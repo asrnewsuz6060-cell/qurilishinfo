@@ -1,95 +1,219 @@
-// db.js — SQLite bazasini yaratadi va boshlang'ich ma'lumot bilan to'ldiradi.
-const path = require('path');
-const bcrypt = require('bcryptjs');
-const Database = require('better-sqlite3');
+// db.js — QurilishInfo SQLite bazasi:
+// maqolalar, admin, reklama, sayt sozlamalari va murojaatlar.
 
-const DB_PATH = path.join(__dirname, 'data.sqlite');
+const path = require("path");
+const bcrypt = require("bcryptjs");
+const Database = require("better-sqlite3");
+
+const DB_PATH = path.join(__dirname, "data.sqlite");
 const db = new Database(DB_PATH);
-db.pragma('journal_mode = WAL');
+
+db.pragma("journal_mode = WAL");
+
+/* =========================================================
+   ASOSIY JADVALLAR
+========================================================= */
 
 db.exec(`
-CREATE TABLE IF NOT EXISTS articles (
-  id INTEGER PRIMARY KEY AUTOINCREMENT,
-  category TEXT NOT NULL,
-  title TEXT NOT NULL,
-  lead TEXT NOT NULL,
-  body TEXT NOT NULL,
-  minutes INTEGER NOT NULL DEFAULT 5,
-  created_at TEXT NOT NULL DEFAULT (datetime('now'))
-);
+  CREATE TABLE IF NOT EXISTS articles (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    category TEXT NOT NULL,
+    title TEXT NOT NULL,
+    lead TEXT NOT NULL,
+    body TEXT NOT NULL,
+    minutes INTEGER NOT NULL DEFAULT 5,
+    created_at TEXT NOT NULL DEFAULT (datetime('now'))
+  );
 
-CREATE TABLE IF NOT EXISTS admin_users (
-  id INTEGER PRIMARY KEY AUTOINCREMENT,
-  username TEXT NOT NULL UNIQUE,
-  password_hash TEXT NOT NULL
-);
+  CREATE TABLE IF NOT EXISTS admin_users (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    username TEXT NOT NULL UNIQUE,
+    password_hash TEXT NOT NULL
+  );
+
+  CREATE TABLE IF NOT EXISTS site_settings (
+    key TEXT PRIMARY KEY,
+    value TEXT NOT NULL DEFAULT ''
+  );
+
+  CREATE TABLE IF NOT EXISTS advertisements (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    title TEXT NOT NULL,
+    description TEXT NOT NULL,
+    company_name TEXT NOT NULL DEFAULT '',
+    image_url TEXT NOT NULL DEFAULT '',
+    target_url TEXT NOT NULL DEFAULT '',
+    label TEXT NOT NULL DEFAULT 'Reklama',
+    status TEXT NOT NULL DEFAULT 'active',
+    created_at TEXT NOT NULL DEFAULT (datetime('now'))
+  );
+
+  CREATE TABLE IF NOT EXISTS appeals (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    name TEXT NOT NULL DEFAULT '',
+    phone TEXT NOT NULL DEFAULT '',
+    region TEXT NOT NULL,
+    topic TEXT NOT NULL,
+    message TEXT NOT NULL,
+    status TEXT NOT NULL DEFAULT 'new',
+    created_at TEXT NOT NULL DEFAULT (datetime('now'))
+  );
 `);
 
-function seedAdmin() {
-  const existing = db.prepare('SELECT * FROM admin_users LIMIT 1').get();
-  if (existing) return;
-  const username = process.env.ADMIN_USERNAME || 'admin';
-  const password = process.env.ADMIN_PASSWORD || 'change-me-123';
-  const hash = bcrypt.hashSync(password, 10);
-  db.prepare('INSERT INTO admin_users (username, password_hash) VALUES (?, ?)').run(username, hash);
-  console.log('[QurilishInfo] Admin yaratildi: ' + username + ' / ' + password + ' — darhol almashtiring!');
+/* =========================================================
+   ESKI ARTICLES JADVALIGA YANGI USTUNLARNI XAVFSIZ QO'SHISH
+========================================================= */
+
+function addColumnIfMissing(table, column, definition) {
+  const columns = db.prepare(`PRAGMA table_info(${table})`).all();
+  const exists = columns.some((item) => item.name === column);
+
+  if (!exists) {
+    db.exec(`ALTER TABLE ${table} ADD COLUMN ${column} ${definition}`);
+    console.log(`[QurilishInfo] ${table}.${column} ustuni qo'shildi.`);
+  }
 }
 
-function seedArticles() {
-  const count = db.prepare('SELECT COUNT(*) AS c FROM articles').get().c;
-  if (count > 0) return;
+addColumnIfMissing("articles", "status", "TEXT NOT NULL DEFAULT 'published'");
+addColumnIfMissing("articles", "image_url", "TEXT NOT NULL DEFAULT ''");
+addColumnIfMissing("articles", "author", "TEXT NOT NULL DEFAULT 'QurilishInfo tahririyati'");
+addColumnIfMissing("articles", "source_name", "TEXT NOT NULL DEFAULT ''");
+addColumnIfMissing("articles", "source_url", "TEXT NOT NULL DEFAULT ''");
+addColumnIfMissing("articles", "document_no", "TEXT NOT NULL DEFAULT ''");
+addColumnIfMissing("articles", "updated", "TEXT NOT NULL DEFAULT ''");
+addColumnIfMissing("articles", "steps", "TEXT NOT NULL DEFAULT ''");
+addColumnIfMissing("articles", "warning", "TEXT NOT NULL DEFAULT ''");
+addColumnIfMissing("articles", "is_advertisement", "INTEGER NOT NULL DEFAULT 0");
 
-  const p = (arr) => arr.join('\n\n');
-  const seed = [
-    { category: 'Ruxsatnoma', title: "Uy qurish uchun ruxsatnoma: qayerdan boshlash kerak", lead: "Qurilishni boshlashdan oldin qaysi bosqichlardan o'tish kerakligi haqida umumiy yo'l xaritasi.", minutes: 6, body: p([
-      "Uy qurishni boshlashdan oldin yer uchastkasi hujjatlari va qurilish loyihasi tayyor bo'lishi kerak.",
-      "Birinchi qadam: yer uchastkasining maqsadli vazifasi hujjatda qanday yozilganini tekshirish.",
-      "Keyingi qadam: mahalliy arxitektura va qurilish organiga murojaat qilib, aniq hujjatlar ro'yxatini so'rash."
-    ])},
-    { category: 'Uy sotib olish', title: "Yangi qurilgan uyni sotib olishdan oldin tekshiriladigan narsalar", lead: "Hujjatlar va binoning holati bo'yicha xaridor uchun oddiy tekshiruv ro'yxati.", minutes: 7, body: p([
-      "Sotuvchi yoki quruvchi kompaniyaning barcha hujjatlarini so'rang: yerga va binoga egalik, qurilishga ruxsat, foydalanishga topshirilgani haqidagi hujjat.",
-      "Binoni o'zingiz ko'zdan kechiring: devor va shiftda yoriq, namlik izlari, deraza va eshiklarning yopilishi.",
-      "Shubhali joy bo'lsa, mustaqil mutaxassisdan ko'rik o'tkazishni so'rash pulingizni himoya qiladi."
-    ])},
-    { category: 'Uy qurish', title: "Uy qurish xarajatini oldindan qanday hisoblash mumkin", lead: "Loyiha, material, ish haqi va kutilmagan xarajatlar uchun zaxira.", minutes: 6, body: p([
-      "Xarajatni guruhlarga bo'ling: loyiha va hujjatlar, poydevor va karkas, tom, pardozlash, kommunikatsiyalar.",
-      "Har guruh uchun kamida ikki-uch ustadan alohida narx oling va yozma saqlang.",
-      "Kutilmagan xarajatlar uchun umumiy summaning bir qismini zaxira sifatida ajrating."
-    ])},
-    { category: 'Materiallar', title: "Qurilish materialini tanlashda ko'p qilinadigan xatolar", lead: "Narx va sifat o'rtasida to'g'ri tanlov qilish uchun nimalarga qarash kerak.", minutes: 5, body: p([
-      "Faqat arzon narxga qarab tanlamang, material sertifikatini so'rang.",
-      "Bir necha do'kondan bir xil o'lcham va markadagi mahsulotlarni solishtiring.",
-      "Kerak bo'lgandan biroz ko'proq oling, keyin xuddi shu partiyani topish qiyin bo'lishi mumkin."
-    ])},
-    { category: 'Savol-javob', title: "Usta bilan shartnoma tuzishda nimalar yozilishi kerak", lead: "Ish hajmi, muddat, to'lov va kafolat bandlarini aniq belgilash.", minutes: 5, body: p([
-      "Og'zaki kelishuv o'rniga yozma shartnoma tuzing: ish turi, hajmi, muddat va narx aniq yozilsin.",
-      "To'lovni bosqichlarga bo'lish yaxshi: har tugagan bosqichdan keyin to'lanadi.",
-      "Kafolat muddati va kamchilik chiqsa kim tuzatishi ham shartnomada yozilsin."
-    ])},
-    { category: 'Ruxsatnoma', title: "Ta'mirlashda ruxsat kerak bo'ladimi", lead: "Oddiy ta'mirlash va konstruksiyaga tegadigan o'zgartirishning farqi.", minutes: 5, body: p([
-      "Bo'yash, pol almashtirish odatda konstruksiyaga tegmaydi, lekin devor buzish boshqa masala.",
-      "Yuk ko'taruvchi devorga tegishdan oldin mutaxassis xulosasi va ruxsat haqida aniqlab oling.",
-      "Ko'p qavatli uyda umumiy qismlarga ta'sir qiluvchi ishlar qo'shimcha tartibga ega bo'lishi mumkin."
-    ])},
-    { category: 'Uy qurish', title: "Qurilish bosqichlari: poydevordan tomgacha", lead: "Qurilish ketma-ketligi va har bosqichda nimani nazorat qilish kerak.", minutes: 8, body: p([
-      "Odatda ketma-ketlik: loyiha, yer ishlari va poydevor, devor va karkas, tom, kommunikatsiyalar, pardozlash.",
-      "Har bosqich tugagach keyingisiga o'tishdan oldin ishning sifatini tekshiring.",
-      "Fotosuratlar va yozuvlar saqlang, keyinchalik nizo chiqsa yordam beradi."
-    ])},
-    { category: 'Yangiliklar', title: "Qurilish sohasidagi qonun o'zgarishlarini qanday kuzatish kerak", lead: "Yangi qoidalardan xabardor bo'lish uchun ishonchli manbalar.", minutes: 4, body: p([
-      "Rasmiy huquqiy hujjatlar bazasi va tegishli idoralarning ochiq e'lonlarini muntazam kuzating.",
-      "Ijtimoiy tarmoqdagi gaplarga emas, hujjatning o'ziga qarang: kuchga kirgan sana muhim.",
-      "Har bir yangilik yonida manba havolasi bo'lishi ishonchni oshiradi."
-    ])}
+/* =========================================================
+   INDEXLAR — TEZ QIDIRUV UCHUN
+========================================================= */
+
+db.exec(`
+  CREATE INDEX IF NOT EXISTS idx_articles_category
+  ON articles(category);
+
+  CREATE INDEX IF NOT EXISTS idx_articles_status
+  ON articles(status);
+
+  CREATE INDEX IF NOT EXISTS idx_advertisements_status
+  ON advertisements(status);
+
+  CREATE INDEX IF NOT EXISTS idx_appeals_status
+  ON appeals(status);
+`);
+
+/* =========================================================
+   ADMIN YARATISH
+========================================================= */
+
+function seedAdmin() {
+  const existing = db.prepare("SELECT * FROM admin_users LIMIT 1").get();
+
+  if (existing) {
+    return;
+  }
+
+  const username = process.env.ADMIN_USERNAME || "admin";
+  const password = process.env.ADMIN_PASSWORD || "change-me-123";
+  const hash = bcrypt.hashSync(password, 10);
+
+  db.prepare(
+    "INSERT INTO admin_users (username, password_hash) VALUES (?, ?)"
+  ).run(username, hash);
+
+  console.log(
+    `[QurilishInfo] Admin yaratildi: ${username} / ${password} — darhol almashtiring!`
+  );
+}
+
+/* =========================================================
+   STANDART SAYT SOZLAMALARI
+========================================================= */
+
+function seedSettings() {
+  const settings = [
+    ["site_name", "QurilishInfo"],
+    [
+      "site_description",
+      "Uy qurish, ruxsatnoma va qurilish nazorati bo'yicha amaliy ma'lumotlar"
+    ],
+    ["telegram_url", "https://t.me/qurilishinfo"],
+    ["contact", "@qurilishinfo_admin"],
+    ["contact_url", "https://t.me/qurilishinfo_admin"],
+    ["instagram_url", ""],
+    ["facebook_url", ""],
+    ["youtube_url", ""],
+    ["tiktok_url", ""],
+    [
+      "about_text",
+      "QurilishInfo — uy qurish, uy sotib olish, ruxsatnoma, ta'mirlash va qurilish nazorati bo'yicha amaliy ma'lumotlar platformasi. Loyiha rasmiy davlat organi emas. Materiallar rasmiy hujjatlar, davlat organlari e'lonlari va mutaxassislarning izohlari asosida tayyorlanadi."
+    ],
+    [
+      "editorial_policy",
+      "Reklama va tahririy materiallar alohida belgilanadi."
+    ],
+    ["cta_title", "Qurilishda muammo bormi?"],
+    [
+      "cta_text",
+      "Ruxsatnoma, noqonuniy qurilish, uy sifati, shartnoma yoki ta'mirlash bo'yicha savolingizni yuboring."
+    ]
   ];
 
-  const insert = db.prepare('INSERT INTO articles (category, title, lead, body, minutes) VALUES (@category, @title, @lead, @body, @minutes)');
-  const insertMany = db.transaction((rows) => rows.forEach((r) => insert.run(r)));
-  insertMany(seed);
-  console.log('[QurilishInfo] ' + seed.length + ' ta boshlang\'ich maqola qo\'shildi.');
+  const statement = db.prepare(
+    "INSERT OR IGNORE INTO site_settings (key, value) VALUES (?, ?)"
+  );
+
+  const insertMany = db.transaction((items) => {
+    for (const item of items) {
+      statement.run(item[0], item[1]);
+    }
+  });
+
+  insertMany(settings);
 }
 
-seedAdmin();
-seedArticles();
+/* =========================================================
+   BOSHLANG'ICH MAQOLALAR
+========================================================= */
 
-module.exports = db;
+function seedArticles() {
+  const count = db.prepare("SELECT COUNT(*) AS count FROM articles").get()
+    .count;
+
+  if (count > 0) {
+    return;
+  }
+
+  const p = (items) => items.join("\n\n");
+
+  const seed = [
+    {
+      category: "Ruxsatnoma",
+      title: "Uy qurish uchun ruxsatnoma: qayerdan boshlash kerak",
+      lead: "Qurilishni boshlashdan oldin qaysi bosqichlardan o'tish kerakligi haqida umumiy yo'l xaritasi.",
+      minutes: 6,
+      body: p([
+        "Uy qurishni boshlashdan oldin yer uchastkasi hujjatlari va qurilish loyihasi tayyor bo'lishi kerak.",
+        "Birinchi qadam: yer uchastkasining maqsadli vazifasi hujjatda qanday yozilganini tekshirish.",
+        "Keyingi qadam: mahalliy arxitektura va qurilish organiga murojaat qilib, aniq hujjatlar ro'yxatini so'rash."
+      ])
+    },
+    {
+      category: "Uy sotib olish",
+      title: "Yangi qurilgan uyni sotib olishdan oldin tekshiriladigan narsalar",
+      lead: "Hujjatlar va binoning holati bo'yicha xaridor uchun oddiy tekshiruv ro'yxati.",
+      minutes: 7,
+      body: p([
+        "Sotuvchi yoki quruvchi kompaniyaning barcha hujjatlarini so'rang: yerga va binoga egalik, qurilishga ruxsat, foydalanishga topshirilgani haqidagi hujjat.",
+        "Binoni o'zingiz ko'zdan kechiring: devor va shiftda yoriq, namlik izlari, deraza va eshiklarning yopilishi.",
+        "Shubhali joy bo'lsa, mustaqil mutaxassisdan ko'rik o'tkazishni so'rash pulingizni himoya qiladi."
+      ])
+    },
+    {
+      category: "Uy qurish",
+      title: "Uy qurish xarajatini oldindan qanday hisoblash mumkin",
+      lead: "Loyiha, material, ish haqi va kutilmagan xarajatlar uchun zaxira.",
+      minutes: 6,
+      body: p([
+        "Xarajatni guruhlarga bo'ling: loyiha va hujjatlar, poydevor va
