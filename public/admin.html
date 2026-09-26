@@ -1,1542 +1,543 @@
 <!DOCTYPE html>
-<html lang="uz">
+<html lang="uz" class="scroll-smooth">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="color-scheme" content="light">
-  <title>QurilishInfo — Admin panel</title>
-  <style>
-    :root {
-      --navy: #102a43;
-      --navy-soft: #173f5f;
-      --blue: #1e73be;
-      --blue-dark: #155a95;
-      --sky: #eaf4ff;
-      --yellow: #fbbf24;
-      --green: #138a5b;
-      --red: #c0392b;
-      --orange: #d97706;
-      --ink: #1f2937;
-      --muted: #64748b;
-      --line: #dbe5ee;
-      --paper: #ffffff;
-      --background: #f3f7fb;
-      --shadow: 0 12px 36px rgba(16, 42, 67, 0.12);
-      --radius: 16px;
-    }
-
-    * {
-      box-sizing: border-box;
-    }
-
-    html {
-      scroll-behavior: smooth;
-    }
-
-    body {
-      margin: 0;
-      min-width: 320px;
-      min-height: 100vh;
-      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      color: var(--ink);
-      background: var(--background);
-    }
-
-    button,
-    input,
-    select,
-    textarea {
-      font: inherit;
-    }
-
-    button {
-      cursor: pointer;
-    }
-
-    a {
-      color: inherit;
-    }
-
-    .hidden {
-      display: none !important;
-    }
-
-    .login-screen {
-      min-height: 100vh;
-      display: grid;
-      place-items: center;
-      padding: 24px;
-      background:
-        radial-gradient(circle at top left, rgba(30, 115, 190, 0.32), transparent 34%),
-        linear-gradient(135deg, #102a43, #1e73be);
-    }
-
-    .login-card {
-      width: min(100%, 430px);
-      background: rgba(255, 255, 255, 0.98);
-      border-radius: 22px;
-      padding: 34px;
-      box-shadow: 0 20px 55px rgba(0, 0, 0, 0.28);
-    }
-
-    .brand {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      margin-bottom: 26px;
-    }
-
-    .brand-mark {
-      width: 46px;
-      height: 46px;
-      display: grid;
-      place-items: center;
-      flex: 0 0 auto;
-      border-radius: 14px;
-      color: white;
-      font-weight: 900;
-      font-size: 22px;
-      background: linear-gradient(135deg, var(--blue), #4aa7ee);
-    }
-
-    .brand h1 {
-      margin: 0;
-      color: var(--navy);
-      font-size: 22px;
-    }
-
-    .brand p {
-      margin: 3px 0 0;
-      color: var(--muted);
-      font-size: 13px;
-    }
-
-    .login-card h2 {
-      margin: 0 0 8px;
-      color: var(--navy);
-      font-size: 26px;
-    }
-
-    .login-card > p {
-      margin: 0 0 24px;
-      color: var(--muted);
-      line-height: 1.6;
-    }
-
-    .field {
-      display: grid;
-      gap: 7px;
-      margin-bottom: 16px;
-    }
-
-    .field label {
-      color: var(--navy);
-      font-size: 14px;
-      font-weight: 700;
-    }
-
-    .field input,
-    .field select,
-    .field textarea {
-      width: 100%;
-      border: 1px solid var(--line);
-      border-radius: 11px;
-      padding: 12px 13px;
-      outline: none;
-      color: var(--ink);
-      background: var(--paper);
-      transition: border-color 0.2s, box-shadow 0.2s;
-    }
-
-    .field textarea {
-      min-height: 128px;
-      line-height: 1.55;
-      resize: vertical;
-    }
-
-    .field input:focus,
-    .field select:focus,
-    .field textarea:focus {
-      border-color: var(--blue);
-      box-shadow: 0 0 0 3px rgba(30, 115, 190, 0.14);
-    }
-
-    .help-text {
-      margin: -5px 0 0;
-      color: var(--muted);
-      font-size: 12px;
-      line-height: 1.5;
-    }
-
-    .btn {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-      min-height: 42px;
-      padding: 10px 15px;
-      border: 0;
-      border-radius: 10px;
-      text-decoration: none;
-      font-weight: 800;
-      font-size: 14px;
-      transition: transform 0.18s, box-shadow 0.18s, background 0.18s;
-    }
-
-    .btn:hover {
-      transform: translateY(-1px);
-    }
-
-    .btn-primary {
-      color: white;
-      background: var(--blue);
-      box-shadow: 0 8px 18px rgba(30, 115, 190, 0.22);
-    }
-
-    .btn-primary:hover {
-      background: var(--blue-dark);
-    }
-
-    .btn-dark {
-      color: white;
-      background: var(--navy);
-    }
-
-    .btn-light {
-      color: var(--navy);
-      border: 1px solid var(--line);
-      background: white;
-    }
-
-    .btn-danger {
-      color: white;
-      background: var(--red);
-    }
-
-    .btn-warning {
-      color: #4a3300;
-      background: var(--yellow);
-    }
-
-    .btn-small {
-      min-height: 35px;
-      padding: 7px 10px;
-      font-size: 12px;
-    }
-
-    .full-width {
-      width: 100%;
-    }
-
-    .error-message {
-      min-height: 21px;
-      margin: 12px 0 0;
-      color: var(--red);
-      font-size: 13px;
-      font-weight: 700;
-    }
-
-    .admin-shell {
-      min-height: 100vh;
-      display: grid;
-      grid-template-columns: 272px minmax(0, 1fr);
-    }
-
-    .sidebar {
-      position: sticky;
-      top: 0;
-      height: 100vh;
-      display: flex;
-      flex-direction: column;
-      padding: 22px 16px;
-      color: #dbeafe;
-      background: var(--navy);
-    }
-
-    .sidebar .brand {
-      padding: 0 8px 22px;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.12);
-    }
-
-    .sidebar .brand h1 {
-      color: white;
-    }
-
-    .sidebar .brand p {
-      color: #b8cbe0;
-    }
-
-    .side-nav {
-      display: grid;
-      gap: 6px;
-      margin-top: 22px;
-    }
-
-    .side-nav button {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      width: 100%;
-      border: 0;
-      border-radius: 10px;
-      padding: 12px 13px;
-      color: #cfe1f5;
-      text-align: left;
-      background: transparent;
-      font-weight: 700;
-    }
-
-    .side-nav button:hover,
-    .side-nav button.active {
-      color: white;
-      background: rgba(255, 255, 255, 0.13);
-    }
-
-    .side-nav .nav-icon {
-      width: 22px;
-      text-align: center;
-      font-size: 17px;
-    }
-
-    .side-footer {
-      margin-top: auto;
-      padding: 18px 8px 0;
-      border-top: 1px solid rgba(255, 255, 255, 0.12);
-    }
-
-    .side-footer p {
-      margin: 0 0 10px;
-      color: #b8cbe0;
-      font-size: 12px;
-      line-height: 1.45;
-    }
-
-    .side-footer a {
-      color: white;
-      font-size: 13px;
-      font-weight: 800;
-    }
-
-    .workspace {
-      min-width: 0;
-    }
-
-    .topbar {
-      position: sticky;
-      top: 0;
-      z-index: 20;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 14px;
-      min-height: 74px;
-      padding: 14px 28px;
-      border-bottom: 1px solid var(--line);
-      background: rgba(255, 255, 255, 0.94);
-      backdrop-filter: blur(12px);
-    }
-
-    .topbar-left {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
-
-    .menu-button {
-      display: none;
-      width: 42px;
-      height: 42px;
-      border: 1px solid var(--line);
-      border-radius: 10px;
-      color: var(--navy);
-      background: white;
-    }
-
-    .page-title {
-      margin: 0;
-      color: var(--navy);
-      font-size: 21px;
-    }
-
-    .page-subtitle {
-      margin: 2px 0 0;
-      color: var(--muted);
-      font-size: 13px;
-    }
-
-    .topbar-actions {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-
-    .admin-user {
-      display: grid;
-      gap: 1px;
-      text-align: right;
-    }
-
-    .admin-user strong {
-      color: var(--navy);
-      font-size: 13px;
-    }
-
-    .admin-user span {
-      color: var(--muted);
-      font-size: 12px;
-    }
-
-    .main-content {
-      padding: 28px;
-    }
-
-    .view {
-      display: none;
-    }
-
-    .view.active {
-      display: block;
-    }
-
-    .hero-panel {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 20px;
-      padding: 28px;
-      border-radius: var(--radius);
-      color: white;
-      background: linear-gradient(135deg, var(--navy), var(--blue));
-      box-shadow: var(--shadow);
-    }
-
-    .hero-panel h2 {
-      margin: 0 0 7px;
-      font-size: 26px;
-    }
-
-    .hero-panel p {
-      max-width: 660px;
-      margin: 0;
-      color: #dceeff;
-      line-height: 1.6;
-    }
-
-    .stats-grid {
-      display: grid;
-      grid-template-columns: repeat(4, minmax(0, 1fr));
-      gap: 18px;
-      margin: 24px 0;
-    }
-
-    .stat-card {
-      padding: 20px;
-      border: 1px solid var(--line);
-      border-radius: var(--radius);
-      background: var(--paper);
-      box-shadow: 0 5px 18px rgba(16, 42, 67, 0.05);
-    }
-
-    .stat-card .stat-label {
-      color: var(--muted);
-      font-size: 13px;
-      font-weight: 700;
-    }
-
-    .stat-card strong {
-      display: block;
-      margin-top: 8px;
-      color: var(--navy);
-      font-size: 30px;
-    }
-
-    .stat-card .stat-hint {
-      display: block;
-      margin-top: 5px;
-      color: var(--muted);
-      font-size: 12px;
-    }
-
-    .dashboard-grid {
-      display: grid;
-      grid-template-columns: 1.25fr 0.75fr;
-      gap: 20px;
-    }
-
-    .panel {
-      border: 1px solid var(--line);
-      border-radius: var(--radius);
-      background: var(--paper);
-      box-shadow: 0 5px 18px rgba(16, 42, 67, 0.05);
-    }
-
-    .panel-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 14px;
-      padding: 19px 20px;
-      border-bottom: 1px solid var(--line);
-    }
-
-    .panel-header h3 {
-      margin: 0;
-      color: var(--navy);
-      font-size: 16px;
-    }
-
-    .panel-body {
-      padding: 20px;
-    }
-
-    .quick-actions {
-      display: grid;
-      gap: 11px;
-    }
-
-    .quick-actions button {
-      justify-content: flex-start;
-    }
-
-    .empty-state {
-      padding: 24px 6px;
-      color: var(--muted);
-      text-align: center;
-      line-height: 1.6;
-    }
-
-    .recent-list {
-      display: grid;
-      gap: 12px;
-    }
-
-    .recent-item {
-      padding-bottom: 12px;
-      border-bottom: 1px solid var(--line);
-    }
-
-    .recent-item:last-child {
-      padding-bottom: 0;
-      border-bottom: 0;
-    }
-
-    .recent-item strong {
-      display: block;
-      color: var(--navy);
-      font-size: 14px;
-    }
-
-    .recent-item span {
-      display: block;
-      margin-top: 4px;
-      color: var(--muted);
-      font-size: 12px;
-    }
-
-    .section-heading {
-      display: flex;
-      align-items: flex-start;
-      justify-content: space-between;
-      gap: 18px;
-      margin-bottom: 20px;
-    }
-
-    .section-heading h2 {
-      margin: 0;
-      color: var(--navy);
-      font-size: 24px;
-    }
-
-    .section-heading p {
-      margin: 5px 0 0;
-      color: var(--muted);
-      line-height: 1.5;
-    }
-
-    .form-card {
-      padding: 24px;
-      border: 1px solid var(--line);
-      border-radius: var(--radius);
-      background: var(--paper);
-      box-shadow: 0 5px 18px rgba(16, 42, 67, 0.05);
-    }
-
-    .form-grid {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 16px;
-    }
-
-    .form-grid .field-full {
-      grid-column: 1 / -1;
-    }
-
-    .form-divider {
-      margin: 24px 0;
-      border: 0;
-      border-top: 1px solid var(--line);
-    }
-
-    .form-actions {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      margin-top: 22px;
-    }
-
-    .table-card {
-      overflow: hidden;
-      border: 1px solid var(--line);
-      border-radius: var(--radius);
-      background: var(--paper);
-      box-shadow: 0 5px 18px rgba(16, 42, 67, 0.05);
-    }
-
-    .toolbar {
-      display: flex;
-      flex-wrap: wrap;
-      align-items: center;
-      gap: 10px;
-      padding: 16px;
-      border-bottom: 1px solid var(--line);
-    }
-
-    .toolbar input,
-    .toolbar select {
-      min-height: 40px;
-      border: 1px solid var(--line);
-      border-radius: 9px;
-      padding: 9px 11px;
-      outline: none;
-      color: var(--ink);
-      background: white;
-    }
-
-    .toolbar input {
-      flex: 1 1 240px;
-    }
-
-    .table-wrap {
-      overflow-x: auto;
-    }
-
-    table {
-      width: 100%;
-      min-width: 770px;
-      border-collapse: collapse;
-    }
-
-    th,
-    td {
-      padding: 14px 16px;
-      border-bottom: 1px solid var(--line);
-      text-align: left;
-      vertical-align: top;
-    }
-
-    th {
-      color: var(--muted);
-      background: #f8fbfe;
-      font-size: 12px;
-      letter-spacing: 0.02em;
-      text-transform: uppercase;
-    }
-
-    td {
-      color: #344256;
-      font-size: 13px;
-      line-height: 1.45;
-    }
-
-    tr:last-child td {
-      border-bottom: 0;
-    }
-
-    .article-title {
-      min-width: 220px;
-      color: var(--navy);
-      font-weight: 800;
-    }
-
-    .article-title small {
-      display: block;
-      margin-top: 4px;
-      color: var(--muted);
-      font-weight: 500;
-    }
-
-    .badge {
-      display: inline-flex;
-      align-items: center;
-      border-radius: 999px;
-      padding: 4px 9px;
-      font-size: 11px;
-      font-weight: 800;
-      white-space: nowrap;
-    }
-
-    .badge-published,
-    .badge-active,
-    .badge-answered {
-      color: #075d3c;
-      background: #d9f7e8;
-    }
-
-    .badge-draft,
-    .badge-reviewing {
-      color: #815400;
-      background: #fff3c4;
-    }
-
-    .badge-archived,
-    .badge-inactive {
-      color: #7d2a2a;
-      background: #fde2e2;
-    }
-
-    .badge-new {
-      color: #154e83;
-      background: #ddebfb;
-    }
-
-    .actions-cell {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 7px;
-    }
-
-    .status-select {
-      min-width: 136px;
-      border: 1px solid var(--line);
-      border-radius: 8px;
-      padding: 7px;
-      color: var(--ink);
-      background: white;
-    }
-
-    .notice {
-      display: none;
-      margin-bottom: 18px;
-      padding: 13px 15px;
-      border-radius: 10px;
-      font-size: 14px;
-      font-weight: 700;
-    }
-
-    .notice.success {
-      display: block;
-      color: #075d3c;
-      border: 1px solid #9ce2bd;
-      background: #e7fff0;
-    }
-
-    .notice.error {
-      display: block;
-      color: #9e2020;
-      border: 1px solid #f1b6b6;
-      background: #fff0f0;
-    }
-
-    .toggle-row {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      min-height: 48px;
-      padding: 10px 12px;
-      border: 1px solid var(--line);
-      border-radius: 10px;
-      background: #fbfdff;
-    }
-
-    .toggle-row input {
-      width: 18px;
-      height: 18px;
-      accent-color: var(--blue);
-    }
-
-    .toggle-row label {
-      color: var(--navy);
-      font-size: 14px;
-      font-weight: 700;
-    }
-
-    .muted-box {
-      padding: 15px;
-      border-radius: 10px;
-      color: var(--muted);
-      background: #f5f9fd;
-      font-size: 13px;
-      line-height: 1.6;
-    }
-
-    .overlay {
-      display: none;
-    }
-
-    @media (max-width: 1080px) {
-      .stats-grid {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Admin — QurilishInfo</title>
+
+  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+
+  <style type="text/tailwindcss">
+    @theme {
+      --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+      --font-display: "Manrope", ui-sans-serif, system-ui, sans-serif;
+      --color-qblue: #0b4f7c;
+      --color-qnavy: #073b61;
+      --color-qgreen: #138a5b;
+      --color-qgreen-dark: #0c6d47;
+      --color-qsoft: #f3f7fa;
+      --color-qline: #dce5eb;
+      --color-qink: #17212b;
+    }
+
+    @keyframes fade-in {
+      from {
+        opacity: 0;
+        transform: translateY(8px);
       }
-
-      .dashboard-grid {
-        grid-template-columns: 1fr;
+      to {
+        opacity: 1;
+        transform: translateY(0);
       }
     }
 
-    @media (max-width: 850px) {
-      .admin-shell {
-        display: block;
-      }
-
-      .sidebar {
-        position: fixed;
-        top: 0;
-        left: 0;
-        z-index: 60;
-        width: 272px;
-        transform: translateX(-102%);
-        transition: transform 0.22s ease;
-        box-shadow: 16px 0 35px rgba(0, 0, 0, 0.22);
-      }
-
-      .sidebar.open {
-        transform: translateX(0);
-      }
-
-      .overlay {
-        position: fixed;
-        inset: 0;
-        z-index: 50;
-        background: rgba(0, 0, 0, 0.43);
-      }
-
-      .overlay.open {
-        display: block;
-      }
-
-      .menu-button {
-        display: inline-grid;
-        place-items: center;
-      }
-
-      .topbar {
-        padding: 13px 17px;
-      }
-
-      .main-content {
-        padding: 20px 16px;
-      }
-
-      .topbar-actions .btn-light {
-        display: none;
-      }
-
-      .form-grid {
-        grid-template-columns: 1fr;
-      }
-
-      .form-grid .field-full {
-        grid-column: auto;
-      }
-
-      .hero-panel {
-        align-items: flex-start;
-        flex-direction: column;
-      }
+    .animate-fade-in {
+      animation: fade-in .25s ease both;
     }
 
-    @media (max-width: 560px) {
-      .login-card {
-        padding: 26px 21px;
-      }
+    .delay-1 {
+      animation-delay: .06s;
+    }
 
-      .topbar {
-        align-items: flex-start;
-      }
+    .delay-2 {
+      animation-delay: .12s;
+    }
 
-      .page-title {
-        font-size: 18px;
-      }
+    .delay-3 {
+      animation-delay: .18s;
+    }
 
-      .admin-user {
-        display: none;
-      }
+    .delay-4 {
+      animation-delay: .24s;
+    }
 
-      .stats-grid {
-        grid-template-columns: 1fr;
-      }
+    .delay-5 {
+      animation-delay: .3s;
+    }
 
-      .section-heading {
-        align-items: stretch;
-        flex-direction: column;
-      }
+    .tab-button.active {
+      background: #0b4f7c;
+      color: #fff;
+    }
 
-      .section-heading .btn {
-        width: 100%;
-      }
+    .dark .tab-button.active {
+      background: #69b5e4;
+      color: #073b61;
+    }
 
-      .hero-panel {
-        padding: 22px;
-      }
+    .nav-item.active {
+      background: rgba(11, 79, 124, 0.12);
+      color: #0b4f7c;
+      border-right: 3px solid #0b4f7c;
+    }
 
-      .hero-panel h2 {
-        font-size: 22px;
-      }
+    .dark .nav-item.active {
+      background: rgba(105, 181, 228, 0.14);
+      color: #69b5e4;
+      border-right-color: #69b5e4;
     }
   </style>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Manrope:wght@600;700;800&display=swap" rel="stylesheet">
 </head>
 
-<body>
-  <main id="loginScreen" class="login-screen">
-    <section class="login-card" aria-labelledby="loginTitle">
-      <div class="brand">
-        <div class="brand-mark" aria-hidden="true">QI</div>
-        <div>
-          <h1>QurilishInfo</h1>
-          <p>Tahririyat boshqaruv tizimi</p>
+<body class="bg-qsoft text-qink antialiased transition-colors duration-300 dark:bg-slate-950 dark:text-slate-100">
+  <div id="mobileOverlay" class="fixed inset-0 z-40 hidden bg-slate-950/50 backdrop-blur-sm"></div>
+
+  <aside id="sidebar" class="fixed inset-y-0 left-0 z-50 flex w-[290px] max-w-[86vw] -translate-x-full flex-col border-r border-slate-200 bg-white shadow-xl transition-transform duration-300 dark:border-slate-800 dark:bg-slate-900 lg:translate-x-0">
+    <div class="flex items-center justify-between border-b border-slate-200 px-5 py-5 dark:border-slate-800">
+      <a href="/" class="flex items-center gap-3 font-display text-xl font-extrabold text-qnavy dark:text-white">
+        <span class="grid h-10 w-10 place-items-center rounded-xl bg-qblue text-white shadow-lg shadow-sky-900/20">
+          <svg viewBox="0 0 24 24" class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="2.2">
+            <path d="M3 21h18"></path><path d="M5 21V10l7-6 7 6v11"></path><path d="M9 21v-6h6v6"></path>
+          </svg>
+        </span>
+        <span>Admin <span class="text-qgreen">Panel</span></span>
+      </a>
+
+      <button id="sidebarCloseButton" type="button" class="grid h-10 w-10 place-items-center rounded-lg border border-slate-200 text-slate-600 dark:border-slate-700 dark:text-slate-300" aria-label="Menyuni yopish">
+        <svg viewBox="0 0 24 24" class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M6 6l12 12M18 6L6 18"></path>
+        </svg>
+      </button>
+    </div>
+
+    <nav class="flex-1 overflow-y-auto px-3 py-5">
+      <button type="button" data-tab="dashboard" class="nav-item active mb-1 flex w-full items-center gap-3 rounded-xl px-4 py-3 text-left font-semibold text-slate-700 transition hover:bg-slate-100 dark:text-slate-200 dark:hover:bg-slate-800">
+        <svg viewBox="0 0 24 24" class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M3 3h8v8H3zM13 3h8v8h-8zM3 13h8v8H3zM13 13h8v8h-8z"></path>
+        </svg>
+        <span>Dashboard</span>
+      </button>
+
+      <button type="button" data-tab="articles" class="nav-item mb-1 flex w-full items-center gap-3 rounded-xl px-4 py-3 text-left font-semibold text-slate-700 transition hover:bg-slate-100 dark:text-slate-200 dark:hover:bg-slate-800">
+        <svg viewBox="0 0 24 24" class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M4 4h16v16H4z"></path><path d="M8 8h8M8 12h8M8 16h5"></path>
+        </svg>
+        <span>Maqolalar</span>
+      </button>
+
+      <button type="button" data-tab="categories" class="nav-item mb-1 flex w-full items-center gap-3 rounded-xl px-4 py-3 text-left font-semibold text-slate-700 transition hover:bg-slate-100 dark:text-slate-200 dark:hover:bg-slate-800">
+        <svg viewBox="0 0 24 24" class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M3 7h18M3 12h18M3 17h18"></path>
+        </svg>
+        <span>Ruknlar</span>
+      </button>
+
+      <button type="button" data-tab="advertisements" class="nav-item mb-1 flex w-full items-center gap-3 rounded-xl px-4 py-3 text-left font-semibold text-slate-700 transition hover:bg-slate-100 dark:text-slate-200 dark:hover:bg-slate-800">
+        <svg viewBox="0 0 24 24" class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M3 21h18M5 18h14M6 18V9M10 18V9M14 18V9M18 18V9M3 9h18L12 3 3 9z"></path>
+        </svg>
+        <span>Reklama</span>
+      </button>
+
+      <button type="button" data-tab="settings" class="nav-item mb-1 flex w-full items-center gap-3 rounded-xl px-4 py-3 text-left font-semibold text-slate-700 transition hover:bg-slate-100 dark:text-slate-200 dark:hover:bg-slate-800">
+        <svg viewBox="0 0 24 24" class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M12 20a8 8 0 1 0 0-16 8 8 0 0 0 0 16z"></path>
+          <path d="M12 14a2 2 0 1 0 0-4 2 2 0 0 0 0 4z"></path>
+        </svg>
+        <span>Sozlamalar</span>
+      </button>
+    </nav>
+
+    <div class="border-t border-slate-200 px-5 py-5 text-xs leading-5 text-slate-500 dark:border-slate-800 dark:text-slate-400">
+      QurilishInfo — Admin Panel<br>
+      v1.0.0
+    </div>
+  </aside>
+
+  <div class="lg:pl-[290px]">
+    <header class="sticky top-0 z-30 border-b border-slate-200 bg-white/95 backdrop-blur-lg dark:border-slate-800 dark:bg-slate-950/95">
+      <div class="mx-auto flex h-[68px] max-w-7xl items-center justify-between gap-3 px-4 sm:px-6 lg:px-8">
+        <button id="sidebarOpenButton" type="button" class="grid h-10 w-10 place-items-center rounded-xl border border-slate-200 text-slate-700 lg:hidden dark:border-slate-700 dark:text-slate-200" aria-label="Menyuni ochish">
+          <svg viewBox="0 0 24 24" class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M4 7h16M4 12h16M4 17h16"></path>
+          </svg>
+        </button>
+
+        <div class="flex items-center gap-3">
+          <h1 id="pageTitle" class="font-display text-xl font-extrabold tracking-tight text-qnavy dark:text-white">Dashboard</h1>
+        </div>
+
+        <div class="flex items-center gap-2">
+          <a href="/" target="_blank" class="hidden items-center gap-2 rounded-xl border border-slate-300 bg-white px-4 py-2.5 text-sm font-bold text-slate-700 transition hover:border-qblue hover:text-qblue dark:border-slate-700 dark:bg-slate-900 dark:text-slate-200 sm:inline-flex">
+            <svg viewBox="0 0 24 24" class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><path d="M15 3h6v6"></path><path d="M10 14L21 3"></path>
+            </svg>
+            Saytni ochish
+          </a>
+
+          <button id="themeButton" type="button" class="grid h-10 w-10 place-items-center rounded-xl border border-slate-200 text-slate-700 hover:border-qblue hover:text-qblue dark:border-slate-700 dark:text-slate-200" aria-label="Mavzuni almashtirish">
+            <svg id="themeSunIcon" viewBox="0 0 24 24" class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="4"></circle>
+              <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"></path>
+            </svg>
+          </button>
         </div>
       </div>
+    </header>
 
-      <h2 id="loginTitle">Admin panelga kirish</h2>
-      <p>Login va parolingizni kiriting. Maqolalar, reklama va sayt sozlamalari shu yerda boshqariladi.</p>
+    <main class="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
+      <section id="dashboardTab" class="tab-content animate-fade-in">
+        <div class="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+          <div class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm dark:border-slate-800 dark:bg-slate-900">
+            <p class="text-xs font-bold uppercase tracking-[0.14em] text-slate-500 dark:text-slate-400">Maqolalar</p>
+            <p id="statArticles" class="mt-2 font-display text-3xl font-extrabold text-qnavy dark:text-white">0</p>
+            <p class="mt-1 text-xs text-slate-500 dark:text-slate-400">Jami maqolalar soni</p>
+          </div>
 
-      <form id="loginForm">
-        <div class="field">
-          <label for="loginUsername">Login</label>
-          <input id="loginUsername" name="username" autocomplete="username" required>
+          <div class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm dark:border-slate-800 dark:bg-slate-900">
+            <p class="text-xs font-bold uppercase tracking-[0.14em] text-slate-500 dark:text-slate-400">Reklama</p>
+            <p id="statAds" class="mt-2 font-display text-3xl font-extrabold text-qnavy dark:text-white">0</p>
+            <p class="mt-1 text-xs text-slate-500 dark:text-slate-400">Faol reklamalar</p>
+          </div>
+
+          <div class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm dark:border-slate-800 dark:bg-slate-900">
+            <p class="text-xs font-bold uppercase tracking-[0.14em] text-slate-500 dark:text-slate-400">Ruknlar</p>
+            <p id="statCategories" class="mt-2 font-display text-3xl font-extrabold text-qnavy dark:text-white">0</p>
+            <p class="mt-1 text-xs text-slate-500 dark:text-slate-400">Faol ruknlar</p>
+          </div>
+
+          <div class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm dark:border-slate-800 dark:bg-slate-900">
+            <p class="text-xs font-bold uppercase tracking-[0.14em] text-slate-500 dark:text-slate-400">Tizim</p>
+            <p id="statStatus" class="mt-2 font-display text-3xl font-extrabold text-qnavy dark:text-white">OK</p>
+            <p class="mt-1 text-xs text-slate-500 dark:text-slate-400">Server holati</p>
+          </div>
         </div>
 
-        <div class="field">
-          <label for="loginPassword">Parol</label>
-          <input id="loginPassword" name="password" type="password" autocomplete="current-password" required>
+        <div class="mt-8 rounded-2xl border border-slate-200 bg-white p-6 dark:border-slate-800 dark:bg-slate-900">
+          <h2 class="font-display text-xl font-extrabold text-qnavy dark:text-white">So‘nggi maqolalar</h2>
+          <div id="dashboardArticles" class="mt-5 grid gap-4 sm:grid-cols-2 lg:grid-cols-3"></div>
         </div>
+      </section>
 
-        <button class="btn btn-primary full-width" type="submit" aria-label="Admin panelga kirish">
-          Kirish
-        </button>
-
-        <div id="loginError" class="error-message" role="alert"></div>
-      </form>
-    </section>
-  </main>
-
-  <div id="adminShell" class="admin-shell hidden">
-    <aside id="sidebar" class="sidebar" aria-label="Admin menyusi">
-      <div class="brand">
-        <div class="brand-mark" aria-hidden="true">QI</div>
-        <div>
-          <h1>QurilishInfo</h1>
-          <p>Admin panel</p>
-        </div>
-      </div>
-
-      <nav class="side-nav">
-        <button class="nav-button active" data-view="dashboard" type="button">
-          <span class="nav-icon">▦</span>
-          Boshqaruv paneli
-        </button>
-
-        <button class="nav-button" data-view="articles" type="button">
-          <span class="nav-icon">▤</span>
-          Maqolalar
-        </button>
-
-        <button class="nav-button" data-view="articleForm" type="button">
-          <span class="nav-icon">＋</span>
-          Yangi maqola
-        </button>
-
-        <button class="nav-button" data-view="advertisements" type="button">
-          <span class="nav-icon">▣</span>
-          Reklama
-        </button>
-
-        <button class="nav-button" data-view="appeals" type="button">
-          <span class="nav-icon">✉</span>
-          Murojaatlar
-        </button>
-
-        <button class="nav-button" data-view="settings" type="button">
-          <span class="nav-icon">⚙</span>
-          Sayt sozlamalari
-        </button>
-
-        <button class="nav-button" data-view="password" type="button">
-          <span class="nav-icon">🔒</span>
-          Parol
-        </button>
-      </nav>
-
-      <div class="side-footer">
-        <p>Saytingizni tashqi oynada tekshirib ko‘ring.</p>
-        <a href="/" target="_blank" rel="noopener">↗ Saytni ochish</a>
-      </div>
-    </aside>
-
-    <div id="overlay" class="overlay"></div>
-
-    <section class="workspace">
-      <header class="topbar">
-        <div class="topbar-left">
-          <button id="menuButton" class="menu-button" type="button" aria-label="Menyuni ochish">☰</button>
+      <section id="articlesTab" class="tab-content hidden animate-fade-in">
+        <div class="mb-6 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
           <div>
-            <h1 id="pageTitle" class="page-title">Boshqaruv paneli</h1>
-            <p id="pageSubtitle" class="page-subtitle">Tahririyat faoliyati bo‘yicha umumiy ko‘rinish</p>
+            <p class="text-sm font-bold uppercase tracking-[0.14em] text-qgreen">Maqolalar boshqaruvi</p>
+            <h2 class="mt-1 font-display text-3xl font-extrabold tracking-tight text-qnavy dark:text-white">Maqolalar ro‘yxati</h2>
           </div>
+
+          <button id="newArticleButton" type="button" class="inline-flex items-center gap-2 rounded-xl bg-qblue px-5 py-3 font-bold text-white shadow-lg shadow-sky-900/15 transition hover:-translate-y-0.5 hover:bg-qnavy">
+            <svg viewBox="0 0 24 24" class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M12 5v14M5 12h14"></path>
+            </svg>
+            Yangi maqola
+          </button>
         </div>
 
-        <div class="topbar-actions">
-          <div class="admin-user">
-            <strong id="adminUsername">Admin</strong>
-            <span>Tahririyat boshqaruvi</span>
+        <div class="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm dark:border-slate-800 dark:bg-slate-900">
+          <div class="overflow-x-auto">
+            <table class="min-w-full text-left text-sm">
+              <thead class="border-b border-slate-200 bg-slate-50 dark:border-slate-800 dark:bg-slate-950">
+                <tr>
+                  <th class="px-5 py-4 font-bold text-slate-600 dark:text-slate-300">Sarlavha</th>
+                  <th class="px-5 py-4 font-bold text-slate-600 dark:text-slate-300">Rukn</th>
+                  <th class="px-5 py-4 font-bold text-slate-600 dark:text-slate-300">Turi</th>
+                  <th class="px-5 py-4 font-bold text-slate-600 dark:text-slate-300">Holat</th>
+                  <th class="px-5 py-4 font-bold text-slate-600 dark:text-slate-300">Amallar</th>
+                </tr>
+              </thead>
+              <tbody id="articlesTableBody" class="divide-y divide-slate-200 dark:divide-slate-800"></tbody>
+            </table>
           </div>
-
-          <a href="/" target="_blank" rel="noopener" class="btn btn-light">Saytni ochish</a>
-          <button id="logoutButton" type="button" class="btn btn-dark" aria-label="Admin paneldan chiqish">Chiqish</button>
         </div>
-      </header>
+      </section>
 
-      <main class="main-content">
-        <div id="globalNotice" class="notice" role="alert"></div>
+      <section id="categoriesTab" class="tab-content hidden animate-fade-in">
+        <div class="mb-6 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+          <div>
+            <p class="text-sm font-bold uppercase tracking-[0.14em] text-qgreen">Ruknlar boshqaruvi</p>
+            <h2 class="mt-1 font-display text-3xl font-extrabold tracking-tight text-qnavy dark:text-white">Ruknlar ro‘yxati</h2>
+          </div>
 
-        <section id="dashboardView" class="view active">
-          <div class="hero-panel">
+          <button id="newCategoryButton" type="button" class="inline-flex items-center gap-2 rounded-xl bg-qblue px-5 py-3 font-bold text-white shadow-lg shadow-sky-900/15 transition hover:-translate-y-0.5 hover:bg-qnavy">
+            <svg viewBox="0 0 24 24" class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M12 5v14M5 12h14"></path>
+            </svg>
+            Yangi rukn
+          </button>
+        </div>
+
+        <div class="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm dark:border-slate-800 dark:bg-slate-900">
+          <div class="overflow-x-auto">
+            <table class="min-w-full text-left text-sm">
+              <thead class="border-b border-slate-200 bg-slate-50 dark:border-slate-800 dark:bg-slate-950">
+                <tr>
+                  <th class="px-5 py-4 font-bold text-slate-600 dark:text-slate-300">Rukn nomi</th>
+                  <th class="px-5 py-4 font-bold text-slate-600 dark:text-slate-300">Slug</th>
+                  <th class="px-5 py-4 font-bold text-slate-600 dark:text-slate-300">Holat</th>
+                  <th class="px-5 py-4 font-bold text-slate-600 dark:text-slate-300">Tartib</th>
+                  <th class="px-5 py-4 font-bold text-slate-600 dark:text-slate-300">Amallar</th>
+                </tr>
+              </thead>
+              <tbody id="categoriesTableBody" class="divide-y divide-slate-200 dark:divide-slate-800"></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <section id="advertisementsTab" class="tab-content hidden animate-fade-in">
+        <div class="mb-6 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+          <div>
+            <p class="text-sm font-bold uppercase tracking-[0.14em] text-qgreen">Reklama boshqaruvi</p>
+            <h2 class="mt-1 font-display text-3xl font-extrabold tracking-tight text-qnavy dark:text-white">Reklamalar ro‘yxati</h2>
+          </div>
+
+          <button id="newAdButton" type="button" class="inline-flex items-center gap-2 rounded-xl bg-qblue px-5 py-3 font-bold text-white shadow-lg shadow-sky-900/15 transition hover:-translate-y-0.5 hover:bg-qnavy">
+            <svg viewBox="0 0 24 24" class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M12 5v14M5 12h14"></path>
+            </svg>
+            Yangi reklama
+          </button>
+        </div>
+
+        <div class="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm dark:border-slate-800 dark:bg-slate-900">
+          <div class="overflow-x-auto">
+            <table class="min-w-full text-left text-sm">
+              <thead class="border-b border-slate-200 bg-slate-50 dark:border-slate-800 dark:bg-slate-950">
+                <tr>
+                  <th class="px-5 py-4 font-bold text-slate-600 dark:text-slate-300">Sarlavha</th>
+                  <th class="px-5 py-4 font-bold text-slate-600 dark:text-slate-300">Kompaniya</th>
+                  <th class="px-5 py-4 font-bold text-slate-600 dark:text-slate-300">Holat</th>
+                  <th class="px-5 py-4 font-bold text-slate-600 dark:text-slate-300">Amallar</th>
+                </tr>
+              </thead>
+              <tbody id="adsTableBody" class="divide-y divide-slate-200 dark:divide-slate-800"></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <section id="settingsTab" class="tab-content hidden animate-fade-in">
+        <div class="mb-6">
+          <p class="text-sm font-bold uppercase tracking-[0.14em] text-qgreen">Sayt sozlamalari</p>
+          <h2 class="mt-1 font-display text-3xl font-extrabold tracking-tight text-qnavy dark:text-white">Asosiy sozlamalar</h2>
+        </div>
+
+        <div class="rounded-2xl border border-slate-200 bg-white p-6 dark:border-slate-800 dark:bg-slate-900">
+          <form id="settingsForm" class="grid gap-5 sm:grid-cols-2">
             <div>
-              <h2>Assalomu alaykum, tahririyat!</h2>
-              <p>Bu yerda QurilishInfo saytidagi maqolalar, murojaatlar, reklama va saytning asosiy ma’lumotlarini boshqarishingiz mumkin.</p>
+              <label class="block text-sm font-bold text-slate-700 dark:text-slate-200">Sayt nomi</label>
+              <input type="text" name="site_name" class="mt-1 w-full rounded-xl border border-slate-300 bg-slate-50 px-4 py-3 outline-none transition focus:border-qblue focus:bg-white focus:ring-4 focus:ring-sky-100 dark:border-slate-700 dark:bg-slate-950 dark:focus:border-sky-400 dark:focus:bg-slate-950 dark:focus:ring-sky-900/30">
             </div>
 
-            <button class="btn btn-warning" type="button" data-go-view="articleForm">
-              ＋ Yangi maqola qo‘shish
-            </button>
-          </div>
-
-          <div class="stats-grid">
-            <article class="stat-card">
-              <span class="stat-label">Jami maqolalar</span>
-              <strong id="statArticles">0</strong>
-              <span class="stat-hint">Barcha materiallar</span>
-            </article>
-
-            <article class="stat-card">
-              <span class="stat-label">Qoralamalar</span>
-              <strong id="statDrafts">0</strong>
-              <span class="stat-hint">Hali e’lon qilinmagan</span>
-            </article>
-
-            <article class="stat-card">
-              <span class="stat-label">Faol reklamalar</span>
-              <strong id="statAds">0</strong>
-              <span class="stat-hint">Hamkorlik materiallari</span>
-            </article>
-
-            <article class="stat-card">
-              <span class="stat-label">Yangi murojaatlar</span>
-              <strong id="statAppeals">0</strong>
-              <span class="stat-hint">Javob kutayotgan savollar</span>
-            </article>
-          </div>
-
-          <div class="dashboard-grid">
-            <section class="panel">
-              <header class="panel-header">
-                <h3>So‘nggi maqolalar</h3>
-                <button class="btn btn-light btn-small" type="button" data-go-view="articles">Barchasini ko‘rish</button>
-              </header>
-              <div id="recentArticles" class="panel-body recent-list"></div>
-            </section>
-
-            <section class="panel">
-              <header class="panel-header">
-                <h3>Tezkor amallar</h3>
-              </header>
-              <div class="panel-body quick-actions">
-                <button class="btn btn-primary" type="button" data-go-view="articleForm">＋ Maqola yozish</button>
-                <button class="btn btn-light" type="button" data-go-view="advertisements">▣ Reklama joylashtirish</button>
-                <button class="btn btn-light" type="button" data-go-view="appeals">✉ Murojaatlarni ko‘rish</button>
-                <button class="btn btn-light" type="button" data-go-view="settings">⚙ Sayt sozlamalari</button>
-              </div>
-            </section>
-          </div>
-        </section>
-
-        <section id="articlesView" class="view">
-          <div class="section-heading">
             <div>
-              <h2>Maqolalar</h2>
-              <p>Materiallarni qidiring, tahrirlang yoki o‘chiring.</p>
-            </div>
-            <button class="btn btn-primary" type="button" data-go-view="articleForm">＋ Yangi maqola</button>
-          </div>
-
-          <section class="table-card">
-            <div class="toolbar">
-              <input id="articleSearch" type="search" placeholder="Sarlavha yoki rukn bo‘yicha qidirish" aria-label="Maqolalarni qidirish">
-
-              <select id="articleStatusFilter" aria-label="Maqola holatini filtrlash">
-                <option value="">Barcha holatlar</option>
-                <option value="published">E’lon qilingan</option>
-                <option value="draft">Qoralama</option>
-                <option value="archived">Arxiv</option>
-              </select>
+              <label class="block text-sm font-bold text-slate-700 dark:text-slate-200">Telegram URL</label>
+              <input type="url" name="telegram_url" class="mt-1 w-full rounded-xl border border-slate-300 bg-slate-50 px-4 py-3 outline-none transition focus:border-qblue focus:bg-white focus:ring-4 focus:ring-sky-100 dark:border-slate-700 dark:bg-slate-950 dark:focus:border-sky-400 dark:focus:bg-slate-950 dark:focus:ring-sky-900/30">
             </div>
 
-            <div class="table-wrap">
-              <table>
-                <thead>
-                  <tr>
-                    <th>Maqola</th>
-                    <th>Rukn</th>
-                    <th>Holat</th>
-                    <th>Sana</th>
-                    <th>Amallar</th>
-                  </tr>
-                </thead>
-                <tbody id="articlesTableBody"></tbody>
-              </table>
-            </div>
-          </section>
-        </section>
-
-        <section id="articleFormView" class="view">
-          <div class="section-heading">
             <div>
-              <h2 id="articleFormTitle">Yangi maqola qo‘shish</h2>
-              <p>Materialni to‘liq kiriting. Qoralama holatida saqlab, keyin e’lon qilishingiz ham mumkin.</p>
+              <label class="block text-sm font-bold text-slate-700 dark:text-slate-200">Instagram URL</label>
+              <input type="url" name="instagram_url" class="mt-1 w-full rounded-xl border border-slate-300 bg-slate-50 px-4 py-3 outline-none transition focus:border-qblue focus:bg-white focus:ring-4 focus:ring-sky-100 dark:border-slate-700 dark:bg-slate-950 dark:focus:border-sky-400 dark:focus:bg-slate-950 dark:focus:ring-sky-900/30">
             </div>
-            <button id="cancelArticleEdit" class="btn btn-light hidden" type="button">Bekor qilish</button>
-          </div>
 
-          <form id="articleForm" class="form-card">
-            <input id="articleId" type="hidden">
+            <div>
+              <label class="block text-sm font-bold text-slate-700 dark:text-slate-200">Facebook URL</label>
+              <input type="url" name="facebook_url" class="mt-1 w-full rounded-xl border border-slate-300 bg-slate-50 px-4 py-3 outline-none transition focus:border-qblue focus:bg-white focus:ring-4 focus:ring-sky-100 dark:border-slate-700 dark:bg-slate-950 dark:focus:border-sky-400 dark:focus:bg-slate-950 dark:focus:ring-sky-900/30">
+            </div>
 
-            <div class="form-grid">
-              <div class="field">
-                <label for="articleCategory">Rukn</label>
-                <select id="articleCategory" required>
-                  <option value="">Ruknni tanlang</option>
-                  <option value="Savol-javob">Savol-javob</option>
-                  <option value="Uy qurish">Uy qurish</option>
-                  <option value="Uy sotib olish">Uy sotib olish</option>
-                  <option value="Inspeksiya izohlaydi">Inspeksiya izohlaydi</option>
-                  <option value="Qaror sodda tilda">Qaror sodda tilda</option>
-                  <option value="Rasmiy xabarlar">Rasmiy xabarlar</option>
-                  <option value="Ruxsatnoma">Ruxsatnoma</option>
-                  <option value="Materiallar">Materiallar</option>
-                  <option value="Yangiliklar">Yangiliklar</option>
+            <div>
+              <label class="block text-sm font-bold text-slate-700 dark:text-slate-200">YouTube URL</label>
+              <input type="url" name="youtube_url" class="mt-1 w-full rounded-xl border border-slate-300 bg-slate-50 px-4 py-3 outline-none transition focus:border-qblue focus:bg-white focus:ring-4 focus:ring-sky-100 dark:border-slate-700 dark:bg-slate-950 dark:focus:border-sky-400 dark:focus:bg-slate-950 dark:focus:ring-sky-900/30">
+            </div>
+
+            <div>
+              <label class="block text-sm font-bold text-slate-700 dark:text-slate-200">TikTok URL</label>
+              <input type="url" name="tiktok_url" class="mt-1 w-full rounded-xl border border-slate-300 bg-slate-50 px-4 py-3 outline-none transition focus:border-qblue focus:bg-white focus:ring-4 focus:ring-sky-100 dark:border-slate-700 dark:bg-slate-950 dark:focus:border-sky-400 dark:focus:bg-slate-950 dark:focus:ring-sky-900/30">
+            </div>
+
+            <div class="sm:col-span-2">
+              <label class="block text-sm font-bold text-slate-700 dark:text-slate-200">Tahririyat kontakti</label>
+              <input type="text" name="contact" class="mt-1 w-full rounded-xl border border-slate-300 bg-slate-50 px-4 py-3 outline-none transition focus:border-qblue focus:bg-white focus:ring-4 focus:ring-sky-100 dark:border-slate-700 dark:bg-slate-950 dark:focus:border-sky-400 dark:focus:bg-slate-950 dark:focus:ring-sky-900/30">
+            </div>
+
+            <div class="sm:col-span-2">
+              <label class="block text-sm font-bold text-slate-700 dark:text-slate-200">Sayt haqida</label>
+              <textarea name="about_text" rows="4" class="mt-1 w-full rounded-xl border border-slate-300 bg-slate-50 px-4 py-3 outline-none transition focus:border-qblue focus:bg-white focus:ring-4 focus:ring-sky-100 dark:border-slate-700 dark:bg-slate-950 dark:focus:border-sky-400 dark:focus:bg-slate-950 dark:focus:ring-sky-900/30"></textarea>
+            </div>
+
+            <div class="sm:col-span-2">
+              <button type="submit" class="inline-flex items-center gap-2 rounded-xl bg-qblue px-5 py-3.5 font-bold text-white shadow-lg shadow-sky-900/15 transition hover:-translate-y-0.5 hover:bg-qnavy">
+                Saqlash
+                <svg viewBox="0 0 24 24" class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M5 12h14M13 6l6 6-6 6"></path>
+                </svg>
+              </button>
+            </div>
+          </form>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <div id="articleModal" class="fixed inset-0 z-[60] hidden overflow-y-auto bg-slate-950/70 p-0 backdrop-blur-sm sm:p-6">
+    <div class="mx-auto min-h-full max-w-4xl sm:flex sm:min-h-full sm:items-center">
+      <div class="relative min-h-screen w-full bg-white shadow-2xl dark:bg-slate-900 sm:min-h-0 sm:rounded-3xl">
+        <button id="articleModalClose" type="button" class="absolute right-4 top-4 z-10 grid h-11 w-11 place-items-center rounded-xl bg-white/95 text-slate-700 shadow-lg hover:text-qblue dark:bg-slate-800/95 dark:text-slate-200" aria-label="Oynani yopish">
+          <svg viewBox="0 0 24 24" class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M6 6l12 12M18 6L6 18"></path>
+          </svg>
+        </button>
+
+        <div class="max-h-[90vh] overflow-y-auto px-5 py-8 sm:px-10 sm:py-10">
+          <h2 id="articleModalTitle" class="font-display text-2xl font-extrabold text-qnavy dark:text-white">Yangi maqola</h2>
+
+          <form id="articleForm" class="mt-6 grid gap-5">
+            <div>
+              <label class="block text-sm font-bold text-slate-700 dark:text-slate-200">Sarlavha</label>
+              <input type="text" name="title" required class="mt-1 w-full rounded-xl border border-slate-300 bg-slate-50 px-4 py-3 outline-none transition focus:border-qblue focus:bg-white focus:ring-4 focus:ring-sky-100 dark:border-slate-700 dark:bg-slate-950 dark:focus:border-sky-400 dark:focus:bg-slate-950 dark:focus:ring-sky-900/30">
+            </div>
+
+            <div>
+              <label class="block text-sm font-bold text-slate-700 dark:text-slate-200">Rukn</label>
+              <select name="category" required class="mt-1 w-full rounded-xl border border-slate-300 bg-slate-50 px-4 py-3 outline-none transition focus:border-qblue focus:bg-white focus:ring-4 focus:ring-sky-100 dark:border-slate-700 dark:bg-slate-950 dark:focus:border-sky-400 dark:focus:bg-slate-950 dark:focus:ring-sky-900/30"></select>
+            </div>
+
+            <div class="grid gap-5 sm:grid-cols-2">
+              <div>
+                <label class="block text-sm font-bold text-slate-700 dark:text-slate-200">Maqola turi</label>
+                <select name="article_type" required class="mt-1 w-full rounded-xl border border-slate-300 bg-slate-50 px-4 py-3 outline-none transition focus:border-qblue focus:bg-white focus:ring-4 focus:ring-sky-100 dark:border-slate-700 dark:bg-slate-950 dark:focus:border-sky-400 dark:focus:bg-slate-950 dark:focus:ring-sky-900/30">
+                  <option value="guide">Qo‘llanma</option>
+                  <option value="news">Yangilik</option>
+                  <option value="official">Rasmiy xabar</option>
+                  <option value="analysis">Tahlil</option>
+                  <option value="question">Savol-javob</option>
                 </select>
               </div>
 
-              <div class="field">
-                <label for="articleStatus">Holat</label>
-                <select id="articleStatus" required>
-                  <option value="published">E’lon qilingan</option>
+              <div>
+                <label class="block text-sm font-bold text-slate-700 dark:text-slate-200">Holat</label>
+                <select name="status" required class="mt-1 w-full rounded-xl border border-slate-300 bg-slate-50 px-4 py-3 outline-none transition focus:border-qblue focus:bg-white focus:ring-4 focus:ring-sky-100 dark:border-slate-700 dark:bg-slate-950 dark:focus:border-sky-400 dark:focus:bg-slate-950 dark:focus:ring-sky-900/30">
                   <option value="draft">Qoralama</option>
-                  <option value="archived">Arxiv</option>
+                  <option value="published">Chiqarilgan</option>
                 </select>
               </div>
+            </div>
 
-              <div class="field field-full">
-                <label for="articleTitle">Maqola sarlavhasi</label>
-                <input id="articleTitle" required placeholder="Masalan: Uy sotib olishdan oldin tekshiriladigan 7 hujjat">
+            <div>
+              <label class="block text-sm font-bold text-slate-700 dark:text-slate-200">Lid (qisqa kirish)</label>
+              <textarea name="lead" required rows="3" class="mt-1 w-full rounded-xl border border-slate-300 bg-slate-50 px-4 py-3 outline-none transition focus:border-qblue focus:bg-white focus:ring-4 focus:ring-sky-100 dark:border-slate-700 dark:bg-slate-950 dark:focus:border-sky-400 dark:focus:bg-slate-950 dark:focus:ring-sky-900/30"></textarea>
+            </div>
+
+            <div>
+              <label class="block text-sm font-bold text-slate-700 dark:text-slate-200">Asosiy matn (qatorlar orasiga bo‘sh qator qoldiring)</label>
+              <textarea name="body" required rows="10" class="mt-1 w-full rounded-xl border border-slate-300 bg-slate-50 px-4 py-3 outline-none transition focus:border-qblue focus:bg-white focus:ring-4 focus:ring-sky-100 dark:border-slate-700 dark:bg-slate-950 dark:focus:border-sky-400 dark:focus:bg-slate-950 dark:focus:ring-sky-900/30"></textarea>
+            </div>
+
+            <div class="grid gap-5 sm:grid-cols-2">
+              <div>
+                <label class="block text-sm font-bold text-slate-700 dark:text-slate-200">Muallif</label>
+                <input type="text" name="author" class="mt-1 w-full rounded-xl border border-slate-300 bg-slate-50 px-4 py-3 outline-none transition focus:border-qblue focus:bg-white focus:ring-4 focus:ring-sky-100 dark:border-slate-700 dark:bg-slate-950 dark:focus:border-sky-400 dark:focus:bg-slate-950 dark:focus:ring-sky-900/30">
               </div>
 
-              <div class="field field-full">
-                <label for="articleLead">Qisqacha izoh</label>
-                <textarea id="articleLead" required placeholder="Maqolaning 1–2 jumlalik qisqacha mazmuni"></textarea>
-              </div>
-
-              <div class="field field-full">
-                <label for="articleBody">To‘liq maqola matni</label>
-                <textarea id="articleBody" required placeholder="Maqola matnini shu yerga yozing. Paragraflarni bo‘sh qator bilan ajrating."></textarea>
-              </div>
-
-              <div class="field">
-                <label for="articleMinutes">O‘qish vaqti (daqiqada)</label>
-                <input id="articleMinutes" type="number" min="1" value="5" required>
-              </div>
-
-              <div class="field">
-                <label for="articleAuthor">Muallif</label>
-                <input id="articleAuthor" value="QurilishInfo tahririyati">
-              </div>
-
-              <div class="field field-full">
-                <label for="articleImageUrl">Rasm havolasi</label>
-                <input id="articleImageUrl" type="url" placeholder="https://...">
-                <p class="help-text">Hozircha rasmni internetdagi to‘g‘ridan-to‘g‘ri havola orqali biriktiring.</p>
+              <div>
+                <label class="block text-sm font-bold text-slate-700 dark:text-slate-200">O‘qish vaqti (daqiqada)</label>
+                <input type="number" name="minutes" min="1" class="mt-1 w-full rounded-xl border border-slate-300 bg-slate-50 px-4 py-3 outline-none transition focus:border-qblue focus:bg-white focus:ring-4 focus:ring-sky-100 dark:border-slate-700 dark:bg-slate-950 dark:focus:border-sky-400 dark:focus:bg-slate-950 dark:focus:ring-sky-900/30">
               </div>
             </div>
 
-            <hr class="form-divider">
-
-            <h3 style="margin: 0 0 16px; color: var(--navy);">Rasmiy manba va foydali bloklar</h3>
-
-            <div class="form-grid">
-              <div class="field">
-                <label for="articleSourceName">Rasmiy manba nomi</label>
-                <input id="articleSourceName" placeholder="Masalan: Lex.uz">
+            <div class="grid gap-5 sm:grid-cols-2">
+              <div>
+                <label class="block text-sm font-bold text-slate-700 dark:text-slate-200">Rasm URL (ixtiyoriy)</label>
+                <input type="url" name="image_url" class="mt-1 w-full rounded-xl border border-slate-300 bg-slate-50 px-4 py-3 outline-none transition focus:border-qblue focus:bg-white focus:ring-4 focus:ring-sky-100 dark:border-slate-700 dark:bg-slate-950 dark:focus:border-sky-400 dark:focus:bg-slate-950 dark:focus:ring-sky-900/30">
               </div>
 
-              <div class="field">
-                <label for="articleSourceUrl">Rasmiy manba havolasi</label>
-                <input id="articleSourceUrl" type="url" placeholder="https://lex.uz/...">
-              </div>
-
-              <div class="field">
-                <label for="articleDocumentNo">Hujjat / manba raqami</label>
-                <input id="articleDocumentNo" placeholder="Masalan: PQ-123">
-              </div>
-
-              <div class="field">
-                <label for="articleUpdated">Yangilangan sana</label>
-                <input id="articleUpdated" type="date">
-              </div>
-
-              <div class="field field-full">
-                <label for="articleSteps">Nima qilish kerak? Qadamlar</label>
-                <textarea id="articleSteps" placeholder="Har bir qadamni yangi qatordan yozing.&#10;1-qadam&#10;2-qadam&#10;3-qadam"></textarea>
-              </div>
-
-              <div class="field field-full">
-                <label for="articleWarning">E’tibor bering</label>
-                <textarea id="articleWarning" placeholder="Muhim ogohlantirish yoki eslatmani yozing"></textarea>
+              <div>
+                <label class="block text-sm font-bold text-slate-700 dark:text-slate-200">Rasm izohi (ixtiyoriy)</label>
+                <input type="text" name="image_caption" class="mt-1 w-full rounded-xl border border-slate-300 bg-slate-50 px-4 py-3 outline-none transition focus:border-qblue focus:bg-white focus:ring-4 focus:ring-sky-100 dark:border-slate-700 dark:bg-slate-950 dark:focus:border-sky-400 dark:focus:bg-slate-950 dark:focus:ring-sky-900/30">
               </div>
             </div>
 
-            <div class="form-actions">
-              <button class="btn btn-primary" type="submit">Saqlash</button>
-              <button id="saveAsDraftButton" class="btn btn-warning" type="button">Qoralama qilib saqlash</button>
-              <button id="resetArticleFormButton" class="btn btn-light" type="button">Tozalash</button>
+            <div>
+              <label class="block text-sm font-bold text-slate-700 dark:text-slate-200">Tezklar (har qator bitta qadam)</label>
+              <textarea name="steps" rows="4" class="mt-1 w-full rounded-xl border border-slate-300 bg-slate-50 px-4 py-3 outline-none transition focus:border-qblue focus:bg-white focus:ring-4 focus:ring-sky-100 dark:border-slate-700 dark:bg-slate-950 dark:focus:border-sky-400 dark:focus:bg-slate-950 dark:focus:ring-sky-900/30"></textarea>
+            </div>
+
+            <div>
+              <label class="block text-sm font-bold text-slate-700 dark:text-slate-200">E’tibor bering (ixtiyoriy)</label>
+              <textarea name="warning" rows="3" class="mt-1 w-full rounded-xl border border-slate-300 bg-slate-50 px-4 py-3 outline-none transition focus:border-qblue focus:bg-white focus:ring-4 focus:ring-sky-100 dark:border-slate-700 dark:bg-slate-950 dark:focus:border-sky-400 dark:focus:bg-slate-950 dark:focus:ring-sky-900/30"></textarea>
+            </div>
+
+            <div class="grid gap-5 sm:grid-cols-2">
+              <div>
+                <label class="block text-sm font-bold text-slate-700 dark:text-slate-200">Manba nomi (ixtiyoriy)</label>
+                <input type="text" name="source_name" class="mt-1 w-full rounded-xl border border-slate-300 bg-slate-50 px-4 py-3 outline-none transition focus:border-qblue focus:bg-white focus:ring-4 focus:ring-sky-100 dark:border-slate-700 dark:bg-slate-950 dark:focus:border-sky-400 dark:focus:bg-slate-950 dark:focus:ring-sky-900/30">
+              </div>
+
+              <div>
+                <label class="block text-sm font-bold text-slate-700 dark:text-slate-200">Manba URL (ixtiyoriy)</label>
+                <input type="url" name="source_url" class="mt-1 w-full rounded-xl border border-slate-300 bg-slate-50 px-4 py-3 outline-none transition focus:border-qblue focus:bg-white focus:ring-4 focus:ring-sky-100 dark:border-slate-700 dark:bg-slate-950 dark:focus:border-sky-400 dark:focus:bg-slate-950 dark:focus:ring-sky-900/30">
+              </div>
+            </div>
+
+            <div>
+              <label class="block text-sm font-bold text-slate-700 dark:text-slate-200">Hujjat raqami / manba (ixtiyoriy)</label>
+              <input type="text" name="document_no" class="mt-1 w-full rounded-xl border border-slate-300 bg-slate-50 px-4 py-3 outline-none transition focus:border-qblue focus:bg-white focus:ring-4 focus:ring-sky-100 dark:border-slate-700 dark:bg-slate-950 dark:focus:border-sky-400 dark:focus:bg-slate-950 dark:focus:ring-sky-900/30">
+            </div>
+
+            <div class="grid gap-5 sm:grid-cols-2">
+              <div>
+                <label class="block text-sm font-bold text-slate-700 dark:text-slate-200">Yangilangan sana</label>
+                <input type="date" name="updated" class="mt-1 w-full rounded-xl border border-slate-300 bg-slate-50 px-4 py-3 outline-none transition focus:border-qblue focus:bg-white focus:ring-4 focus:ring-sky-100 dark:border-slate-700 dark:bg-slate-950 dark:focus:border-sky-400 dark:focus:bg-slate-950 dark:focus:ring-sky-900/30">
+              </div>
+
+              <div>
+                <label class="block text-sm font-bold text-slate-700 dark:text-slate-200">Chiqarilgan sana</label>
+                <input type="datetime-local" name="published_at" class="mt-1 w-full rounded-xl border border-slate-300 bg-slate-50 px-4 py-3 outline-none transition focus:border-qblue focus:bg-white focus:ring-4 focus:ring-sky-100 dark:border-slate-700 dark:bg-slate-950 dark:focus:border-sky-400 dark:focus:bg-slate-950 dark:focus:ring-sky-900/30">
+              </div>
+            </div>
+
+            <div>
+              <label class="block text-sm font-bold text-slate-700 dark:text-slate-200">Teglar (vergul bilan ajrating)</label>
+              <input type="text" name="tags" class="mt-1 w-full rounded-xl border border-slate-300 bg-slate-50 px-4 py-3 outline-none transition focus:border-qblue focus:bg-white focus:ring-4 focus:ring-sky-100 dark:border-slate-700 dark:bg-slate-950 dark:focus:border-sky-400 dark:focus:bg-slate-950 dark:focus:ring-sky-900/30">
+            </div>
+
+            <div class="flex items-center gap-3">
+              <input type="checkbox" name="is_featured" id="is_featured" class="h-4 w-4 rounded border-slate-300 text-qblue focus:ring-qblue dark:border-slate-700 dark:bg-slate-950">
+              <label for="is_featured" class="text-sm font-bold text-slate-700 dark:text-slate-200">Bosh sahifada asosiy maqola</label>
+            </div>
+
+            <div class="flex items-center gap-3">
+              <input type="checkbox" name="is_pinned" id="is_pinned" class="h-4 w-4 rounded border-slate-300 text-qblue focus:ring-qblue dark:border-slate-700 dark:bg-slate-950">
+              <label for="is_pinned" class="text-sm font-bold text-slate-700 dark:text-slate-200">Muhim xabar sifatida ko‘rsatish</label>
+            </div>
+
+            <div class="flex items-center gap-3">
+              <input type="checkbox" name="is_advertisement" id="is_advertisement" class="h-4 w-4 rounded border-slate-300 text-qblue focus:ring-qblue dark:border-slate-700 dark:bg-slate-950">
+              <label for="is_advertisement" class="text-sm font-bold text-slate-700 dark:text-slate-200">Reklama sifatida belgilash</label>
+            </div>
+
+            <div class="flex items-center gap-3">
+              <button type="submit" class="inline-flex items-center gap-2 rounded-xl bg-qblue px-5 py-3.5 font-bold text-white shadow-lg shadow-sky-900/15 transition hover:-translate-y-0.5 hover:bg-qnavy">
+                Saqlash
+                <svg viewBox="0 0 24 24" class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M5 12h14M13 6l6 6-6 6"></path>
+                </svg>
+              </button>
+
+              <button type="button" id="cancelArticleButton" class="rounded-xl border border-slate-300 bg-white px-5 py-3.5 font-bold text-slate-700 hover:border-qblue hover:text-qblue dark:border-slate-700 dark:bg-slate-950 dark:text-slate-200">
+                Bekor qilish
+              </button>
             </div>
           </form>
-        </section>
-
-        <section id="advertisementsView" class="view">
-          <div class="section-heading">
-            <div>
-              <h2>Reklama va hamkorlik materiallari</h2>
-              <p>Reklama materiallari tahririy maqolalardan alohida belgilanadi.</p>
-            </div>
-          </div>
-
-          <form id="advertisementForm" class="form-card">
-            <input id="advertisementId" type="hidden">
-
-            <div class="form-grid">
-              <div class="field">
-                <label for="adLabel">Belgi</label>
-                <select id="adLabel">
-                  <option value="Reklama">Reklama</option>
-                  <option value="Hamkorlik materiali">Hamkorlik materiali</option>
-                </select>
-              </div>
-
-              <div class="field">
-                <label for="adStatus">Holat</label>
-                <select id="adStatus">
-                  <option value="active">Faol</option>
-                  <option value="inactive">Nofaol</option>
-                </select>
-              </div>
-
-              <div class="field">
-                <label for="adCompanyName">Kompaniya nomi</label>
-                <input id="adCompanyName" placeholder="Masalan: ABC Qurilish">
-              </div>
-
-              <div class="field">
-                <label for="adTargetUrl">Havola</label>
-                <input id="adTargetUrl" type="url" placeholder="https://...">
-              </div>
-
-              <div class="field field-full">
-                <label for="adTitle">Sarlavha</label>
-                <input id="adTitle" required placeholder="Reklama materialining sarlavhasi">
-              </div>
-
-              <div class="field field-full">
-                <label for="adDescription">Qisqacha tavsif</label>
-                <textarea id="adDescription" required placeholder="Hamkorlik materiali haqida qisqa va aniq ma’lumot"></textarea>
-              </div>
-
-              <div class="field field-full">
-                <label for="adImageUrl">Banner yoki rasm havolasi</label>
-                <input id="adImageUrl" type="url" placeholder="https://...">
-              </div>
-            </div>
-
-            <div class="form-actions">
-              <button class="btn btn-primary" type="submit">Reklamani saqlash</button>
-              <button id="cancelAdEdit" class="btn btn-light hidden" type="button">Bekor qilish</button>
-            </div>
-          </form>
-
-          <div style="height: 22px"></div>
-
-          <section class="table-card">
-            <div class="table-wrap">
-              <table>
-                <thead>
-                  <tr>
-                    <th>Material</th>
-                    <th>Kompaniya</th>
-                    <th>Belgi</th>
-                    <th>Holat</th>
-                    <th>Amallar</th>
-                  </tr>
-                </thead>
-                <tbody id="advertisementsTableBody"></tbody>
-              </table>
-            </div>
-          </section>
-        </section>
-
-        <section id="appealsView" class="view">
-          <div class="section-heading">
-            <div>
-              <h2>Murojaatlar</h2>
-              <p>Saytdagi forma orqali kelgan savollarni nazorat qiling.</p>
-            </div>
-          </div>
-
-          <section class="table-card">
-            <div class="toolbar">
-              <select id="appealStatusFilter" aria-label="Murojaat holatini filtrlash">
-                <option value="">Barcha murojaatlar</option>
-                <option value="new">Yangi</option>
-                <option value="reviewing">Ko‘rib chiqilmoqda</option>
-                <option value="answered">Javob berildi</option>
-                <option value="archived">Arxiv</option>
-              </select>
-            </div>
-
-            <div class="table-wrap">
-              <table>
-                <thead>
-                  <tr>
-                    <th>Murojaat</th>
-                    <th>Hudud va mavzu</th>
-                    <th>Sana</th>
-                    <th>Holat</th>
-                  </tr>
-                </thead>
-                <tbody id="appealsTableBody"></tbody>
-              </table>
-            </div>
-          </section>
-        </section>
-
-        <section id="settingsView" class="view">
-          <div class="section-heading">
-            <div>
-              <h2>Sayt sozlamalari</h2>
-              <p>“Biz haqimizda”, aloqa va ijtimoiy tarmoq manzillarini shu yerda yangilang.</p>
-            </div>
-          </div>
-
-          <form id="settingsForm" class="form-card">
-            <h3 style="margin: 0 0 16px; color: var(--navy);">Asosiy ma’lumotlar</h3>
-
-            <div class="form-grid">
-              <div class="field">
-                <label for="settingSiteName">Sayt nomi</label>
-                <input id="settingSiteName" required>
-              </div>
-
-              <div class="field">
-                <label for="settingContact">Aloqa nomi</label>
-                <input id="settingContact" placeholder="@qurilishinfo_admin">
-              </div>
-
-              <div class="field field-full">
-                <label for="settingDescription">Qisqa tavsif</label>
-                <textarea id="settingDescription"></textarea>
-              </div>
-
-              <div class="field field-full">
-                <label for="settingAbout">Biz haqimizda</label>
-                <textarea id="settingAbout"></textarea>
-              </div>
-
-              <div class="field field-full">
-                <label for="settingEditorialPolicy">Tahririyat va reklama qoidasi</label>
-                <textarea id="settingEditorialPolicy"></textarea>
-              </div>
-            </div>
-
-            <hr class="form-divider">
-
-            <h3 style="margin: 0 0 16px; color: var(--navy);">Murojaat bloki</h3>
-
-            <div class="form-grid">
-              <div class="field">
-                <label for="settingCtaTitle">CTA sarlavhasi</label>
-                <input id="settingCtaTitle">
-              </div>
-
-              <div class="field">
-                <label for="settingTelegramUrl">Telegram kanal yoki bot havolasi</label>
-                <input id="settingTelegramUrl" type="url" placeholder="https://t.me/...">
-              </div>
-
-              <div class="field field-full">
-                <label for="settingCtaText">CTA matni</label>
-                <textarea id="settingCtaText"></textarea>
-              </div>
-
-              <div class="field">
-                <label for="settingContactUrl">Reklama / aloqa Telegram havolasi</label>
-                <input id="settingContactUrl" type="url" placeholder="https://t.me/...">
-              </div>
-            </div>
-
-            <hr class="form-divider">
-
-            <h3 style="margin: 0 0 16px; color: var(--navy);">Ijtimoiy tarmoqlar</h3>
-
-            <div class="form-grid">
-              <div class="field">
-                <label for="settingInstagramUrl">Instagram havolasi</label>
-                <input id="settingInstagramUrl" type="url" placeholder="https://instagram.com/...">
-              </div>
-
-              <div class="field">
-                <label for="settingFacebookUrl">Facebook havolasi</label>
-                <input id="settingFacebookUrl" type="url" placeholder="https://facebook.com/...">
-              </div>
-
-              <div class="field">
-                <label for="settingYoutubeUrl">YouTube havolasi</label>
-                <input id="settingYoutubeUrl" type="url" placeholder="https://youtube.com/...">
-              </div>
-
-              <div class="field">
-                <label for="settingTiktokUrl">TikTok havolasi</label>
-                <input id="settingTiktokUrl" type="url" placeholder="https://tiktok.com/@...">
-              </div>
-            </div>
-
-            <div class="form-actions">
-              <button class="btn btn-primary" type="submit">Sozlamalarni saqlash</button>
-            </div>
-          </form>
-        </section>
-
-        <section id="passwordView" class="view">
-          <div class="section-heading">
-            <div>
-              <h2>Parolni almashtirish</h2>
-              <p>Hisobingiz xavfsizligi uchun kuchli va boshqalarga noma’lum parol qo‘ying.</p>
-            </div>
-          </div>
-
-          <form id="passwordForm" class="form-card" style="max-width: 650px">
-            <div class="field">
-              <label for="currentPassword">Joriy parol</label>
-              <input id="currentPassword" type="password" autocomplete="current-password" required>
-            </div>
-
-            <div class="field">
-              <label for="newPassword">Yangi parol</label>
-              <input id="newPassword" type="password" minlength="8" autocomplete="new-password" required>
-              <p class="help-text">Kamida 8 belgi ishlating. Harf, raqam va belgilar aralash bo‘lsa yaxshi.</p>
-            </div>
-
-            <div class="field">
-              <label for="newPasswordAgain">Yangi parolni qayta kiriting</label>
-              <input id="newPasswordAgain" type="password" minlength="8" autocomplete="new-password" required>
-            </div>
-
-            <div class="form-actions">
-              <button class="btn btn-primary" type="submit">Parolni yangilash</button>
-            </div>
-          </form>
-        </section>
-      </main>
-    </section>
+        </div>
+      </div>
+    </div>
   </div>
 
   <script>
     const state = {
       articles: [],
+      categories: [],
       advertisements: [],
-      appeals: [],
       settings: {},
-      currentView: "dashboard",
-      adminUsername: ""
+      editingArticleId: null
     };
 
-    const VIEW_META = {
-      dashboard: {
-        title: "Boshqaruv paneli",
-        subtitle: "Tahririyat faoliyati bo‘yicha umumiy ko‘rinish"
-      },
-      articles: {
-        title: "Maqolalar",
-        subtitle: "Barcha materiallarni boshqaring"
-      },
-      articleForm: {
-        title: "Maqola muharriri",
-        subtitle: "Yangi material yozing yoki mavjudini tahrirlang"
-      },
-      advertisements: {
-        title: "Reklama",
-        subtitle: "Hamkorlik materiallari va reklama bloklari"
-      },
-      appeals: {
-        title: "Murojaatlar",
-        subtitle: "Foydalanuvchilardan kelgan savollar"
-      },
-      settings: {
-        title: "Sayt sozlamalari",
-        subtitle: "Aloqa, ijtimoiy tarmoqlar va tahririy ma’lumotlar"
-      },
-      password: {
-        title: "Parol",
-        subtitle: "Admin hisobingiz xavfsizligi"
-      }
-    };
-
-    async function api(url, options = {}) {
-      const config = {
-        credentials: "same-origin",
-        headers: {
-          ...(options.body ? { "Content-Type": "application/json" } : {}),
-          ...(options.headers || {})
-        },
-        ...options
-      };
-
-      const response = await fetch(url, config);
-
-      let payload = null;
-
-      try {
-        payload = await response.json();
-      } catch (error) {
-        payload = null;
-      }
-
-      if (!response.ok) {
-        throw new Error(payload?.error || "So‘rovni bajarishda xatolik yuz berdi");
-      }
-
-      return payload;
-    }
-
-    function showNotice(message, type = "success") {
-      const notice = document.getElementById("globalNotice");
-      notice.textContent = message;
-      notice.className = `notice ${type}`;
-
-      window.clearTimeout(showNotice.timer);
-
-      showNotice.timer = window.setTimeout(() => {
-        notice.className = "notice";
-        notice.textContent = "";
-      }, 5000);
-    }
+    const $ = (id) => document.getElementById(id);
 
     function escapeHtml(value) {
       return String(value ?? "")
@@ -1547,639 +548,415 @@
         .replace(/'/g, "&#039;");
     }
 
-    function formatDate(value) {
-      if (!value) {
-        return "—";
-      }
+    function articleTypeText(type) {
+      const map = {
+        guide: "Qo‘llanma",
+        news: "Yangilik",
+        official: "Rasmiy xabar",
+        analysis: "Tahlil",
+        question: "Savol-javob",
+        advertisement: "Hamkorlik materiali"
+      };
 
-      const date = new Date(value.replace(" ", "T") + (value.includes("Z") ? "" : "Z"));
+      return map[type] || "Maqola";
+    }
+
+    function formatDate(value) {
+      if (!value) return "";
+
+      const normalized = String(value).includes("T")
+        ? String(value)
+        : String(value).replace(" ", "T");
+
+      const date = new Date(normalized.endsWith("Z") ? normalized : normalized + "Z");
 
       if (Number.isNaN(date.getTime())) {
-        return value;
+        return String(value);
       }
 
       return new Intl.DateTimeFormat("uz-UZ", {
         year: "numeric",
-        month: "short",
-        day: "numeric",
-        hour: "2-digit",
-        minute: "2-digit"
+        month: "long",
+        day: "numeric"
       }).format(date);
     }
 
-    function articleStatusText(status) {
-      const map = {
-        published: "E’lon qilingan",
-        draft: "Qoralama",
-        archived: "Arxiv"
-      };
+    function applyTheme(theme) {
+      const isDark = theme === "dark";
+      document.documentElement.classList.toggle("dark", isDark);
+      localStorage.setItem("qurilishinfo-admin-theme", theme);
 
-      return map[status] || status || "E’lon qilingan";
+      $("themeSunIcon").innerHTML = isDark
+        ? '<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>'
+        : '<circle cx="12" cy="12" r="4"></circle><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"></path>';
     }
 
-    function appealStatusText(status) {
-      const map = {
-        new: "Yangi",
-        reviewing: "Ko‘rib chiqilmoqda",
-        answered: "Javob berildi",
-        archived: "Arxiv"
-      };
+    function initializeTheme() {
+      const saved = localStorage.getItem("qurilishinfo-admin-theme");
 
-      return map[status] || status;
-    }
-
-    function adStatusText(status) {
-      return status === "inactive" ? "Nofaol" : "Faol";
-    }
-
-    function statusBadge(status, type) {
-      const normalized = String(status || "").toLowerCase();
-      const suffix = type === "article"
-        ? (normalized === "published" ? "published" : normalized === "draft" ? "draft" : "archived")
-        : type === "appeal"
-          ? normalized
-          : (normalized === "active" ? "active" : "inactive");
-
-      const text = type === "article"
-        ? articleStatusText(normalized)
-        : type === "appeal"
-          ? appealStatusText(normalized)
-          : adStatusText(normalized);
-
-      return `<span class="badge badge-${suffix}">${escapeHtml(text)}</span>`;
-    }
-
-    function showView(viewName) {
-      const target = document.getElementById(`${viewName}View`);
-
-      if (!target) {
+      if (saved) {
+        applyTheme(saved);
         return;
       }
 
-      state.currentView = viewName;
+      const prefersDark = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
+      applyTheme(prefersDark ? "dark" : "light");
+    }
 
-      document.querySelectorAll(".view").forEach((view) => {
-        view.classList.remove("active");
+    function setTab(tabName) {
+      document.querySelectorAll(".tab-content").forEach((el) => el.classList.add("hidden"));
+      document.querySelectorAll(".nav-item").forEach((el) => el.classList.remove("active"));
+
+      $(`${tabName}Tab`).classList.remove("hidden");
+      document.querySelector(`[data-tab="${tabName}"]`).classList.add("active");
+
+      const titles = {
+        dashboard: "Dashboard",
+        articles: "Maqolalar",
+        categories: "Ruknlar",
+        advertisements: "Reklama",
+        settings: "Sozlamalar"
+      };
+
+      $("pageTitle").textContent = titles[tabName] || "Admin Panel";
+    }
+
+    function openArticleModal(article = null) {
+      state.editingArticleId = article ? article.id : null;
+
+      $("articleModalTitle").textContent = article ? "Maqolani tahrirlash" : "Yangi maqola";
+
+      const form = $("articleForm");
+      form.reset();
+
+      if (article) {
+        form.title.value = article.title || "";
+        form.category.value = article.category || "";
+        form.article_type.value = article.article_type || "guide";
+        form.status.value = article.status || "draft";
+        form.lead.value = article.lead || "";
+        form.body.value = article.body || "";
+        form.author.value = article.author || "";
+        form.minutes.value = article.minutes || 5;
+        form.image_url.value = article.image_url || "";
+        form.image_caption.value = article.image_caption || "";
+        form.steps.value = article.steps || "";
+        form.warning.value = article.warning || "";
+        form.source_name.value = article.source_name || "";
+        form.source_url.value = article.source_url || "";
+        form.document_no.value = article.document_no || "";
+        form.updated.value = article.updated ? article.updated.split("T")[0] : "";
+        form.published_at.value = article.published_at ? article.published_at.slice(0, 16) : "";
+        form.tags.value = article.tags || "";
+        form.is_featured.checked = Number(article.is_featured) === 1;
+        form.is_pinned.checked = Number(article.is_pinned) === 1;
+        form.is_advertisement.checked = Number(article.is_advertisement) === 1;
+      }
+
+      $("articleModal").classList.remove("hidden");
+      document.body.style.overflow = "hidden";
+    }
+
+    function closeArticleModal() {
+      $("articleModal").classList.add("hidden");
+      document.body.style.overflow = "";
+    }
+
+    async function getJson(url, fallback) {
+      try {
+        const response = await fetch(url);
+
+        if (!response.ok) {
+          return fallback;
+        }
+
+        return await response.json();
+      } catch (error) {
+        return fallback;
+      }
+    }
+
+    async function postJson(url, body) {
+      const response = await fetch(url, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(body)
       });
 
-      target.classList.add("active");
-
-      document.querySelectorAll(".nav-button").forEach((button) => {
-        button.classList.toggle("active", button.dataset.view === viewName);
-      });
-
-      const meta = VIEW_META[viewName] || VIEW_META.dashboard;
-
-      document.getElementById("pageTitle").textContent = meta.title;
-      document.getElementById("pageSubtitle").textContent = meta.subtitle;
-
-      closeMobileMenu();
-      window.scrollTo({ top: 0, behavior: "smooth" });
+      return await response.json();
     }
 
-    function openMobileMenu() {
-      document.getElementById("sidebar").classList.add("open");
-      document.getElementById("overlay").classList.add("open");
-    }
-
-    function closeMobileMenu() {
-      document.getElementById("sidebar").classList.remove("open");
-      document.getElementById("overlay").classList.remove("open");
-    }
-
-    async function loadAllData() {
-      const [articles, advertisements, appeals, settings] = await Promise.all([
-        api("/api/admin/articles"),
-        api("/api/admin/advertisements"),
-        api("/api/admin/appeals"),
-        api("/api/admin/settings")
+    async function loadDashboard() {
+      const [articles, categories, advertisements, settings] = await Promise.all([
+        getJson("/api/articles", []),
+        getJson("/api/categories", []),
+        getJson("/api/advertisements", []),
+        getJson("/api/settings", {})
       ]);
 
       state.articles = Array.isArray(articles) ? articles : [];
+      state.categories = Array.isArray(categories) ? categories : [];
       state.advertisements = Array.isArray(advertisements) ? advertisements : [];
-      state.appeals = Array.isArray(appeals) ? appeals : [];
       state.settings = settings || {};
 
-      renderDashboard();
-      renderArticles();
-      renderAdvertisements();
-      renderAppeals();
-      fillSettingsForm();
+      $("statArticles").textContent = state.articles.length;
+      $("statAds").textContent = state.advertisements.filter((ad) => ad.status === "active").length;
+      $("statCategories").textContent = state.categories.filter((cat) => cat.is_active).length;
+      $("statStatus").textContent = "OK";
+
+      renderDashboardArticles();
+      renderArticlesTable();
+      renderCategoriesTable();
+      renderAdsTable();
+      renderSettingsForm();
+      populateCategorySelect();
     }
 
-    function renderDashboard() {
-      const totalArticles = state.articles.length;
-      const draftArticles = state.articles.filter((article) => article.status === "draft").length;
-      const activeAds = state.advertisements.filter((ad) => ad.status === "active").length;
-      const newAppeals = state.appeals.filter((appeal) => appeal.status === "new").length;
+    function renderDashboardArticles() {
+      const latest = [...state.articles]
+        .sort((a, b) => {
+          const aDate = new Date(String(a.published_at || a.created_at || "").replace(" ", "T") + "Z").getTime() || 0;
+          const bDate = new Date(String(b.published_at || b.created_at || "").replace(" ", "T") + "Z").getTime() || 0;
 
-      document.getElementById("statArticles").textContent = totalArticles;
-      document.getElementById("statDrafts").textContent = draftArticles;
-      document.getElementById("statAds").textContent = activeAds;
-      document.getElementById("statAppeals").textContent = newAppeals;
+          return bDate - aDate || Number(b.id) - Number(a.id);
+        })
+        .slice(0, 6);
 
-      const recentContainer = document.getElementById("recentArticles");
-      const latest = state.articles.slice(0, 5);
+      $("dashboardArticles").innerHTML = latest.map((article) => {
+        const date = formatDate(article.published_at || article.created_at);
 
-      if (!latest.length) {
-        recentContainer.innerHTML = '<div class="empty-state">Hozircha maqola yo‘q. Birinchi materialni yozishni boshlang.</div>';
-        return;
-      }
-
-      recentContainer.innerHTML = latest.map((article) => `
-        <article class="recent-item">
-          <strong>${escapeHtml(article.title)}</strong>
-          <span>${escapeHtml(article.category)} · ${articleStatusText(article.status)} · ${formatDate(article.created_at)}</span>
-        </article>
-      `).join("");
+        return `
+          <article class="rounded-xl border border-slate-200 bg-slate-50 p-4 dark:border-slate-800 dark:bg-slate-950">
+            <div class="flex items-center justify-between gap-2 text-xs font-bold text-slate-500 dark:text-slate-400">
+              <span>${escapeHtml(article.category)}</span>
+              <span>${date ? date.split(" ")[0] : ""}</span>
+            </div>
+            <h3 class="mt-2 line-clamp-2 font-display text-base font-bold text-qnavy dark:text-white">${escapeHtml(article.title)}</h3>
+          </article>
+        `;
+      }).join("");
     }
 
-    function renderArticles() {
-      const query = document.getElementById("articleSearch").value.trim().toLowerCase();
-      const status = document.getElementById("articleStatusFilter").value;
+    function renderArticlesTable() {
+      const tbody = $("articlesTableBody");
 
-      const rows = state.articles.filter((article) => {
-        const haystack = `${article.title} ${article.category} ${article.lead}`.toLowerCase();
-        const matchesQuery = !query || haystack.includes(query);
-        const matchesStatus = !status || article.status === status;
+      tbody.innerHTML = state.articles.map((article) => {
+        const date = formatDate(article.published_at || article.created_at);
 
-        return matchesQuery && matchesStatus;
-      });
+        return `
+          <tr class="hover:bg-slate-50 dark:hover:bg-slate-950">
+            <td class="px-5 py-4">
+              <div class="font-semibold text-slate-800 dark:text-slate-200">${escapeHtml(article.title)}</div>
+              <div class="text-xs text-slate-500 dark:text-slate-400">${date || ""}</div>
+            </td>
+            <td class="px-5 py-4 text-slate-700 dark:text-slate-300">${escapeHtml(article.category)}</td>
+            <td class="px-5 py-4 text-slate-700 dark:text-slate-300">${articleTypeText(article.article_type)}</td>
+            <td class="px-5 py-4">
+              <span class="rounded-full bg-emerald-100 px-3 py-1 text-xs font-bold text-emerald-800 dark:bg-emerald-950/50 dark:text-emerald-300">${article.status === "published" ? "Chiqarilgan" : "Qoralama"}</span>
+            </td>
+            <td class="px-5 py-4">
+              <div class="flex items-center gap-2">
+                <button type="button" data-edit-article="${article.id}" class="rounded-lg border border-slate-300 bg-white px-3 py-1.5 text-xs font-bold text-slate-700 hover:border-qblue hover:text-qblue dark:border-slate-700 dark:bg-slate-950 dark:text-slate-200">Tahrirlash</button>
+                <button type="button" data-delete-article="${article.id}" class="rounded-lg border border-red-300 bg-white px-3 py-1.5 text-xs font-bold text-red-700 hover:border-red-500 hover:text-red-600 dark:border-red-800 dark:bg-slate-950 dark:text-red-300">O‘chirish</button>
+              </div>
+            </td>
+          </tr>
+        `;
+      }).join("");
+    }
 
-      const tbody = document.getElementById("articlesTableBody");
+    function renderCategoriesTable() {
+      const tbody = $("categoriesTableBody");
 
-      if (!rows.length) {
-        tbody.innerHTML = '<tr><td colspan="5"><div class="empty-state">Mos maqola topilmadi.</div></td></tr>';
-        return;
-      }
-
-      tbody.innerHTML = rows.map((article) => `
-        <tr>
-          <td class="article-title">
-            ${escapeHtml(article.title)}
-            <small>${escapeHtml(article.lead || "")}</small>
+      tbody.innerHTML = state.categories.map((category, index) => `
+        <tr class="hover:bg-slate-50 dark:hover:bg-slate-950">
+          <td class="px-5 py-4 font-semibold text-slate-800 dark:text-slate-200">${escapeHtml(category.name)}</td>
+          <td class="px-5 py-4 text-slate-700 dark:text-slate-300">${escapeHtml(category.slug)}</td>
+          <td class="px-5 py-4">
+            <span class="rounded-full ${category.is_active ? "bg-emerald-100 text-emerald-800 dark:bg-emerald-950/50 dark:text-emerald-300" : "bg-slate-200 text-slate-700 dark:bg-slate-800 dark:text-slate-300"} px-3 py-1 text-xs font-bold">${category.is_active ? "Faol" : "O‘chirilgan"}</span>
           </td>
-          <td>${escapeHtml(article.category)}</td>
-          <td>${statusBadge(article.status, "article")}</td>
-          <td>${formatDate(article.created_at)}</td>
-          <td>
-            <div class="actions-cell">
-              <button class="btn btn-light btn-small" type="button" onclick="editArticle(${article.id})">Tahrirlash</button>
-              <button class="btn btn-danger btn-small" type="button" onclick="deleteArticle(${article.id})">O‘chirish</button>
+          <td class="px-5 py-4 text-slate-700 dark:text-slate-300">${index + 1}</td>
+          <td class="px-5 py-4">
+            <div class="flex items-center gap-2">
+              <button type="button" data-edit-category="${category.id}" class="rounded-lg border border-slate-300 bg-white px-3 py-1.5 text-xs font-bold text-slate-700 hover:border-qblue hover:text-qblue dark:border-slate-700 dark:bg-slate-950 dark:text-slate-200">Tahrirlash</button>
+              <button type="button" data-delete-category="${category.id}" class="rounded-lg border border-red-300 bg-white px-3 py-1.5 text-xs font-bold text-red-700 hover:border-red-500 hover:text-red-600 dark:border-red-800 dark:bg-slate-950 dark:text-red-300">O‘chirish</button>
             </div>
           </td>
         </tr>
       `).join("");
     }
 
-    function renderAdvertisements() {
-      const tbody = document.getElementById("advertisementsTableBody");
-
-      if (!state.advertisements.length) {
-        tbody.innerHTML = '<tr><td colspan="5"><div class="empty-state">Hozircha reklama materiali yo‘q.</div></td></tr>';
-        return;
-      }
+    function renderAdsTable() {
+      const tbody = $("adsTableBody");
 
       tbody.innerHTML = state.advertisements.map((ad) => `
-        <tr>
-          <td class="article-title">
-            ${escapeHtml(ad.title)}
-            <small>${escapeHtml(ad.description || "")}</small>
+        <tr class="hover:bg-slate-50 dark:hover:bg-slate-950">
+          <td class="px-5 py-4 font-semibold text-slate-800 dark:text-slate-200">${escapeHtml(ad.title)}</td>
+          <td class="px-5 py-4 text-slate-700 dark:text-slate-300">${escapeHtml(ad.company_name || "—")}</td>
+          <td class="px-5 py-4">
+            <span class="rounded-full ${ad.status === "active" ? "bg-emerald-100 text-emerald-800 dark:bg-emerald-950/50 dark:text-emerald-300" : "bg-slate-200 text-slate-700 dark:bg-slate-800 dark:text-slate-300"} px-3 py-1 text-xs font-bold">${ad.status === "active" ? "Faol" : "O‘chirilgan"}</span>
           </td>
-          <td>${escapeHtml(ad.company_name || "—")}</td>
-          <td><span class="badge badge-new">${escapeHtml(ad.label || "Reklama")}</span></td>
-          <td>${statusBadge(ad.status, "advertisement")}</td>
-          <td>
-            <div class="actions-cell">
-              <button class="btn btn-light btn-small" type="button" onclick="editAdvertisement(${ad.id})">Tahrirlash</button>
-              <button class="btn btn-danger btn-small" type="button" onclick="deleteAdvertisement(${ad.id})">O‘chirish</button>
+          <td class="px-5 py-4">
+            <div class="flex items-center gap-2">
+              <button type="button" data-edit-ad="${ad.id}" class="rounded-lg border border-slate-300 bg-white px-3 py-1.5 text-xs font-bold text-slate-700 hover:border-qblue hover:text-qblue dark:border-slate-700 dark:bg-slate-950 dark:text-slate-200">Tahrirlash</button>
+              <button type="button" data-delete-ad="${ad.id}" class="rounded-lg border border-red-300 bg-white px-3 py-1.5 text-xs font-bold text-red-700 hover:border-red-500 hover:text-red-600 dark:border-red-800 dark:bg-slate-950 dark:text-red-300">O‘chirish</button>
             </div>
           </td>
         </tr>
       `).join("");
     }
 
-    function renderAppeals() {
-      const filter = document.getElementById("appealStatusFilter").value;
+    function renderSettingsForm() {
+      const form = $("settingsForm");
 
-      const rows = state.appeals.filter((appeal) => {
-        return !filter || appeal.status === filter;
-      });
-
-      const tbody = document.getElementById("appealsTableBody");
-
-      if (!rows.length) {
-        tbody.innerHTML = '<tr><td colspan="4"><div class="empty-state">Hozircha murojaat yo‘q.</div></td></tr>';
-        return;
-      }
-
-      tbody.innerHTML = rows.map((appeal) => `
-        <tr>
-          <td>
-            <strong>${escapeHtml(appeal.name || "Ism ko‘rsatilmagan")}</strong><br>
-            <span style="color: var(--muted)">${escapeHtml(appeal.phone || "Telefon ko‘rsatilmagan")}</span>
-            <p style="margin: 8px 0 0; white-space: pre-wrap">${escapeHtml(appeal.message)}</p>
-          </td>
-          <td>
-            <strong>${escapeHtml(appeal.topic)}</strong><br>
-            <span style="color: var(--muted)">${escapeHtml(appeal.region)}</span>
-          </td>
-          <td>${formatDate(appeal.created_at)}</td>
-          <td>
-            <select class="status-select" aria-label="Murojaat holati" onchange="updateAppealStatus(${appeal.id}, this.value)">
-              <option value="new" ${appeal.status === "new" ? "selected" : ""}>Yangi</option>
-              <option value="reviewing" ${appeal.status === "reviewing" ? "selected" : ""}>Ko‘rib chiqilmoqda</option>
-              <option value="answered" ${appeal.status === "answered" ? "selected" : ""}>Javob berildi</option>
-              <option value="archived" ${appeal.status === "archived" ? "selected" : ""}>Arxiv</option>
-            </select>
-          </td>
-        </tr>
-      `).join("");
+      form.site_name.value = state.settings.site_name || "";
+      form.telegram_url.value = state.settings.telegram_url || "";
+      form.instagram_url.value = state.settings.instagram_url || "";
+      form.facebook_url.value = state.settings.facebook_url || "";
+      form.youtube_url.value = state.settings.youtube_url || "";
+      form.tiktok_url.value = state.settings.tiktok_url || "";
+      form.contact.value = state.settings.contact || "";
+      form.about_text.value = state.settings.about_text || "";
     }
 
-    function fillSettingsForm() {
-      const settings = state.settings;
+    function populateCategorySelect() {
+      const select = document.querySelector("#articleForm select[name='category']");
 
-      document.getElementById("settingSiteName").value = settings.site_name || "QurilishInfo";
-      document.getElementById("settingContact").value = settings.contact || "";
-      document.getElementById("settingDescription").value = settings.site_description || "";
-      document.getElementById("settingAbout").value = settings.about_text || "";
-      document.getElementById("settingEditorialPolicy").value = settings.editorial_policy || "";
-      document.getElementById("settingCtaTitle").value = settings.cta_title || "";
-      document.getElementById("settingCtaText").value = settings.cta_text || "";
-      document.getElementById("settingTelegramUrl").value = settings.telegram_url || "";
-      document.getElementById("settingContactUrl").value = settings.contact_url || "";
-      document.getElementById("settingInstagramUrl").value = settings.instagram_url || "";
-      document.getElementById("settingFacebookUrl").value = settings.facebook_url || "";
-      document.getElementById("settingYoutubeUrl").value = settings.youtube_url || "";
-      document.getElementById("settingTiktokUrl").value = settings.tiktok_url || "";
+      select.innerHTML = state.categories
+        .filter((cat) => cat.is_active)
+        .map((cat) => `<option value="${escapeHtml(cat.name)}">${escapeHtml(cat.name)}</option>`)
+        .join("");
     }
 
-    function resetArticleForm() {
-      document.getElementById("articleForm").reset();
-      document.getElementById("articleId").value = "";
-      document.getElementById("articleMinutes").value = 5;
-      document.getElementById("articleStatus").value = "published";
-      document.getElementById("articleAuthor").value = "QurilishInfo tahririyati";
-      document.getElementById("articleFormTitle").textContent = "Yangi maqola qo‘shish";
-      document.getElementById("cancelArticleEdit").classList.add("hidden");
-    }
+    document.addEventListener("click", (event) => {
+      const navItem = event.target.closest(".nav-item");
 
-    function resetAdvertisementForm() {
-      document.getElementById("advertisementForm").reset();
-      document.getElementById("advertisementId").value = "";
-      document.getElementById("adLabel").value = "Reklama";
-      document.getElementById("adStatus").value = "active";
-      document.getElementById("cancelAdEdit").classList.add("hidden");
-    }
-
-    window.editArticle = function editArticle(id) {
-      const article = state.articles.find((item) => Number(item.id) === Number(id));
-
-      if (!article) {
-        showNotice("Maqola topilmadi", "error");
-        return;
+      if (navItem) {
+        setTab(navItem.getAttribute("data-tab"));
       }
 
-      document.getElementById("articleId").value = article.id;
-      document.getElementById("articleCategory").value = article.category || "";
-      document.getElementById("articleStatus").value = article.status || "published";
-      document.getElementById("articleTitle").value = article.title || "";
-      document.getElementById("articleLead").value = article.lead || "";
-      document.getElementById("articleBody").value = article.body || "";
-      document.getElementById("articleMinutes").value = article.minutes || 5;
-      document.getElementById("articleAuthor").value = article.author || "QurilishInfo tahririyati";
-      document.getElementById("articleImageUrl").value = article.image_url || "";
-      document.getElementById("articleSourceName").value = article.source_name || "";
-      document.getElementById("articleSourceUrl").value = article.source_url || "";
-      document.getElementById("articleDocumentNo").value = article.document_no || "";
-      document.getElementById("articleUpdated").value = article.updated || "";
-      document.getElementById("articleSteps").value = article.steps || "";
-      document.getElementById("articleWarning").value = article.warning || "";
-      document.getElementById("articleFormTitle").textContent = "Maqolani tahrirlash";
-      document.getElementById("cancelArticleEdit").classList.remove("hidden");
+      const newArticleButton = event.target.closest("#newArticleButton");
 
-      showView("articleForm");
-    };
-
-    window.deleteArticle = async function deleteArticle(id) {
-      const article = state.articles.find((item) => Number(item.id) === Number(id));
-      const title = article ? article.title : "ushbu maqola";
-
-      if (!window.confirm(`“${title}” maqolasini o‘chirmoqchimisiz? Bu amalni qaytarib bo‘lmaydi.`)) {
-        return;
+      if (newArticleButton) {
+        openArticleModal();
       }
 
-      try {
-        await api(`/api/admin/articles/${id}`, {
-          method: "DELETE"
-        });
+      const editArticleButton = event.target.closest("[data-edit-article]");
 
-        await loadAllData();
-        showNotice("Maqola o‘chirildi.");
-      } catch (error) {
-        showNotice(error.message, "error");
-      }
-    };
-
-    window.editAdvertisement = function editAdvertisement(id) {
-      const ad = state.advertisements.find((item) => Number(item.id) === Number(id));
-
-      if (!ad) {
-        showNotice("Reklama materiali topilmadi", "error");
-        return;
+      if (editArticleButton) {
+        const article = state.articles.find((a) => String(a.id) === String(editArticleButton.getAttribute("data-edit-article")));
+        openArticleModal(article);
       }
 
-      document.getElementById("advertisementId").value = ad.id;
-      document.getElementById("adLabel").value = ad.label || "Reklama";
-      document.getElementById("adStatus").value = ad.status || "active";
-      document.getElementById("adCompanyName").value = ad.company_name || "";
-      document.getElementById("adTargetUrl").value = ad.target_url || "";
-      document.getElementById("adTitle").value = ad.title || "";
-      document.getElementById("adDescription").value = ad.description || "";
-      document.getElementById("adImageUrl").value = ad.image_url || "";
-      document.getElementById("cancelAdEdit").classList.remove("hidden");
+      const deleteArticleButton = event.target.closest("[data-delete-article]");
 
-      window.scrollTo({ top: 0, behavior: "smooth" });
-    };
+      if (deleteArticleButton) {
+        const id = deleteArticleButton.getAttribute("data-delete-article");
 
-    window.deleteAdvertisement = async function deleteAdvertisement(id) {
-      const ad = state.advertisements.find((item) => Number(item.id) === Number(id));
-      const title = ad ? ad.title : "ushbu reklama";
-
-      if (!window.confirm(`“${title}” materialini o‘chirmoqchimisiz?`)) {
-        return;
-      }
-
-      try {
-        await api(`/api/admin/advertisements/${id}`, {
-          method: "DELETE"
-        });
-
-        await loadAllData();
-        showNotice("Reklama materiali o‘chirildi.");
-      } catch (error) {
-        showNotice(error.message, "error");
-      }
-    };
-
-    window.updateAppealStatus = async function updateAppealStatus(id, status) {
-      try {
-        await api(`/api/admin/appeals/${id}/status`, {
-          method: "PUT",
-          body: JSON.stringify({ status })
-        });
-
-        await loadAllData();
-        showNotice("Murojaat holati yangilandi.");
-      } catch (error) {
-        showNotice(error.message, "error");
-      }
-    };
-
-    async function handleLogin(event) {
-      event.preventDefault();
-
-      const errorBox = document.getElementById("loginError");
-      errorBox.textContent = "";
-
-      const username = document.getElementById("loginUsername").value.trim();
-      const password = document.getElementById("loginPassword").value;
-
-      try {
-        const result = await api("/api/login", {
-          method: "POST",
-          body: JSON.stringify({ username, password })
-        });
-
-        state.adminUsername = result.username || username;
-
-        document.getElementById("adminUsername").textContent = state.adminUsername;
-        document.getElementById("loginScreen").classList.add("hidden");
-        document.getElementById("adminShell").classList.remove("hidden");
-
-        await loadAllData();
-        showView("dashboard");
-      } catch (error) {
-        errorBox.textContent = error.message;
-      }
-    }
-
-    async function handleArticleSubmit(event, forceDraft = false) {
-      event.preventDefault();
-
-      const id = document.getElementById("articleId").value;
-      const payload = {
-        category: document.getElementById("articleCategory").value,
-        status: forceDraft ? "draft" : document.getElementById("articleStatus").value,
-        title: document.getElementById("articleTitle").value.trim(),
-        lead: document.getElementById("articleLead").value.trim(),
-        body: document.getElementById("articleBody").value.trim(),
-        minutes: Number(document.getElementById("articleMinutes").value) || 5,
-        author: document.getElementById("articleAuthor").value.trim(),
-        image_url: document.getElementById("articleImageUrl").value.trim(),
-        source_name: document.getElementById("articleSourceName").value.trim(),
-        source_url: document.getElementById("articleSourceUrl").value.trim(),
-        document_no: document.getElementById("articleDocumentNo").value.trim(),
-        updated: document.getElementById("articleUpdated").value,
-        steps: document.getElementById("articleSteps").value.trim(),
-        warning: document.getElementById("articleWarning").value.trim()
-      };
-
-      try {
-        const url = id ? `/api/admin/articles/${id}` : "/api/admin/articles";
-        const method = id ? "PUT" : "POST";
-
-        await api(url, {
-          method,
-          body: JSON.stringify(payload)
-        });
-
-        await loadAllData();
-        resetArticleForm();
-        showView("articles");
-        showNotice(forceDraft ? "Maqola qoralama sifatida saqlandi." : "Maqola muvaffaqiyatli saqlandi.");
-      } catch (error) {
-        showNotice(error.message, "error");
-      }
-    }
-
-    async function handleAdvertisementSubmit(event) {
-      event.preventDefault();
-
-      const id = document.getElementById("advertisementId").value;
-      const payload = {
-        label: document.getElementById("adLabel").value,
-        status: document.getElementById("adStatus").value,
-        company_name: document.getElementById("adCompanyName").value.trim(),
-        target_url: document.getElementById("adTargetUrl").value.trim(),
-        title: document.getElementById("adTitle").value.trim(),
-        description: document.getElementById("adDescription").value.trim(),
-        image_url: document.getElementById("adImageUrl").value.trim()
-      };
-
-      try {
-        const url = id ? `/api/admin/advertisements/${id}` : "/api/admin/advertisements";
-        const method = id ? "PUT" : "POST";
-
-        await api(url, {
-          method,
-          body: JSON.stringify(payload)
-        });
-
-        await loadAllData();
-        resetAdvertisementForm();
-        showNotice("Reklama materiali saqlandi.");
-      } catch (error) {
-        showNotice(error.message, "error");
-      }
-    }
-
-    async function handleSettingsSubmit(event) {
-      event.preventDefault();
-
-      const payload = {
-        site_name: document.getElementById("settingSiteName").value.trim(),
-        contact: document.getElementById("settingContact").value.trim(),
-        site_description: document.getElementById("settingDescription").value.trim(),
-        about_text: document.getElementById("settingAbout").value.trim(),
-        editorial_policy: document.getElementById("settingEditorialPolicy").value.trim(),
-        cta_title: document.getElementById("settingCtaTitle").value.trim(),
-        cta_text: document.getElementById("settingCtaText").value.trim(),
-        telegram_url: document.getElementById("settingTelegramUrl").value.trim(),
-        contact_url: document.getElementById("settingContactUrl").value.trim(),
-        instagram_url: document.getElementById("settingInstagramUrl").value.trim(),
-        facebook_url: document.getElementById("settingFacebookUrl").value.trim(),
-        youtube_url: document.getElementById("settingYoutubeUrl").value.trim(),
-        tiktok_url: document.getElementById("settingTiktokUrl").value.trim()
-      };
-
-      try {
-        await api("/api/admin/settings", {
-          method: "PUT",
-          body: JSON.stringify(payload)
-        });
-
-        await loadAllData();
-        showNotice("Sayt sozlamalari saqlandi.");
-      } catch (error) {
-        showNotice(error.message, "error");
-      }
-    }
-
-    async function handlePasswordSubmit(event) {
-      event.preventDefault();
-
-      const currentPassword = document.getElementById("currentPassword").value;
-      const newPassword = document.getElementById("newPassword").value;
-      const newPasswordAgain = document.getElementById("newPasswordAgain").value;
-
-      if (newPassword !== newPasswordAgain) {
-        showNotice("Yangi parollar bir xil emas.", "error");
-        return;
-      }
-
-      try {
-        await api("/api/admin/change-password", {
-          method: "POST",
-          body: JSON.stringify({
-            currentPassword,
-            newPassword
-          })
-        });
-
-        document.getElementById("passwordForm").reset();
-        showNotice("Parol muvaffaqiyatli yangilandi.");
-      } catch (error) {
-        showNotice(error.message, "error");
-      }
-    }
-
-    async function handleLogout() {
-      try {
-        await api("/api/logout", {
-          method: "POST"
-        });
-      } catch (error) {
-      }
-
-      window.location.reload();
-    }
-
-    async function checkSession() {
-      try {
-        const result = await api("/api/admin/check");
-
-        if (!result.loggedIn) {
-          return;
+        if (confirm("Haqiqatan ham bu maqolani o‘chirmoqchimisiz?")) {
+          postJson("/api/articles/delete", { id }).then(() => loadDashboard());
         }
-
-        state.adminUsername = result.username || "Admin";
-        document.getElementById("adminUsername").textContent = state.adminUsername;
-        document.getElementById("loginScreen").classList.add("hidden");
-        document.getElementById("adminShell").classList.remove("hidden");
-
-        await loadAllData();
-      } catch (error) {
       }
-    }
-
-    document.addEventListener("DOMContentLoaded", () => {
-      document.getElementById("loginForm").addEventListener("submit", handleLogin);
-      document.getElementById("articleForm").addEventListener("submit", (event) => handleArticleSubmit(event, false));
-      document.getElementById("advertisementForm").addEventListener("submit", handleAdvertisementSubmit);
-      document.getElementById("settingsForm").addEventListener("submit", handleSettingsSubmit);
-      document.getElementById("passwordForm").addEventListener("submit", handlePasswordSubmit);
-      document.getElementById("logoutButton").addEventListener("click", handleLogout);
-
-      document.getElementById("articleSearch").addEventListener("input", renderArticles);
-      document.getElementById("articleStatusFilter").addEventListener("change", renderArticles);
-      document.getElementById("appealStatusFilter").addEventListener("change", renderAppeals);
-
-      document.getElementById("saveAsDraftButton").addEventListener("click", () => {
-        const form = document.getElementById("articleForm");
-
-        if (!form.reportValidity()) {
-          return;
-        }
-
-        handleArticleSubmit(new Event("submit"), true);
-      });
-
-      document.getElementById("resetArticleFormButton").addEventListener("click", resetArticleForm);
-
-      document.getElementById("cancelArticleEdit").addEventListener("click", () => {
-        resetArticleForm();
-        showView("articles");
-      });
-
-      document.getElementById("cancelAdEdit").addEventListener("click", resetAdvertisementForm);
-
-      document.querySelectorAll(".nav-button").forEach((button) => {
-        button.addEventListener("click", () => {
-          if (button.dataset.view === "articleForm") {
-            resetArticleForm();
-          }
-
-          showView(button.dataset.view);
-        });
-      });
-
-      document.querySelectorAll("[data-go-view]").forEach((button) => {
-        button.addEventListener("click", () => {
-          if (button.dataset.goView === "articleForm") {
-            resetArticleForm();
-          }
-
-          showView(button.dataset.goView);
-        });
-      });
-
-      document.getElementById("menuButton").addEventListener("click", openMobileMenu);
-      document.getElementById("overlay").addEventListener("click", closeMobileMenu);
-
-      checkSession();
     });
+
+    $("articleModalClose").addEventListener("click", closeArticleModal);
+    $("articleModal").addEventListener("click", (event) => {
+      if (event.target === $("articleModal")) {
+        closeArticleModal();
+      }
+    });
+
+    $("cancelArticleButton").addEventListener("click", closeArticleModal);
+
+    $("articleForm").addEventListener("submit", async (event) => {
+      event.preventDefault();
+
+      const form = event.target;
+      const data = {
+        title: form.title.value,
+        category: form.category.value,
+        article_type: form.article_type.value,
+        status: form.status.value,
+        lead: form.lead.value,
+        body: form.body.value,
+        author: form.author.value,
+        minutes: Number(form.minutes.value) || 5,
+        image_url: form.image_url.value,
+        image_caption: form.image_caption.value,
+        steps: form.steps.value,
+        warning: form.warning.value,
+        source_name: form.source_name.value,
+        source_url: form.source_url.value,
+        document_no: form.document_no.value,
+        updated: form.updated.value,
+        published_at: form.published_at.value,
+        tags: form.tags.value,
+        is_featured: form.is_featured.checked ? 1 : 0,
+        is_pinned: form.is_pinned.checked ? 1 : 0,
+        is_advertisement: form.is_advertisement.checked ? 1 : 0
+      };
+
+      if (state.editingArticleId) {
+        data.id = state.editingArticleId;
+        await postJson("/api/articles/update", data);
+      } else {
+        await postJson("/api/articles/create", data);
+      }
+
+      closeArticleModal();
+      loadDashboard();
+    });
+
+    $("settingsForm").addEventListener("submit", async (event) => {
+      event.preventDefault();
+
+      const form = event.target;
+      const data = {
+        site_name: form.site_name.value,
+        telegram_url: form.telegram_url.value,
+        instagram_url: form.instagram_url.value,
+        facebook_url: form.facebook_url.value,
+        youtube_url: form.youtube_url.value,
+        tiktok_url: form.tiktok_url.value,
+        contact: form.contact.value,
+        about_text: form.about_text.value
+      };
+
+      await postJson("/api/settings/update", data);
+      alert("Sozlamalar saqlandi.");
+      loadDashboard();
+    });
+
+    $("sidebarOpenButton").addEventListener("click", () => {
+      $("sidebar").classList.remove("-translate-x-full");
+      $("mobileOverlay").classList.remove("hidden");
+      document.body.style.overflow = "hidden";
+    });
+
+    $("sidebarCloseButton").addEventListener("click", () => {
+      $("sidebar").classList.add("-translate-x-full");
+      $("mobileOverlay").classList.add("hidden");
+      document.body.style.overflow = "";
+    });
+
+    $("mobileOverlay").addEventListener("click", () => {
+      $("sidebar").classList.add("-translate-x-full");
+      $("mobileOverlay").classList.add("hidden");
+      document.body.style.overflow = "";
+    });
+
+    $("themeButton").addEventListener("click", () => {
+      applyTheme(document.documentElement.classList.contains("dark") ? "light" : "dark");
+    });
+
+    document.addEventListener("keydown", (event) => {
+      if (event.key === "Escape") {
+        closeArticleModal();
+      }
+    });
+
+    initializeTheme();
+    loadDashboard();
   </script>
 </body>
 </html>
