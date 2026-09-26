@@ -1,16 +1,63 @@
-const Database = require("better-sqlite3");
+const sqlite3 = require("sqlite3").verbose();
 const path = require("path");
 
 const DB_PATH = path.join(__dirname, "data", "qurilishinfo.db");
 
 function openDatabase() {
-  const db = new Database(DB_PATH);
-  db.pragma("journal_mode = WAL");
-  return db;
+  return new Promise((resolve, reject) => {
+    const db = new sqlite3.Database(DB_PATH, sqlite3.OPEN_READWRITE | sqlite3.OPEN_CREATE, (err) => {
+      if (err) {
+        reject(err);
+      } else {
+        db.run("PRAGMA journal_mode = WAL", (err) => {
+          if (err) {
+            console.error("WAL xatosi:", err);
+          }
+          resolve(db);
+        });
+      }
+    });
+  });
 }
 
-function initializeDatabase(db) {
-  db.exec(`
+function runSql(db, sql, params = []) {
+  return new Promise((resolve, reject) => {
+    db.run(sql, params, (err) => {
+      if (err) {
+        reject(err);
+      } else {
+        resolve();
+      }
+    });
+  });
+}
+
+function getSql(db, sql, params = []) {
+  return new Promise((resolve, reject) => {
+    db.get(sql, params, (err, row) => {
+      if (err) {
+        reject(err);
+      } else {
+        resolve(row);
+      }
+    });
+  });
+}
+
+function allSql(db, sql, params = []) {
+  return new Promise((resolve, reject) => {
+    db.all(sql, params, (err, rows) => {
+      if (err) {
+        reject(err);
+      } else {
+        resolve(rows);
+      }
+    });
+  });
+}
+
+async function initializeDatabase(db) {
+  await runSql(db, `
     CREATE TABLE IF NOT EXISTS categories (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
       name_uz TEXT NOT NULL,
@@ -20,8 +67,10 @@ function initializeDatabase(db) {
       is_active INTEGER DEFAULT 1,
       sort_order INTEGER DEFAULT 0,
       created_at DATETIME DEFAULT CURRENT_TIMESTAMP
-    );
+    )
+  `);
 
+  await runSql(db, `
     CREATE TABLE IF NOT EXISTS articles (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
       title_uz TEXT NOT NULL,
@@ -54,8 +103,10 @@ function initializeDatabase(db) {
       is_pinned INTEGER DEFAULT 0,
       is_advertisement INTEGER DEFAULT 0,
       created_at DATETIME DEFAULT CURRENT_TIMESTAMP
-    );
+    )
+  `);
 
+  await runSql(db, `
     CREATE TABLE IF NOT EXISTS advertisements (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
       title_uz TEXT NOT NULL,
@@ -70,23 +121,27 @@ function initializeDatabase(db) {
       starts_at DATETIME,
       ends_at DATETIME,
       created_at DATETIME DEFAULT CURRENT_TIMESTAMP
-    );
+    )
+  `);
 
+  await runSql(db, `
     CREATE TABLE IF NOT EXISTS settings (
       key TEXT PRIMARY KEY,
       value_uz TEXT,
       value_ru TEXT
-    );
+    )
+  `);
 
+  await runSql(db, `
     CREATE TABLE IF NOT EXISTS translations (
       key TEXT PRIMARY KEY,
       value_uz TEXT,
       value_ru TEXT
-    );
+    )
   `);
 
-  // Default categories (agar bo‘sh bo‘lsa)
-  const count = db.prepare("SELECT COUNT(*) as c FROM categories").get();
+  // Default categories
+  const count = await getSql(db, "SELECT COUNT(*) as c FROM categories");
 
   if (count.c === 0) {
     const defaultCategories = [
@@ -101,83 +156,80 @@ function initializeDatabase(db) {
       { name_uz: "Rasmiy xabarlar", name_ru: "Официальные сообщения", slug: "rasmiy-xabarlar", color: "#123a58", sort_order: 9 }
     ];
 
-    const insert = db.prepare(`
-      INSERT INTO categories (name_uz, name_ru, slug, color, is_active, sort_order)
-      VALUES (@name_uz, @name_ru, @slug, @color, 1, @sort_order)
-    `);
-
     for (const cat of defaultCategories) {
-      insert.run(cat);
+      await runSql(db, `
+        INSERT INTO categories (name_uz, name_ru, slug, color, is_active, sort_order)
+        VALUES (?, ?, ?, ?, 1, ?)
+      `, [cat.name_uz, cat.name_ru, cat.slug, cat.color, cat.sort_order]);
     }
   }
 
   // Default settings
-  const settingsCount = db.prepare("SELECT COUNT(*) as c FROM settings").get();
+  const settingsCount = await getSql(db, "SELECT COUNT(*) as c FROM settings");
 
   if (settingsCount.c === 0) {
     const defaultSettings = [
-      { key: "site_name_uz", value_uz: "QurilishInfo", value_ru: null },
-      { key: "site_name_ru", value_uz: null, value_ru: "QurilishInfo" },
-      { key: "site_tagline_uz", value_uz: "Qurilishdagi to‘g‘ri qarorlar uchun amaliy ma’lumot", value_ru: null },
-      { key: "site_tagline_ru", value_uz: null, value_ru: "Практическая информация для правильных решений в строительстве" },
-      { key: "telegram_url", value_uz: "https://t.me/qurilishinfo", value_ru: null },
-      { key: "contact_uz", value_uz: "@qurilishinfo_admin", value_ru: null },
-      { key: "contact_url", value_uz: "https://t.me/qurilishinfo_admin", value_ru: null },
-      { key: "about_text_uz", value_uz: "QurilishInfo — uy qurish, uy sotib olish, ruxsatnoma, ta’mirlash va qurilish nazorati bo‘yicha amaliy ma’lumotlar platformasi.", value_ru: null },
-      { key: "about_text_ru", value_uz: null, value_ru: "QurilishInfo — практическая платформа по строительству, покупке дома, разрешениям, ремонту и контролю за строительством." },
-      { key: "editorial_policy_uz", value_uz: "Reklama va tahririy materiallar alohida belgilanadi.", value_ru: null },
-      { key: "editorial_policy_ru", value_uz: null, value_ru: "Рекламные и редакционные материалы помечаются отдельно." }
+      ["site_name_uz", "QurilishInfo", null],
+      ["site_name_ru", null, "QurilishInfo"],
+      ["site_tagline_uz", "Qurilishdagi to‘g‘ri qarorlar uchun amaliy ma’lumot", null],
+      ["site_tagline_ru", null, "Практическая информация для правильных решений в строительстве"],
+      ["telegram_url", "https://t.me/qurilishinfo", null],
+      ["contact_uz", "@qurilishinfo_admin", null],
+      ["contact_url", "https://t.me/qurilishinfo_admin", null],
+      ["about_text_uz", "QurilishInfo — uy qurish, uy sotib olish, ruxsatnoma, ta’mirlash va qurilish nazorati bo‘yicha amaliy ma’lumotlar platformasi.", null],
+      ["about_text_ru", null, "QurilishInfo — практическая платформа по строительству, покупке дома, разрешениям, ремонту и контролю за строительством."],
+      ["editorial_policy_uz", "Reklama va tahririy materiallar alohida belgilanadi.", null],
+      ["editorial_policy_ru", null, "Рекламные и редакционные материалы помечаются отдельно."]
     ];
 
-    const insert = db.prepare(`
-      INSERT INTO settings (key, value_uz, value_ru)
-      VALUES (@key, @value_uz, @value_ru)
-    `);
-
     for (const setting of defaultSettings) {
-      insert.run(setting);
+      await runSql(db, `
+        INSERT OR REPLACE INTO settings (key, value_uz, value_ru)
+        VALUES (?, ?, ?)
+      `, setting);
     }
   }
 
-  // Default translations (interfeys matnlari)
-  const translationsCount = db.prepare("SELECT COUNT(*) as c FROM translations").get();
+  // Default translations
+  const translationsCount = await getSql(db, "SELECT COUNT(*) as c FROM translations");
 
   if (translationsCount.c === 0) {
     const defaultTranslations = [
-      { key: "nav_home_uz", value_uz: "Bosh sahifa", value_ru: null },
-      { key: "nav_home_ru", value_uz: null, value_ru: "Главная" },
-      { key: "nav_articles_uz", value_uz: "Maqolalar", value_ru: null },
-      { key: "nav_articles_ru", value_uz: null, value_ru: "Статьи" },
-      { key: "nav_ads_uz", value_uz: "Reklama", value_ru: null },
-      { key: "nav_ads_ru", value_uz: null, value_ru: "Реклама" },
-      { key: "nav_settings_uz", value_uz: "Sozlamalar", value_ru: null },
-      { key: "nav_settings_ru", value_uz: null, value_ru: "Настройки" },
-      { key: "btn_save_uz", value_uz: "Saqlash", value_ru: null },
-      { key: "btn_save_ru", value_uz: null, value_ru: "Сохранить" },
-      { key: "btn_cancel_uz", value_uz: "Bekor qilish", value_ru: null },
-      { key: "btn_cancel_ru", value_uz: null, value_ru: "Отмена" },
-      { key: "btn_delete_uz", value_uz: "O‘chirish", value_ru: null },
-      { key: "btn_delete_ru", value_uz: null, value_ru: "Удалить" },
-      { key: "btn_edit_uz", value_uz: "Tahrirlash", value_ru: null },
-      { key: "btn_edit_ru", value_uz: null, value_ru: "Редактировать" },
-      { key: "status_draft_uz", value_uz: "Qoralama", value_ru: null },
-      { key: "status_draft_ru", value_uz: null, value_ru: "Черновик" },
-      { key: "status_published_uz", value_uz: "Chiqarilgan", value_ru: null },
-      { key: "status_published_ru", value_uz: null, value_ru: "Опубликовано" }
+      ["nav_home_uz", "Bosh sahifa", null],
+      ["nav_home_ru", null, "Главная"],
+      ["nav_articles_uz", "Maqolalar", null],
+      ["nav_articles_ru", null, "Статьи"],
+      ["nav_ads_uz", "Reklama", null],
+      ["nav_ads_ru", null, "Реклама"],
+      ["nav_settings_uz", "Sozlamalar", null],
+      ["nav_settings_ru", null, "Настройки"],
+      ["btn_save_uz", "Saqlash", null],
+      ["btn_save_ru", null, "Сохранить"],
+      ["btn_cancel_uz", "Bekor qilish", null],
+      ["btn_cancel_ru", null, "Отмена"],
+      ["btn_delete_uz", "O‘chirish", null],
+      ["btn_delete_ru", null, "Удалить"],
+      ["btn_edit_uz", "Tahrirlash", null],
+      ["btn_edit_ru", null, "Редактировать"],
+      ["status_draft_uz", "Qoralama", null],
+      ["status_draft_ru", null, "Черновик"],
+      ["status_published_uz", "Chiqarilgan", null],
+      ["status_published_ru", null, "Опубликовано"]
     ];
 
-    const insert = db.prepare(`
-      INSERT INTO translations (key, value_uz, value_ru)
-      VALUES (@key, @value_uz, @value_ru)
-    `);
-
     for (const t of defaultTranslations) {
-      insert.run(t);
+      await runSql(db, `
+        INSERT OR REPLACE INTO translations (key, value_uz, value_ru)
+        VALUES (?, ?, ?)
+      `, t);
     }
   }
 }
 
 module.exports = {
   openDatabase,
-  initializeDatabase
+  initializeDatabase,
+  runSql,
+  getSql,
+  allSql
 };
