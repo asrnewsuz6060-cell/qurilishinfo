@@ -35,26 +35,6 @@
       animation: fade-in .25s ease both;
     }
 
-    .delay-1 {
-      animation-delay: .06s;
-    }
-
-    .delay-2 {
-      animation-delay: .12s;
-    }
-
-    .delay-3 {
-      animation-delay: .18s;
-    }
-
-    .delay-4 {
-      animation-delay: .24s;
-    }
-
-    .delay-5 {
-      animation-delay: .3s;
-    }
-
     .tab-button.active {
       background: #0b4f7c;
       color: #fff;
@@ -180,6 +160,7 @@
     </header>
 
     <main class="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
+      <!-- DASHBOARD -->
       <section id="dashboardTab" class="tab-content animate-fade-in">
         <div class="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
           <div class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm dark:border-slate-800 dark:bg-slate-900">
@@ -208,16 +189,17 @@
         </div>
 
         <div class="mt-8 rounded-2xl border border-slate-200 bg-white p-6 dark:border-slate-800 dark:bg-slate-900">
-          <h2 class="font-display text-xl font-extrabold text-qnavy dark:text-white">So‘nggi maqolalar</h2>
+          <h2 class="font-display text-xl font-extrabold text-qnavy dark:text-white">So'nggi maqolalar</h2>
           <div id="dashboardArticles" class="mt-5 grid gap-4 sm:grid-cols-2 lg:grid-cols-3"></div>
         </div>
       </section>
 
+      <!-- MAQOLALAR -->
       <section id="articlesTab" class="tab-content hidden animate-fade-in">
         <div class="mb-6 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
           <div>
             <p class="text-sm font-bold uppercase tracking-[0.14em] text-qgreen">Maqolalar boshqaruvi</p>
-            <h2 class="mt-1 font-display text-3xl font-extrabold tracking-tight text-qnavy dark:text-white">Maqolalar ro‘yxati</h2>
+            <h2 class="mt-1 font-display text-3xl font-extrabold tracking-tight text-qnavy dark:text-white">Maqolalar ro'yxati</h2>
           </div>
 
           <button id="newArticleButton" type="button" class="inline-flex items-center gap-2 rounded-xl bg-qblue px-5 py-3 font-bold text-white shadow-lg shadow-sky-900/15 transition hover:-translate-y-0.5 hover:bg-qnavy">
@@ -246,11 +228,12 @@
         </div>
       </section>
 
+      <!-- RUKNLAR -->
       <section id="categoriesTab" class="tab-content hidden animate-fade-in">
         <div class="mb-6 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
           <div>
             <p class="text-sm font-bold uppercase tracking-[0.14em] text-qgreen">Ruknlar boshqaruvi</p>
-            <h2 class="mt-1 font-display text-3xl font-extrabold tracking-tight text-qnavy dark:text-white">Ruknlar ro‘yxati</h2>
+            <h2 class="mt-1 font-display text-3xl font-extrabold tracking-tight text-qnavy dark:text-white">Ruknlar ro'yxati</h2>
           </div>
 
           <button id="newCategoryButton" type="button" class="inline-flex items-center gap-2 rounded-xl bg-qblue px-5 py-3 font-bold text-white shadow-lg shadow-sky-900/15 transition hover:-translate-y-0.5 hover:bg-qnavy">
@@ -269,7 +252,6 @@
                   <th class="px-5 py-4 font-bold text-slate-600 dark:text-slate-300">Rukn nomi</th>
                   <th class="px-5 py-4 font-bold text-slate-600 dark:text-slate-300">Slug</th>
                   <th class="px-5 py-4 font-bold text-slate-600 dark:text-slate-300">Holat</th>
-                  <th class="px-5 py-4 font-bold text-slate-600 dark:text-slate-300">Tartib</th>
                   <th class="px-5 py-4 font-bold text-slate-600 dark:text-slate-300">Amallar</th>
                 </tr>
               </thead>
@@ -279,11 +261,12 @@
         </div>
       </section>
 
+      <!-- REKLAMA -->
       <section id="advertisementsTab" class="tab-content hidden animate-fade-in">
         <div class="mb-6 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
           <div>
             <p class="text-sm font-bold uppercase tracking-[0.14em] text-qgreen">Reklama boshqaruvi</p>
-            <h2 class="mt-1 font-display text-3xl font-extrabold tracking-tight text-qnavy dark:text-white">Reklamalar ro‘yxati</h2>
+            <h2 class="mt-1 font-display text-3xl font-extrabold tracking-tight text-qnavy dark:text-white">Reklamalar ro'yxati</h2>
           </div>
 
           <button id="newAdButton" type="button" class="inline-flex items-center gap-2 rounded-xl bg-qblue px-5 py-3 font-bold text-white shadow-lg shadow-sky-900/15 transition hover:-translate-y-0.5 hover:bg-qnavy">
@@ -311,6 +294,7 @@
         </div>
       </section>
 
+      <!-- SOZLAMALAR -->
       <section id="settingsTab" class="tab-content hidden animate-fade-in">
         <div class="mb-6">
           <p class="text-sm font-bold uppercase tracking-[0.14em] text-qgreen">Sayt sozlamalari</p>
@@ -373,6 +357,7 @@
     </main>
   </div>
 
+  <!-- MAQOLA MODAL -->
   <div id="articleModal" class="fixed inset-0 z-[60] hidden overflow-y-auto bg-slate-950/70 p-0 backdrop-blur-sm sm:p-6">
     <div class="mx-auto min-h-full max-w-4xl sm:flex sm:min-h-full sm:items-center">
       <div class="relative min-h-screen w-full bg-white shadow-2xl dark:bg-slate-900 sm:min-h-0 sm:rounded-3xl">
@@ -386,13 +371,15 @@
           <h2 id="articleModalTitle" class="font-display text-2xl font-extrabold text-qnavy dark:text-white">Yangi maqola</h2>
 
           <form id="articleForm" class="mt-6 grid gap-5">
+            <input type="hidden" name="id">
+
             <div>
-              <label class="block text-sm font-bold text-slate-700 dark:text-slate-200">Sarlavha</label>
+              <label class="block text-sm font-bold text-slate-700 dark:text-slate-200">Sarlavha *</label>
               <input type="text" name="title" required class="mt-1 w-full rounded-xl border border-slate-300 bg-slate-50 px-4 py-3 outline-none transition focus:border-qblue focus:bg-white focus:ring-4 focus:ring-sky-100 dark:border-slate-700 dark:bg-slate-950 dark:focus:border-sky-400 dark:focus:bg-slate-950 dark:focus:ring-sky-900/30">
             </div>
 
             <div>
-              <label class="block text-sm font-bold text-slate-700 dark:text-slate-200">Rukn</label>
+              <label class="block text-sm font-bold text-slate-700 dark:text-slate-200">Rukn *</label>
               <select name="category" required class="mt-1 w-full rounded-xl border border-slate-300 bg-slate-50 px-4 py-3 outline-none transition focus:border-qblue focus:bg-white focus:ring-4 focus:ring-sky-100 dark:border-slate-700 dark:bg-slate-950 dark:focus:border-sky-400 dark:focus:bg-slate-950 dark:focus:ring-sky-900/30"></select>
             </div>
 
@@ -400,7 +387,7 @@
               <div>
                 <label class="block text-sm font-bold text-slate-700 dark:text-slate-200">Maqola turi</label>
                 <select name="article_type" required class="mt-1 w-full rounded-xl border border-slate-300 bg-slate-50 px-4 py-3 outline-none transition focus:border-qblue focus:bg-white focus:ring-4 focus:ring-sky-100 dark:border-slate-700 dark:bg-slate-950 dark:focus:border-sky-400 dark:focus:bg-slate-950 dark:focus:ring-sky-900/30">
-                  <option value="guide">Qo‘llanma</option>
+                  <option value="guide">Qo'llanma</option>
                   <option value="news">Yangilik</option>
                   <option value="official">Rasmiy xabar</option>
                   <option value="analysis">Tahlil</option>
@@ -418,12 +405,12 @@
             </div>
 
             <div>
-              <label class="block text-sm font-bold text-slate-700 dark:text-slate-200">Lid (qisqa kirish)</label>
+              <label class="block text-sm font-bold text-slate-700 dark:text-slate-200">Lid (qisqa kirish) *</label>
               <textarea name="lead" required rows="3" class="mt-1 w-full rounded-xl border border-slate-300 bg-slate-50 px-4 py-3 outline-none transition focus:border-qblue focus:bg-white focus:ring-4 focus:ring-sky-100 dark:border-slate-700 dark:bg-slate-950 dark:focus:border-sky-400 dark:focus:bg-slate-950 dark:focus:ring-sky-900/30"></textarea>
             </div>
 
             <div>
-              <label class="block text-sm font-bold text-slate-700 dark:text-slate-200">Asosiy matn (qatorlar orasiga bo‘sh qator qoldiring)</label>
+              <label class="block text-sm font-bold text-slate-700 dark:text-slate-200">Asosiy matn *</label>
               <textarea name="body" required rows="10" class="mt-1 w-full rounded-xl border border-slate-300 bg-slate-50 px-4 py-3 outline-none transition focus:border-qblue focus:bg-white focus:ring-4 focus:ring-sky-100 dark:border-slate-700 dark:bg-slate-950 dark:focus:border-sky-400 dark:focus:bg-slate-950 dark:focus:ring-sky-900/30"></textarea>
             </div>
 
@@ -434,47 +421,47 @@
               </div>
 
               <div>
-                <label class="block text-sm font-bold text-slate-700 dark:text-slate-200">O‘qish vaqti (daqiqada)</label>
-                <input type="number" name="minutes" min="1" class="mt-1 w-full rounded-xl border border-slate-300 bg-slate-50 px-4 py-3 outline-none transition focus:border-qblue focus:bg-white focus:ring-4 focus:ring-sky-100 dark:border-slate-700 dark:bg-slate-950 dark:focus:border-sky-400 dark:focus:bg-slate-950 dark:focus:ring-sky-900/30">
+                <label class="block text-sm font-bold text-slate-700 dark:text-slate-200">O'qish vaqti (daqiqada)</label>
+                <input type="number" name="minutes" min="1" value="5" class="mt-1 w-full rounded-xl border border-slate-300 bg-slate-50 px-4 py-3 outline-none transition focus:border-qblue focus:bg-white focus:ring-4 focus:ring-sky-100 dark:border-slate-700 dark:bg-slate-950 dark:focus:border-sky-400 dark:focus:bg-slate-950 dark:focus:ring-sky-900/30">
               </div>
             </div>
 
             <div class="grid gap-5 sm:grid-cols-2">
               <div>
-                <label class="block text-sm font-bold text-slate-700 dark:text-slate-200">Rasm URL (ixtiyoriy)</label>
+                <label class="block text-sm font-bold text-slate-700 dark:text-slate-200">Rasm URL</label>
                 <input type="url" name="image_url" class="mt-1 w-full rounded-xl border border-slate-300 bg-slate-50 px-4 py-3 outline-none transition focus:border-qblue focus:bg-white focus:ring-4 focus:ring-sky-100 dark:border-slate-700 dark:bg-slate-950 dark:focus:border-sky-400 dark:focus:bg-slate-950 dark:focus:ring-sky-900/30">
               </div>
 
               <div>
-                <label class="block text-sm font-bold text-slate-700 dark:text-slate-200">Rasm izohi (ixtiyoriy)</label>
+                <label class="block text-sm font-bold text-slate-700 dark:text-slate-200">Rasm izohi</label>
                 <input type="text" name="image_caption" class="mt-1 w-full rounded-xl border border-slate-300 bg-slate-50 px-4 py-3 outline-none transition focus:border-qblue focus:bg-white focus:ring-4 focus:ring-sky-100 dark:border-slate-700 dark:bg-slate-950 dark:focus:border-sky-400 dark:focus:bg-slate-950 dark:focus:ring-sky-900/30">
               </div>
             </div>
 
             <div>
-              <label class="block text-sm font-bold text-slate-700 dark:text-slate-200">Tezklar (har qator bitta qadam)</label>
+              <label class="block text-sm font-bold text-slate-700 dark:text-slate-200">Tezklar</label>
               <textarea name="steps" rows="4" class="mt-1 w-full rounded-xl border border-slate-300 bg-slate-50 px-4 py-3 outline-none transition focus:border-qblue focus:bg-white focus:ring-4 focus:ring-sky-100 dark:border-slate-700 dark:bg-slate-950 dark:focus:border-sky-400 dark:focus:bg-slate-950 dark:focus:ring-sky-900/30"></textarea>
             </div>
 
             <div>
-              <label class="block text-sm font-bold text-slate-700 dark:text-slate-200">E’tibor bering (ixtiyoriy)</label>
+              <label class="block text-sm font-bold text-slate-700 dark:text-slate-200">E'tibor bering</label>
               <textarea name="warning" rows="3" class="mt-1 w-full rounded-xl border border-slate-300 bg-slate-50 px-4 py-3 outline-none transition focus:border-qblue focus:bg-white focus:ring-4 focus:ring-sky-100 dark:border-slate-700 dark:bg-slate-950 dark:focus:border-sky-400 dark:focus:bg-slate-950 dark:focus:ring-sky-900/30"></textarea>
             </div>
 
             <div class="grid gap-5 sm:grid-cols-2">
               <div>
-                <label class="block text-sm font-bold text-slate-700 dark:text-slate-200">Manba nomi (ixtiyoriy)</label>
+                <label class="block text-sm font-bold text-slate-700 dark:text-slate-200">Manba nomi</label>
                 <input type="text" name="source_name" class="mt-1 w-full rounded-xl border border-slate-300 bg-slate-50 px-4 py-3 outline-none transition focus:border-qblue focus:bg-white focus:ring-4 focus:ring-sky-100 dark:border-slate-700 dark:bg-slate-950 dark:focus:border-sky-400 dark:focus:bg-slate-950 dark:focus:ring-sky-900/30">
               </div>
 
               <div>
-                <label class="block text-sm font-bold text-slate-700 dark:text-slate-200">Manba URL (ixtiyoriy)</label>
+                <label class="block text-sm font-bold text-slate-700 dark:text-slate-200">Manba URL</label>
                 <input type="url" name="source_url" class="mt-1 w-full rounded-xl border border-slate-300 bg-slate-50 px-4 py-3 outline-none transition focus:border-qblue focus:bg-white focus:ring-4 focus:ring-sky-100 dark:border-slate-700 dark:bg-slate-950 dark:focus:border-sky-400 dark:focus:bg-slate-950 dark:focus:ring-sky-900/30">
               </div>
             </div>
 
             <div>
-              <label class="block text-sm font-bold text-slate-700 dark:text-slate-200">Hujjat raqami / manba (ixtiyoriy)</label>
+              <label class="block text-sm font-bold text-slate-700 dark:text-slate-200">Hujjat raqami / manba</label>
               <input type="text" name="document_no" class="mt-1 w-full rounded-xl border border-slate-300 bg-slate-50 px-4 py-3 outline-none transition focus:border-qblue focus:bg-white focus:ring-4 focus:ring-sky-100 dark:border-slate-700 dark:bg-slate-950 dark:focus:border-sky-400 dark:focus:bg-slate-950 dark:focus:ring-sky-900/30">
             </div>
 
@@ -491,7 +478,7 @@
             </div>
 
             <div>
-              <label class="block text-sm font-bold text-slate-700 dark:text-slate-200">Teglar (vergul bilan ajrating)</label>
+              <label class="block text-sm font-bold text-slate-700 dark:text-slate-200">Teglar</label>
               <input type="text" name="tags" class="mt-1 w-full rounded-xl border border-slate-300 bg-slate-50 px-4 py-3 outline-none transition focus:border-qblue focus:bg-white focus:ring-4 focus:ring-sky-100 dark:border-slate-700 dark:bg-slate-950 dark:focus:border-sky-400 dark:focus:bg-slate-950 dark:focus:ring-sky-900/30">
             </div>
 
@@ -502,7 +489,7 @@
 
             <div class="flex items-center gap-3">
               <input type="checkbox" name="is_pinned" id="is_pinned" class="h-4 w-4 rounded border-slate-300 text-qblue focus:ring-qblue dark:border-slate-700 dark:bg-slate-950">
-              <label for="is_pinned" class="text-sm font-bold text-slate-700 dark:text-slate-200">Muhim xabar sifatida ko‘rsatish</label>
+              <label for="is_pinned" class="text-sm font-bold text-slate-700 dark:text-slate-200">Muhim xabar sifatida ko'rsatish</label>
             </div>
 
             <div class="flex items-center gap-3">
@@ -528,435 +515,644 @@
     </div>
   </div>
 
+  <!-- RUKN MODAL -->
+  <div id="categoryModal" class="fixed inset-0 z-[60] hidden overflow-y-auto bg-slate-950/70 p-4 backdrop-blur-sm sm:p-6">
+    <div class="mx-auto max-w-lg rounded-2xl bg-white shadow-2xl dark:bg-slate-900">
+      <div class="mb-6 flex items-center justify-between">
+        <h2 id="categoryModalTitle" class="font-display text-2xl font-extrabold text-qnavy dark:text-white">Yangi rukn</h2>
+        <button id="categoryModalClose" type="button" class="grid h-10 w-10 place-items-center text-slate-500">
+          <svg viewBox="0 0 24 24" class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M6 6l12 12M18 6L6 18"></path>
+          </svg>
+        </button>
+      </div>
+
+      <form id="categoryForm" class="px-6 pb-6">
+        <input type="hidden" name="id">
+
+        <div class="mb-5">
+          <label class="block text-sm font-bold text-slate-700 dark:text-slate-200">Rukn nomi *</label>
+          <input type="text" name="name" required class="mt-1 w-full rounded-xl border border-slate-300 bg-slate-50 px-4 py-3 outline-none transition focus:border-qblue focus:bg-white focus:ring-4 focus:ring-sky-100 dark:border-slate-700 dark:bg-slate-950 dark:focus:border-sky-400 dark:focus:bg-slate-950 dark:focus:ring-sky-900/30">
+        </div>
+
+        <div class="mb-5">
+          <label class="block text-sm font-bold text-slate-700 dark:text-slate-200">Slug</label>
+          <input type="text" name="slug" class="mt-1 w-full rounded-xl border border-slate-300 bg-slate-50 px-4 py-3 outline-none transition focus:border-qblue focus:bg-white focus:ring-4 focus:ring-sky-100 dark:border-slate-700 dark:bg-slate-950 dark:focus:border-sky-400 dark:focus:bg-slate-950 dark:focus:ring-sky-900/30">
+        </div>
+
+        <div class="mb-5 flex items-center gap-3">
+          <input type="checkbox" name="is_active" id="is_active" checked class="h-4 w-4 rounded border-slate-300 text-qblue focus:ring-qblue dark:border-slate-700 dark:bg-slate-950">
+          <label for="is_active" class="text-sm font-bold text-slate-700 dark:text-slate-200">Faol rukn</label>
+        </div>
+
+        <div class="flex gap-3">
+          <button type="submit" class="inline-flex items-center gap-2 rounded-xl bg-qblue px-5 py-3 font-bold text-white shadow-lg shadow-sky-900/15 transition hover:-translate-y-0.5 hover:bg-qnavy">
+            Saqlash
+          </button>
+
+          <button type="button" id="cancelCategoryButton" class="rounded-xl border border-slate-300 bg-white px-5 py-3 font-bold text-slate-700 hover:border-qblue hover:text-qblue dark:border-slate-700 dark:bg-slate-950 dark:text-slate-200">
+            Bekor qilish
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- AD MODAL -->
+  <div id="adModal" class="fixed inset-0 z-[60] hidden overflow-y-auto bg-slate-950/70 p-4 backdrop-blur-sm sm:p-6">
+    <div class="mx-auto max-w-lg rounded-2xl bg-white shadow-2xl dark:bg-slate-900">
+      <div class="mb-6 flex items-center justify-between">
+        <h2 id="adModalTitle" class="font-display text-2xl font-extrabold text-qnavy dark:text-white">Yangi reklama</h2>
+        <button id="adModalClose" type="button" class="grid h-10 w-10 place-items-center text-slate-500">
+          <svg viewBox="0 0 24 24" class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M6 6l12 12M18 6L6 18"></path>
+          </svg>
+        </button>
+      </div>
+
+      <form id="adForm" class="px-6 pb-6">
+        <input type="hidden" name="id">
+
+        <div class="mb-5">
+          <label class="block text-sm font-bold text-slate-700 dark:text-slate-200">Sarlavha *</label>
+          <input type="text" name="title" required class="mt-1 w-full rounded-xl border border-slate-300 bg-slate-50 px-4 py-3 outline-none transition focus:border-qblue focus:bg-white focus:ring-4 focus:ring-sky-100 dark:border-slate-700 dark:bg-slate-950 dark:focus:border-sky-400 dark:focus:bg-slate-950 dark:focus:ring-sky-900/30">
+        </div>
+
+        <div class="mb-5">
+          <label class="block text-sm font-bold text-slate-700 dark:text-slate-200">Kompaniya nomi</label>
+          <input type="text" name="company_name" class="mt-1 w-full rounded-xl border border-slate-300 bg-slate-50 px-4 py-3 outline-none transition focus:border-qblue focus:bg-white focus:ring-4 focus:ring-sky-100 dark:border-slate-700 dark:bg-slate-950 dark:focus:border-sky-400 dark:focus:bg-slate-950 dark:focus:ring-sky-900/30">
+        </div>
+
+        <div class="mb-5">
+          <label class="block text-sm font-bold text-slate-700 dark:text-slate-200">Holat</label>
+          <select name="status" class="mt-1 w-full rounded-xl border border-slate-300 bg-slate-50 px-4 py-3 outline-none transition focus:border-qblue focus:bg-white focus:ring-4 focus:ring-sky-100 dark:border-slate-700 dark:bg-slate-950 dark:focus:border-sky-400 dark:focus:bg-slate-950 dark:focus:ring-sky-900/30">
+            <option value="active">Faol</option>
+            <option value="inactive">Nofaol</option>
+          </select>
+        </div>
+
+        <div class="mb-5">
+          <label class="block text-sm font-bold text-slate-700 dark:text-slate-200">Rasm URL</label>
+          <input type="url" name="image_url" class="mt-1 w-full rounded-xl border border-slate-300 bg-slate-50 px-4 py-3 outline-none transition focus:border-qblue focus:bg-white focus:ring-4 focus:ring-sky-100 dark:border-slate-700 dark:bg-slate-950 dark:focus:border-sky-400 dark:focus:bg-slate-950 dark:focus:ring-sky-900/30">
+        </div>
+
+        <div class="mb-5">
+          <label class="block text-sm font-bold text-slate-700 dark:text-slate-200">Link</label>
+          <input type="url" name="link" class="mt-1 w-full rounded-xl border border-slate-300 bg-slate-50 px-4 py-3 outline-none transition focus:border-qblue focus:bg-white focus:ring-4 focus:ring-sky-100 dark:border-slate-700 dark:bg-slate-950 dark:focus:border-sky-400 dark:focus:bg-slate-950 dark:focus:ring-sky-900/30">
+        </div>
+
+        <div class="flex gap-3">
+          <button type="submit" class="inline-flex items-center gap-2 rounded-xl bg-qblue px-5 py-3 font-bold text-white shadow-lg shadow-sky-900/15 transition hover:-translate-y-0.5 hover:bg-qnavy">
+            Saqlash
+          </button>
+
+          <button type="button" id="cancelAdButton" class="rounded-xl border border-slate-300 bg-white px-5 py-3 font-bold text-slate-700 hover:border-qblue hover:text-qblue dark:border-slate-700 dark:bg-slate-950 dark:text-slate-200">
+            Bekor qilish
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
   <script>
-    const state = {
-      articles: [],
-      categories: [],
-      advertisements: [],
-      settings: {},
-      editingArticleId: null
-    };
+    // ====== STORAGE ======
+    const STORAGE_ARTICLES = 'qi_articles';
+    const STORAGE_CATEGORIES = 'qi_categories';
+    const STORAGE_ADS = 'qi_advertisements';
+    const STORAGE_SETTINGS = 'qi_settings';
+    const STORAGE_THEME = 'qi_theme';
+
+    let articles = JSON.parse(localStorage.getItem(STORAGE_ARTICLES)) || [];
+    let categories = JSON.parse(localStorage.getItem(STORAGE_CATEGORIES)) || [];
+    let advertisements = JSON.parse(localStorage.getItem(STORAGE_ADS)) || [];
+    let settings = JSON.parse(localStorage.getItem(STORAGE_SETTINGS)) || {};
+
+    let editingArticleId = null;
+    let editingCategoryId = null;
+    let editingAdId = null;
 
     const $ = (id) => document.getElementById(id);
 
-    function escapeHtml(value) {
-      return String(value ?? "")
-        .replace(/&/g, "&amp;")
-        .replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;")
-        .replace(/"/g, "&quot;")
-        .replace(/'/g, "&#039;");
+    // ====== UTILITY ======
+    function saveAll() {
+      localStorage.setItem(STORAGE_ARTICLES, JSON.stringify(articles));
+      localStorage.setItem(STORAGE_CATEGORIES, JSON.stringify(categories));
+      localStorage.setItem(STORAGE_ADS, JSON.stringify(advertisements));
+      localStorage.setItem(STORAGE_SETTINGS, JSON.stringify(settings));
+    }
+
+    function escapeHtml(str) {
+      const map = {
+        '&': '&amp;',
+        '<': '&lt;',
+        '>': '&gt;',
+        '"': '&quot;',
+        "'": '&#039;'
+      };
+      return String(str || '').replace(/[&<>"']/g, m => map[m]);
+    }
+
+    function nextId(list) {
+      if (!list.length) return 1;
+      return Math.max(...list.map(item => Number(item.id) || 0)) + 1;
+    }
+
+    function formatDate(value) {
+      if (!value) return '';
+      const date = new Date(value);
+      if (isNaN(date.getTime())) return String(value);
+      return date.toLocaleDateString('uz-UZ', { year: 'numeric', month: 'long', day: 'numeric' });
     }
 
     function articleTypeText(type) {
       const map = {
-        guide: "Qo‘llanma",
-        news: "Yangilik",
-        official: "Rasmiy xabar",
-        analysis: "Tahlil",
-        question: "Savol-javob",
-        advertisement: "Hamkorlik materiali"
+        'guide': 'Qo\'llanma',
+        'news': 'Yangilik',
+        'official': 'Rasmiy xabar',
+        'analysis': 'Tahlil',
+        'question': 'Savol-javob'
       };
-
-      return map[type] || "Maqola";
+      return map[type] || 'Maqola';
     }
 
-    function formatDate(value) {
-      if (!value) return "";
-
-      const normalized = String(value).includes("T")
-        ? String(value)
-        : String(value).replace(" ", "T");
-
-      const date = new Date(normalized.endsWith("Z") ? normalized : normalized + "Z");
-
-      if (Number.isNaN(date.getTime())) {
-        return String(value);
+    // ====== THEME ======
+    function initTheme() {
+      const saved = localStorage.getItem(STORAGE_THEME);
+      if (saved === 'dark') {
+        document.documentElement.classList.add('dark');
+        updateThemeIcon();
       }
-
-      return new Intl.DateTimeFormat("uz-UZ", {
-        year: "numeric",
-        month: "long",
-        day: "numeric"
-      }).format(date);
     }
 
-    function applyTheme(theme) {
-      const isDark = theme === "dark";
-      document.documentElement.classList.toggle("dark", isDark);
-      localStorage.setItem("qurilishinfo-admin-theme", theme);
-
-      $("themeSunIcon").innerHTML = isDark
-        ? '<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>'
-        : '<circle cx="12" cy="12" r="4"></circle><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"></path>';
-    }
-
-    function initializeTheme() {
-      const saved = localStorage.getItem("qurilishinfo-admin-theme");
-
-      if (saved) {
-        applyTheme(saved);
-        return;
+    function updateThemeIcon() {
+      const icon = $('themeSunIcon');
+      if (document.documentElement.classList.contains('dark')) {
+        icon.innerHTML = '<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>';
+      } else {
+        icon.innerHTML = '<circle cx="12" cy="12" r="4"></circle><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"></path>';
       }
-
-      const prefersDark = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
-      applyTheme(prefersDark ? "dark" : "light");
     }
 
+    $('themeButton').addEventListener('click', () => {
+      document.documentElement.classList.toggle('dark');
+      const isDark = document.documentElement.classList.contains('dark');
+      localStorage.setItem(STORAGE_THEME, isDark ? 'dark' : 'light');
+      updateThemeIcon();
+    });
+
+    // ====== TAB NAVIGATION ======
     function setTab(tabName) {
-      document.querySelectorAll(".tab-content").forEach((el) => el.classList.add("hidden"));
-      document.querySelectorAll(".nav-item").forEach((el) => el.classList.remove("active"));
+      document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+      document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
 
-      $(`${tabName}Tab`).classList.remove("hidden");
-      document.querySelector(`[data-tab="${tabName}"]`).classList.add("active");
+      $(`${tabName}Tab`).classList.remove('hidden');
+      document.querySelector(`[data-tab="${tabName}"]`).classList.add('active');
 
       const titles = {
-        dashboard: "Dashboard",
-        articles: "Maqolalar",
-        categories: "Ruknlar",
-        advertisements: "Reklama",
-        settings: "Sozlamalar"
+        dashboard: 'Dashboard',
+        articles: 'Maqolalar',
+        categories: 'Ruknlar',
+        advertisements: 'Reklama',
+        settings: 'Sozlamalar'
       };
 
-      $("pageTitle").textContent = titles[tabName] || "Admin Panel";
+      $('pageTitle').textContent = titles[tabName] || 'Admin Panel';
     }
 
-    function openArticleModal(article = null) {
-      state.editingArticleId = article ? article.id : null;
+    document.querySelectorAll('.nav-item').forEach(button => {
+      button.addEventListener('click', () => setTab(button.getAttribute('data-tab')));
+    });
 
-      $("articleModalTitle").textContent = article ? "Maqolani tahrirlash" : "Yangi maqola";
+    // ====== SIDEBAR ======
+    $('sidebarOpenButton').addEventListener('click', () => {
+      $('sidebar').classList.remove('-translate-x-full');
+      $('mobileOverlay').classList.remove('hidden');
+    });
 
-      const form = $("articleForm");
-      form.reset();
+    $('sidebarCloseButton').addEventListener('click', () => {
+      $('sidebar').classList.add('-translate-x-full');
+      $('mobileOverlay').classList.add('hidden');
+    });
 
-      if (article) {
-        form.title.value = article.title || "";
-        form.category.value = article.category || "";
-        form.article_type.value = article.article_type || "guide";
-        form.status.value = article.status || "draft";
-        form.lead.value = article.lead || "";
-        form.body.value = article.body || "";
-        form.author.value = article.author || "";
-        form.minutes.value = article.minutes || 5;
-        form.image_url.value = article.image_url || "";
-        form.image_caption.value = article.image_caption || "";
-        form.steps.value = article.steps || "";
-        form.warning.value = article.warning || "";
-        form.source_name.value = article.source_name || "";
-        form.source_url.value = article.source_url || "";
-        form.document_no.value = article.document_no || "";
-        form.updated.value = article.updated ? article.updated.split("T")[0] : "";
-        form.published_at.value = article.published_at ? article.published_at.slice(0, 16) : "";
-        form.tags.value = article.tags || "";
-        form.is_featured.checked = Number(article.is_featured) === 1;
-        form.is_pinned.checked = Number(article.is_pinned) === 1;
-        form.is_advertisement.checked = Number(article.is_advertisement) === 1;
-      }
+    $('mobileOverlay').addEventListener('click', () => {
+      $('sidebar').classList.add('-translate-x-full');
+      $('mobileOverlay').classList.add('hidden');
+    });
 
-      $("articleModal").classList.remove("hidden");
-      document.body.style.overflow = "hidden";
+    // ====== RENDER DASHBOARD ======
+    function renderDashboard() {
+      $('statArticles').textContent = articles.length;
+      $('statCategories').textContent = categories.filter(c => c.is_active).length;
+      $('statAds').textContent = advertisements.filter(a => a.status === 'active').length;
+      $('statStatus').textContent = 'OK';
+
+      const latest = [...articles].reverse().slice(0, 6);
+      $('dashboardArticles').innerHTML = latest.map(article => `
+        <article class="rounded-xl border border-slate-200 bg-slate-50 p-4 dark:border-slate-800 dark:bg-slate-950">
+          <div class="flex items-center justify-between gap-2 text-xs font-bold text-slate-500 dark:text-slate-400">
+            <span>${escapeHtml(article.category)}</span>
+            <span>${formatDate(article.updated)}</span>
+          </div>
+          <h3 class="mt-2 line-clamp-2 font-display text-base font-bold text-qnavy dark:text-white">${escapeHtml(article.title)}</h3>
+        </article>
+      `).join('');
     }
 
-    function closeArticleModal() {
-      $("articleModal").classList.add("hidden");
-      document.body.style.overflow = "";
-    }
-
-    async function getJson(url, fallback) {
-      try {
-        const response = await fetch(url);
-
-        if (!response.ok) {
-          return fallback;
-        }
-
-        return await response.json();
-      } catch (error) {
-        return fallback;
-      }
-    }
-
-    async function postJson(url, body) {
-      const response = await fetch(url, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(body)
-      });
-
-      return await response.json();
-    }
-
-    async function loadDashboard() {
-      const [articles, categories, advertisements, settings] = await Promise.all([
-        getJson("/api/articles", []),
-        getJson("/api/categories", []),
-        getJson("/api/advertisements", []),
-        getJson("/api/settings", {})
-      ]);
-
-      state.articles = Array.isArray(articles) ? articles : [];
-      state.categories = Array.isArray(categories) ? categories : [];
-      state.advertisements = Array.isArray(advertisements) ? advertisements : [];
-      state.settings = settings || {};
-
-      $("statArticles").textContent = state.articles.length;
-      $("statAds").textContent = state.advertisements.filter((ad) => ad.status === "active").length;
-      $("statCategories").textContent = state.categories.filter((cat) => cat.is_active).length;
-      $("statStatus").textContent = "OK";
-
-      renderDashboardArticles();
-      renderArticlesTable();
-      renderCategoriesTable();
-      renderAdsTable();
-      renderSettingsForm();
-      populateCategorySelect();
-    }
-
-    function renderDashboardArticles() {
-      const latest = [...state.articles]
-        .sort((a, b) => {
-          const aDate = new Date(String(a.published_at || a.created_at || "").replace(" ", "T") + "Z").getTime() || 0;
-          const bDate = new Date(String(b.published_at || b.created_at || "").replace(" ", "T") + "Z").getTime() || 0;
-
-          return bDate - aDate || Number(b.id) - Number(a.id);
-        })
-        .slice(0, 6);
-
-      $("dashboardArticles").innerHTML = latest.map((article) => {
-        const date = formatDate(article.published_at || article.created_at);
-
-        return `
-          <article class="rounded-xl border border-slate-200 bg-slate-50 p-4 dark:border-slate-800 dark:bg-slate-950">
-            <div class="flex items-center justify-between gap-2 text-xs font-bold text-slate-500 dark:text-slate-400">
-              <span>${escapeHtml(article.category)}</span>
-              <span>${date ? date.split(" ")[0] : ""}</span>
+    // ====== RENDER ARTICLES ======
+    function renderArticles() {
+      const tbody = $('articlesTableBody');
+      tbody.innerHTML = articles.map(article => `
+        <tr class="hover:bg-slate-50 dark:hover:bg-slate-950">
+          <td class="px-5 py-4">
+            <div class="font-semibold text-slate-800 dark:text-slate-200">${escapeHtml(article.title)}</div>
+            <div class="text-xs text-slate-500 dark:text-slate-400">${formatDate(article.updated)}</div>
+          </td>
+          <td class="px-5 py-4 text-slate-700 dark:text-slate-300">${escapeHtml(article.category)}</td>
+          <td class="px-5 py-4 text-slate-700 dark:text-slate-300">${articleTypeText(article.article_type)}</td>
+          <td class="px-5 py-4">
+            <span class="rounded-full ${article.status === 'published' ? 'bg-emerald-100 text-emerald-800 dark:bg-emerald-950/50 dark:text-emerald-300' : 'bg-orange-100 text-orange-800 dark:bg-orange-950/50 dark:text-orange-300'} px-3 py-1 text-xs font-bold">
+              ${article.status === 'published' ? 'Chiqarilgan' : 'Qoralama'}
+            </span>
+          </td>
+          <td class="px-5 py-4">
+            <div class="flex gap-2">
+              <button onclick="editArticleModal(${article.id})" class="rounded-lg border border-slate-300 bg-white px-3 py-1.5 text-xs font-bold text-slate-700 hover:border-qblue dark:border-slate-700 dark:bg-slate-950 dark:text-slate-200">Tahrirlash</button>
+              <button onclick="deleteArticle(${article.id})" class="rounded-lg border border-red-300 bg-white px-3 py-1.5 text-xs font-bold text-red-700 dark:border-red-800 dark:bg-slate-950 dark:text-red-300">O'chirish</button>
             </div>
-            <h3 class="mt-2 line-clamp-2 font-display text-base font-bold text-qnavy dark:text-white">${escapeHtml(article.title)}</h3>
-          </article>
-        `;
-      }).join("");
+          </td>
+        </tr>
+      `).join('');
     }
 
-    function renderArticlesTable() {
-      const tbody = $("articlesTableBody");
-
-      tbody.innerHTML = state.articles.map((article) => {
-        const date = formatDate(article.published_at || article.created_at);
-
-        return `
-          <tr class="hover:bg-slate-50 dark:hover:bg-slate-950">
-            <td class="px-5 py-4">
-              <div class="font-semibold text-slate-800 dark:text-slate-200">${escapeHtml(article.title)}</div>
-              <div class="text-xs text-slate-500 dark:text-slate-400">${date || ""}</div>
-            </td>
-            <td class="px-5 py-4 text-slate-700 dark:text-slate-300">${escapeHtml(article.category)}</td>
-            <td class="px-5 py-4 text-slate-700 dark:text-slate-300">${articleTypeText(article.article_type)}</td>
-            <td class="px-5 py-4">
-              <span class="rounded-full bg-emerald-100 px-3 py-1 text-xs font-bold text-emerald-800 dark:bg-emerald-950/50 dark:text-emerald-300">${article.status === "published" ? "Chiqarilgan" : "Qoralama"}</span>
-            </td>
-            <td class="px-5 py-4">
-              <div class="flex items-center gap-2">
-                <button type="button" data-edit-article="${article.id}" class="rounded-lg border border-slate-300 bg-white px-3 py-1.5 text-xs font-bold text-slate-700 hover:border-qblue hover:text-qblue dark:border-slate-700 dark:bg-slate-950 dark:text-slate-200">Tahrirlash</button>
-                <button type="button" data-delete-article="${article.id}" class="rounded-lg border border-red-300 bg-white px-3 py-1.5 text-xs font-bold text-red-700 hover:border-red-500 hover:text-red-600 dark:border-red-800 dark:bg-slate-950 dark:text-red-300">O‘chirish</button>
-              </div>
-            </td>
-          </tr>
-        `;
-      }).join("");
-    }
-
-    function renderCategoriesTable() {
-      const tbody = $("categoriesTableBody");
-
-      tbody.innerHTML = state.categories.map((category, index) => `
+    // ====== RENDER CATEGORIES ======
+    function renderCategories() {
+      const tbody = $('categoriesTableBody');
+      tbody.innerHTML = categories.map((category, idx) => `
         <tr class="hover:bg-slate-50 dark:hover:bg-slate-950">
           <td class="px-5 py-4 font-semibold text-slate-800 dark:text-slate-200">${escapeHtml(category.name)}</td>
           <td class="px-5 py-4 text-slate-700 dark:text-slate-300">${escapeHtml(category.slug)}</td>
           <td class="px-5 py-4">
-            <span class="rounded-full ${category.is_active ? "bg-emerald-100 text-emerald-800 dark:bg-emerald-950/50 dark:text-emerald-300" : "bg-slate-200 text-slate-700 dark:bg-slate-800 dark:text-slate-300"} px-3 py-1 text-xs font-bold">${category.is_active ? "Faol" : "O‘chirilgan"}</span>
+            <span class="rounded-full ${category.is_active ? 'bg-emerald-100 text-emerald-800 dark:bg-emerald-950/50 dark:text-emerald-300' : 'bg-slate-200 text-slate-700 dark:bg-slate-800 dark:text-slate-300'} px-3 py-1 text-xs font-bold">
+              ${category.is_active ? 'Faol' : 'Nofaol'}
+            </span>
           </td>
-          <td class="px-5 py-4 text-slate-700 dark:text-slate-300">${index + 1}</td>
           <td class="px-5 py-4">
-            <div class="flex items-center gap-2">
-              <button type="button" data-edit-category="${category.id}" class="rounded-lg border border-slate-300 bg-white px-3 py-1.5 text-xs font-bold text-slate-700 hover:border-qblue hover:text-qblue dark:border-slate-700 dark:bg-slate-950 dark:text-slate-200">Tahrirlash</button>
-              <button type="button" data-delete-category="${category.id}" class="rounded-lg border border-red-300 bg-white px-3 py-1.5 text-xs font-bold text-red-700 hover:border-red-500 hover:text-red-600 dark:border-red-800 dark:bg-slate-950 dark:text-red-300">O‘chirish</button>
+            <div class="flex gap-2">
+              <button onclick="editCategoryModal(${category.id})" class="rounded-lg border border-slate-300 bg-white px-3 py-1.5 text-xs font-bold text-slate-700 hover:border-qblue dark:border-slate-700 dark:bg-slate-950 dark:text-slate-200">Tahrirlash</button>
+              <button onclick="deleteCategory(${category.id})" class="rounded-lg border border-red-300 bg-white px-3 py-1.5 text-xs font-bold text-red-700 dark:border-red-800 dark:bg-slate-950 dark:text-red-300">O'chirish</button>
             </div>
           </td>
         </tr>
-      `).join("");
+      `).join('');
     }
 
-    function renderAdsTable() {
-      const tbody = $("adsTableBody");
-
-      tbody.innerHTML = state.advertisements.map((ad) => `
+    // ====== RENDER ADS ======
+    function renderAds() {
+      const tbody = $('adsTableBody');
+      tbody.innerHTML = advertisements.map(ad => `
         <tr class="hover:bg-slate-50 dark:hover:bg-slate-950">
           <td class="px-5 py-4 font-semibold text-slate-800 dark:text-slate-200">${escapeHtml(ad.title)}</td>
-          <td class="px-5 py-4 text-slate-700 dark:text-slate-300">${escapeHtml(ad.company_name || "—")}</td>
+          <td class="px-5 py-4 text-slate-700 dark:text-slate-300">${escapeHtml(ad.company_name || '—')}</td>
           <td class="px-5 py-4">
-            <span class="rounded-full ${ad.status === "active" ? "bg-emerald-100 text-emerald-800 dark:bg-emerald-950/50 dark:text-emerald-300" : "bg-slate-200 text-slate-700 dark:bg-slate-800 dark:text-slate-300"} px-3 py-1 text-xs font-bold">${ad.status === "active" ? "Faol" : "O‘chirilgan"}</span>
+            <span class="rounded-full ${ad.status === 'active' ? 'bg-emerald-100 text-emerald-800 dark:bg-emerald-950/50 dark:text-emerald-300' : 'bg-slate-200 text-slate-700 dark:bg-slate-800 dark:text-slate-300'} px-3 py-1 text-xs font-bold">
+              ${ad.status === 'active' ? 'Faol' : 'Nofaol'}
+            </span>
           </td>
           <td class="px-5 py-4">
-            <div class="flex items-center gap-2">
-              <button type="button" data-edit-ad="${ad.id}" class="rounded-lg border border-slate-300 bg-white px-3 py-1.5 text-xs font-bold text-slate-700 hover:border-qblue hover:text-qblue dark:border-slate-700 dark:bg-slate-950 dark:text-slate-200">Tahrirlash</button>
-              <button type="button" data-delete-ad="${ad.id}" class="rounded-lg border border-red-300 bg-white px-3 py-1.5 text-xs font-bold text-red-700 hover:border-red-500 hover:text-red-600 dark:border-red-800 dark:bg-slate-950 dark:text-red-300">O‘chirish</button>
+            <div class="flex gap-2">
+              <button onclick="editAdModal(${ad.id})" class="rounded-lg border border-slate-300 bg-white px-3 py-1.5 text-xs font-bold text-slate-700 hover:border-qblue dark:border-slate-700 dark:bg-slate-950 dark:text-slate-200">Tahrirlash</button>
+              <button onclick="deleteAd(${ad.id})" class="rounded-lg border border-red-300 bg-white px-3 py-1.5 text-xs font-bold text-red-700 dark:border-red-800 dark:bg-slate-950 dark:text-red-300">O'chirish</button>
             </div>
           </td>
         </tr>
-      `).join("");
+      `).join('');
     }
 
-    function renderSettingsForm() {
-      const form = $("settingsForm");
-
-      form.site_name.value = state.settings.site_name || "";
-      form.telegram_url.value = state.settings.telegram_url || "";
-      form.instagram_url.value = state.settings.instagram_url || "";
-      form.facebook_url.value = state.settings.facebook_url || "";
-      form.youtube_url.value = state.settings.youtube_url || "";
-      form.tiktok_url.value = state.settings.tiktok_url || "";
-      form.contact.value = state.settings.contact || "";
-      form.about_text.value = state.settings.about_text || "";
+    // ====== RENDER SETTINGS ======
+    function renderSettings() {
+      const form = $('settingsForm');
+      form.site_name.value = settings.site_name || '';
+      form.telegram_url.value = settings.telegram_url || '';
+      form.instagram_url.value = settings.instagram_url || '';
+      form.facebook_url.value = settings.facebook_url || '';
+      form.youtube_url.value = settings.youtube_url || '';
+      form.tiktok_url.value = settings.tiktok_url || '';
+      form.contact.value = settings.contact || '';
+      form.about_text.value = settings.about_text || '';
     }
 
+    function renderAll() {
+      renderDashboard();
+      renderArticles();
+      renderCategories();
+      renderAds();
+      renderSettings();
+      populateCategorySelect();
+    }
+
+    // ====== ARTICLE MODAL ======
     function populateCategorySelect() {
-      const select = document.querySelector("#articleForm select[name='category']");
-
-      select.innerHTML = state.categories
-        .filter((cat) => cat.is_active)
-        .map((cat) => `<option value="${escapeHtml(cat.name)}">${escapeHtml(cat.name)}</option>`)
-        .join("");
+      const select = $('articleForm').querySelector('select[name="category"]');
+      select.innerHTML = categories
+        .filter(c => c.is_active)
+        .map(c => `<option value="${escapeHtml(c.name)}">${escapeHtml(c.name)}</option>`)
+        .join('');
     }
 
-    document.addEventListener("click", (event) => {
-      const navItem = event.target.closest(".nav-item");
+    $('newArticleButton').addEventListener('click', () => {
+      editingArticleId = null;
+      $('articleModalTitle').textContent = 'Yangi maqola';
+      $('articleForm').reset();
+      $('articleForm').querySelector('input[name="id"]').value = '';
+      $('articleForm').querySelector('select[name="status"]').value = 'draft';
+      $('articleForm').querySelector('input[name="minutes"]').value = '5';
+      populateCategorySelect();
+      $('articleModal').classList.remove('hidden');
+    });
 
-      if (navItem) {
-        setTab(navItem.getAttribute("data-tab"));
-      }
+    function editArticleModal(id) {
+      const article = articles.find(a => a.id === id);
+      if (!article) return;
 
-      const newArticleButton = event.target.closest("#newArticleButton");
+      editingArticleId = id;
+      const form = $('articleForm');
 
-      if (newArticleButton) {
-        openArticleModal();
-      }
+      $('articleModalTitle').textContent = 'Maqolani tahrirlash';
+      form.id.value = article.id;
+      form.title.value = article.title || '';
+      form.category.value = article.category || '';
+      form.article_type.value = article.article_type || 'guide';
+      form.status.value = article.status || 'draft';
+      form.lead.value = article.lead || '';
+      form.body.value = article.body || '';
+      form.author.value = article.author || '';
+      form.minutes.value = article.minutes || 5;
+      form.image_url.value = article.image_url || '';
+      form.image_caption.value = article.image_caption || '';
+      form.steps.value = article.steps || '';
+      form.warning.value = article.warning || '';
+      form.source_name.value = article.source_name || '';
+      form.source_url.value = article.source_url || '';
+      form.document_no.value = article.document_no || '';
+      form.updated.value = article.updated || '';
+      form.published_at.value = article.published_at || '';
+      form.tags.value = article.tags || '';
+      form.is_featured.checked = article.is_featured ? true : false;
+      form.is_pinned.checked = article.is_pinned ? true : false;
+      form.is_advertisement.checked = article.is_advertisement ? true : false;
 
-      const editArticleButton = event.target.closest("[data-edit-article]");
+      populateCategorySelect();
+      $('articleModal').classList.remove('hidden');
+    }
 
-      if (editArticleButton) {
-        const article = state.articles.find((a) => String(a.id) === String(editArticleButton.getAttribute("data-edit-article")));
-        openArticleModal(article);
-      }
+    $('articleModalClose').addEventListener('click', () => {
+      $('articleModal').classList.add('hidden');
+    });
 
-      const deleteArticleButton = event.target.closest("[data-delete-article]");
+    $('cancelArticleButton').addEventListener('click', () => {
+      $('articleModal').classList.add('hidden');
+    });
 
-      if (deleteArticleButton) {
-        const id = deleteArticleButton.getAttribute("data-delete-article");
-
-        if (confirm("Haqiqatan ham bu maqolani o‘chirmoqchimisiz?")) {
-          postJson("/api/articles/delete", { id }).then(() => loadDashboard());
-        }
+    $('articleModal').addEventListener('click', (e) => {
+      if (e.target === $('articleModal')) {
+        $('articleModal').classList.add('hidden');
       }
     });
 
-    $("articleModalClose").addEventListener("click", closeArticleModal);
-    $("articleModal").addEventListener("click", (event) => {
-      if (event.target === $("articleModal")) {
-        closeArticleModal();
-      }
-    });
+    $('articleForm').addEventListener('submit', (e) => {
+      e.preventDefault();
 
-    $("cancelArticleButton").addEventListener("click", closeArticleModal);
-
-    $("articleForm").addEventListener("submit", async (event) => {
-      event.preventDefault();
-
-      const form = event.target;
+      const form = $('articleForm');
       const data = {
-        title: form.title.value,
+        title: form.title.value.trim(),
         category: form.category.value,
         article_type: form.article_type.value,
         status: form.status.value,
-        lead: form.lead.value,
-        body: form.body.value,
-        author: form.author.value,
+        lead: form.lead.value.trim(),
+        body: form.body.value.trim(),
+        author: form.author.value.trim(),
         minutes: Number(form.minutes.value) || 5,
-        image_url: form.image_url.value,
-        image_caption: form.image_caption.value,
-        steps: form.steps.value,
-        warning: form.warning.value,
-        source_name: form.source_name.value,
-        source_url: form.source_url.value,
-        document_no: form.document_no.value,
+        image_url: form.image_url.value.trim(),
+        image_caption: form.image_caption.value.trim(),
+        steps: form.steps.value.trim(),
+        warning: form.warning.value.trim(),
+        source_name: form.source_name.value.trim(),
+        source_url: form.source_url.value.trim(),
+        document_no: form.document_no.value.trim(),
         updated: form.updated.value,
         published_at: form.published_at.value,
-        tags: form.tags.value,
+        tags: form.tags.value.trim(),
         is_featured: form.is_featured.checked ? 1 : 0,
         is_pinned: form.is_pinned.checked ? 1 : 0,
         is_advertisement: form.is_advertisement.checked ? 1 : 0
       };
 
-      if (state.editingArticleId) {
-        data.id = state.editingArticleId;
-        await postJson("/api/articles/update", data);
+      if (editingArticleId) {
+        const idx = articles.findIndex(a => a.id === editingArticleId);
+        articles[idx] = { ...articles[idx], ...data };
       } else {
-        await postJson("/api/articles/create", data);
+        articles.push({ id: nextId(articles), ...data });
       }
 
-      closeArticleModal();
-      loadDashboard();
+      saveAll();
+      renderAll();
+      $('articleModal').classList.add('hidden');
+      alert('Saqlandi');
     });
 
-    $("settingsForm").addEventListener("submit", async (event) => {
-      event.preventDefault();
+    function deleteArticle(id) {
+      if (!confirm('O\'chirish ishonchisizmi?')) return;
+      articles = articles.filter(a => a.id !== id);
+      saveAll();
+      renderAll();
+    }
 
-      const form = event.target;
+    // ====== CATEGORY MODAL ======
+    $('newCategoryButton').addEventListener('click', () => {
+      editingCategoryId = null;
+      $('categoryModalTitle').textContent = 'Yangi rukn';
+      $('categoryForm').reset();
+      $('categoryForm').querySelector('input[name="id"]').value = '';
+      $('categoryForm').querySelector('input[name="is_active"]').checked = true;
+      $('categoryModal').classList.remove('hidden');
+    });
+
+    function editCategoryModal(id) {
+      const category = categories.find(c => c.id === id);
+      if (!category) return;
+
+      editingCategoryId = id;
+      const form = $('categoryForm');
+
+      $('categoryModalTitle').textContent = 'Ruknni tahrirlash';
+      form.id.value = category.id;
+      form.name.value = category.name || '';
+      form.slug.value = category.slug || '';
+      form.is_active.checked = category.is_active ? true : false;
+
+      $('categoryModal').classList.remove('hidden');
+    }
+
+    $('categoryModalClose').addEventListener('click', () => {
+      $('categoryModal').classList.add('hidden');
+    });
+
+    $('cancelCategoryButton').addEventListener('click', () => {
+      $('categoryModal').classList.add('hidden');
+    });
+
+    $('categoryModal').addEventListener('click', (e) => {
+      if (e.target === $('categoryModal')) {
+        $('categoryModal').classList.add('hidden');
+      }
+    });
+
+    $('categoryForm').addEventListener('submit', (e) => {
+      e.preventDefault();
+
+      const form = $('categoryForm');
+      const name = form.name.value.trim();
+      if (!name) {
+        alert('Rukn nomini yozing');
+        return;
+      }
+
+      const slug = form.slug.value.trim() || 
+        name.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '');
+
       const data = {
-        site_name: form.site_name.value,
-        telegram_url: form.telegram_url.value,
-        instagram_url: form.instagram_url.value,
-        facebook_url: form.facebook_url.value,
-        youtube_url: form.youtube_url.value,
-        tiktok_url: form.tiktok_url.value,
-        contact: form.contact.value,
-        about_text: form.about_text.value
+        name,
+        slug,
+        is_active: form.is_active.checked ? true : false
       };
 
-      await postJson("/api/settings/update", data);
-      alert("Sozlamalar saqlandi.");
-      loadDashboard();
+      if (editingCategoryId) {
+        const idx = categories.findIndex(c => c.id === editingCategoryId);
+        categories[idx] = { ...categories[idx], ...data };
+      } else {
+        categories.push({ id: nextId(categories), ...data });
+      }
+
+      saveAll();
+      renderAll();
+      $('categoryModal').classList.add('hidden');
+      alert('Saqlandi');
     });
 
-    $("sidebarOpenButton").addEventListener("click", () => {
-      $("sidebar").classList.remove("-translate-x-full");
-      $("mobileOverlay").classList.remove("hidden");
-      document.body.style.overflow = "hidden";
+    function deleteCategory(id) {
+      const used = articles.some(a => {
+        const cat = categories.find(c => c.id === id);
+        return a.category === cat.name;
+      });
+
+      if (used) {
+        alert('Bu ruknda maqolalar bor');
+        return;
+      }
+
+      if (!confirm('O\'chirish ishonchisizmi?')) return;
+      categories = categories.filter(c => c.id !== id);
+      saveAll();
+      renderAll();
+    }
+
+    // ====== AD MODAL ======
+    $('newAdButton').addEventListener('click', () => {
+      editingAdId = null;
+      $('adModalTitle').textContent = 'Yangi reklama';
+      $('adForm').reset();
+      $('adForm').querySelector('input[name="id"]').value = '';
+      $('adForm').querySelector('select[name="status"]').value = 'active';
+      $('adModal').classList.remove('hidden');
     });
 
-    $("sidebarCloseButton").addEventListener("click", () => {
-      $("sidebar").classList.add("-translate-x-full");
-      $("mobileOverlay").classList.add("hidden");
-      document.body.style.overflow = "";
+    function editAdModal(id) {
+      const ad = advertisements.find(a => a.id === id);
+      if (!ad) return;
+
+      editingAdId = id;
+      const form = $('adForm');
+
+      $('adModalTitle').textContent = 'Reklamani tahrirlash';
+      form.id.value = ad.id;
+      form.title.value = ad.title || '';
+      form.company_name.value = ad.company_name || '';
+      form.status.value = ad.status || 'active';
+      form.image_url.value = ad.image_url || '';
+      form.link.value = ad.link || '';
+
+      $('adModal').classList.remove('hidden');
+    }
+
+    $('adModalClose').addEventListener('click', () => {
+      $('adModal').classList.add('hidden');
     });
 
-    $("mobileOverlay").addEventListener("click", () => {
-      $("sidebar").classList.add("-translate-x-full");
-      $("mobileOverlay").classList.add("hidden");
-      document.body.style.overflow = "";
+    $('cancelAdButton').addEventListener('click', () => {
+      $('adModal').classList.add('hidden');
     });
 
-    $("themeButton").addEventListener("click", () => {
-      applyTheme(document.documentElement.classList.contains("dark") ? "light" : "dark");
-    });
-
-    document.addEventListener("keydown", (event) => {
-      if (event.key === "Escape") {
-        closeArticleModal();
+    $('adModal').addEventListener('click', (e) => {
+      if (e.target === $('adModal')) {
+        $('adModal').classList.add('hidden');
       }
     });
 
-    initializeTheme();
-    loadDashboard();
+    $('adForm').addEventListener('submit', (e) => {
+      e.preventDefault();
+
+      const form = $('adForm');
+      const data = {
+        title: form.title.value.trim(),
+        company_name: form.company_name.value.trim(),
+        status: form.status.value,
+        image_url: form.image_url.value.trim(),
+        link: form.link.value.trim()
+      };
+
+      if (editingAdId) {
+        const idx = advertisements.findIndex(a => a.id === editingAdId);
+        advertisements[idx] = { ...advertisements[idx], ...data };
+      } else {
+        advertisements.push({ id: nextId(advertisements), ...data });
+      }
+
+      saveAll();
+      renderAll();
+      $('adModal').classList.add('hidden');
+      alert('Saqlandi');
+    });
+
+    function deleteAd(id) {
+      if (!confirm('O\'chirish ishonchisizmi?')) return;
+      advertisements = advertisements.filter(a => a.id !== id);
+      saveAll();
+      renderAll();
+    }
+
+    // ====== SETTINGS ======
+    $('settingsForm').addEventListener('submit', (e) => {
+      e.preventDefault();
+
+      const form = $('settingsForm');
+      settings = {
+        site_name: form.site_name.value.trim(),
+        telegram_url: form.telegram_url.value.trim(),
+        instagram_url: form.instagram_url.value.trim(),
+        facebook_url: form.facebook_url.value.trim(),
+        youtube_url: form.youtube_url.value.trim(),
+        tiktok_url: form.tiktok_url.value.trim(),
+        contact: form.contact.value.trim(),
+        about_text: form.about_text.value.trim()
+      };
+
+      saveAll();
+      alert('Sozlamalar saqlandi');
+    });
+
+    // ====== INIT ======
+    initTheme();
+    renderAll();
   </script>
 </body>
 </html>
