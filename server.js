@@ -59,7 +59,10 @@ function ensureDefaultSettings() {
       "about_text",
       "QurilishInfo — uy qurish, uy sotib olish, ruxsatnoma, ta'mirlash va qurilish nazorati bo'yicha amaliy ma'lumotlar platformasi. Loyiha rasmiy davlat organi emas. Materiallar rasmiy hujjatlar, davlat organlari e'lonlari va mutaxassislarning izohlari asosida tayyorlanadi."
     ],
-    ["editorial_policy", "Reklama va tahririy materiallar alohida belgilanadi."],
+    [
+      "editorial_policy",
+      "Reklama va tahririy materiallar alohida belgilanadi."
+    ],
     ["cta_title", "Qurilishda muammo bormi?"],
     [
       "cta_text",
@@ -83,14 +86,14 @@ function ensureDefaultSettings() {
 ensureDefaultSettings();
 
 /* =========================================================
-   OCHIQ API — bosh sahifa uchun
+   OCHIQ API — BOSH SAHIFA UCHUN
 ========================================================= */
 
 app.get("/api/articles", (req, res) => {
-  const category = req.query.category;
+  const category = String(req.query.category || "").trim();
   const search = String(req.query.search || "").trim();
 
-  let rows;
+  let rows = [];
 
   if (search) {
     const keyword = `%${search}%`;
@@ -98,25 +101,40 @@ app.get("/api/articles", (req, res) => {
     rows = db
       .prepare(
         `
-        SELECT *
-        FROM articles
-        WHERE title LIKE ?
-           OR lead LIKE ?
-           OR body LIKE ?
-           OR category LIKE ?
-        ORDER BY created_at DESC, id DESC
-      `
+          SELECT *
+          FROM articles
+          WHERE status = 'published'
+            AND (
+              title LIKE ?
+              OR lead LIKE ?
+              OR body LIKE ?
+              OR category LIKE ?
+            )
+          ORDER BY created_at DESC, id DESC
+        `
       )
       .all(keyword, keyword, keyword, keyword);
   } else if (category && category !== "Barchasi") {
     rows = db
       .prepare(
-        "SELECT * FROM articles WHERE category = ? ORDER BY created_at DESC, id DESC"
+        `
+          SELECT *
+          FROM articles
+          WHERE status = 'published' AND category = ?
+          ORDER BY created_at DESC, id DESC
+        `
       )
       .all(category);
   } else {
     rows = db
-      .prepare("SELECT * FROM articles ORDER BY created_at DESC, id DESC")
+      .prepare(
+        `
+          SELECT *
+          FROM articles
+          WHERE status = 'published'
+          ORDER BY created_at DESC, id DESC
+        `
+      )
       .all();
   }
 
@@ -125,7 +143,13 @@ app.get("/api/articles", (req, res) => {
 
 app.get("/api/articles/:id", (req, res) => {
   const row = db
-    .prepare("SELECT * FROM articles WHERE id = ?")
+    .prepare(
+      `
+        SELECT *
+        FROM articles
+        WHERE id = ? AND status = 'published'
+      `
+    )
     .get(req.params.id);
 
   if (!row) {
@@ -139,7 +163,6 @@ app.get("/api/articles/:id", (req, res) => {
 
 app.get("/api/settings", (req, res) => {
   const rows = db.prepare("SELECT key, value FROM site_settings").all();
-
   const settings = {};
 
   for (const row of rows) {
@@ -153,19 +176,50 @@ app.get("/api/advertisements", (req, res) => {
   const rows = db
     .prepare(
       `
-      SELECT *
-      FROM advertisements
-      WHERE status = 'active'
-      ORDER BY created_at DESC, id DESC
-    `
+        SELECT *
+        FROM advertisements
+        WHERE status = 'active'
+        ORDER BY created_at DESC, id DESC
+      `
     )
     .all();
 
   res.json(rows);
 });
 
+app.post("/api/appeals", (req, res) => {
+  const { name, phone, region, topic, message } = req.body || {};
+
+  if (!region || !topic || !message) {
+    return res.status(400).json({
+      error: "Hudud, mavzu va savol to'ldirilishi shart"
+    });
+  }
+
+  const info = db
+    .prepare(
+      `
+        INSERT INTO appeals (name, phone, region, topic, message, status)
+        VALUES (?, ?, ?, ?, ?, ?)
+      `
+    )
+    .run(
+      String(name || "").trim(),
+      String(phone || "").trim(),
+      String(region).trim(),
+      String(topic).trim(),
+      String(message).trim(),
+      "new"
+    );
+
+  res.json({
+    ok: true,
+    id: info.lastInsertRowid
+  });
+});
+
 /* =========================================================
-   ADMIN KIRISH / CHIQISH
+   KIRISH / CHIQISH
 ========================================================= */
 
 app.post("/api/login", (req, res) => {
@@ -173,20 +227,20 @@ app.post("/api/login", (req, res) => {
 
   const user = db
     .prepare("SELECT * FROM admin_users WHERE username = ?")
-    .get(username || "");
+    .get(String(username || "").trim());
 
-  if (!user || !bcrypt.compareSync(password || "", user.password_hash)) {
+  if (!user || !bcrypt.compareSync(String(password || ""), user.password_hash)) {
     return res.status(401).json({
       error: "Login yoki parol noto'g'ri"
     });
   }
 
   req.session.isAdmin = true;
-  req.session.username = username;
+  req.session.username = user.username;
 
   res.json({
     ok: true,
-    username
+    username: user.username
   });
 });
 
@@ -200,7 +254,7 @@ app.post("/api/logout", (req, res) => {
 
 app.get("/api/admin/check", (req, res) => {
   res.json({
-    loggedIn: !!(req.session && req.session.isAdmin),
+    loggedIn: Boolean(req.session && req.session.isAdmin),
     username:
       req.session && req.session.username ? req.session.username : null
   });
@@ -218,7 +272,7 @@ app.get("/api/admin/articles", requireAuth, (req, res) => {
   res.json(rows);
 });
 
-app.post("/api/admin/articles", app.post("/api/admin/articles", requireAuth, (req, res) => {
+app.post("/api/admin/articles", requireAuth, (req, res) => {
   const {
     category,
     status,
@@ -244,50 +298,103 @@ app.post("/api/admin/articles", app.post("/api/admin/articles", requireAuth, (re
   }
 
   const allowedStatuses = ["published", "draft", "archived"];
-
   const normalizedStatus = allowedStatuses.includes(status)
     ? status
     : "published";
 
-  const info = db.prepare(`
-    INSERT INTO articles (
-      category,
-      status,
-      title,
-      lead,
-      body,
-      minutes,
-      author,
-      image_url,
-      source_name,
-      source_url,
-      document_no,
-      updated,
-      steps,
-      warning,
-      is_advertisement
+  const info = db
+    .prepare(
+      `
+        INSERT INTO articles (
+          category,
+          status,
+          title,
+          lead,
+          body,
+          minutes,
+          author,
+          image_url,
+          source_name,
+          source_url,
+          document_no,
+          updated,
+          steps,
+          warning,
+          is_advertisement
+        )
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+      `
     )
-    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-  `).run(
-    category.trim(),
-    normalizedStatus,
-    title.trim(),
-    lead.trim(),
-    body.trim(),
-    Number(minutes) || 5,
-    (author || "QurilishInfo tahririyati").trim(),
-    (image_url || "").trim(),
-    (source_name || "").trim(),
-    (source_url || "").trim(),
-    (document_no || "").trim(),
-    (updated || "").trim(),
-    (steps || "").trim(),
-    (warning || "").trim(),
-    Number(is_advertisement) ? 1 : 0
-  );
+    .run(
+      String(category).trim(),
+      normalizedStatus,
+      String(title).trim(),
+      String(lead).trim(),
+      String(body).trim(),
+      Number(minutes) || 5,
+      String(author || "QurilishInfo tahririyati").trim(),
+      String(image_url || "").trim(),
+      String(source_name || "").trim(),
+      String(source_url || "").trim(),
+      String(document_no || "").trim(),
+      String(updated || "").trim(),
+      String(steps || "").trim(),
+      String(warning || "").trim(),
+      Number(is_advertisement) ? 1 : 0
+    );
 
   res.json({
     ok: true,
     id: info.lastInsertRowid
   });
 });
+
+app.put("/api/admin/articles/:id", requireAuth, (req, res) => {
+  const {
+    category,
+    status,
+    title,
+    lead,
+    body,
+    minutes,
+    author,
+    image_url,
+    source_name,
+    source_url,
+    document_no,
+    updated,
+    steps,
+    warning,
+    is_advertisement
+  } = req.body || {};
+
+  const exists = db
+    .prepare("SELECT id FROM articles WHERE id = ?")
+    .get(req.params.id);
+
+  if (!exists) {
+    return res.status(404).json({
+      error: "Maqola topilmadi"
+    });
+  }
+
+  if (!category || !title || !lead || !body) {
+    return res.status(400).json({
+      error: "Bo'lim, sarlavha, qisqacha va matn to'ldirilishi shart"
+    });
+  }
+
+  const allowedStatuses = ["published", "draft", "archived"];
+  const normalizedStatus = allowedStatuses.includes(status)
+    ? status
+    : "published";
+
+  db.prepare(
+    `
+      UPDATE articles
+      SET
+        category = ?,
+        status = ?,
+        title = ?,
+        lead = ?,
+        body
