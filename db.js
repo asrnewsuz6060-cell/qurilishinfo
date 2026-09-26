@@ -1,354 +1,183 @@
-// db.js — QurilishInfo SQLite bazasi.
-// Amaliy qurilish ma'lumotlari, yangiliklar, reklama, sozlamalar va tahririyat xabarlari.
-
-const path = require("path");
-const bcrypt = require("bcryptjs");
 const Database = require("better-sqlite3");
+const path = require("path");
 
-const DB_PATH = path.join(__dirname, "data.sqlite");
-const db = new Database(DB_PATH);
+const DB_PATH = path.join(__dirname, "data", "qurilishinfo.db");
 
-db.pragma("journal_mode = WAL");
-
-/* =========================================================
-   ASOSIY JADVALLAR
-========================================================= */
-
-db.exec(`
-  CREATE TABLE IF NOT EXISTS articles (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    category TEXT NOT NULL,
-    title TEXT NOT NULL,
-    lead TEXT NOT NULL,
-    body TEXT NOT NULL,
-    minutes INTEGER NOT NULL DEFAULT 5,
-    created_at TEXT NOT NULL DEFAULT (datetime('now'))
-  );
-
-  CREATE TABLE IF NOT EXISTS admin_users (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    username TEXT NOT NULL UNIQUE,
-    password_hash TEXT NOT NULL
-  );
-
-  CREATE TABLE IF NOT EXISTS site_settings (
-    key TEXT PRIMARY KEY,
-    value TEXT NOT NULL DEFAULT ''
-  );
-
-  CREATE TABLE IF NOT EXISTS advertisements (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    title TEXT NOT NULL,
-    description TEXT NOT NULL,
-    company_name TEXT NOT NULL DEFAULT '',
-    image_url TEXT NOT NULL DEFAULT '',
-    target_url TEXT NOT NULL DEFAULT '',
-    label TEXT NOT NULL DEFAULT 'Reklama',
-    status TEXT NOT NULL DEFAULT 'active',
-    placement TEXT NOT NULL DEFAULT 'homepage',
-    starts_at TEXT NOT NULL DEFAULT '',
-    ends_at TEXT NOT NULL DEFAULT '',
-    created_at TEXT NOT NULL DEFAULT (datetime('now'))
-  );
-
-  CREATE TABLE IF NOT EXISTS appeals (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    name TEXT NOT NULL DEFAULT '',
-    phone TEXT NOT NULL DEFAULT '',
-    region TEXT NOT NULL DEFAULT '',
-    topic TEXT NOT NULL DEFAULT '',
-    message TEXT NOT NULL,
-    status TEXT NOT NULL DEFAULT 'new',
-    created_at TEXT NOT NULL DEFAULT (datetime('now'))
-  );
-`);
-
-/* =========================================================
-   MAVJUD JADVALLARNI XAVFSIZ KENGAYTIRISH
-   Eski maqola, reklama va admin ma'lumotlari o'chmaydi.
-========================================================= */
-
-function addColumnIfMissing(table, column, definition) {
-  const columns = db.prepare(`PRAGMA table_info(${table})`).all();
-  const exists = columns.some((item) => item.name === column);
-
-  if (!exists) {
-    db.exec(`ALTER TABLE ${table} ADD COLUMN ${column} ${definition}`);
-    console.log(`[QurilishInfo] ${table}.${column} ustuni qo'shildi.`);
-  }
+function openDatabase() {
+  const db = new Database(DB_PATH);
+  db.pragma("journal_mode = WAL");
+  return db;
 }
 
-/* ---------- MAQOLALAR ---------- */
+function initializeDatabase(db) {
+  db.exec(`
+    CREATE TABLE IF NOT EXISTS categories (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      name_uz TEXT NOT NULL,
+      name_ru TEXT NOT NULL,
+      slug TEXT NOT NULL UNIQUE,
+      color TEXT DEFAULT '#0b4f7c',
+      is_active INTEGER DEFAULT 1,
+      sort_order INTEGER DEFAULT 0,
+      created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+    );
 
-addColumnIfMissing("articles", "status", "TEXT NOT NULL DEFAULT 'published'");
-addColumnIfMissing("articles", "article_type", "TEXT NOT NULL DEFAULT 'guide'");
-addColumnIfMissing("articles", "tags", "TEXT NOT NULL DEFAULT ''");
-addColumnIfMissing("articles", "image_url", "TEXT NOT NULL DEFAULT ''");
-addColumnIfMissing("articles", "image_caption", "TEXT NOT NULL DEFAULT ''");
-addColumnIfMissing("articles", "image_credit", "TEXT NOT NULL DEFAULT ''");
-addColumnIfMissing("articles", "author", "TEXT NOT NULL DEFAULT 'QurilishInfo tahririyati'");
-addColumnIfMissing("articles", "source_name", "TEXT NOT NULL DEFAULT ''");
-addColumnIfMissing("articles", "source_url", "TEXT NOT NULL DEFAULT ''");
-addColumnIfMissing("articles", "document_no", "TEXT NOT NULL DEFAULT ''");
-addColumnIfMissing("articles", "updated", "TEXT NOT NULL DEFAULT ''");
-addColumnIfMissing("articles", "steps", "TEXT NOT NULL DEFAULT ''");
-addColumnIfMissing("articles", "warning", "TEXT NOT NULL DEFAULT ''");
-addColumnIfMissing("articles", "is_advertisement", "INTEGER NOT NULL DEFAULT 0");
-addColumnIfMissing("articles", "is_featured", "INTEGER NOT NULL DEFAULT 0");
-addColumnIfMissing("articles", "is_pinned", "INTEGER NOT NULL DEFAULT 0");
-addColumnIfMissing("articles", "published_at", "TEXT NOT NULL DEFAULT ''");
-addColumnIfMissing("articles", "seo_title", "TEXT NOT NULL DEFAULT ''");
-addColumnIfMissing("articles", "seo_description", "TEXT NOT NULL DEFAULT ''");
+    CREATE TABLE IF NOT EXISTS articles (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      title_uz TEXT NOT NULL,
+      title_ru TEXT NOT NULL,
+      slug_uz TEXT,
+      slug_ru TEXT,
+      category_id INTEGER REFERENCES categories(id),
+      article_type TEXT DEFAULT 'guide',
+      status TEXT DEFAULT 'draft',
+      lead_uz TEXT,
+      lead_ru TEXT,
+      body_uz TEXT,
+      body_ru TEXT,
+      author TEXT,
+      minutes INTEGER DEFAULT 5,
+      image_url TEXT,
+      image_caption_uz TEXT,
+      image_caption_ru TEXT,
+      steps TEXT,
+      warning_uz TEXT,
+      warning_ru TEXT,
+      source_name_uz TEXT,
+      source_name_ru TEXT,
+      source_url TEXT,
+      document_no TEXT,
+      updated DATE,
+      published_at DATETIME,
+      tags TEXT,
+      is_featured INTEGER DEFAULT 0,
+      is_pinned INTEGER DEFAULT 0,
+      is_advertisement INTEGER DEFAULT 0,
+      created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+    );
 
-/* ---------- REKLAMALAR ---------- */
+    CREATE TABLE IF NOT EXISTS advertisements (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      title_uz TEXT NOT NULL,
+      title_ru TEXT NOT NULL,
+      description_uz TEXT,
+      description_ru TEXT,
+      company_name TEXT,
+      label TEXT DEFAULT 'Reklama',
+      image_url TEXT,
+      target_url TEXT,
+      status TEXT DEFAULT 'active',
+      starts_at DATETIME,
+      ends_at DATETIME,
+      created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+    );
 
-addColumnIfMissing("advertisements", "placement", "TEXT NOT NULL DEFAULT 'homepage'");
-addColumnIfMissing("advertisements", "starts_at", "TEXT NOT NULL DEFAULT ''");
-addColumnIfMissing("advertisements", "ends_at", "TEXT NOT NULL DEFAULT ''");
+    CREATE TABLE IF NOT EXISTS settings (
+      key TEXT PRIMARY KEY,
+      value_uz TEXT,
+      value_ru TEXT
+    );
 
-/* =========================================================
-   INDEXLAR — TEZ ISHLASH UCHUN
-========================================================= */
-
-db.exec(`
-  CREATE INDEX IF NOT EXISTS idx_articles_category
-  ON articles(category);
-
-  CREATE INDEX IF NOT EXISTS idx_articles_status
-  ON articles(status);
-
-  CREATE INDEX IF NOT EXISTS idx_articles_type
-  ON articles(article_type);
-
-  CREATE INDEX IF NOT EXISTS idx_articles_featured
-  ON articles(is_featured);
-
-  CREATE INDEX IF NOT EXISTS idx_articles_pinned
-  ON articles(is_pinned);
-
-  CREATE INDEX IF NOT EXISTS idx_articles_published_at
-  ON articles(published_at);
-
-  CREATE INDEX IF NOT EXISTS idx_advertisements_status
-  ON advertisements(status);
-
-  CREATE INDEX IF NOT EXISTS idx_advertisements_placement
-  ON advertisements(placement);
-
-  CREATE INDEX IF NOT EXISTS idx_appeals_status
-  ON appeals(status);
-`);
-
-/* =========================================================
-   ADMIN YARATISH
-========================================================= */
-
-function seedAdmin() {
-  const existing = db.prepare("SELECT * FROM admin_users LIMIT 1").get();
-
-  if (existing) {
-    return;
-  }
-
-  const username = process.env.ADMIN_USERNAME || "admin";
-  const password = process.env.ADMIN_PASSWORD || "change-me-123";
-  const hash = bcrypt.hashSync(password, 10);
-
-  db.prepare(
-    "INSERT INTO admin_users (username, password_hash) VALUES (?, ?)"
-  ).run(username, hash);
-
-  console.log(
-    `[QurilishInfo] Admin yaratildi: ${username} / ${password} — darhol almashtiring!`
-  );
-}
-
-/* =========================================================
-   STANDART SAYT SOZLAMALARI
-========================================================= */
-
-function seedSettings() {
-  const settings = [
-    ["site_name", "QurilishInfo"],
-    [
-      "site_tagline",
-      "Uy qurish, uy sotib olish va ta'mirlash bo'yicha sodda, amaliy yo'l-yo'riqlar"
-    ],
-    [
-      "site_description",
-      "Uy qurish, ruxsatnoma, smeta, ta'mirlash va qurilishdagi huquqlar bo'yicha amaliy ma'lumotlar."
-    ],
-    ["telegram_url", "https://t.me/qurilishinfo"],
-    ["contact", "@qurilishinfo_admin"],
-    ["contact_url", "https://t.me/qurilishinfo_admin"],
-    ["instagram_url", ""],
-    ["facebook_url", ""],
-    ["youtube_url", ""],
-    ["tiktok_url", ""],
-    [
-      "about_text",
-      "QurilishInfo — uy qurish, uy sotib olish, ruxsatnoma, ta'mirlash va qurilish nazorati bo'yicha amaliy ma'lumotlar platformasi. Loyiha rasmiy davlat organi emas. Materiallar rasmiy hujjatlar, davlat organlari e'lonlari va mutaxassislarning izohlari asosida tayyorlanadi."
-    ],
-    [
-      "editorial_policy",
-      "Reklama, hamkorlik materiali va tahririy maqolalar aniq alohida belgilanadi. Materiallardagi ma'lumot umumiy xarakterda bo'lib, qaror qilishdan oldin rasmiy manbani tekshirish tavsiya qilinadi."
-    ],
-    ["cta_title", "Qurilish bo'yicha savolingiz bormi?"],
-    [
-      "cta_text",
-      "Ruxsatnoma, uy qurish, uy sotib olish, ta'mirlash yoki qurilish nazorati bo'yicha foydali maqolalarni toping."
-    ],
-    ["important_notice_title", ""],
-    ["important_notice_url", ""],
-    ["important_notice_until", ""]
-  ];
-
-  const statement = db.prepare(
-    "INSERT OR IGNORE INTO site_settings (key, value) VALUES (?, ?)"
-  );
-
-  const insertMany = db.transaction((items) => {
-    for (const item of items) {
-      statement.run(item[0], item[1]);
-    }
-  });
-
-  insertMany(settings);
-}
-
-/* =========================================================
-   BOSHLANG'ICH MAQOLALAR
-   Faqat baza bo'sh bo'lsa qo'shiladi.
-========================================================= */
-
-function seedArticles() {
-  const result = db.prepare("SELECT COUNT(*) AS count FROM articles").get();
-
-  if (result.count > 0) {
-    return;
-  }
-
-  const paragraphs = (items) => items.join("\n\n");
-
-  const seed = [
-    {
-      category: "Boshlashdan oldin",
-      article_type: "guide",
-      tags: "yer,ruxsatnoma,loyiha,hujjatlar",
-      title: "Uy qurishni nimadan boshlash kerak?",
-      lead: "Yer, loyiha, ruxsatnoma va smetani tartib bilan tayyorlash uchun amaliy yo'l xaritasi.",
-      minutes: 7,
-      is_featured: 1,
-      is_pinned: 1,
-      body: paragraphs([
-        "Uy qurishni boshlashdan oldin yer uchastkasi hujjatlari, loyiha va qurilishga qo'yiladigan talablarni aniqlab oling.",
-        "Birinchi qadam — yer uchastkasining hujjatlarda ko'rsatilgan maqsadli vazifasini tekshirish. Keyin loyiha va taxminiy smeta tayyorlanadi.",
-        "Ruxsat va kelishuv talablari hudud hamda obyekt turiga qarab farq qilishi mumkin. Shuning uchun boshlashdan oldin tegishli mahalliy organ yoki mutaxassisdan aniq ro'yxatni so'rang."
-      ]),
-      steps: "Yer uchastkasi hujjatlarini tekshiring\nLoyiha va smeta tayyorlang\nRuxsat talablari haqida aniqlik kiriting\nPudratchi yoki usta bilan yozma shartnoma qiling\nQurilish jarayonini bosqichma-bosqich nazorat qiling",
-      warning: "Ruxsat va loyiha talablarini aniqlamasdan qurilishni boshlash keyinchalik qo'shimcha xarajat va nizolarga olib kelishi mumkin."
-    },
-    {
-      category: "Xarajat va narxlar",
-      article_type: "guide",
-      tags: "smeta,xarajat,uy qurish,materiallar",
-      title: "Uy qurish uchun qancha pul kerak: xarajatni qanday hisoblash mumkin?",
-      lead: "Smetani poydevor, devor, tom, kommunikatsiya va pardozlashga bo'lib hisoblashning qulay usuli.",
-      minutes: 8,
-      is_featured: 0,
-      is_pinned: 1,
-      body: paragraphs([
-        "Uy qurish narxi uy maydoni, hudud, material sifati, loyiha va pardozlash darajasiga bog'liq. Shu sabab yagona universal narx aytish to'g'ri emas.",
-        "Xarajatni alohida guruhlarga ajratish foydali: loyiha va hujjatlar, poydevor, devor va karkas, tom, elektr-suv-kanalizatsiya, deraza-eshik va pardozlash.",
-        "Har bir ish turi uchun kamida ikki yoki uchta taklif oling. Kutilmagan xarajatlar uchun ham zaxira rejalashtiring."
-      ]),
-      steps: "Uy maydoni va loyiha turini aniqlang\nIshlarni bosqichlarga ajrating\nMaterial va ish haqi bo'yicha bir nechta narx oling\nYozma smeta tuzing\nKutilmagan xarajatlar uchun zaxira belgilang",
-      warning: "Faqat kvadrat metri bo'yicha aytilgan umumiy narxga tayanmang. Kommunikatsiya, tom, pardozlash va tashqi ishlar ko'pincha alohida xarajat hisoblanadi."
-    },
-    {
-      category: "Huquq va idoralar",
-      article_type: "guide",
-      tags: "idora,kadastr,hokimlik,inspeksiya,ruxsatnoma",
-      title: "Qurilish masalasida qaysi idoraga murojaat qilish kerak?",
-      lead: "Ruxsatnoma, kadastr, noqonuniy qurilish yoki sifat muammosida qayerdan boshlash mumkinligi haqida yo'nalish.",
-      minutes: 6,
-      is_featured: 0,
-      is_pinned: 0,
-      body: paragraphs([
-        "Qurilish bilan bog'liq masalalarda murojaat qilinadigan idora muammo turiga bog'liq bo'ladi.",
-        "Yer va ro'yxatdan o'tkazish masalalarida kadastr organlari, hududiy qurilish tartiblari bo'yicha tegishli mahalliy organlar, nazorat va xavfsizlik masalalarida esa vakolatli inspeksiya yoki boshqa idoralar muhim bo'lishi mumkin.",
-        "Murojaat qilishdan oldin mavjud hujjatlar, manzil, fotosurat va boshqa dalillarni tayyorlab qo'yish foydali."
-      ]),
-      steps: "Muammo turini aniq belgilang\nYer va mulk bo'yicha hujjatlarni tayyorlang\nTegishli idora vakolatini aniqlang\nMurojaatni yozma yoki elektron shaklda yuboring\nJavob va hujjatlarni saqlab qo'ying",
-      warning: "Vakolatlar hudud va holatga qarab farq qilishi mumkin. Rasmiy manba yoki tegishli idora orqali aniq tartibni tekshiring."
-    },
-    {
-      category: "Uy sotib olish",
-      article_type: "guide",
-      tags: "uy sotib olish,kadastr,shartnoma,hujjatlar",
-      title: "Uy sotib olishdan oldin tekshiriladigan asosiy hujjatlar",
-      lead: "Kadastr, egalik, shartnoma va binoning texnik holatini tekshirish bo'yicha qisqa ro'yxat.",
-      minutes: 7,
-      is_featured: 0,
-      is_pinned: 0,
-      body: paragraphs([
-        "Uy sotib olayotganda faqat narx va joylashuvga emas, balki huquqiy va texnik holatga ham e'tibor bering.",
-        "Sotuvchidan mulkka egalik hujjatlari, kadastr ma'lumotlari va kerakli boshqa rasmiy ma'lumotlarni so'rang.",
-        "Shubhali joy bo'lsa, mustaqil mutaxassis yoki malakali yurist bilan maslahatlashish xaridorni katta xavfdan saqlashi mumkin."
-      ]),
-      steps: "Sotuvchi va mulk hujjatlarini tekshiring\nKadastr ma'lumotlarini solishtiring\nUyda yoriq, namlik va kommunikatsiyalarni ko'ring\nTo'lov shartlarini yozma belgilang\nShartnomani rasmiylashtiring",
-      warning: "Hujjatlar to'liq tekshirilmasdan katta miqdordagi oldindan to'lovni bermang."
-    }
-  ];
-
-  const insert = db.prepare(`
-    INSERT INTO articles (
-      category,
-      article_type,
-      tags,
-      title,
-      lead,
-      body,
-      minutes,
-      is_featured,
-      is_pinned,
-      steps,
-      warning,
-      status,
-      published_at
-    )
-    VALUES (
-      @category,
-      @article_type,
-      @tags,
-      @title,
-      @lead,
-      @body,
-      @minutes,
-      @is_featured,
-      @is_pinned,
-      @steps,
-      @warning,
-      'published',
-      datetime('now')
-    )
+    CREATE TABLE IF NOT EXISTS translations (
+      key TEXT PRIMARY KEY,
+      value_uz TEXT,
+      value_ru TEXT
+    );
   `);
 
-  const insertMany = db.transaction((rows) => {
-    for (const row of rows) {
-      insert.run(row);
+  // Default categories (agar bo‘sh bo‘lsa)
+  const count = db.prepare("SELECT COUNT(*) as c FROM categories").get();
+
+  if (count.c === 0) {
+    const defaultCategories = [
+      { name_uz: "Boshlashdan oldin", name_ru: "Перед началом", slug: "boshlashdan-oldin", color: "#073b61", sort_order: 1 },
+      { name_uz: "Uy qurish", name_ru: "Строительство дома", slug: "uy-qurish", color: "#0b4f7c", sort_order: 2 },
+      { name_uz: "Xarajat va narxlar", name_ru: "Расходы и цены", slug: "xarajat-va-narxlar", color: "#138a5b", sort_order: 3 },
+      { name_uz: "Uy sotib olish", name_ru: "Покупка дома", slug: "uy-sotib-olish", color: "#2b6c8e", sort_order: 4 },
+      { name_uz: "Ta'mirlash", name_ru: "Ремонт", slug: "tamirlash", color: "#344b5e", sort_order: 5 },
+      { name_uz: "Huquq va idoralar", name_ru: "Право и органы", slug: "huquq-va-idoralar", color: "#1d4f72", sort_order: 6 },
+      { name_uz: "Inspeksiya izohlaydi", name_ru: "Инспекция объясняет", slug: "inspeksiya-izohlaydi", color: "#134c75", sort_order: 7 },
+      { name_uz: "Qaror sodda tilda", name_ru: "Решение простым языком", slug: "qaror-sodda-tilda", color: "#0c486f", sort_order: 8 },
+      { name_uz: "Rasmiy xabarlar", name_ru: "Официальные сообщения", slug: "rasmiy-xabarlar", color: "#123a58", sort_order: 9 }
+    ];
+
+    const insert = db.prepare(`
+      INSERT INTO categories (name_uz, name_ru, slug, color, is_active, sort_order)
+      VALUES (@name_uz, @name_ru, @slug, @color, 1, @sort_order)
+    `);
+
+    for (const cat of defaultCategories) {
+      insert.run(cat);
     }
-  });
+  }
 
-  insertMany(seed);
+  // Default settings
+  const settingsCount = db.prepare("SELECT COUNT(*) as c FROM settings").get();
 
-  console.log(
-    `[QurilishInfo] ${seed.length} ta boshlang'ich amaliy maqola qo'shildi.`
-  );
+  if (settingsCount.c === 0) {
+    const defaultSettings = [
+      { key: "site_name_uz", value_uz: "QurilishInfo", value_ru: null },
+      { key: "site_name_ru", value_uz: null, value_ru: "QurilishInfo" },
+      { key: "site_tagline_uz", value_uz: "Qurilishdagi to‘g‘ri qarorlar uchun amaliy ma’lumot", value_ru: null },
+      { key: "site_tagline_ru", value_uz: null, value_ru: "Практическая информация для правильных решений в строительстве" },
+      { key: "telegram_url", value_uz: "https://t.me/qurilishinfo", value_ru: null },
+      { key: "contact_uz", value_uz: "@qurilishinfo_admin", value_ru: null },
+      { key: "contact_url", value_uz: "https://t.me/qurilishinfo_admin", value_ru: null },
+      { key: "about_text_uz", value_uz: "QurilishInfo — uy qurish, uy sotib olish, ruxsatnoma, ta’mirlash va qurilish nazorati bo‘yicha amaliy ma’lumotlar platformasi.", value_ru: null },
+      { key: "about_text_ru", value_uz: null, value_ru: "QurilishInfo — практическая платформа по строительству, покупке дома, разрешениям, ремонту и контролю за строительством." },
+      { key: "editorial_policy_uz", value_uz: "Reklama va tahririy materiallar alohida belgilanadi.", value_ru: null },
+      { key: "editorial_policy_ru", value_uz: null, value_ru: "Рекламные и редакционные материалы помечаются отдельно." }
+    ];
+
+    const insert = db.prepare(`
+      INSERT INTO settings (key, value_uz, value_ru)
+      VALUES (@key, @value_uz, @value_ru)
+    `);
+
+    for (const setting of defaultSettings) {
+      insert.run(setting);
+    }
+  }
+
+  // Default translations (interfeys matnlari)
+  const translationsCount = db.prepare("SELECT COUNT(*) as c FROM translations").get();
+
+  if (translationsCount.c === 0) {
+    const defaultTranslations = [
+      { key: "nav_home_uz", value_uz: "Bosh sahifa", value_ru: null },
+      { key: "nav_home_ru", value_uz: null, value_ru: "Главная" },
+      { key: "nav_articles_uz", value_uz: "Maqolalar", value_ru: null },
+      { key: "nav_articles_ru", value_uz: null, value_ru: "Статьи" },
+      { key: "nav_ads_uz", value_uz: "Reklama", value_ru: null },
+      { key: "nav_ads_ru", value_uz: null, value_ru: "Реклама" },
+      { key: "nav_settings_uz", value_uz: "Sozlamalar", value_ru: null },
+      { key: "nav_settings_ru", value_uz: null, value_ru: "Настройки" },
+      { key: "btn_save_uz", value_uz: "Saqlash", value_ru: null },
+      { key: "btn_save_ru", value_uz: null, value_ru: "Сохранить" },
+      { key: "btn_cancel_uz", value_uz: "Bekor qilish", value_ru: null },
+      { key: "btn_cancel_ru", value_uz: null, value_ru: "Отмена" },
+      { key: "btn_delete_uz", value_uz: "O‘chirish", value_ru: null },
+      { key: "btn_delete_ru", value_uz: null, value_ru: "Удалить" },
+      { key: "btn_edit_uz", value_uz: "Tahrirlash", value_ru: null },
+      { key: "btn_edit_ru", value_uz: null, value_ru: "Редактировать" },
+      { key: "status_draft_uz", value_uz: "Qoralama", value_ru: null },
+      { key: "status_draft_ru", value_uz: null, value_ru: "Черновик" },
+      { key: "status_published_uz", value_uz: "Chiqarilgan", value_ru: null },
+      { key: "status_published_ru", value_uz: null, value_ru: "Опубликовано" }
+    ];
+
+    const insert = db.prepare(`
+      INSERT INTO translations (key, value_uz, value_ru)
+      VALUES (@key, @value_uz, @value_ru)
+    `);
+
+    for (const t of defaultTranslations) {
+      insert.run(t);
+    }
+  }
 }
 
-seedAdmin();
-seedSettings();
-seedArticles();
-
-module.exports = db;
+module.exports = {
+  openDatabase,
+  initializeDatabase
+};
