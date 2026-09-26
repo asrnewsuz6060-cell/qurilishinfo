@@ -3,7 +3,6 @@ const path = require("path");
 
 function openDatabase() {
   return new Promise((resolve, reject) => {
-    // VAQTINCHALIK: xotirada baza (test uchun)
     const db = new sqlite3.Database(":memory:", (err) => {
       if (err) {
         reject(err);
@@ -139,7 +138,6 @@ async function initializeDatabase(db) {
     )
   `);
 
-  // Default categories
   const count = await getSql(db, "SELECT COUNT(*) as c FROM categories");
 
   if (count.c === 0) {
@@ -163,7 +161,6 @@ async function initializeDatabase(db) {
     }
   }
 
-  // Default settings
   const settingsCount = await getSql(db, "SELECT COUNT(*) as c FROM settings");
 
   if (settingsCount.c === 0) {
@@ -189,7 +186,6 @@ async function initializeDatabase(db) {
     }
   }
 
-  // Default translations
   const translationsCount = await getSql(db, "SELECT COUNT(*) as c FROM translations");
 
   if (translationsCount.c === 0) {
@@ -230,4 +226,5 @@ module.exports = {
   initializeDatabase,
   runSql,
   getSql,
-  al
+  allSql
+};
