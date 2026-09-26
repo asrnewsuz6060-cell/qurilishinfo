@@ -2,961 +2,305 @@
 <html lang="uz" class="scroll-smooth">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-  <title>Admin — QurilishInfo</title>
-
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Panel — QurilishInfo</title>
   <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
-
-  <style type="text/tailwindcss">
-    @theme {
-      --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
-      --font-display: "Manrope", ui-sans-serif, system-ui, sans-serif;
-      --color-qblue: #0b4f7c;
-      --color-qnavy: #073b61;
-      --color-qgreen: #138a5b;
-      --color-qgreen-dark: #0c6d47;
-      --color-qsoft: #f3f7fa;
-      --color-qline: #dce5eb;
-      --color-qink: #17212b;
-    }
-
-    @keyframes fade-in {
-      from {
-        opacity: 0;
-        transform: translateY(8px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-
-    .animate-fade-in {
-      animation: fade-in .25s ease both;
-    }
-
-    .delay-1 {
-      animation-delay: .06s;
-    }
-
-    .delay-2 {
-      animation-delay: .12s;
-    }
-
-    .delay-3 {
-      animation-delay: .18s;
-    }
-
-    .delay-4 {
-      animation-delay: .24s;
-    }
-
-    .delay-5 {
-      animation-delay: .3s;
-    }
-
-    .tab-button.active {
-      background: #0b4f7c;
-      color: #fff;
-    }
-
-    .dark .tab-button.active {
-      background: #69b5e4;
-      color: #073b61;
-    }
-
-    .nav-item.active {
-      background: rgba(11, 79, 124, 0.12);
-      color: #0b4f7c;
-      border-right: 3px solid #0b4f7c;
-    }
-
-    .dark .nav-item.active {
-      background: rgba(105, 181, 228, 0.14);
-      color: #69b5e4;
-      border-right-color: #69b5e4;
-    }
-  </style>
-
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Manrope:wght@600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>body { font-family: 'Inter', sans-serif; }</style>
 </head>
+<body class="bg-gray-50 text-gray-900 dark:bg-gray-950 dark:text-gray-100">
 
-<body class="bg-qsoft text-qink antialiased transition-colors duration-300 dark:bg-slate-950 dark:text-slate-100">
-  <div id="mobileOverlay" class="fixed inset-0 z-40 hidden bg-slate-950/50 backdrop-blur-sm"></div>
-
-  <aside id="sidebar" class="fixed inset-y-0 left-0 z-50 flex w-[290px] max-w-[86vw] -translate-x-full flex-col border-r border-slate-200 bg-white shadow-xl transition-transform duration-300 dark:border-slate-800 dark:bg-slate-900 lg:translate-x-0">
-    <div class="flex items-center justify-between border-b border-slate-200 px-5 py-5 dark:border-slate-800">
-      <a href="/" class="flex items-center gap-3 font-display text-xl font-extrabold text-qnavy dark:text-white">
-        <span class="grid h-10 w-10 place-items-center rounded-xl bg-qblue text-white shadow-lg shadow-sky-900/20">
-          <svg viewBox="0 0 24 24" class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="2.2">
-            <path d="M3 21h18"></path><path d="M5 21V10l7-6 7 6v11"></path><path d="M9 21v-6h6v6"></path>
+  <div class="flex h-screen overflow-hidden">
+    
+    <!-- Sidebar -->
+    <aside class="hidden w-64 flex-col border-r bg-white dark:border-gray-800 dark:bg-gray-900 lg:flex">
+      <div class="flex h-16 items-center gap-3 border-b px-6 dark:border-gray-800">
+        <div class="grid h-10 w-10 place-items-center rounded-xl bg-gradient-to-br from-blue-600 to-blue-800 text-white">
+          <svg class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path d="M3 21h18M5 21V10l7-6 7 6v11M9 21v-6h6v6"></path>
           </svg>
-        </span>
-        <span>Admin <span class="text-qgreen">Panel</span></span>
-      </a>
-
-      <button id="sidebarCloseButton" type="button" class="grid h-10 w-10 place-items-center rounded-lg border border-slate-200 text-slate-600 dark:border-slate-700 dark:text-slate-300" aria-label="Menyuni yopish">
-        <svg viewBox="0 0 24 24" class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M6 6l12 12M18 6L6 18"></path>
-        </svg>
-      </button>
-    </div>
-
-    <nav class="flex-1 overflow-y-auto px-3 py-5">
-      <button type="button" data-tab="dashboard" class="nav-item active mb-1 flex w-full items-center gap-3 rounded-xl px-4 py-3 text-left font-semibold text-slate-700 transition hover:bg-slate-100 dark:text-slate-200 dark:hover:bg-slate-800">
-        <svg viewBox="0 0 24 24" class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M3 3h8v8H3zM13 3h8v8h-8zM3 13h8v8H3zM13 13h8v8h-8z"></path>
-        </svg>
-        <span>Dashboard</span>
-      </button>
-
-      <button type="button" data-tab="articles" class="nav-item mb-1 flex w-full items-center gap-3 rounded-xl px-4 py-3 text-left font-semibold text-slate-700 transition hover:bg-slate-100 dark:text-slate-200 dark:hover:bg-slate-800">
-        <svg viewBox="0 0 24 24" class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M4 4h16v16H4z"></path><path d="M8 8h8M8 12h8M8 16h5"></path>
-        </svg>
-        <span>Maqolalar</span>
-      </button>
-
-      <button type="button" data-tab="categories" class="nav-item mb-1 flex w-full items-center gap-3 rounded-xl px-4 py-3 text-left font-semibold text-slate-700 transition hover:bg-slate-100 dark:text-slate-200 dark:hover:bg-slate-800">
-        <svg viewBox="0 0 24 24" class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M3 7h18M3 12h18M3 17h18"></path>
-        </svg>
-        <span>Ruknlar</span>
-      </button>
-
-      <button type="button" data-tab="advertisements" class="nav-item mb-1 flex w-full items-center gap-3 rounded-xl px-4 py-3 text-left font-semibold text-slate-700 transition hover:bg-slate-100 dark:text-slate-200 dark:hover:bg-slate-800">
-        <svg viewBox="0 0 24 24" class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M3 21h18M5 18h14M6 18V9M10 18V9M14 18V9M18 18V9M3 9h18L12 3 3 9z"></path>
-        </svg>
-        <span>Reklama</span>
-      </button>
-
-      <button type="button" data-tab="settings" class="nav-item mb-1 flex w-full items-center gap-3 rounded-xl px-4 py-3 text-left font-semibold text-slate-700 transition hover:bg-slate-100 dark:text-slate-200 dark:hover:bg-slate-800">
-        <svg viewBox="0 0 24 24" class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M12 20a8 8 0 1 0 0-16 8 8 0 0 0 0 16z"></path>
-          <path d="M12 14a2 2 0 1 0 0-4 2 2 0 0 0 0 4z"></path>
-        </svg>
-        <span>Sozlamalar</span>
-      </button>
-    </nav>
-
-    <div class="border-t border-slate-200 px-5 py-5 text-xs leading-5 text-slate-500 dark:border-slate-800 dark:text-slate-400">
-      QurilishInfo — Admin Panel<br>
-      v1.0.0
-    </div>
-  </aside>
-
-  <div class="lg:pl-[290px]">
-    <header class="sticky top-0 z-30 border-b border-slate-200 bg-white/95 backdrop-blur-lg dark:border-slate-800 dark:bg-slate-950/95">
-      <div class="mx-auto flex h-[68px] max-w-7xl items-center justify-between gap-3 px-4 sm:px-6 lg:px-8">
-        <button id="sidebarOpenButton" type="button" class="grid h-10 w-10 place-items-center rounded-xl border border-slate-200 text-slate-700 lg:hidden dark:border-slate-700 dark:text-slate-200" aria-label="Menyuni ochish">
-          <svg viewBox="0 0 24 24" class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M4 7h16M4 12h16M4 17h16"></path>
-          </svg>
-        </button>
-
-        <div class="flex items-center gap-3">
-          <h1 id="pageTitle" class="font-display text-xl font-extrabold tracking-tight text-qnavy dark:text-white">Dashboard</h1>
         </div>
-
-        <div class="flex items-center gap-2">
-          <a href="/" target="_blank" class="hidden items-center gap-2 rounded-xl border border-slate-300 bg-white px-4 py-2.5 text-sm font-bold text-slate-700 transition hover:border-qblue hover:text-qblue dark:border-slate-700 dark:bg-slate-900 dark:text-slate-200 sm:inline-flex">
-            <svg viewBox="0 0 24 24" class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><path d="M15 3h6v6"></path><path d="M10 14L21 3"></path>
-            </svg>
-            Saytni ochish
-          </a>
-
-          <button id="themeButton" type="button" class="grid h-10 w-10 place-items-center rounded-xl border border-slate-200 text-slate-700 hover:border-qblue hover:text-qblue dark:border-slate-700 dark:text-slate-200" aria-label="Mavzuni almashtirish">
-            <svg id="themeSunIcon" viewBox="0 0 24 24" class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2">
-              <circle cx="12" cy="12" r="4"></circle>
-              <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"></path>
-            </svg>
-          </button>
-        </div>
+        <div class="text-lg font-bold">Admin<span class="text-green-600">Panel</span></div>
       </div>
-    </header>
 
-    <main class="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
-      <section id="dashboardTab" class="tab-content animate-fade-in">
-        <div class="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
-          <div class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm dark:border-slate-800 dark:bg-slate-900">
-            <p class="text-xs font-bold uppercase tracking-[0.14em] text-slate-500 dark:text-slate-400">Maqolalar</p>
-            <p id="statArticles" class="mt-2 font-display text-3xl font-extrabold text-qnavy dark:text-white">0</p>
-            <p class="mt-1 text-xs text-slate-500 dark:text-slate-400">Jami maqolalar soni</p>
-          </div>
-
-          <div class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm dark:border-slate-800 dark:bg-slate-900">
-            <p class="text-xs font-bold uppercase tracking-[0.14em] text-slate-500 dark:text-slate-400">Reklama</p>
-            <p id="statAds" class="mt-2 font-display text-3xl font-extrabold text-qnavy dark:text-white">0</p>
-            <p class="mt-1 text-xs text-slate-500 dark:text-slate-400">Faol reklamalar</p>
-          </div>
-
-          <div class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm dark:border-slate-800 dark:bg-slate-900">
-            <p class="text-xs font-bold uppercase tracking-[0.14em] text-slate-500 dark:text-slate-400">Ruknlar</p>
-            <p id="statCategories" class="mt-2 font-display text-3xl font-extrabold text-qnavy dark:text-white">0</p>
-            <p class="mt-1 text-xs text-slate-500 dark:text-slate-400">Faol ruknlar</p>
-          </div>
-
-          <div class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm dark:border-slate-800 dark:bg-slate-900">
-            <p class="text-xs font-bold uppercase tracking-[0.14em] text-slate-500 dark:text-slate-400">Tizim</p>
-            <p id="statStatus" class="mt-2 font-display text-3xl font-extrabold text-qnavy dark:text-white">OK</p>
-            <p class="mt-1 text-xs text-slate-500 dark:text-slate-400">Server holati</p>
-          </div>
-        </div>
-
-        <div class="mt-8 rounded-2xl border border-slate-200 bg-white p-6 dark:border-slate-800 dark:bg-slate-900">
-          <h2 class="font-display text-xl font-extrabold text-qnavy dark:text-white">So‘nggi maqolalar</h2>
-          <div id="dashboardArticles" class="mt-5 grid gap-4 sm:grid-cols-2 lg:grid-cols-3"></div>
-        </div>
-      </section>
-
-      <section id="articlesTab" class="tab-content hidden animate-fade-in">
-        <div class="mb-6 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
-          <div>
-            <p class="text-sm font-bold uppercase tracking-[0.14em] text-qgreen">Maqolalar boshqaruvi</p>
-            <h2 class="mt-1 font-display text-3xl font-extrabold tracking-tight text-qnavy dark:text-white">Maqolalar ro‘yxati</h2>
-          </div>
-
-          <button id="newArticleButton" type="button" class="inline-flex items-center gap-2 rounded-xl bg-qblue px-5 py-3 font-bold text-white shadow-lg shadow-sky-900/15 transition hover:-translate-y-0.5 hover:bg-qnavy">
-            <svg viewBox="0 0 24 24" class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M12 5v14M5 12h14"></path>
-            </svg>
-            Yangi maqola
-          </button>
-        </div>
-
-        <div class="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm dark:border-slate-800 dark:bg-slate-900">
-          <div class="overflow-x-auto">
-            <table class="min-w-full text-left text-sm">
-              <thead class="border-b border-slate-200 bg-slate-50 dark:border-slate-800 dark:bg-slate-950">
-                <tr>
-                  <th class="px-5 py-4 font-bold text-slate-600 dark:text-slate-300">Sarlavha</th>
-                  <th class="px-5 py-4 font-bold text-slate-600 dark:text-slate-300">Rukn</th>
-                  <th class="px-5 py-4 font-bold text-slate-600 dark:text-slate-300">Turi</th>
-                  <th class="px-5 py-4 font-bold text-slate-600 dark:text-slate-300">Holat</th>
-                  <th class="px-5 py-4 font-bold text-slate-600 dark:text-slate-300">Amallar</th>
-                </tr>
-              </thead>
-              <tbody id="articlesTableBody" class="divide-y divide-slate-200 dark:divide-slate-800"></tbody>
-            </table>
-          </div>
-        </div>
-      </section>
-
-      <section id="categoriesTab" class="tab-content hidden animate-fade-in">
-        <div class="mb-6 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
-          <div>
-            <p class="text-sm font-bold uppercase tracking-[0.14em] text-qgreen">Ruknlar boshqaruvi</p>
-            <h2 class="mt-1 font-display text-3xl font-extrabold tracking-tight text-qnavy dark:text-white">Ruknlar ro‘yxati</h2>
-          </div>
-
-          <button id="newCategoryButton" type="button" class="inline-flex items-center gap-2 rounded-xl bg-qblue px-5 py-3 font-bold text-white shadow-lg shadow-sky-900/15 transition hover:-translate-y-0.5 hover:bg-qnavy">
-            <svg viewBox="0 0 24 24" class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M12 5v14M5 12h14"></path>
-            </svg>
-            Yangi rukn
-          </button>
-        </div>
-
-        <div class="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm dark:border-slate-800 dark:bg-slate-900">
-          <div class="overflow-x-auto">
-            <table class="min-w-full text-left text-sm">
-              <thead class="border-b border-slate-200 bg-slate-50 dark:border-slate-800 dark:bg-slate-950">
-                <tr>
-                  <th class="px-5 py-4 font-bold text-slate-600 dark:text-slate-300">Rukn nomi</th>
-                  <th class="px-5 py-4 font-bold text-slate-600 dark:text-slate-300">Slug</th>
-                  <th class="px-5 py-4 font-bold text-slate-600 dark:text-slate-300">Holat</th>
-                  <th class="px-5 py-4 font-bold text-slate-600 dark:text-slate-300">Tartib</th>
-                  <th class="px-5 py-4 font-bold text-slate-600 dark:text-slate-300">Amallar</th>
-                </tr>
-              </thead>
-              <tbody id="categoriesTableBody" class="divide-y divide-slate-200 dark:divide-slate-800"></tbody>
-            </table>
-          </div>
-        </div>
-      </section>
-
-      <section id="advertisementsTab" class="tab-content hidden animate-fade-in">
-        <div class="mb-6 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
-          <div>
-            <p class="text-sm font-bold uppercase tracking-[0.14em] text-qgreen">Reklama boshqaruvi</p>
-            <h2 class="mt-1 font-display text-3xl font-extrabold tracking-tight text-qnavy dark:text-white">Reklamalar ro‘yxati</h2>
-          </div>
-
-          <button id="newAdButton" type="button" class="inline-flex items-center gap-2 rounded-xl bg-qblue px-5 py-3 font-bold text-white shadow-lg shadow-sky-900/15 transition hover:-translate-y-0.5 hover:bg-qnavy">
-            <svg viewBox="0 0 24 24" class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M12 5v14M5 12h14"></path>
-            </svg>
-            Yangi reklama
-          </button>
-        </div>
-
-        <div class="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm dark:border-slate-800 dark:bg-slate-900">
-          <div class="overflow-x-auto">
-            <table class="min-w-full text-left text-sm">
-              <thead class="border-b border-slate-200 bg-slate-50 dark:border-slate-800 dark:bg-slate-950">
-                <tr>
-                  <th class="px-5 py-4 font-bold text-slate-600 dark:text-slate-300">Sarlavha</th>
-                  <th class="px-5 py-4 font-bold text-slate-600 dark:text-slate-300">Kompaniya</th>
-                  <th class="px-5 py-4 font-bold text-slate-600 dark:text-slate-300">Holat</th>
-                  <th class="px-5 py-4 font-bold text-slate-600 dark:text-slate-300">Amallar</th>
-                </tr>
-              </thead>
-              <tbody id="adsTableBody" class="divide-y divide-slate-200 dark:divide-slate-800"></tbody>
-            </table>
-          </div>
-        </div>
-      </section>
-
-      <section id="settingsTab" class="tab-content hidden animate-fade-in">
-        <div class="mb-6">
-          <p class="text-sm font-bold uppercase tracking-[0.14em] text-qgreen">Sayt sozlamalari</p>
-          <h2 class="mt-1 font-display text-3xl font-extrabold tracking-tight text-qnavy dark:text-white">Asosiy sozlamalar</h2>
-        </div>
-
-        <div class="rounded-2xl border border-slate-200 bg-white p-6 dark:border-slate-800 dark:bg-slate-900">
-          <form id="settingsForm" class="grid gap-5 sm:grid-cols-2">
-            <div>
-              <label class="block text-sm font-bold text-slate-700 dark:text-slate-200">Sayt nomi</label>
-              <input type="text" name="site_name" class="mt-1 w-full rounded-xl border border-slate-300 bg-slate-50 px-4 py-3 outline-none transition focus:border-qblue focus:bg-white focus:ring-4 focus:ring-sky-100 dark:border-slate-700 dark:bg-slate-950 dark:focus:border-sky-400 dark:focus:bg-slate-950 dark:focus:ring-sky-900/30">
-            </div>
-
-            <div>
-              <label class="block text-sm font-bold text-slate-700 dark:text-slate-200">Telegram URL</label>
-              <input type="url" name="telegram_url" class="mt-1 w-full rounded-xl border border-slate-300 bg-slate-50 px-4 py-3 outline-none transition focus:border-qblue focus:bg-white focus:ring-4 focus:ring-sky-100 dark:border-slate-700 dark:bg-slate-950 dark:focus:border-sky-400 dark:focus:bg-slate-950 dark:focus:ring-sky-900/30">
-            </div>
-
-            <div>
-              <label class="block text-sm font-bold text-slate-700 dark:text-slate-200">Instagram URL</label>
-              <input type="url" name="instagram_url" class="mt-1 w-full rounded-xl border border-slate-300 bg-slate-50 px-4 py-3 outline-none transition focus:border-qblue focus:bg-white focus:ring-4 focus:ring-sky-100 dark:border-slate-700 dark:bg-slate-950 dark:focus:border-sky-400 dark:focus:bg-slate-950 dark:focus:ring-sky-900/30">
-            </div>
-
-            <div>
-              <label class="block text-sm font-bold text-slate-700 dark:text-slate-200">Facebook URL</label>
-              <input type="url" name="facebook_url" class="mt-1 w-full rounded-xl border border-slate-300 bg-slate-50 px-4 py-3 outline-none transition focus:border-qblue focus:bg-white focus:ring-4 focus:ring-sky-100 dark:border-slate-700 dark:bg-slate-950 dark:focus:border-sky-400 dark:focus:bg-slate-950 dark:focus:ring-sky-900/30">
-            </div>
-
-            <div>
-              <label class="block text-sm font-bold text-slate-700 dark:text-slate-200">YouTube URL</label>
-              <input type="url" name="youtube_url" class="mt-1 w-full rounded-xl border border-slate-300 bg-slate-50 px-4 py-3 outline-none transition focus:border-qblue focus:bg-white focus:ring-4 focus:ring-sky-100 dark:border-slate-700 dark:bg-slate-950 dark:focus:border-sky-400 dark:focus:bg-slate-950 dark:focus:ring-sky-900/30">
-            </div>
-
-            <div>
-              <label class="block text-sm font-bold text-slate-700 dark:text-slate-200">TikTok URL</label>
-              <input type="url" name="tiktok_url" class="mt-1 w-full rounded-xl border border-slate-300 bg-slate-50 px-4 py-3 outline-none transition focus:border-qblue focus:bg-white focus:ring-4 focus:ring-sky-100 dark:border-slate-700 dark:bg-slate-950 dark:focus:border-sky-400 dark:focus:bg-slate-950 dark:focus:ring-sky-900/30">
-            </div>
-
-            <div class="sm:col-span-2">
-              <label class="block text-sm font-bold text-slate-700 dark:text-slate-200">Tahririyat kontakti</label>
-              <input type="text" name="contact" class="mt-1 w-full rounded-xl border border-slate-300 bg-slate-50 px-4 py-3 outline-none transition focus:border-qblue focus:bg-white focus:ring-4 focus:ring-sky-100 dark:border-slate-700 dark:bg-slate-950 dark:focus:border-sky-400 dark:focus:bg-slate-950 dark:focus:ring-sky-900/30">
-            </div>
-
-            <div class="sm:col-span-2">
-              <label class="block text-sm font-bold text-slate-700 dark:text-slate-200">Sayt haqida</label>
-              <textarea name="about_text" rows="4" class="mt-1 w-full rounded-xl border border-slate-300 bg-slate-50 px-4 py-3 outline-none transition focus:border-qblue focus:bg-white focus:ring-4 focus:ring-sky-100 dark:border-slate-700 dark:bg-slate-950 dark:focus:border-sky-400 dark:focus:bg-slate-950 dark:focus:ring-sky-900/30"></textarea>
-            </div>
-
-            <div class="sm:col-span-2">
-              <button type="submit" class="inline-flex items-center gap-2 rounded-xl bg-qblue px-5 py-3.5 font-bold text-white shadow-lg shadow-sky-900/15 transition hover:-translate-y-0.5 hover:bg-qnavy">
-                Saqlash
-                <svg viewBox="0 0 24 24" class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2">
-                  <path d="M5 12h14M13 6l6 6-6 6"></path>
-                </svg>
-              </button>
-            </div>
-          </form>
-        </div>
-      </section>
-    </main>
-  </div>
-
-  <div id="articleModal" class="fixed inset-0 z-[60] hidden overflow-y-auto bg-slate-950/70 p-0 backdrop-blur-sm sm:p-6">
-    <div class="mx-auto min-h-full max-w-4xl sm:flex sm:min-h-full sm:items-center">
-      <div class="relative min-h-screen w-full bg-white shadow-2xl dark:bg-slate-900 sm:min-h-0 sm:rounded-3xl">
-        <button id="articleModalClose" type="button" class="absolute right-4 top-4 z-10 grid h-11 w-11 place-items-center rounded-xl bg-white/95 text-slate-700 shadow-lg hover:text-qblue dark:bg-slate-800/95 dark:text-slate-200" aria-label="Oynani yopish">
-          <svg viewBox="0 0 24 24" class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M6 6l12 12M18 6L6 18"></path>
+      <nav class="flex-1 overflow-y-auto p-4">
+        <a href="#dashboard" class="nav-item active mb-1 flex items-center gap-3 rounded-xl bg-blue-50 px-4 py-3 text-sm font-semibold text-blue-800 dark:bg-blue-900/20 dark:text-blue-300">
+          <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path d="M3 3h7v7H3zM14 3h7v7h-7zM3 14h7v7H3zM14 14h7v7h-7z"></path>
           </svg>
-        </button>
+          Dashboard
+        </a>
+        <a href="#articles" class="nav-item mb-1 flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-medium text-gray-700 hover:bg-gray-50 dark:text-gray-300 dark:hover:bg-gray-800">
+          <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path d="M12 20h9M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path>
+          </svg>
+          Maqolalar
+        </a>
+        <a href="#categories" class="nav-item mb-1 flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-medium text-gray-700 hover:bg-gray-50 dark:text-gray-300 dark:hover:bg-gray-800">
+          <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path d="M3 7h18M3 12h18M3 17h18"></path>
+          </svg>
+          Kategoriyalar
+        </a>
+        <a href="#ads" class="nav-item mb-1 flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-medium text-gray-700 hover:bg-gray-50 dark:text-gray-300 dark:hover:bg-gray-800">
+          <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path>
+          </svg>
+          Reklama
+        </a>
+        <a href="#settings" class="nav-item mb-1 flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-medium text-gray-700 hover:bg-gray-50 dark:text-gray-300 dark:hover:bg-gray-800">
+          <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path d="M12 20a8 8 0 1 0 0-16 8 8 0 0 0 0 16z"></path>
+            <path d="M12 14a2 2 0 1 0 0-4 2 2 0 0 0 0 4z"></path>
+          </svg>
+          Sozlamalar
+        </a>
+      </nav>
 
-        <div class="max-h-[90vh] overflow-y-auto px-5 py-8 sm:px-10 sm:py-10">
-          <h2 id="articleModalTitle" class="font-display text-2xl font-extrabold text-qnavy dark:text-white">Yangi maqola</h2>
-
-          <form id="articleForm" class="mt-6 grid gap-5">
-            <div>
-              <label class="block text-sm font-bold text-slate-700 dark:text-slate-200">Sarlavha</label>
-              <input type="text" name="title" required class="mt-1 w-full rounded-xl border border-slate-300 bg-slate-50 px-4 py-3 outline-none transition focus:border-qblue focus:bg-white focus:ring-4 focus:ring-sky-100 dark:border-slate-700 dark:bg-slate-950 dark:focus:border-sky-400 dark:focus:bg-slate-950 dark:focus:ring-sky-900/30">
-            </div>
-
-            <div>
-              <label class="block text-sm font-bold text-slate-700 dark:text-slate-200">Rukn</label>
-              <select name="category" required class="mt-1 w-full rounded-xl border border-slate-300 bg-slate-50 px-4 py-3 outline-none transition focus:border-qblue focus:bg-white focus:ring-4 focus:ring-sky-100 dark:border-slate-700 dark:bg-slate-950 dark:focus:border-sky-400 dark:focus:bg-slate-950 dark:focus:ring-sky-900/30"></select>
-            </div>
-
-            <div class="grid gap-5 sm:grid-cols-2">
-              <div>
-                <label class="block text-sm font-bold text-slate-700 dark:text-slate-200">Maqola turi</label>
-                <select name="article_type" required class="mt-1 w-full rounded-xl border border-slate-300 bg-slate-50 px-4 py-3 outline-none transition focus:border-qblue focus:bg-white focus:ring-4 focus:ring-sky-100 dark:border-slate-700 dark:bg-slate-950 dark:focus:border-sky-400 dark:focus:bg-slate-950 dark:focus:ring-sky-900/30">
-                  <option value="guide">Qo‘llanma</option>
-                  <option value="news">Yangilik</option>
-                  <option value="official">Rasmiy xabar</option>
-                  <option value="analysis">Tahlil</option>
-                  <option value="question">Savol-javob</option>
-                </select>
-              </div>
-
-              <div>
-                <label class="block text-sm font-bold text-slate-700 dark:text-slate-200">Holat</label>
-                <select name="status" required class="mt-1 w-full rounded-xl border border-slate-300 bg-slate-50 px-4 py-3 outline-none transition focus:border-qblue focus:bg-white focus:ring-4 focus:ring-sky-100 dark:border-slate-700 dark:bg-slate-950 dark:focus:border-sky-400 dark:focus:bg-slate-950 dark:focus:ring-sky-900/30">
-                  <option value="draft">Qoralama</option>
-                  <option value="published">Chiqarilgan</option>
-                </select>
-              </div>
-            </div>
-
-            <div>
-              <label class="block text-sm font-bold text-slate-700 dark:text-slate-200">Lid (qisqa kirish)</label>
-              <textarea name="lead" required rows="3" class="mt-1 w-full rounded-xl border border-slate-300 bg-slate-50 px-4 py-3 outline-none transition focus:border-qblue focus:bg-white focus:ring-4 focus:ring-sky-100 dark:border-slate-700 dark:bg-slate-950 dark:focus:border-sky-400 dark:focus:bg-slate-950 dark:focus:ring-sky-900/30"></textarea>
-            </div>
-
-            <div>
-              <label class="block text-sm font-bold text-slate-700 dark:text-slate-200">Asosiy matn (qatorlar orasiga bo‘sh qator qoldiring)</label>
-              <textarea name="body" required rows="10" class="mt-1 w-full rounded-xl border border-slate-300 bg-slate-50 px-4 py-3 outline-none transition focus:border-qblue focus:bg-white focus:ring-4 focus:ring-sky-100 dark:border-slate-700 dark:bg-slate-950 dark:focus:border-sky-400 dark:focus:bg-slate-950 dark:focus:ring-sky-900/30"></textarea>
-            </div>
-
-            <div class="grid gap-5 sm:grid-cols-2">
-              <div>
-                <label class="block text-sm font-bold text-slate-700 dark:text-slate-200">Muallif</label>
-                <input type="text" name="author" class="mt-1 w-full rounded-xl border border-slate-300 bg-slate-50 px-4 py-3 outline-none transition focus:border-qblue focus:bg-white focus:ring-4 focus:ring-sky-100 dark:border-slate-700 dark:bg-slate-950 dark:focus:border-sky-400 dark:focus:bg-slate-950 dark:focus:ring-sky-900/30">
-              </div>
-
-              <div>
-                <label class="block text-sm font-bold text-slate-700 dark:text-slate-200">O‘qish vaqti (daqiqada)</label>
-                <input type="number" name="minutes" min="1" class="mt-1 w-full rounded-xl border border-slate-300 bg-slate-50 px-4 py-3 outline-none transition focus:border-qblue focus:bg-white focus:ring-4 focus:ring-sky-100 dark:border-slate-700 dark:bg-slate-950 dark:focus:border-sky-400 dark:focus:bg-slate-950 dark:focus:ring-sky-900/30">
-              </div>
-            </div>
-
-            <div class="grid gap-5 sm:grid-cols-2">
-              <div>
-                <label class="block text-sm font-bold text-slate-700 dark:text-slate-200">Rasm URL (ixtiyoriy)</label>
-                <input type="url" name="image_url" class="mt-1 w-full rounded-xl border border-slate-300 bg-slate-50 px-4 py-3 outline-none transition focus:border-qblue focus:bg-white focus:ring-4 focus:ring-sky-100 dark:border-slate-700 dark:bg-slate-950 dark:focus:border-sky-400 dark:focus:bg-slate-950 dark:focus:ring-sky-900/30">
-              </div>
-
-              <div>
-                <label class="block text-sm font-bold text-slate-700 dark:text-slate-200">Rasm izohi (ixtiyoriy)</label>
-                <input type="text" name="image_caption" class="mt-1 w-full rounded-xl border border-slate-300 bg-slate-50 px-4 py-3 outline-none transition focus:border-qblue focus:bg-white focus:ring-4 focus:ring-sky-100 dark:border-slate-700 dark:bg-slate-950 dark:focus:border-sky-400 dark:focus:bg-slate-950 dark:focus:ring-sky-900/30">
-              </div>
-            </div>
-
-            <div>
-              <label class="block text-sm font-bold text-slate-700 dark:text-slate-200">Tezklar (har qator bitta qadam)</label>
-              <textarea name="steps" rows="4" class="mt-1 w-full rounded-xl border border-slate-300 bg-slate-50 px-4 py-3 outline-none transition focus:border-qblue focus:bg-white focus:ring-4 focus:ring-sky-100 dark:border-slate-700 dark:bg-slate-950 dark:focus:border-sky-400 dark:focus:bg-slate-950 dark:focus:ring-sky-900/30"></textarea>
-            </div>
-
-            <div>
-              <label class="block text-sm font-bold text-slate-700 dark:text-slate-200">E’tibor bering (ixtiyoriy)</label>
-              <textarea name="warning" rows="3" class="mt-1 w-full rounded-xl border border-slate-300 bg-slate-50 px-4 py-3 outline-none transition focus:border-qblue focus:bg-white focus:ring-4 focus:ring-sky-100 dark:border-slate-700 dark:bg-slate-950 dark:focus:border-sky-400 dark:focus:bg-slate-950 dark:focus:ring-sky-900/30"></textarea>
-            </div>
-
-            <div class="grid gap-5 sm:grid-cols-2">
-              <div>
-                <label class="block text-sm font-bold text-slate-700 dark:text-slate-200">Manba nomi (ixtiyoriy)</label>
-                <input type="text" name="source_name" class="mt-1 w-full rounded-xl border border-slate-300 bg-slate-50 px-4 py-3 outline-none transition focus:border-qblue focus:bg-white focus:ring-4 focus:ring-sky-100 dark:border-slate-700 dark:bg-slate-950 dark:focus:border-sky-400 dark:focus:bg-slate-950 dark:focus:ring-sky-900/30">
-              </div>
-
-              <div>
-                <label class="block text-sm font-bold text-slate-700 dark:text-slate-200">Manba URL (ixtiyoriy)</label>
-                <input type="url" name="source_url" class="mt-1 w-full rounded-xl border border-slate-300 bg-slate-50 px-4 py-3 outline-none transition focus:border-qblue focus:bg-white focus:ring-4 focus:ring-sky-100 dark:border-slate-700 dark:bg-slate-950 dark:focus:border-sky-400 dark:focus:bg-slate-950 dark:focus:ring-sky-900/30">
-              </div>
-            </div>
-
-            <div>
-              <label class="block text-sm font-bold text-slate-700 dark:text-slate-200">Hujjat raqami / manba (ixtiyoriy)</label>
-              <input type="text" name="document_no" class="mt-1 w-full rounded-xl border border-slate-300 bg-slate-50 px-4 py-3 outline-none transition focus:border-qblue focus:bg-white focus:ring-4 focus:ring-sky-100 dark:border-slate-700 dark:bg-slate-950 dark:focus:border-sky-400 dark:focus:bg-slate-950 dark:focus:ring-sky-900/30">
-            </div>
-
-            <div class="grid gap-5 sm:grid-cols-2">
-              <div>
-                <label class="block text-sm font-bold text-slate-700 dark:text-slate-200">Yangilangan sana</label>
-                <input type="date" name="updated" class="mt-1 w-full rounded-xl border border-slate-300 bg-slate-50 px-4 py-3 outline-none transition focus:border-qblue focus:bg-white focus:ring-4 focus:ring-sky-100 dark:border-slate-700 dark:bg-slate-950 dark:focus:border-sky-400 dark:focus:bg-slate-950 dark:focus:ring-sky-900/30">
-              </div>
-
-              <div>
-                <label class="block text-sm font-bold text-slate-700 dark:text-slate-200">Chiqarilgan sana</label>
-                <input type="datetime-local" name="published_at" class="mt-1 w-full rounded-xl border border-slate-300 bg-slate-50 px-4 py-3 outline-none transition focus:border-qblue focus:bg-white focus:ring-4 focus:ring-sky-100 dark:border-slate-700 dark:bg-slate-950 dark:focus:border-sky-400 dark:focus:bg-slate-950 dark:focus:ring-sky-900/30">
-              </div>
-            </div>
-
-            <div>
-              <label class="block text-sm font-bold text-slate-700 dark:text-slate-200">Teglar (vergul bilan ajrating)</label>
-              <input type="text" name="tags" class="mt-1 w-full rounded-xl border border-slate-300 bg-slate-50 px-4 py-3 outline-none transition focus:border-qblue focus:bg-white focus:ring-4 focus:ring-sky-100 dark:border-slate-700 dark:bg-slate-950 dark:focus:border-sky-400 dark:focus:bg-slate-950 dark:focus:ring-sky-900/30">
-            </div>
-
-            <div class="flex items-center gap-3">
-              <input type="checkbox" name="is_featured" id="is_featured" class="h-4 w-4 rounded border-slate-300 text-qblue focus:ring-qblue dark:border-slate-700 dark:bg-slate-950">
-              <label for="is_featured" class="text-sm font-bold text-slate-700 dark:text-slate-200">Bosh sahifada asosiy maqola</label>
-            </div>
-
-            <div class="flex items-center gap-3">
-              <input type="checkbox" name="is_pinned" id="is_pinned" class="h-4 w-4 rounded border-slate-300 text-qblue focus:ring-qblue dark:border-slate-700 dark:bg-slate-950">
-              <label for="is_pinned" class="text-sm font-bold text-slate-700 dark:text-slate-200">Muhim xabar sifatida ko‘rsatish</label>
-            </div>
-
-            <div class="flex items-center gap-3">
-              <input type="checkbox" name="is_advertisement" id="is_advertisement" class="h-4 w-4 rounded border-slate-300 text-qblue focus:ring-qblue dark:border-slate-700 dark:bg-slate-950">
-              <label for="is_advertisement" class="text-sm font-bold text-slate-700 dark:text-slate-200">Reklama sifatida belgilash</label>
-            </div>
-
-            <div class="flex items-center gap-3">
-              <button type="submit" class="inline-flex items-center gap-2 rounded-xl bg-qblue px-5 py-3.5 font-bold text-white shadow-lg shadow-sky-900/15 transition hover:-translate-y-0.5 hover:bg-qnavy">
-                Saqlash
-                <svg viewBox="0 0 24 24" class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2">
-                  <path d="M5 12h14M13 6l6 6-6 6"></path>
-                </svg>
-              </button>
-
-              <button type="button" id="cancelArticleButton" class="rounded-xl border border-slate-300 bg-white px-5 py-3.5 font-bold text-slate-700 hover:border-qblue hover:text-qblue dark:border-slate-700 dark:bg-slate-950 dark:text-slate-200">
-                Bekor qilish
-              </button>
-            </div>
-          </form>
-        </div>
+      <div class="border-t p-4 dark:border-gray-800">
+        <a href="/" class="flex items-center gap-2 text-sm font-medium text-gray-700 hover:text-blue-600 dark:text-gray-300">
+          <svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+          </svg>
+          Saytga o'tish
+        </a>
       </div>
+    </aside>
+
+    <!-- Main Content -->
+    <div class="flex flex-1 flex-col overflow-hidden">
+      
+      <!-- Top Bar -->
+      <header class="flex h-16 items-center justify-between border-b bg-white px-6 dark:border-gray-800 dark:bg-gray-900">
+        <h1 id="pageTitle" class="text-xl font-bold">Dashboard</h1>
+        <div class="flex items-center gap-4">
+          <button id="themeButton" class="grid h-10 w-10 place-items-center rounded-lg bg-gray-100 text-gray-700 hover:bg-gray-200 dark:bg-gray-800 dark:text-gray-300">
+            <svg id="themeIcon" class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+            </svg>
+          </button>
+          <div class="flex items-center gap-3">
+            <div class="grid h-10 w-10 place-items-center rounded-full bg-blue-100 text-blue-700 dark:bg-blue-900 dark:text-blue-300">
+              <span class="text-sm font-bold">A</span>
+            </div>
+            <div class="hidden lg:block">
+              <div class="text-sm font-semibold">Admin</div>
+              <div class="text-xs text-gray-500">admin@qurilishinfo.uz</div>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <!-- Content Area -->
+      <main class="flex-1 overflow-y-auto p-6">
+        
+        <!-- Dashboard -->
+        <section id="dashboard" class="tab-content">
+          <div class="mb-6">
+            <h2 class="text-2xl font-bold">Statistika</h2>
+            <p class="text-gray-600 dark:text-gray-400">Sayt faoliyati haqida qisqacha ma'lumot</p>
+          </div>
+
+          <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+            <div class="rounded-2xl border bg-white p-6 shadow-sm dark:border-gray-800 dark:bg-gray-900">
+              <div class="flex items-center justify-between">
+                <div>
+                  <p class="text-sm text-gray-600 dark:text-gray-400">Maqolalar</p>
+                  <p class="mt-2 text-3xl font-bold">12</p>
+                </div>
+                <div class="grid h-12 w-12 place-items-center rounded-xl bg-blue-100 text-blue-600 dark:bg-blue-900/30 dark:text-blue-400">
+                  <svg class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <path d="M12 20h9M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path>
+                  </svg>
+                </div>
+              </div>
+            </div>
+
+            <div class="rounded-2xl border bg-white p-6 shadow-sm dark:border-gray-800 dark:bg-gray-900">
+              <div class="flex items-center justify-between">
+                <div>
+                  <p class="text-sm text-gray-600 dark:text-gray-400">Kategoriyalar</p>
+                  <p class="mt-2 text-3xl font-bold">9</p>
+                </div>
+                <div class="grid h-12 w-12 place-items-center rounded-xl bg-green-100 text-green-600 dark:bg-green-900/30 dark:text-green-400">
+                  <svg class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <path d="M3 7h18M3 12h18M3 17h18"></path>
+                  </svg>
+                </div>
+              </div>
+            </div>
+
+            <div class="rounded-2xl border bg-white p-6 shadow-sm dark:border-gray-800 dark:bg-gray-900">
+              <div class="flex items-center justify-between">
+                <div>
+                  <p class="text-sm text-gray-600 dark:text-gray-400">Reklamalar</p>
+                  <p class="mt-2 text-3xl font-bold">3</p>
+                </div>
+                <div class="grid h-12 w-12 place-items-center rounded-xl bg-purple-100 text-purple-600 dark:bg-purple-900/30 dark:text-purple-400">
+                  <svg class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path>
+                  </svg>
+                </div>
+              </div>
+            </div>
+
+            <div class="rounded-2xl border bg-white p-6 shadow-sm dark:border-gray-800 dark:bg-gray-900">
+              <div class="flex items-center justify-between">
+                <div>
+                  <p class="text-sm text-gray-600 dark:text-gray-400">Tashriflar (bugun)</p>
+                  <p class="mt-2 text-3xl font-bold">248</p>
+                </div>
+                <div class="grid h-12 w-12 place-items-center rounded-xl bg-orange-100 text-orange-600 dark:bg-orange-900/30 dark:text-orange-400">
+                  <svg class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                    <circle cx="9" cy="7" r="4"></circle>
+                    <path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"></path>
+                  </svg>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="mt-8 rounded-2xl border bg-white p-6 dark:border-gray-800 dark:bg-gray-900">
+            <h3 class="text-lg font-bold">So'nggi maqolalar</h3>
+            <div class="mt-4 overflow-hidden rounded-xl border dark:border-gray-800">
+              <table class="min-w-full">
+                <thead class="bg-gray-50 dark:bg-gray-800">
+                  <tr>
+                    <th class="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider">Sarlavha</th>
+                    <th class="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider">Kategoriya</th>
+                    <th class="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider">Sana</th>
+                    <th class="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider">Holat</th>
+                  </tr>
+                </thead>
+                <tbody class="divide-y dark:divide-gray-800">
+                  <tr>
+                    <td class="px-6 py-4 text-sm font-medium">500 m² qoidasi: nimalar o'zgardi?</td>
+                    <td class="px-6 py-4 text-sm text-gray-600 dark:text-gray-400">Uy qurish</td>
+                    <td class="px-6 py-4 text-sm text-gray-600 dark:text-gray-400">26 sen 2026</td>
+                    <td class="px-6 py-4"><span class="rounded-full bg-green-100 px-3 py-1 text-xs font-semibold text-green-800 dark:bg-green-900/30 dark:text-green-400">Chiqarilgan</span></td>
+                  </tr>
+                  <tr>
+                    <td class="px-6 py-4 text-sm font-medium">Kadastr xarajatlari: 2026 narxlar</td>
+                    <td class="px-6 py-4 text-sm text-gray-600 dark:text-gray-400">Kadastr</td>
+                    <td class="px-6 py-4 text-sm text-gray-600 dark:text-gray-400">26 sen 2026</td>
+                    <td class="px-6 py-4"><span class="rounded-full bg-green-100 px-3 py-1 text-xs font-semibold text-green-800 dark:bg-green-900/30 dark:text-green-400">Chiqarilgan</span></td>
+                  </tr>
+                  <tr>
+                    <td class="px-6 py-4 text-sm font-medium">666-son qaror: asosiy o'zgarishlar</td>
+                    <td class="px-6 py-4 text-sm text-gray-600 dark:text-gray-400">Qonunchilik</td>
+                    <td class="px-6 py-4 text-sm text-gray-600 dark:text-gray-400">26 sen 2026</td>
+                    <td class="px-6 py-4"><span class="rounded-full bg-yellow-100 px-3 py-1 text-xs font-semibold text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400">Qoralama</span></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <!-- Maqolalar -->
+        <section id="articles" class="tab-content hidden">
+          <div class="mb-6 flex items-center justify-between">
+            <div>
+              <h2 class="text-2xl font-bold">Maqolalar</h2>
+              <p class="text-gray-600 dark:text-gray-400">Barcha maqolalarni boshqarish</p>
+            </div>
+            <button class="rounded-xl bg-blue-600 px-6 py-3 font-semibold text-white hover:bg-blue-700">
+              + Yangi maqola
+            </button>
+          </div>
+
+          <div class="rounded-2xl border bg-white p-6 dark:border-gray-800 dark:bg-gray-900">
+            <p class="text-sm text-gray-600 dark:text-gray-400">Maqolalar ro'yxati tez orada qo'shiladi...</p>
+          </div>
+        </section>
+
+        <!-- Kategoriyalar -->
+        <section id="categories" class="tab-content hidden">
+          <div class="mb-6 flex items-center justify-between">
+            <div>
+              <h2 class="text-2xl font-bold">Kategoriyalar</h2>
+              <p class="text-gray-600 dark:text-gray-400">Sayt bo'limlarini boshqarish</p>
+            </div>
+            <button class="rounded-xl bg-blue-600 px-6 py-3 font-semibold text-white hover:bg-blue-700">
+              + Yangi kategoriya
+            </button>
+          </div>
+
+          <div class="rounded-2xl border bg-white p-6 dark:border-gray-800 dark:bg-gray-900">
+            <p class="text-sm text-gray-600 dark:text-gray-400">Kategoriyalar ro'yxati tez orada qo'shiladi...</p>
+          </div>
+        </section>
+
+        <!-- Reklama -->
+        <section id="ads" class="tab-content hidden">
+          <div class="mb-6 flex items-center justify-between">
+            <div>
+              <h2 class="text-2xl font-bold">Reklama</h2>
+              <p class="text-gray-600 dark:text-gray-400">Reklama joylarini boshqarish</p>
+            </div>
+            <button class="rounded-xl bg-blue-600 px-6 py-3 font-semibold text-white hover:bg-blue-700">
+              + Yangi reklama
+            </button>
+          </div>
+
+          <div class="rounded-2xl border bg-white p-6 dark:border-gray-800 dark:bg-gray-900">
+            <p class="text-sm text-gray-600 dark:text-gray-400">Reklamalar ro'yxati tez orada qo'shiladi...</p>
+          </div>
+        </section>
+
+        <!-- Sozlamalar -->
+        <section id="settings" class="tab-content hidden">
+          <div class="mb-6">
+            <h2 class="text-2xl font-bold">Sozlamalar</h2>
+            <p class="text-gray-600 dark:text-gray-400">Sayt konfiguratsiyasi</p>
+          </div>
+
+          <div class="rounded-2xl border bg-white p-6 dark:border-gray-800 dark:bg-gray-900">
+            <p class="text-sm text-gray-600 dark:text-gray-400">Sozlamalar tez orada qo'shiladi...</p>
+          </div>
+        </section>
+
+      </main>
     </div>
   </div>
 
   <script>
-    const state = {
-      articles: [],
-      categories: [],
-      advertisements: [],
-      settings: {},
-      editingArticleId: null
-    };
+    // Navigation
+    document.querySelectorAll('.nav-item').forEach(item => {
+      item.addEventListener('click', (e) => {
+        e.preventDefault();
+        const target = item.getAttribute('href').substring(1);
+        
+        // Update active nav
+        document.querySelectorAll('.nav-item').forEach(nav => {
+          nav.classList.remove('active', 'bg-blue-50', 'text-blue-800', 'dark:bg-blue-900/20', 'dark:text-blue-300');
+          nav.classList.add('text-gray-700', 'dark:text-gray-300');
+        });
+        item.classList.add('active', 'bg-blue-50', 'text-blue-800', 'dark:bg-blue-900/20', 'dark:text-blue-300');
+        item.classList.remove('text-gray-700', 'dark:text-gray-300');
 
-    const $ = (id) => document.getElementById(id);
+        // Update page title
+        document.getElementById('pageTitle').textContent = item.textContent.trim();
 
-    function escapeHtml(value) {
-      return String(value ?? "")
-        .replace(/&/g, "&amp;")
-        .replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;")
-        .replace(/"/g, "&quot;")
-        .replace(/'/g, "&#039;");
-    }
-
-    function articleTypeText(type) {
-      const map = {
-        guide: "Qo‘llanma",
-        news: "Yangilik",
-        official: "Rasmiy xabar",
-        analysis: "Tahlil",
-        question: "Savol-javob",
-        advertisement: "Hamkorlik materiali"
-      };
-
-      return map[type] || "Maqola";
-    }
-
-    function formatDate(value) {
-      if (!value) return "";
-
-      const normalized = String(value).includes("T")
-        ? String(value)
-        : String(value).replace(" ", "T");
-
-      const date = new Date(normalized.endsWith("Z") ? normalized : normalized + "Z");
-
-      if (Number.isNaN(date.getTime())) {
-        return String(value);
-      }
-
-      return new Intl.DateTimeFormat("uz-UZ", {
-        year: "numeric",
-        month: "long",
-        day: "numeric"
-      }).format(date);
-    }
-
-    function applyTheme(theme) {
-      const isDark = theme === "dark";
-      document.documentElement.classList.toggle("dark", isDark);
-      localStorage.setItem("qurilishinfo-admin-theme", theme);
-
-      $("themeSunIcon").innerHTML = isDark
-        ? '<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>'
-        : '<circle cx="12" cy="12" r="4"></circle><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"></path>';
-    }
-
-    function initializeTheme() {
-      const saved = localStorage.getItem("qurilishinfo-admin-theme");
-
-      if (saved) {
-        applyTheme(saved);
-        return;
-      }
-
-      const prefersDark = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
-      applyTheme(prefersDark ? "dark" : "light");
-    }
-
-    function setTab(tabName) {
-      document.querySelectorAll(".tab-content").forEach((el) => el.classList.add("hidden"));
-      document.querySelectorAll(".nav-item").forEach((el) => el.classList.remove("active"));
-
-      $(`${tabName}Tab`).classList.remove("hidden");
-      document.querySelector(`[data-tab="${tabName}"]`).classList.add("active");
-
-      const titles = {
-        dashboard: "Dashboard",
-        articles: "Maqolalar",
-        categories: "Ruknlar",
-        advertisements: "Reklama",
-        settings: "Sozlamalar"
-      };
-
-      $("pageTitle").textContent = titles[tabName] || "Admin Panel";
-    }
-
-    function openArticleModal(article = null) {
-      state.editingArticleId = article ? article.id : null;
-
-      $("articleModalTitle").textContent = article ? "Maqolani tahrirlash" : "Yangi maqola";
-
-      const form = $("articleForm");
-      form.reset();
-
-      if (article) {
-        form.title.value = article.title || "";
-        form.category.value = article.category || "";
-        form.article_type.value = article.article_type || "guide";
-        form.status.value = article.status || "draft";
-        form.lead.value = article.lead || "";
-        form.body.value = article.body || "";
-        form.author.value = article.author || "";
-        form.minutes.value = article.minutes || 5;
-        form.image_url.value = article.image_url || "";
-        form.image_caption.value = article.image_caption || "";
-        form.steps.value = article.steps || "";
-        form.warning.value = article.warning || "";
-        form.source_name.value = article.source_name || "";
-        form.source_url.value = article.source_url || "";
-        form.document_no.value = article.document_no || "";
-        form.updated.value = article.updated ? article.updated.split("T")[0] : "";
-        form.published_at.value = article.published_at ? article.published_at.slice(0, 16) : "";
-        form.tags.value = article.tags || "";
-        form.is_featured.checked = Number(article.is_featured) === 1;
-        form.is_pinned.checked = Number(article.is_pinned) === 1;
-        form.is_advertisement.checked = Number(article.is_advertisement) === 1;
-      }
-
-      $("articleModal").classList.remove("hidden");
-      document.body.style.overflow = "hidden";
-    }
-
-    function closeArticleModal() {
-      $("articleModal").classList.add("hidden");
-      document.body.style.overflow = "";
-    }
-
-    async function getJson(url, fallback) {
-      try {
-        const response = await fetch(url);
-
-        if (!response.ok) {
-          return fallback;
-        }
-
-        return await response.json();
-      } catch (error) {
-        return fallback;
-      }
-    }
-
-    async function postJson(url, body) {
-      const response = await fetch(url, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(body)
+        // Show tab
+        document.querySelectorAll('.tab-content').forEach(tab => tab.classList.add('hidden'));
+        document.getElementById(target).classList.remove('hidden');
       });
+    });
 
-      return await response.json();
+    // Theme toggle
+    const themeButton = document.getElementById('themeButton');
+    const themeIcon = document.getElementById('themeIcon');
+    
+    function applyTheme(theme) {
+      document.documentElement.classList.toggle('dark', theme === 'dark');
+      localStorage.setItem('admin-theme', theme);
+      themeIcon.innerHTML = theme === 'dark' 
+        ? '<circle cx="12" cy="12" r="5"></circle><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"></path>'
+        : '<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>';
     }
 
-    async function loadDashboard() {
-      const [articles, categories, advertisements, settings] = await Promise.all([
-        getJson("/api/articles", []),
-        getJson("/api/categories", []),
-        getJson("/api/advertisements", []),
-        getJson("/api/settings", {})
-      ]);
-
-      state.articles = Array.isArray(articles) ? articles : [];
-      state.categories = Array.isArray(categories) ? categories : [];
-      state.advertisements = Array.isArray(advertisements) ? advertisements : [];
-      state.settings = settings || {};
-
-      $("statArticles").textContent = state.articles.length;
-      $("statAds").textContent = state.advertisements.filter((ad) => ad.status === "active").length;
-      $("statCategories").textContent = state.categories.filter((cat) => cat.is_active).length;
-      $("statStatus").textContent = "OK";
-
-      renderDashboardArticles();
-      renderArticlesTable();
-      renderCategoriesTable();
-      renderAdsTable();
-      renderSettingsForm();
-      populateCategorySelect();
-    }
-
-    function renderDashboardArticles() {
-      const latest = [...state.articles]
-        .sort((a, b) => {
-          const aDate = new Date(String(a.published_at || a.created_at || "").replace(" ", "T") + "Z").getTime() || 0;
-          const bDate = new Date(String(b.published_at || b.created_at || "").replace(" ", "T") + "Z").getTime() || 0;
-
-          return bDate - aDate || Number(b.id) - Number(a.id);
-        })
-        .slice(0, 6);
-
-      $("dashboardArticles").innerHTML = latest.map((article) => {
-        const date = formatDate(article.published_at || article.created_at);
-
-        return `
-          <article class="rounded-xl border border-slate-200 bg-slate-50 p-4 dark:border-slate-800 dark:bg-slate-950">
-            <div class="flex items-center justify-between gap-2 text-xs font-bold text-slate-500 dark:text-slate-400">
-              <span>${escapeHtml(article.category)}</span>
-              <span>${date ? date.split(" ")[0] : ""}</span>
-            </div>
-            <h3 class="mt-2 line-clamp-2 font-display text-base font-bold text-qnavy dark:text-white">${escapeHtml(article.title)}</h3>
-          </article>
-        `;
-      }).join("");
-    }
-
-    function renderArticlesTable() {
-      const tbody = $("articlesTableBody");
-
-      tbody.innerHTML = state.articles.map((article) => {
-        const date = formatDate(article.published_at || article.created_at);
-
-        return `
-          <tr class="hover:bg-slate-50 dark:hover:bg-slate-950">
-            <td class="px-5 py-4">
-              <div class="font-semibold text-slate-800 dark:text-slate-200">${escapeHtml(article.title)}</div>
-              <div class="text-xs text-slate-500 dark:text-slate-400">${date || ""}</div>
-            </td>
-            <td class="px-5 py-4 text-slate-700 dark:text-slate-300">${escapeHtml(article.category)}</td>
-            <td class="px-5 py-4 text-slate-700 dark:text-slate-300">${articleTypeText(article.article_type)}</td>
-            <td class="px-5 py-4">
-              <span class="rounded-full bg-emerald-100 px-3 py-1 text-xs font-bold text-emerald-800 dark:bg-emerald-950/50 dark:text-emerald-300">${article.status === "published" ? "Chiqarilgan" : "Qoralama"}</span>
-            </td>
-            <td class="px-5 py-4">
-              <div class="flex items-center gap-2">
-                <button type="button" data-edit-article="${article.id}" class="rounded-lg border border-slate-300 bg-white px-3 py-1.5 text-xs font-bold text-slate-700 hover:border-qblue hover:text-qblue dark:border-slate-700 dark:bg-slate-950 dark:text-slate-200">Tahrirlash</button>
-                <button type="button" data-delete-article="${article.id}" class="rounded-lg border border-red-300 bg-white px-3 py-1.5 text-xs font-bold text-red-700 hover:border-red-500 hover:text-red-600 dark:border-red-800 dark:bg-slate-950 dark:text-red-300">O‘chirish</button>
-              </div>
-            </td>
-          </tr>
-        `;
-      }).join("");
-    }
-
-    function renderCategoriesTable() {
-      const tbody = $("categoriesTableBody");
-
-      tbody.innerHTML = state.categories.map((category, index) => `
-        <tr class="hover:bg-slate-50 dark:hover:bg-slate-950">
-          <td class="px-5 py-4 font-semibold text-slate-800 dark:text-slate-200">${escapeHtml(category.name)}</td>
-          <td class="px-5 py-4 text-slate-700 dark:text-slate-300">${escapeHtml(category.slug)}</td>
-          <td class="px-5 py-4">
-            <span class="rounded-full ${category.is_active ? "bg-emerald-100 text-emerald-800 dark:bg-emerald-950/50 dark:text-emerald-300" : "bg-slate-200 text-slate-700 dark:bg-slate-800 dark:text-slate-300"} px-3 py-1 text-xs font-bold">${category.is_active ? "Faol" : "O‘chirilgan"}</span>
-          </td>
-          <td class="px-5 py-4 text-slate-700 dark:text-slate-300">${index + 1}</td>
-          <td class="px-5 py-4">
-            <div class="flex items-center gap-2">
-              <button type="button" data-edit-category="${category.id}" class="rounded-lg border border-slate-300 bg-white px-3 py-1.5 text-xs font-bold text-slate-700 hover:border-qblue hover:text-qblue dark:border-slate-700 dark:bg-slate-950 dark:text-slate-200">Tahrirlash</button>
-              <button type="button" data-delete-category="${category.id}" class="rounded-lg border border-red-300 bg-white px-3 py-1.5 text-xs font-bold text-red-700 hover:border-red-500 hover:text-red-600 dark:border-red-800 dark:bg-slate-950 dark:text-red-300">O‘chirish</button>
-            </div>
-          </td>
-        </tr>
-      `).join("");
-    }
-
-    function renderAdsTable() {
-      const tbody = $("adsTableBody");
-
-      tbody.innerHTML = state.advertisements.map((ad) => `
-        <tr class="hover:bg-slate-50 dark:hover:bg-slate-950">
-          <td class="px-5 py-4 font-semibold text-slate-800 dark:text-slate-200">${escapeHtml(ad.title)}</td>
-          <td class="px-5 py-4 text-slate-700 dark:text-slate-300">${escapeHtml(ad.company_name || "—")}</td>
-          <td class="px-5 py-4">
-            <span class="rounded-full ${ad.status === "active" ? "bg-emerald-100 text-emerald-800 dark:bg-emerald-950/50 dark:text-emerald-300" : "bg-slate-200 text-slate-700 dark:bg-slate-800 dark:text-slate-300"} px-3 py-1 text-xs font-bold">${ad.status === "active" ? "Faol" : "O‘chirilgan"}</span>
-          </td>
-          <td class="px-5 py-4">
-            <div class="flex items-center gap-2">
-              <button type="button" data-edit-ad="${ad.id}" class="rounded-lg border border-slate-300 bg-white px-3 py-1.5 text-xs font-bold text-slate-700 hover:border-qblue hover:text-qblue dark:border-slate-700 dark:bg-slate-950 dark:text-slate-200">Tahrirlash</button>
-              <button type="button" data-delete-ad="${ad.id}" class="rounded-lg border border-red-300 bg-white px-3 py-1.5 text-xs font-bold text-red-700 hover:border-red-500 hover:text-red-600 dark:border-red-800 dark:bg-slate-950 dark:text-red-300">O‘chirish</button>
-            </div>
-          </td>
-        </tr>
-      `).join("");
-    }
-
-    function renderSettingsForm() {
-      const form = $("settingsForm");
-
-      form.site_name.value = state.settings.site_name || "";
-      form.telegram_url.value = state.settings.telegram_url || "";
-      form.instagram_url.value = state.settings.instagram_url || "";
-      form.facebook_url.value = state.settings.facebook_url || "";
-      form.youtube_url.value = state.settings.youtube_url || "";
-      form.tiktok_url.value = state.settings.tiktok_url || "";
-      form.contact.value = state.settings.contact || "";
-      form.about_text.value = state.settings.about_text || "";
-    }
-
-    function populateCategorySelect() {
-      const select = document.querySelector("#articleForm select[name='category']");
-
-      select.innerHTML = state.categories
-        .filter((cat) => cat.is_active)
-        .map((cat) => `<option value="${escapeHtml(cat.name)}">${escapeHtml(cat.name)}</option>`)
-        .join("");
-    }
-
-    document.addEventListener("click", (event) => {
-      const navItem = event.target.closest(".nav-item");
-
-      if (navItem) {
-        setTab(navItem.getAttribute("data-tab"));
-      }
-
-      const newArticleButton = event.target.closest("#newArticleButton");
-
-      if (newArticleButton) {
-        openArticleModal();
-      }
-
-      const editArticleButton = event.target.closest("[data-edit-article]");
-
-      if (editArticleButton) {
-        const article = state.articles.find((a) => String(a.id) === String(editArticleButton.getAttribute("data-edit-article")));
-        openArticleModal(article);
-      }
-
-      const deleteArticleButton = event.target.closest("[data-delete-article]");
-
-      if (deleteArticleButton) {
-        const id = deleteArticleButton.getAttribute("data-delete-article");
-
-        if (confirm("Haqiqatan ham bu maqolani o‘chirmoqchimisiz?")) {
-          postJson("/api/articles/delete", { id }).then(() => loadDashboard());
-        }
-      }
-    });
-
-    $("articleModalClose").addEventListener("click", closeArticleModal);
-    $("articleModal").addEventListener("click", (event) => {
-      if (event.target === $("articleModal")) {
-        closeArticleModal();
-      }
-    });
-
-    $("cancelArticleButton").addEventListener("click", closeArticleModal);
-
-    $("articleForm").addEventListener("submit", async (event) => {
-      event.preventDefault();
-
-      const form = event.target;
-      const data = {
-        title: form.title.value,
-        category: form.category.value,
-        article_type: form.article_type.value,
-        status: form.status.value,
-        lead: form.lead.value,
-        body: form.body.value,
-        author: form.author.value,
-        minutes: Number(form.minutes.value) || 5,
-        image_url: form.image_url.value,
-        image_caption: form.image_caption.value,
-        steps: form.steps.value,
-        warning: form.warning.value,
-        source_name: form.source_name.value,
-        source_url: form.source_url.value,
-        document_no: form.document_no.value,
-        updated: form.updated.value,
-        published_at: form.published_at.value,
-        tags: form.tags.value,
-        is_featured: form.is_featured.checked ? 1 : 0,
-        is_pinned: form.is_pinned.checked ? 1 : 0,
-        is_advertisement: form.is_advertisement.checked ? 1 : 0
-      };
-
-      if (state.editingArticleId) {
-        data.id = state.editingArticleId;
-        await postJson("/api/articles/update", data);
-      } else {
-        await postJson("/api/articles/create", data);
-      }
-
-      closeArticleModal();
-      loadDashboard();
-    });
-
-    $("settingsForm").addEventListener("submit", async (event) => {
-      event.preventDefault();
-
-      const form = event.target;
-      const data = {
-        site_name: form.site_name.value,
-        telegram_url: form.telegram_url.value,
-        instagram_url: form.instagram_url.value,
-        facebook_url: form.facebook_url.value,
-        youtube_url: form.youtube_url.value,
-        tiktok_url: form.tiktok_url.value,
-        contact: form.contact.value,
-        about_text: form.about_text.value
-      };
-
-      await postJson("/api/settings/update", data);
-      alert("Sozlamalar saqlandi.");
-      loadDashboard();
-    });
-
-    $("sidebarOpenButton").addEventListener("click", () => {
-      $("sidebar").classList.remove("-translate-x-full");
-      $("mobileOverlay").classList.remove("hidden");
-      document.body.style.overflow = "hidden";
-    });
-
-    $("sidebarCloseButton").addEventListener("click", () => {
-      $("sidebar").classList.add("-translate-x-full");
-      $("mobileOverlay").classList.add("hidden");
-      document.body.style.overflow = "";
-    });
-
-    $("mobileOverlay").addEventListener("click", () => {
-      $("sidebar").classList.add("-translate-x-full");
-      $("mobileOverlay").classList.add("hidden");
-      document.body.style.overflow = "";
-    });
-
-    $("themeButton").addEventListener("click", () => {
-      applyTheme(document.documentElement.classList.contains("dark") ? "light" : "dark");
-    });
-
-    document.addEventListener("keydown", (event) => {
-      if (event.key === "Escape") {
-        closeArticleModal();
-      }
-    });
-
-    initializeTheme();
-    loadDashboard();
-  </script>
-</body>
-</html>
+    themeButton.addEventListener('click', () => {
+      const isDark = document.documentElement.classList.contains('dark');
