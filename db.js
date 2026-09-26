@@ -1,20 +1,10 @@
 const sqlite3 = require("sqlite3").verbose();
 const path = require("path");
 
-function getDbPath() {
-  // Render persistent disk yoki local
-  if (process.env.RENDER_EXTERNAL_PERSISTENT_DISK) {
-    return "/render/data/qurilishinfo.db";
-  }
-
-  return path.join(__dirname, "data", "qurilishinfo.db");
-}
-
 function openDatabase() {
   return new Promise((resolve, reject) => {
-    const dbPath = getDbPath();
-
-    const db = new sqlite3.Database(dbPath, sqlite3.OPEN_READWRITE | sqlite3.OPEN_CREATE, (err) => {
+    // VAQTINCHALIK: xotirada baza (test uchun)
+    const db = new sqlite3.Database(":memory:", (err) => {
       if (err) {
         reject(err);
       } else {
@@ -240,6 +230,4 @@ module.exports = {
   initializeDatabase,
   runSql,
   getSql,
-  allSql,
-  getDbPath
-};
+  al
