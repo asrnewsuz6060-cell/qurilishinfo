@@ -1,365 +1,1346 @@
+
 <!DOCTYPE html>
 <html lang="uz" class="scroll-smooth">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>QurilishInfo — Qurilish jarayonidagi barcha savollaringizga javob</title>
-  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <style>
-    body { font-family: 'Inter', sans-serif; }
-    .carousel-slide { display: none; opacity: 0; transition: opacity 0.6s ease; }
-    .carousel-slide.active { display: block; opacity: 1; }
-  </style>
-</head>
-<body class="bg-gray-50 text-gray-900 dark:bg-gray-950 dark:text-gray-100">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="description" content="QurilishInfo — uy qurish, ruxsatnoma, smeta, ta'mirlash va qurilishdagi huquqlar bo'yicha amaliy ma'lumotlar.">
+  <title>QurilishInfo — Qurilish bo‘yicha amaliy ma’lumotlar</title>
 
-  <!-- Header -->
-  <header class="sticky top-0 z-50 border-b bg-white/95 backdrop-blur dark:border-gray-800 dark:bg-gray-950/95">
-    <div class="mx-auto flex h-20 max-w-7xl items-center justify-between px-4 lg:px-8">
-      <a href="#" class="flex items-center gap-3">
-        <div class="grid h-12 w-12 place-items-center rounded-xl bg-gradient-to-br from-blue-600 to-blue-800 text-white shadow-lg">
-          <svg class="h-7 w-7" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-            <path d="M3 21h18M5 21V10l7-6 7 6v11M9 21v-6h6v6"></path>
+  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+
+  <style type="text/tailwindcss">
+    @theme {
+      --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+      --font-display: "Manrope", ui-sans-serif, system-ui, sans-serif;
+      --color-qblue: #0b4f7c;
+      --color-qnavy: #073b61;
+      --color-qgreen: #138a5b;
+      --color-qgreen-dark: #0c6d47;
+      --color-qsoft: #f3f7fa;
+      --color-qline: #dce5eb;
+      --color-qink: #17212b;
+    }
+
+    @keyframes fade-up {
+      from {
+        opacity: 0;
+        transform: translateY(16px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes pulse-soft {
+      0%, 100% {
+        box-shadow: 0 0 0 0 rgba(19, 138, 91, 0.28);
+      }
+      50% {
+        box-shadow: 0 0 0 8px rgba(19, 138, 91, 0);
+      }
+    }
+
+    .animate-fade-up {
+      animation: fade-up .55s ease both;
+    }
+
+    .delay-1 {
+      animation-delay: .08s;
+    }
+
+    .delay-2 {
+      animation-delay: .16s;
+    }
+
+    .delay-3 {
+      animation-delay: .24s;
+    }
+
+    .animate-pulse-soft {
+      animation: pulse-soft 2.3s infinite;
+    }
+
+    .article-card:hover .article-image {
+      transform: scale(1.05);
+    }
+
+    .article-card:hover .article-title {
+      color: #0b4f7c;
+    }
+
+    .dark .article-card:hover .article-title {
+      color: #69b5e4;
+    }
+
+    .no-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+
+    .no-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+  </style>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Manrope:wght@600;700;800&display=swap" rel="stylesheet">
+</head>
+
+<body class="bg-qsoft text-qink antialiased transition-colors duration-300 dark:bg-slate-950 dark:text-slate-100">
+  <div id="mobileOverlay" class="fixed inset-0 z-40 hidden bg-slate-950/50 backdrop-blur-sm"></div>
+
+  <aside id="mobileMenu" class="fixed inset-y-0 left-0 z-50 flex w-[310px] max-w-[88vw] -translate-x-full flex-col bg-white shadow-2xl transition-transform duration-300 dark:bg-slate-900">
+    <div class="flex items-center justify-between border-b border-slate-200 px-5 py-5 dark:border-slate-800">
+      <a href="#top" class="flex items-center gap-3 font-display text-xl font-extrabold text-qnavy dark:text-white">
+        <span class="grid h-10 w-10 place-items-center rounded-xl bg-qblue text-white shadow-lg shadow-sky-900/20">
+          <svg viewBox="0 0 24 24" class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true">
+            <path d="M3 21h18"></path>
+            <path d="M5 21V10l7-6 7 6v11"></path>
+            <path d="M9 21v-6h6v6"></path>
+            <path d="M8 10h.01M16 10h.01"></path>
           </svg>
-        </div>
-        <div>
-          <div class="text-2xl font-bold text-blue-800 dark:text-white">Qurilish<span class="text-green-600">Info</span></div>
-          <div class="text-xs text-gray-500 dark:text-gray-400">Rasmiy ma'lumotlar bir joyda</div>
-        </div>
+        </span>
+        <span>Qurilish<span class="text-qgreen">Info</span></span>
       </a>
 
-      <nav class="hidden items-center gap-6 lg:flex">
-        <a href="#" class="text-sm font-semibold text-blue-800">Bosh sahifa</a>
-        <a href="#uy-qurish" class="text-sm font-medium text-gray-700 hover:text-blue-800 dark:text-gray-300">Uy qurish</a>
-        <a href="#kadastr" class="text-sm font-medium text-gray-700 hover:text-blue-800 dark:text-gray-300">Kadastr</a>
-        <a href="#ruxsatnomalar" class="text-sm font-medium text-gray-700 hover:text-blue-800 dark:text-gray-300">Ruxsatnomalar</a>
-        <a href="#inspeksiya" class="text-sm font-medium text-gray-700 hover:text-blue-800 dark:text-gray-300">Inspeksiya</a>
-        <a href="#qonunchilik" class="text-sm font-medium text-gray-700 hover:text-blue-800 dark:text-gray-300">Qonunchilik</a>
+      <button id="mobileCloseButton" type="button" class="grid h-10 w-10 place-items-center rounded-lg border border-slate-200 text-slate-600 dark:border-slate-700 dark:text-slate-300" aria-label="Menyuni yopish">
+        <svg viewBox="0 0 24 24" class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M6 6l12 12M18 6L6 18"></path>
+        </svg>
+      </button>
+    </div>
+
+    <div class="flex-1 overflow-y-auto px-5 py-6">
+      <p class="mb-3 text-xs font-bold uppercase tracking-[0.16em] text-slate-400">Ruknlar</p>
+
+      <nav id="mobileNavigation" class="grid gap-1">
+        <a href="#top" class="mobile-nav-link rounded-xl bg-sky-50 px-4 py-3 font-semibold text-qblue dark:bg-sky-950/40 dark:text-sky-300">Bosh sahifa</a>
+        <button type="button" data-category="Boshlashdan oldin" class="mobile-category-link rounded-xl px-4 py-3 text-left font-semibold text-slate-700 hover:bg-slate-100 dark:text-slate-200 dark:hover:bg-slate-800">Boshlashdan oldin</button>
+        <button type="button" data-category="Uy qurish" class="mobile-category-link rounded-xl px-4 py-3 text-left font-semibold text-slate-700 hover:bg-slate-100 dark:text-slate-200 dark:hover:bg-slate-800">Uy qurish</button>
+        <button type="button" data-category="Xarajat va narxlar" class="mobile-category-link rounded-xl px-4 py-3 text-left font-semibold text-slate-700 hover:bg-slate-100 dark:text-slate-200 dark:hover:bg-slate-800">Xarajat va narxlar</button>
+        <button type="button" data-category="Uy sotib olish" class="mobile-category-link rounded-xl px-4 py-3 text-left font-semibold text-slate-700 hover:bg-slate-100 dark:text-slate-200 dark:hover:bg-slate-800">Uy sotib olish</button>
+        <button type="button" data-category="Ta'mirlash" class="mobile-category-link rounded-xl px-4 py-3 text-left font-semibold text-slate-700 hover:bg-slate-100 dark:text-slate-200 dark:hover:bg-slate-800">Ta'mirlash</button>
+        <button type="button" data-category="Huquq va idoralar" class="mobile-category-link rounded-xl px-4 py-3 text-left font-semibold text-slate-700 hover:bg-slate-100 dark:text-slate-200 dark:hover:bg-slate-800">Huquq va idoralar</button>
+        <button type="button" data-category="Inspeksiya izohlaydi" class="mobile-category-link rounded-xl px-4 py-3 text-left font-semibold text-slate-700 hover:bg-slate-100 dark:text-slate-200 dark:hover:bg-slate-800">Inspeksiya izohlaydi</button>
+        <button type="button" data-category="Qaror sodda tilda" class="mobile-category-link rounded-xl px-4 py-3 text-left font-semibold text-slate-700 hover:bg-slate-100 dark:text-slate-200 dark:hover:bg-slate-800">Qaror sodda tilda</button>
+        <button type="button" data-category="Rasmiy xabarlar" class="mobile-category-link rounded-xl px-4 py-3 text-left font-semibold text-slate-700 hover:bg-slate-100 dark:text-slate-200 dark:hover:bg-slate-800">Rasmiy xabarlar</button>
       </nav>
 
-      <div class="flex items-center gap-3">
-        <button id="langButton" class="rounded-lg border border-gray-300 px-3 py-2 text-sm font-bold hover:border-blue-600 dark:border-gray-700">UZ</button>
-        <button id="themeButton" class="grid h-10 w-10 place-items-center rounded-lg bg-gray-100 text-gray-700 hover:bg-gray-200 dark:bg-gray-800 dark:text-gray-300">
-          <svg id="themeIcon" class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+      <div class="mt-8 rounded-2xl bg-qnavy p-5 text-white">
+        <p class="text-xs font-bold uppercase tracking-[0.14em] text-sky-200">Tezkor yo‘nalish</p>
+        <h2 class="mt-2 font-display text-xl font-bold">Qurilish bo‘yicha savolingiz bormi?</h2>
+        <p class="mt-2 text-sm leading-6 text-sky-100">Kerakli qo‘llanmani qidiring yoki tahririyatga yozing.</p>
+        <a id="mobileTelegramLink" href="#" target="_blank" rel="noopener" class="mt-4 inline-flex items-center gap-2 rounded-xl bg-qgreen px-4 py-3 text-sm font-bold text-white">
+          Telegram orqali yozish
+          <svg viewBox="0 0 24 24" class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M22 2L11 13"></path>
+            <path d="M22 2l-7 20-4-9-9-4 20-7z"></path>
+          </svg>
+        </a>
+      </div>
+    </div>
+
+    <div class="border-t border-slate-200 px-5 py-5 text-xs leading-5 text-slate-500 dark:border-slate-800 dark:text-slate-400">
+      QurilishInfo rasmiy davlat idorasi sayti emas. Ma’lumotlarni rasmiy manba orqali tekshirib oling.
+    </div>
+  </aside>
+
+  <header id="top" class="sticky top-0 z-30 border-b border-slate-200 bg-white/95 backdrop-blur-lg dark:border-slate-800 dark:bg-slate-950/95">
+    <div class="border-b border-slate-100 bg-slate-50 dark:border-slate-800 dark:bg-slate-900">
+      <div class="mx-auto flex max-w-7xl items-center justify-between gap-4 px-4 py-2 text-xs text-slate-600 sm:px-6 lg:px-8 dark:text-slate-300">
+        <p id="siteTagline" class="hidden sm:block">Qurilishdagi to‘g‘ri qarorlar uchun amaliy ma’lumot</p>
+        <div class="ml-auto flex items-center gap-3">
+          <a id="topTelegramLink" href="#" target="_blank" rel="noopener" class="inline-flex items-center gap-1.5 font-semibold text-qblue hover:text-qgreen dark:text-sky-300">
+            <svg viewBox="0 0 24 24" class="h-3.5 w-3.5" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M22 2L11 13"></path>
+              <path d="M22 2l-7 20-4-9-9-4 20-7z"></path>
+            </svg>
+            Telegram
+          </a>
+          <span class="h-4 w-px bg-slate-300 dark:bg-slate-700"></span>
+          <a href="/admin.html" class="font-semibold hover:text-qblue dark:hover:text-sky-300">Admin panel</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="mx-auto flex h-[72px] max-w-7xl items-center gap-3 px-4 sm:px-6 lg:px-8">
+      <button id="mobileMenuButton" type="button" class="grid h-10 w-10 shrink-0 place-items-center rounded-xl border border-slate-200 text-slate-700 lg:hidden dark:border-slate-700 dark:text-slate-200" aria-label="Menyuni ochish">
+        <svg viewBox="0 0 24 24" class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M4 7h16M4 12h16M4 17h16"></path>
+        </svg>
+      </button>
+
+      <a href="#top" class="flex shrink-0 items-center gap-3 font-display text-xl font-extrabold tracking-tight text-qnavy sm:text-2xl dark:text-white">
+        <span class="grid h-10 w-10 place-items-center rounded-xl bg-qblue text-white shadow-lg shadow-sky-900/20">
+          <svg viewBox="0 0 24 24" class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true">
+            <path d="M3 21h18"></path>
+            <path d="M5 21V10l7-6 7 6v11"></path>
+            <path d="M9 21v-6h6v6"></path>
+            <path d="M8 10h.01M16 10h.01"></path>
+          </svg>
+        </span>
+        <span id="siteName">Qurilish<span class="text-qgreen">Info</span></span>
+      </a>
+
+      <nav class="ml-5 hidden flex-1 items-center justify-center gap-1 xl:flex">
+        <a href="#top" class="rounded-lg px-3 py-2 text-sm font-semibold text-qblue hover:bg-sky-50 dark:text-sky-300 dark:hover:bg-slate-800">Bosh sahifa</a>
+        <button type="button" data-category="Boshlashdan oldin" class="desktop-category-link rounded-lg px-3 py-2 text-sm font-semibold text-slate-600 hover:bg-sky-50 hover:text-qblue dark:text-slate-300 dark:hover:bg-slate-800 dark:hover:text-sky-300">Boshlashdan oldin</button>
+        <button type="button" data-category="Uy qurish" class="desktop-category-link rounded-lg px-3 py-2 text-sm font-semibold text-slate-600 hover:bg-sky-50 hover:text-qblue dark:text-slate-300 dark:hover:bg-slate-800 dark:hover:text-sky-300">Uy qurish</button>
+        <button type="button" data-category="Xarajat va narxlar" class="desktop-category-link rounded-lg px-3 py-2 text-sm font-semibold text-slate-600 hover:bg-sky-50 hover:text-qblue dark:text-slate-300 dark:hover:bg-slate-800 dark:hover:text-sky-300">Xarajatlar</button>
+        <button type="button" data-category="Huquq va idoralar" class="desktop-category-link rounded-lg px-3 py-2 text-sm font-semibold text-slate-600 hover:bg-sky-50 hover:text-qblue dark:text-slate-300 dark:hover:bg-slate-800 dark:hover:text-sky-300">Huquq va idoralar</button>
+      </nav>
+
+      <div class="ml-auto flex items-center gap-2">
+        <button id="searchButton" type="button" class="grid h-10 w-10 place-items-center rounded-xl border border-slate-200 text-slate-700 hover:border-qblue hover:text-qblue dark:border-slate-700 dark:text-slate-200" aria-label="Qidiruvni ochish">
+          <svg viewBox="0 0 24 24" class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="11" cy="11" r="6.5"></circle>
+            <path d="M20 20l-4-4"></path>
           </svg>
         </button>
+
+        <button id="themeButton" type="button" class="grid h-10 w-10 place-items-center rounded-xl border border-slate-200 text-slate-700 hover:border-qblue hover:text-qblue dark:border-slate-700 dark:text-slate-200" aria-label="Mavzuni almashtirish">
+          <svg id="themeSunIcon" viewBox="0 0 24 24" class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="4"></circle>
+            <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"></path>
+          </svg>
+        </button>
+
+        <a id="headerTelegramLink" href="#" target="_blank" rel="noopener" class="hidden items-center gap-2 rounded-xl bg-qgreen px-4 py-2.5 text-sm font-bold text-white shadow-lg shadow-emerald-900/15 hover:bg-qgreen-dark sm:inline-flex">
+          <svg viewBox="0 0 24 24" class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M22 2L11 13"></path>
+            <path d="M22 2l-7 20-4-9-9-4 20-7z"></path>
+          </svg>
+          Telegram
+        </a>
+      </div>
+    </div>
+
+    <nav class="hidden border-t border-slate-100 bg-white lg:block dark:border-slate-800 dark:bg-slate-950">
+      <div class="no-scrollbar mx-auto flex max-w-7xl items-center gap-1 overflow-x-auto px-4 py-2 sm:px-6 lg:px-8">
+        <button type="button" data-category="Barchasi" class="desktop-category-link whitespace-nowrap rounded-lg bg-qblue px-3 py-2 text-sm font-bold text-white">Barchasi</button>
+        <button type="button" data-category="Uy qurish" class="desktop-category-link whitespace-nowrap rounded-lg px-3 py-2 text-sm font-semibold text-slate-600 hover:bg-sky-50 hover:text-qblue dark:text-slate-300 dark:hover:bg-slate-800">Uy qurish</button>
+        <button type="button" data-category="Xarajat va narxlar" class="desktop-category-link whitespace-nowrap rounded-lg px-3 py-2 text-sm font-semibold text-slate-600 hover:bg-sky-50 hover:text-qblue dark:text-slate-300 dark:hover:bg-slate-800">Xarajat va narxlar</button>
+        <button type="button" data-category="Uy sotib olish" class="desktop-category-link whitespace-nowrap rounded-lg px-3 py-2 text-sm font-semibold text-slate-600 hover:bg-sky-50 hover:text-qblue dark:text-slate-300 dark:hover:bg-slate-800">Uy sotib olish</button>
+        <button type="button" data-category="Ta'mirlash" class="desktop-category-link whitespace-nowrap rounded-lg px-3 py-2 text-sm font-semibold text-slate-600 hover:bg-sky-50 hover:text-qblue dark:text-slate-300 dark:hover:bg-slate-800">Ta’mirlash</button>
+        <button type="button" data-category="Huquq va idoralar" class="desktop-category-link whitespace-nowrap rounded-lg px-3 py-2 text-sm font-semibold text-slate-600 hover:bg-sky-50 hover:text-qblue dark:text-slate-300 dark:hover:bg-slate-800">Huquq va idoralar</button>
+        <button type="button" data-category="Inspeksiya izohlaydi" class="desktop-category-link whitespace-nowrap rounded-lg px-3 py-2 text-sm font-semibold text-slate-600 hover:bg-sky-50 hover:text-qblue dark:text-slate-300 dark:hover:bg-slate-800">Inspeksiya izohlaydi</button>
+        <button type="button" data-category="Qaror sodda tilda" class="desktop-category-link whitespace-nowrap rounded-lg px-3 py-2 text-sm font-semibold text-slate-600 hover:bg-sky-50 hover:text-qblue dark:text-slate-300 dark:hover:bg-slate-800">Qaror sodda tilda</button>
+        <button type="button" data-category="Rasmiy xabarlar" class="desktop-category-link whitespace-nowrap rounded-lg px-3 py-2 text-sm font-semibold text-slate-600 hover:bg-sky-50 hover:text-qblue dark:text-slate-300 dark:hover:bg-slate-800">Rasmiy xabarlar</button>
+      </div>
+    </nav>
+
+    <div id="searchPanel" class="hidden border-t border-slate-200 bg-white py-4 shadow-lg dark:border-slate-800 dark:bg-slate-950">
+      <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div class="relative">
+          <svg viewBox="0 0 24 24" class="pointer-events-none absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-slate-400" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="11" cy="11" r="6.5"></circle>
+            <path d="M20 20l-4-4"></path>
+          </svg>
+          <input id="searchInput" type="search" placeholder="Masalan: uy qurish uchun qancha pul kerak?" class="w-full rounded-2xl border border-slate-300 bg-slate-50 py-4 pl-12 pr-5 text-base outline-none transition focus:border-qblue focus:bg-white focus:ring-4 focus:ring-sky-100 dark:border-slate-700 dark:bg-slate-900 dark:focus:border-sky-400 dark:focus:bg-slate-900 dark:focus:ring-sky-900/30">
+        </div>
       </div>
     </div>
   </header>
 
   <main>
-    <!-- Carousel Section -->
-    <section class="relative">
-      <div id="carouselContainer" class="relative h-[500px] overflow-hidden bg-gray-900">
-        
-        <!-- Slide 1 -->
-        <div class="carousel-slide active absolute inset-0">
-          <div class="absolute inset-0 bg-gradient-to-r from-blue-900/90 to-blue-600/50"></div>
-          <div class="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1541888946425-d81bb19240f5?w=1600')] bg-cover bg-center opacity-30"></div>
-          <div class="relative flex h-full items-center">
-            <div class="mx-auto max-w-7xl px-4 lg:px-8">
-              <div class="max-w-2xl">
-                <span class="inline-block rounded-full bg-green-500/20 px-4 py-1.5 text-sm font-bold text-green-300 backdrop-blur">YANGI QAROR</span>
-                <h1 class="mt-6 text-4xl font-extrabold leading-tight text-white sm:text-5xl lg:text-6xl">
-                  1 oktabrdan qurilish ruxsatnomalari yangi tartibda beriladi
-                </h1>
-                <p class="mt-4 text-lg text-gray-200">
-                  Endi 500 m² gacha bo'lgan uylar inspeksiyadan ro'yxatdan o'tmaydi. Jarayon 3 barobar tezlashadi.
-                </p>
-                <div class="mt-8 flex gap-4">
-                  <a href="#qonunchilik" class="rounded-xl bg-white px-8 py-4 font-bold text-blue-900 hover:bg-gray-100">Batafsil</a>
-                  <a href="#uy-qurish" class="rounded-xl bg-white/10 px-8 py-4 font-bold text-white backdrop-blur hover:bg-white/20">Uy qurish</a>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Slide 2 -->
-        <div class="carousel-slide absolute inset-0">
-          <div class="absolute inset-0 bg-gradient-to-r from-green-900/90 to-green-600/50"></div>
-          <div class="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1503387762-592deb58ef4e?w=1600')] bg-cover bg-center opacity-30"></div>
-          <div class="relative flex h-full items-center">
-            <div class="mx-auto max-w-7xl px-4 lg:px-8">
-              <div class="max-w-2xl">
-                <span class="inline-block rounded-full bg-blue-500/20 px-4 py-1.5 text-sm font-bold text-blue-300 backdrop-blur">KADASTR</span>
-                <h1 class="mt-6 text-4xl font-extrabold leading-tight text-white sm:text-5xl lg:text-6xl">
-                  Kadastr xarajatlari 2026-yilda o'zgardi
-                </h1>
-                <p class="mt-4 text-lg text-gray-200">
-                  100 m² gacha yer uchun davlat boji 1.25 BHM. To'lovlar jadvali va online ariza topshirish imkoniyati.
-                </p>
-                <div class="mt-8 flex gap-4">
-                  <a href="#kadastr" class="rounded-xl bg-white px-8 py-4 font-bold text-green-900 hover:bg-gray-100">Batafsil</a>
-                  <a href="#" class="rounded-xl bg-white/10 px-8 py-4 font-bold text-white backdrop-blur hover:bg-white/20">Hisoblash</a>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Slide 3 -->
-        <div class="carousel-slide absolute inset-0">
-          <div class="absolute inset-0 bg-gradient-to-r from-purple-900/90 to-purple-600/50"></div>
-          <div class="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1589829545856-d10d557cf95f?w=1600')] bg-cover bg-center opacity-30"></div>
-          <div class="relative flex h-full items-center">
-            <div class="mx-auto max-w-7xl px-4 lg:px-8">
-              <div class="max-w-2xl">
-                <span class="inline-block rounded-full bg-yellow-500/20 px-4 py-1.5 text-sm font-bold text-yellow-300 backdrop-blur">TADBIRKORLAR</span>
-                <h1 class="mt-6 text-4xl font-extrabold leading-tight text-white sm:text-5xl lg:text-6xl">
-                  "Shaffof qurilish" tizimi ishga tushdi
-                </h1>
-                <p class="mt-4 text-lg text-gray-200">
-                  Qurilish kompaniyalari reytingi, shaffof xarid platformasi va yangi imkoniyatlar.
-                </p>
-                <div class="mt-8 flex gap-4">
-                  <a href="#tadbirkorlar" class="rounded-xl bg-white px-8 py-4 font-bold text-purple-900 hover:bg-gray-100">Batafsil</a>
-                  <a href="#reklama" class="rounded-xl bg-white/10 px-8 py-4 font-bold text-white backdrop-blur hover:bg-white/20">Reklama</a>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Controls -->
-        <button id="carouselPrev" class="absolute left-4 top-1/2 z-10 -translate-y-1/2 rounded-full bg-white/10 p-3 text-white backdrop-blur transition hover:bg-white/20">
-          <svg class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-            <path d="M15 19l-7-7 7-7"></path>
+    <section id="importantSection" class="hidden border-b border-emerald-200 bg-emerald-50 dark:border-emerald-900/50 dark:bg-emerald-950/30">
+      <div class="mx-auto flex max-w-7xl items-center gap-3 px-4 py-3 sm:px-6 lg:px-8">
+        <span class="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-qgreen text-white animate-pulse-soft">
+          <svg viewBox="0 0 24 24" class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M12 2v20M5 7h14M5 17h14"></path>
           </svg>
-        </button>
-        <button id="carouselNext" class="absolute right-4 top-1/2 z-10 -translate-y-1/2 rounded-full bg-white/10 p-3 text-white backdrop-blur transition hover:bg-white/20">
-          <svg class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-            <path d="M9 5l7 7-7 7"></path>
-          </svg>
-        </button>
-
-        <!-- Dots -->
-        <div class="absolute bottom-6 left-0 right-0 flex justify-center gap-2">
-          <button data-slide="0" class="carousel-dot h-2 w-2 rounded-full bg-white/50 transition hover:bg-white"></button>
-          <button data-slide="1" class="carousel-dot h-2 w-2 rounded-full bg-white/50 transition hover:bg-white"></button>
-          <button data-slide="2" class="carousel-dot h-2 w-2 rounded-full bg-white/50 transition hover:bg-white"></button>
+        </span>
+        <div class="min-w-0">
+          <span class="mr-2 text-xs font-extrabold uppercase tracking-wider text-qgreen">Muhim</span>
+          <a id="importantLink" href="#latest" class="font-semibold text-slate-800 hover:text-qblue dark:text-slate-100 dark:hover:text-sky-300">
+            <span id="importantTitle"></span>
+          </a>
         </div>
       </div>
     </section>
 
-    <!-- Breaking News Ticker -->
-    <section class="border-b bg-blue-50 dark:border-gray-800 dark:bg-gray-900">
-      <div class="mx-auto flex max-w-7xl items-center gap-4 px-4 py-3 lg:px-8">
-        <span class="flex-shrink-0 rounded-lg bg-red-600 px-3 py-1.5 text-xs font-bold text-white">DOLZARB</span>
-        <div class="flex-1 overflow-hidden">
-          <p class="text-sm font-medium text-gray-900 dark:text-gray-100">
-            500 m² gacha uylar inspeksiyadan ro'yxatdan o'tmaydi • Kadastr narxlar yangilandi • 1 oktabrdan yangi tartib
-          </p>
+    <section class="overflow-hidden bg-gradient-to-br from-sky-50 via-white to-emerald-50 dark:from-slate-950 dark:via-slate-950 dark:to-emerald-950/20">
+      <div class="mx-auto max-w-7xl px-4 py-8 sm:px-6 sm:py-12 lg:px-8 lg:py-16">
+        <div id="heroSlot" class="grid min-h-[360px] place-items-center rounded-3xl border border-dashed border-slate-300 bg-white p-8 text-center dark:border-slate-700 dark:bg-slate-900">
+          <div>
+            <div class="mx-auto h-10 w-10 animate-spin rounded-full border-4 border-slate-200 border-t-qblue"></div>
+            <p class="mt-4 text-sm text-slate-500">Maqolalar yuklanmoqda...</p>
+          </div>
         </div>
       </div>
     </section>
 
-    <!-- Categories Section -->
-    <section class="py-16">
-      <div class="mx-auto max-w-7xl px-4 lg:px-8">
-        <h2 class="text-3xl font-bold text-gray-900 dark:text-white">Kategoriyalar bo'yicha</h2>
-        <p class="mt-2 text-gray-600 dark:text-gray-400">Eng so'nggi yangiliklar va qo'llanmalar</p>
-
-        <div class="mt-10 grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
-          <!-- Uy qurish -->
-          <div class="group rounded-2xl border bg-white p-6 shadow-sm transition hover:-translate-y-1 hover:shadow-lg dark:border-gray-800 dark:bg-gray-900">
-            <div class="flex items-center gap-3">
-              <div class="grid h-12 w-12 place-items-center rounded-xl bg-blue-100 text-blue-600 dark:bg-blue-900/30 dark:text-blue-400">
-                <svg class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                  <path d="M3 21h18M5 21V10l7-6 7 6v11M9 21v-6h6v6"></path>
-                </svg>
-              </div>
-              <h3 class="text-xl font-bold text-gray-900 dark:text-white">Uy qurish</h3>
-            </div>
-            <ul class="mt-6 space-y-4">
-              <li>
-                <a href="#" class="block text-sm font-medium text-gray-700 hover:text-blue-600 dark:text-gray-300 dark:hover:text-blue-400">
-                  500 m² qoidasi: nimalar o'zgardi?
-                </a>
-                <span class="text-xs text-gray-500">26 sentyabr 2026</span>
-              </li>
-              <li>
-                <a href="#" class="block text-sm font-medium text-gray-700 hover:text-blue-600 dark:text-gray-300 dark:hover:text-blue-400">
-                  Loyiha (ART) qanday tayyorlanadi?
-                </a>
-                <span class="text-xs text-gray-500">25 sentyabr 2026</span>
-              </li>
-              <li>
-                <a href="#" class="block text-sm font-medium text-gray-700 hover:text-blue-600 dark:text-gray-300 dark:hover:text-blue-400">
-                  Foydalanishga qabul qilish tartibi
-                </a>
-                <span class="text-xs text-gray-500">24 sentyabr 2026</span>
-              </li>
-            </ul>
+    <section class="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
+      <div class="rounded-3xl bg-qblue px-6 py-8 text-white shadow-xl shadow-sky-900/10 sm:px-9 sm:py-10">
+        <div class="grid items-center gap-6 lg:grid-cols-[1fr_auto]">
+          <div>
+            <p class="text-sm font-bold uppercase tracking-[0.16em] text-sky-200">Amaliy qo‘llanma</p>
+            <h2 id="ctaTitle" class="mt-2 max-w-3xl font-display text-3xl font-extrabold tracking-tight sm:text-4xl">Qurilish bo‘yicha savolingiz bormi?</h2>
+            <p id="ctaText" class="mt-3 max-w-2xl text-base leading-7 text-sky-100">Uy qurish, hujjatlar, xarajat, ta’mirlash va qurilishdagi huquqlaringiz bo‘yicha kerakli ma’lumotlarni toping.</p>
           </div>
 
-          <!-- Kadastr -->
-          <div class="group rounded-2xl border bg-white p-6 shadow-sm transition hover:-translate-y-1 hover:shadow-lg dark:border-gray-800 dark:bg-gray-900">
-            <div class="flex items-center gap-3">
-              <div class="grid h-12 w-12 place-items-center rounded-xl bg-green-100 text-green-600 dark:bg-green-900/30 dark:text-green-400">
-                <svg class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                  <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"></path>
-                </svg>
-              </div>
-              <h3 class="text-xl font-bold text-gray-900 dark:text-white">Kadastr</h3>
-            </div>
-            <ul class="mt-6 space-y-4">
-              <li>
-                <a href="#" class="block text-sm font-medium text-gray-700 hover:text-blue-600 dark:text-gray-300 dark:hover:text-blue-400">
-                  Kadastr xarajatlari: 2026 narxlar
-                </a>
-                <span class="text-xs text-gray-500">26 sentyabr 2026</span>
-              </li>
-              <li>
-                <a href="#" class="block text-sm font-medium text-gray-700 hover:text-blue-600 dark:text-gray-300 dark:hover:text-blue-400">
-                  My.gov.uz orqali kadastr olish
-                </a>
-                <span class="text-xs text-gray-500">25 sentyabr 2026</span>
-              </li>
-              <li>
-                <a href="#" class="block text-sm font-medium text-gray-700 hover:text-blue-600 dark:text-gray-300 dark:hover:text-blue-400">
-                  Yer hujjatlarini rasmiylashtirish
-                </a>
-                <span class="text-xs text-gray-500">23 sentyabr 2026</span>
-              </li>
-            </ul>
-          </div>
+          <a href="#directions" class="inline-flex items-center justify-center gap-2 rounded-xl bg-white px-5 py-3.5 font-bold text-qblue shadow-lg shadow-sky-950/20 transition hover:-translate-y-0.5 hover:bg-sky-50">
+            Yo‘nalishni tanlang
+            <svg viewBox="0 0 24 24" class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M5 12h14"></path>
+              <path d="M13 6l6 6-6 6"></path>
+            </svg>
+          </a>
+        </div>
+      </div>
+    </section>
 
-          <!-- Qonunchilik -->
-          <div class="group rounded-2xl border bg-white p-6 shadow-sm transition hover:-translate-y-1 hover:shadow-lg dark:border-gray-800 dark:bg-gray-900">
-            <div class="flex items-center gap-3">
-              <div class="grid h-12 w-12 place-items-center rounded-xl bg-purple-100 text-purple-600 dark:bg-purple-900/30 dark:text-purple-400">
-                <svg class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                  <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
-                </svg>
-              </div>
-              <h3 class="text-xl font-bold text-gray-900 dark:text-white">Qonunchilik</h3>
-            </div>
-            <ul class="mt-6 space-y-4">
-              <li>
-                <a href="#" class="block text-sm font-medium text-gray-700 hover:text-blue-600 dark:text-gray-300 dark:hover:text-blue-400">
-                  666-son qaror: asosiy o'zgarishlar
-                </a>
-                <span class="text-xs text-gray-500">26 sentyabr 2026</span>
-              </li>
-              <li>
-                <a href="#" class="block text-sm font-medium text-gray-700 hover:text-blue-600 dark:text-gray-300 dark:hover:text-blue-400">
-                  200-son qaror: to'liq matn
-                </a>
-                <span class="text-xs text-gray-500">24 sentyabr 2026</span>
-              </li>
-              <li>
-                <a href="#" class="block text-sm font-medium text-gray-700 hover:text-blue-600 dark:text-gray-300 dark:hover:text-blue-400">
-                  1 oktabr 2026: yangi tartib
-                </a>
-                <span class="text-xs text-gray-500">22 sentyabr 2026</span>
-              </li>
-            </ul>
+    <section id="directions" class="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
+      <div class="mb-6 flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
+        <div>
+          <p class="text-sm font-bold uppercase tracking-[0.14em] text-qgreen">Qulay navigatsiya</p>
+          <h2 class="mt-1 font-display text-3xl font-extrabold tracking-tight text-qnavy dark:text-white">Nima bilmoqchisiz?</h2>
+        </div>
+        <p class="max-w-xl text-sm leading-6 text-slate-600 dark:text-slate-400">Kerakli yo‘nalishni tanlang va sodda tushuntirilgan materiallarni o‘qing.</p>
+      </div>
+
+      <div class="grid grid-cols-2 gap-3 md:grid-cols-3 lg:grid-cols-6">
+        <button type="button" data-category="Uy qurish" class="direction-card group rounded-2xl border border-slate-200 bg-white p-4 text-left shadow-sm transition duration-300 hover:-translate-y-1 hover:border-qblue hover:shadow-lg dark:border-slate-800 dark:bg-slate-900">
+          <span class="grid h-11 w-11 place-items-center rounded-xl bg-sky-100 text-qblue transition group-hover:bg-qblue group-hover:text-white dark:bg-sky-950/60 dark:text-sky-300">
+            <svg viewBox="0 0 24 24" class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M3 21h18"></path><path d="M5 21V10l7-6 7 6v11"></path><path d="M9 21v-6h6v6"></path>
+            </svg>
+          </span>
+          <span class="mt-4 block font-display text-base font-bold">Uy qurish</span>
+          <span class="mt-1 block text-xs leading-5 text-slate-500 dark:text-slate-400">Bosqichlar va maslahatlar</span>
+        </button>
+
+        <button type="button" data-category="Xarajat va narxlar" class="direction-card group rounded-2xl border border-slate-200 bg-white p-4 text-left shadow-sm transition duration-300 hover:-translate-y-1 hover:border-qgreen hover:shadow-lg dark:border-slate-800 dark:bg-slate-900">
+          <span class="grid h-11 w-11 place-items-center rounded-xl bg-emerald-100 text-qgreen transition group-hover:bg-qgreen group-hover:text-white dark:bg-emerald-950/50 dark:text-emerald-300">
+            <svg viewBox="0 0 24 24" class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M4 19V5"></path><path d="M4 19h16"></path><path d="M8 16v-5M12 16V8M16 16v-9"></path>
+            </svg>
+          </span>
+          <span class="mt-4 block font-display text-base font-bold">Xarajatlar</span>
+          <span class="mt-1 block text-xs leading-5 text-slate-500 dark:text-slate-400">Smeta va narxlar</span>
+        </button>
+
+        <button type="button" data-category="Boshlashdan oldin" class="direction-card group rounded-2xl border border-slate-200 bg-white p-4 text-left shadow-sm transition duration-300 hover:-translate-y-1 hover:border-qblue hover:shadow-lg dark:border-slate-800 dark:bg-slate-900">
+          <span class="grid h-11 w-11 place-items-center rounded-xl bg-blue-100 text-blue-700 transition group-hover:bg-blue-700 group-hover:text-white dark:bg-blue-950/50 dark:text-blue-300">
+            <svg viewBox="0 0 24 24" class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M4 4h16v16H4z"></path><path d="M8 8h8M8 12h8M8 16h5"></path>
+            </svg>
+          </span>
+          <span class="mt-4 block font-display text-base font-bold">Hujjatlar</span>
+          <span class="mt-1 block text-xs leading-5 text-slate-500 dark:text-slate-400">Ruxsat va loyiha</span>
+        </button>
+
+        <button type="button" data-category="Uy sotib olish" class="direction-card group rounded-2xl border border-slate-200 bg-white p-4 text-left shadow-sm transition duration-300 hover:-translate-y-1 hover:border-qgreen hover:shadow-lg dark:border-slate-800 dark:bg-slate-900">
+          <span class="grid h-11 w-11 place-items-center rounded-xl bg-teal-100 text-teal-700 transition group-hover:bg-teal-700 group-hover:text-white dark:bg-teal-950/50 dark:text-teal-300">
+            <svg viewBox="0 0 24 24" class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M3 11l9-7 9 7"></path><path d="M5 10v10h14V10"></path><path d="M9 20v-5h6v5"></path>
+            </svg>
+          </span>
+          <span class="mt-4 block font-display text-base font-bold">Uy sotib olish</span>
+          <span class="mt-1 block text-xs leading-5 text-slate-500 dark:text-slate-400">Tekshiruv va shartnoma</span>
+        </button>
+
+        <button type="button" data-category="Ta'mirlash" class="direction-card group rounded-2xl border border-slate-200 bg-white p-4 text-left shadow-sm transition duration-300 hover:-translate-y-1 hover:border-qblue hover:shadow-lg dark:border-slate-800 dark:bg-slate-900">
+          <span class="grid h-11 w-11 place-items-center rounded-xl bg-indigo-100 text-indigo-700 transition group-hover:bg-indigo-700 group-hover:text-white dark:bg-indigo-950/50 dark:text-indigo-300">
+            <svg viewBox="0 0 24 24" class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M14.7 6.3a4 4 0 0 0-5 5L3 18l3 3 6.7-6.7a4 4 0 0 0 5-5l-2.4 2.4-3-3 2.4-2.4z"></path>
+            </svg>
+          </span>
+          <span class="mt-4 block font-display text-base font-bold">Ta’mirlash</span>
+          <span class="mt-1 block text-xs leading-5 text-slate-500 dark:text-slate-400">Usta va kafolat</span>
+        </button>
+
+        <button type="button" data-category="Huquq va idoralar" class="direction-card group rounded-2xl border border-slate-200 bg-white p-4 text-left shadow-sm transition duration-300 hover:-translate-y-1 hover:border-qgreen hover:shadow-lg dark:border-slate-800 dark:bg-slate-900">
+          <span class="grid h-11 w-11 place-items-center rounded-xl bg-amber-100 text-amber-700 transition group-hover:bg-amber-700 group-hover:text-white dark:bg-amber-950/50 dark:text-amber-300">
+            <svg viewBox="0 0 24 24" class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M3 21h18M5 18h14M6 18V9M10 18V9M14 18V9M18 18V9M3 9h18L12 3 3 9z"></path>
+            </svg>
+          </span>
+          <span class="mt-4 block font-display text-base font-bold">Idoralar</span>
+          <span class="mt-1 block text-xs leading-5 text-slate-500 dark:text-slate-400">Kimga murojaat qilish</span>
+        </button>
+      </div>
+    </section>
+
+    <section id="latest" class="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
+      <div class="mb-6 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+        <div>
+          <p id="articlesEyebrow" class="text-sm font-bold uppercase tracking-[0.14em] text-qgreen">Foydali materiallar</p>
+          <h2 id="articlesHeading" class="mt-1 font-display text-3xl font-extrabold tracking-tight text-qnavy dark:text-white">So‘nggi maqolalar</h2>
+        </div>
+
+        <button id="clearFilterButton" type="button" class="hidden items-center gap-2 self-start rounded-xl border border-slate-300 bg-white px-4 py-2.5 text-sm font-bold text-slate-700 hover:border-qblue hover:text-qblue dark:border-slate-700 dark:bg-slate-900 dark:text-slate-200">
+          Filtrni tozalash
+          <svg viewBox="0 0 24 24" class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M6 6l12 12M18 6L6 18"></path>
+          </svg>
+        </button>
+      </div>
+
+      <div id="articlesGrid" class="grid gap-5 sm:grid-cols-2 xl:grid-cols-3"></div>
+
+      <div id="articlesEmpty" class="hidden rounded-3xl border border-dashed border-slate-300 bg-white px-6 py-14 text-center dark:border-slate-700 dark:bg-slate-900">
+        <svg viewBox="0 0 24 24" class="mx-auto h-11 w-11 text-slate-400" fill="none" stroke="currentColor" stroke-width="1.7">
+          <circle cx="11" cy="11" r="6.5"></circle><path d="M20 20l-4-4"></path>
+        </svg>
+        <h3 class="mt-4 font-display text-xl font-bold">Hech narsa topilmadi</h3>
+        <p class="mx-auto mt-2 max-w-md text-sm leading-6 text-slate-500 dark:text-slate-400">Boshqa kalit so‘z bilan qidiring yoki barcha ruknlarga qayting.</p>
+      </div>
+    </section>
+
+    <section class="border-y border-slate-200 bg-white py-12 dark:border-slate-800 dark:bg-slate-900/50">
+      <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div class="mb-7 flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
+          <div>
+            <p class="text-sm font-bold uppercase tracking-[0.14em] text-qgreen">Rasmiy ma’lumot</p>
+            <h2 class="mt-1 font-display text-3xl font-extrabold tracking-tight text-qnavy dark:text-white">Ishonchli manbalar</h2>
           </div>
+          <p class="max-w-xl text-sm leading-6 text-slate-600 dark:text-slate-400">Muhim mavzularda rasmiy manbalarga tayanamiz va ularni sodda tilda tushuntiramiz.</p>
+        </div>
+
+        <div class="grid gap-4 md:grid-cols-3">
+          <a href="https://gov.uz" target="_blank" rel="noopener" class="group rounded-2xl border border-slate-200 bg-qsoft p-6 transition hover:-translate-y-1 hover:border-qblue hover:shadow-lg dark:border-slate-800 dark:bg-slate-950">
+            <span class="grid h-12 w-12 place-items-center rounded-xl bg-sky-100 text-qblue dark:bg-sky-950/60 dark:text-sky-300">
+              <svg viewBox="0 0 24 24" class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="1.8">
+                <path d="M3 21h18M5 18h14M6 18V9M10 18V9M14 18V9M18 18V9M3 9h18L12 3 3 9z"></path>
+              </svg>
+            </span>
+            <p class="mt-5 text-sm font-bold text-qgreen">Davlat organlari</p>
+            <h3 class="mt-1 font-display text-xl font-bold group-hover:text-qblue dark:group-hover:text-sky-300">Vazirlik va idoralar xabarlari</h3>
+            <p class="mt-2 text-sm leading-6 text-slate-600 dark:text-slate-400">Qurilish sohasidagi rasmiy e’lon va yangiliklar.</p>
+          </a>
+
+          <a href="https://lex.uz" target="_blank" rel="noopener" class="group rounded-2xl border border-slate-200 bg-qsoft p-6 transition hover:-translate-y-1 hover:border-qblue hover:shadow-lg dark:border-slate-800 dark:bg-slate-950">
+            <span class="grid h-12 w-12 place-items-center rounded-xl bg-emerald-100 text-qgreen dark:bg-emerald-950/50 dark:text-emerald-300">
+              <svg viewBox="0 0 24 24" class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="1.8">
+                <path d="M6 3h9l3 3v15H6z"></path><path d="M15 3v4h4M9 12h6M9 16h6"></path>
+              </svg>
+            </span>
+            <p class="mt-5 text-sm font-bold text-qgreen">Huquqiy hujjatlar</p>
+            <h3 class="mt-1 font-display text-xl font-bold group-hover:text-qblue dark:group-hover:text-sky-300">Qarorlar sodda tilda</h3>
+            <p class="mt-2 text-sm leading-6 text-slate-600 dark:text-slate-400">Hujjatlar mazmunini amaliy tomondan izohlaymiz.</p>
+          </a>
+
+          <button type="button" data-category="Inspeksiya izohlaydi" class="group rounded-2xl border border-slate-200 bg-qsoft p-6 text-left transition hover:-translate-y-1 hover:border-qblue hover:shadow-lg dark:border-slate-800 dark:bg-slate-950">
+            <span class="grid h-12 w-12 place-items-center rounded-xl bg-blue-100 text-blue-700 dark:bg-blue-950/50 dark:text-blue-300">
+              <svg viewBox="0 0 24 24" class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="1.8">
+                <path d="M12 2l8 4v6c0 5-3.4 8.4-8 10-4.6-1.6-8-5-8-10V6l8-4z"></path><path d="M9 12l2 2 4-4"></path>
+              </svg>
+            </span>
+            <p class="mt-5 text-sm font-bold text-qgreen">Nazorat va xavfsizlik</p>
+            <h3 class="mt-1 font-display text-xl font-bold group-hover:text-qblue dark:group-hover:text-sky-300">Inspeksiya izohlaydi</h3>
+            <p class="mt-2 text-sm leading-6 text-slate-600 dark:text-slate-400">Qurilish sifati, tekshiruv va xavfsizlik bo‘yicha foydali materiallar.</p>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <section id="adsSection" class="hidden mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
+      <div class="mb-6 flex items-end justify-between gap-4">
+        <div>
+          <p class="text-sm font-bold uppercase tracking-[0.14em] text-qgreen">Hamkorlik</p>
+          <h2 class="mt-1 font-display text-3xl font-extrabold tracking-tight text-qnavy dark:text-white">Reklama va hamkorlik materiallari</h2>
+        </div>
+        <a id="advertisingContactLink" href="#" target="_blank" rel="noopener" class="hidden text-sm font-bold text-qblue hover:text-qgreen sm:inline-flex">Reklama bo‘yicha yozish →</a>
+      </div>
+
+      <div id="adsGrid" class="grid gap-5 md:grid-cols-2"></div>
+    </section>
+
+    <section class="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
+      <div class="grid gap-6 lg:grid-cols-[1.08fr_.92fr]">
+        <section class="rounded-3xl bg-qnavy p-7 text-white sm:p-9">
+          <p class="text-sm font-bold uppercase tracking-[0.14em] text-sky-200">QurilishInfo</p>
+          <h2 class="mt-2 max-w-xl font-display text-3xl font-extrabold tracking-tight sm:text-4xl">Qurilishdagi to‘g‘ri qarorlar uchun sodda va ishonchli ma’lumot.</h2>
+          <p class="mt-4 max-w-xl leading-7 text-sky-100">Uy qurish, ruxsatnoma, smeta, ta’mirlash, uy sotib olish va qurilish bilan bog‘liq huquqiy masalalar bo‘yicha amaliy yo‘l-yo‘riqlar.</p>
+
+          <a id="sectionTelegramLink" href="#" target="_blank" rel="noopener" class="mt-7 inline-flex items-center gap-2 rounded-xl bg-qgreen px-5 py-3.5 font-bold text-white transition hover:bg-qgreen-dark">
+            Telegram kanaliga o‘tish
+            <svg viewBox="0 0 24 24" class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M22 2L11 13"></path><path d="M22 2l-7 20-4-9-9-4 20-7z"></path>
+            </svg>
+          </a>
+        </section>
+
+        <section class="rounded-3xl border border-slate-200 bg-white p-7 dark:border-slate-800 dark:bg-slate-900 sm:p-9">
+          <p class="text-sm font-bold uppercase tracking-[0.14em] text-qgreen">Tahririyatga yozish</p>
+          <h2 class="mt-2 font-display text-2xl font-extrabold tracking-tight">Mavzu yoki yangilik taklif qiling</h2>
+          <p class="mt-3 text-sm leading-6 text-slate-600 dark:text-slate-400">Yangilik taklifi, xato haqida xabar yoki hamkorlik masalasi bo‘lsa, bizga yozing.</p>
+
+          <a id="contactTelegramButton" href="#" target="_blank" rel="noopener" class="mt-6 inline-flex items-center gap-2 rounded-xl border border-qblue px-5 py-3 font-bold text-qblue transition hover:bg-sky-50 dark:border-sky-400 dark:text-sky-300 dark:hover:bg-sky-950/40">
+            Tahririyatga yozish
+            <svg viewBox="0 0 24 24" class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M22 2L11 13"></path><path d="M22 2l-7 20-4-9-9-4 20-7z"></path>
+            </svg>
+          </a>
+        </section>
+      </div>
+    </section>
+
+    <section class="border-y border-slate-200 bg-white py-12 dark:border-slate-800 dark:bg-slate-900/50">
+      <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div class="mb-7">
+          <p class="text-sm font-bold uppercase tracking-[0.14em] text-qgreen">Ishonch mezonlari</p>
+          <h2 class="mt-1 font-display text-3xl font-extrabold tracking-tight text-qnavy dark:text-white">Nega QurilishInfo?</h2>
+        </div>
+
+        <div class="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+          <article class="rounded-2xl border border-slate-200 bg-qsoft p-5 dark:border-slate-800 dark:bg-slate-950">
+            <span class="grid h-11 w-11 place-items-center rounded-xl bg-sky-100 text-qblue dark:bg-sky-950/60 dark:text-sky-300">
+              <svg viewBox="0 0 24 24" class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l8 4v6c0 5-3.4 8.4-8 10-4.6-1.6-8-5-8-10V6l8-4z"></path><path d="M9 12l2 2 4-4"></path></svg>
+            </span>
+            <h3 class="mt-4 font-display text-lg font-bold">Ishonchli manbalar</h3>
+            <p class="mt-2 text-sm leading-6 text-slate-600 dark:text-slate-400">Rasmiy hujjat va idora xabarlariga tayanamiz.</p>
+          </article>
+
+          <article class="rounded-2xl border border-slate-200 bg-qsoft p-5 dark:border-slate-800 dark:bg-slate-950">
+            <span class="grid h-11 w-11 place-items-center rounded-xl bg-emerald-100 text-qgreen dark:bg-emerald-950/50 dark:text-emerald-300">
+              <svg viewBox="0 0 24 24" class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19V5M4 19h16M8 16v-5M12 16V8M16 16v-9"></path></svg>
+            </span>
+            <h3 class="mt-4 font-display text-lg font-bold">Amaliy foyda</h3>
+            <p class="mt-2 text-sm leading-6 text-slate-600 dark:text-slate-400">Xarajat, hujjat va qurilish bosqichlarini sodda tushuntiramiz.</p>
+          </article>
+
+          <article class="rounded-2xl border border-slate-200 bg-qsoft p-5 dark:border-slate-800 dark:bg-slate-950">
+            <span class="grid h-11 w-11 place-items-center rounded-xl bg-blue-100 text-blue-700 dark:bg-blue-950/50 dark:text-blue-300">
+              <svg viewBox="0 0 24 24" class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16v16H4z"></path><path d="M8 8h8M8 12h8M8 16h5"></path></svg>
+            </span>
+            <h3 class="mt-4 font-display text-lg font-bold">Sodda izoh</h3>
+            <p class="mt-2 text-sm leading-6 text-slate-600 dark:text-slate-400">Murakkab tartiblarni fuqaro tushunadigan tilda bayon qilamiz.</p>
+          </article>
+
+          <article class="rounded-2xl border border-slate-200 bg-qsoft p-5 dark:border-slate-800 dark:bg-slate-950">
+            <span class="grid h-11 w-11 place-items-center rounded-xl bg-amber-100 text-amber-700 dark:bg-amber-950/50 dark:text-amber-300">
+              <svg viewBox="0 0 24 24" class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 21h18M5 18h14M6 18V9M10 18V9M14 18V9M18 18V9M3 9h18L12 3 3 9z"></path></svg>
+            </span>
+            <h3 class="mt-4 font-display text-lg font-bold">Aniq ajratish</h3>
+            <p class="mt-2 text-sm leading-6 text-slate-600 dark:text-slate-400">Reklama va tahririy materiallar alohida belgilanadi.</p>
+          </article>
         </div>
       </div>
     </section>
   </main>
 
-  <!-- Footer -->
-  <footer class="border-t bg-white py-12 dark:border-gray-800 dark:bg-gray-950">
-    <div class="mx-auto max-w-7xl px-4 lg:px-8">
-      <div class="text-center text-sm text-gray-500 dark:text-gray-400">
-        © 2026 QurilishInfo. Barcha huquqlar himoyalangan.
+  <footer class="bg-slate-950 text-slate-300">
+    <div class="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
+      <div class="grid gap-10 md:grid-cols-2 lg:grid-cols-4">
+        <div class="lg:col-span-2">
+          <a href="#top" class="flex items-center gap-3 font-display text-2xl font-extrabold text-white">
+            <span class="grid h-11 w-11 place-items-center rounded-xl bg-qblue text-white">
+              <svg viewBox="0 0 24 24" class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="2.2">
+                <path d="M3 21h18"></path><path d="M5 21V10l7-6 7 6v11"></path><path d="M9 21v-6h6v6"></path>
+              </svg>
+            </span>
+            <span id="footerSiteName">Qurilish<span class="text-emerald-400">Info</span></span>
+          </a>
+
+          <p id="aboutText" class="mt-5 max-w-xl text-sm leading-7 text-slate-400">QurilishInfo — uy qurish, uy sotib olish, ruxsatnoma, ta’mirlash va qurilish nazorati bo‘yicha amaliy ma’lumotlar platformasi.</p>
+
+          <div id="socialLinks" class="mt-6 flex flex-wrap gap-3"></div>
+        </div>
+
+        <div>
+          <h3 class="font-display text-lg font-bold text-white">Ruknlar</h3>
+          <div class="mt-4 grid gap-2 text-sm">
+            <button type="button" data-category="Boshlashdan oldin" class="footer-category-link text-left text-slate-400 transition hover:text-emerald-400">Boshlashdan oldin</button>
+            <button type="button" data-category="Uy qurish" class="footer-category-link text-left text-slate-400 transition hover:text-emerald-400">Uy qurish</button>
+            <button type="button" data-category="Xarajat va narxlar" class="footer-category-link text-left text-slate-400 transition hover:text-emerald-400">Xarajat va narxlar</button>
+            <button type="button" data-category="Uy sotib olish" class="footer-category-link text-left text-slate-400 transition hover:text-emerald-400">Uy sotib olish</button>
+            <button type="button" data-category="Huquq va idoralar" class="footer-category-link text-left text-slate-400 transition hover:text-emerald-400">Huquq va idoralar</button>
+          </div>
+        </div>
+
+        <div>
+          <h3 class="font-display text-lg font-bold text-white">Aloqa</h3>
+          <p class="mt-4 text-sm leading-6 text-slate-400">Yangilik taklifi, hamkorlik yoki reklama masalasi bo‘yicha tahririyatga yozing.</p>
+          <a id="footerContactLink" href="#" target="_blank" rel="noopener" class="mt-4 inline-flex items-center gap-2 text-sm font-bold text-emerald-400 hover:text-emerald-300">
+            <svg viewBox="0 0 24 24" class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M22 2L11 13"></path><path d="M22 2l-7 20-4-9-9-4 20-7z"></path>
+            </svg>
+            <span id="contactText">@qurilishinfo_admin</span>
+          </a>
+        </div>
+      </div>
+
+      <div class="mt-10 flex flex-col gap-3 border-t border-slate-800 pt-6 text-xs leading-5 text-slate-500 sm:flex-row sm:items-center sm:justify-between">
+        <p>© <span id="currentYear"></span> <span id="copyrightSiteName">QurilishInfo</span>. Barcha huquqlar himoyalangan.</p>
+        <p id="editorialPolicy">Reklama va tahririy materiallar alohida belgilanadi.</p>
       </div>
     </div>
   </footer>
 
+  <div id="articleModal" class="fixed inset-0 z-[60] hidden overflow-y-auto bg-slate-950/70 p-0 backdrop-blur-sm sm:p-6">
+    <div class="mx-auto min-h-full max-w-4xl sm:flex sm:min-h-full sm:items-center">
+      <article id="articleModalCard" class="relative min-h-screen w-full bg-white shadow-2xl dark:bg-slate-900 sm:min-h-0 sm:rounded-3xl">
+        <button id="articleModalClose" type="button" class="absolute right-4 top-4 z-10 grid h-11 w-11 place-items-center rounded-xl bg-white/95 text-slate-700 shadow-lg hover:text-qblue dark:bg-slate-800/95 dark:text-slate-200" aria-label="Maqolani yopish">
+          <svg viewBox="0 0 24 24" class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M6 6l12 12M18 6L6 18"></path>
+          </svg>
+        </button>
+
+        <div id="modalImage" class="h-56 bg-qblue sm:h-80"></div>
+
+        <div class="mx-auto max-w-3xl px-5 py-8 sm:px-10 sm:py-10">
+          <div id="modalArticleContent"></div>
+        </div>
+      </article>
+    </div>
+  </div>
+
   <script>
-    // Carousel
-    const slides = document.querySelectorAll('.carousel-slide');
-    const dots = document.querySelectorAll('.carousel-dot');
-    const prevBtn = document.getElementById('carouselPrev');
-    const nextBtn = document.getElementById('carouselNext');
-    let currentIndex = 0;
-    let autoSlide;
+    const DEFAULTS = {
+      TELEGRAM_URL: "https://t.me/qurilishinfo",
+      CONTACT: "@qurilishinfo_admin",
+      CONTACT_URL: "https://t.me/qurilishinfo_admin"
+    };
 
-    function showSlide(index) {
-      slides.forEach((slide, i) => {
-        slide.classList.toggle('active', i === index);
-      });
-      dots.forEach((dot, i) => {
-        dot.classList.toggle('bg-white', i === index);
-        dot.classList.toggle('bg-white/50', i !== index);
-      });
-      currentIndex = index;
+    const state = {
+      articles: [],
+      advertisements: [],
+      settings: {},
+      category: "Barchasi",
+      query: ""
+    };
+
+    const $ = (id) => document.getElementById(id);
+
+    function escapeHtml(value) {
+      return String(value ?? "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
     }
 
-    function nextSlide() {
-      const nextIndex = (currentIndex + 1) % slides.length;
-      showSlide(nextIndex);
+    function formatDate(value) {
+      if (!value) {
+        return "";
+      }
+
+      const normalized = String(value).includes("T")
+        ? String(value)
+        : String(value).replace(" ", "T");
+
+      const date = new Date(normalized.endsWith("Z") ? normalized : normalized + "Z");
+
+      if (Number.isNaN(date.getTime())) {
+        return String(value);
+      }
+
+      return new Intl.DateTimeFormat("uz-UZ", {
+        year: "numeric",
+        month: "long",
+        day: "numeric"
+      }).format(date);
     }
 
-    function prevSlide() {
-      const prevIndex = (currentIndex - 1 + slides.length) % slides.length;
-      showSlide(prevIndex);
+    function trimText(value, length = 150) {
+      const text = String(value || "");
+
+      if (text.length <= length) {
+        return text;
+      }
+
+      return text.slice(0, length).trim() + "…";
     }
 
-    function startAutoSlide() {
-      autoSlide = setInterval(nextSlide, 5000);
+    function articleTypeText(type) {
+      const map = {
+        guide: "Qo‘llanma",
+        news: "Yangilik",
+        official: "Rasmiy xabar",
+        analysis: "Tahlil",
+        question: "Savol-javob",
+        advertisement: "Hamkorlik materiali"
+      };
+
+      return map[type] || "Maqola";
     }
 
-    function stopAutoSlide() {
-      clearInterval(autoSlide);
+    function imageStyle(article) {
+      if (article.image_url) {
+        return `background-image:linear-gradient(180deg, rgba(7,59,97,.08), rgba(7,59,97,.68)),url("${escapeHtml(article.image_url)}");background-size:cover;background-position:center;`;
+      }
+
+      const categoryColors = {
+        "Uy qurish": "linear-gradient(135deg,#075b9a,#138a5b)",
+        "Xarajat va narxlar": "linear-gradient(135deg,#0c6d47,#075b9a)",
+        "Uy sotib olish": "linear-gradient(135deg,#0b4f7c,#2b6c8e)",
+        "Huquq va idoralar": "linear-gradient(135deg,#1d4f72,#0c6d47)",
+        "Boshlashdan oldin": "linear-gradient(135deg,#073b61,#138a5b)",
+        "Ta'mirlash": "linear-gradient(135deg,#344b5e,#0b4f7c)",
+        "Inspeksiya izohlaydi": "linear-gradient(135deg,#134c75,#176b58)",
+        "Qaror sodda tilda": "linear-gradient(135deg,#0c486f,#2c8c68)",
+        "Rasmiy xabarlar": "linear-gradient(135deg,#123a58,#11734c)"
+      };
+
+      return `background:${categoryColors[article.category] || "linear-gradient(135deg,#075b9a,#138a5b)"};`;
     }
 
-    nextBtn.addEventListener('click', () => {
-      nextSlide();
-      stopAutoSlide();
-      startAutoSlide();
-    });
-
-    prevBtn.addEventListener('click', () => {
-      prevSlide();
-      stopAutoSlide();
-      startAutoSlide();
-    });
-
-    dots.forEach((dot, index) => {
-      dot.addEventListener('click', () => {
-        showSlide(index);
-        stopAutoSlide();
-        startAutoSlide();
-      });
-    });
-
-    startAutoSlide();
-
-    // Theme toggle
-    const themeButton = document.getElementById('themeButton');
-    const themeIcon = document.getElementById('themeIcon');
-    
     function applyTheme(theme) {
-      document.documentElement.classList.toggle('dark', theme === 'dark');
-      localStorage.setItem('theme', theme);
-      themeIcon.innerHTML = theme === 'dark' 
-        ? '<circle cx="12" cy="12" r="5"></circle><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"></path>'
-        : '<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>';
+      const isDark = theme === "dark";
+
+      document.documentElement.classList.toggle("dark", isDark);
+      localStorage.setItem("qurilishinfo-theme", theme);
+
+      $("themeSunIcon").innerHTML = isDark
+        ? '<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>'
+        : '<circle cx="12" cy="12" r="4"></circle><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"></path>';
     }
 
-    themeButton.addEventListener('click', () => {
-      const isDark = document.documentElement.classList.contains('dark');
-      applyTheme(isDark ? 'light' : 'dark');
+    function initializeTheme() {
+      const saved = localStorage.getItem("qurilishinfo-theme");
+
+      if (saved) {
+        applyTheme(saved);
+        return;
+      }
+
+      const prefersDark = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
+      applyTheme(prefersDark ? "dark" : "light");
+    }
+
+    function getSetting(key, fallback = "") {
+      return state.settings[key] || fallback;
+    }
+
+    function updateExternalLinks() {
+      const telegramUrl = getSetting("telegram_url", DEFAULTS.TELEGRAM_URL);
+      const contactUrl = getSetting("contact_url", DEFAULTS.CONTACT_URL);
+
+      [
+        "topTelegramLink",
+        "headerTelegramLink",
+        "mobileTelegramLink",
+        "sectionTelegramLink"
+      ].forEach((id) => {
+        $(id).href = telegramUrl;
+      });
+
+      [
+        "contactTelegramButton",
+        "advertisingContactLink",
+        "footerContactLink"
+      ].forEach((id) => {
+        $(id).href = contactUrl;
+      });
+
+      $("contactText").textContent = getSetting("contact", DEFAULTS.CONTACT);
+    }
+
+    function socialIcon(type) {
+      const icons = {
+        telegram: '<svg viewBox="0 0 24 24" class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 2L11 13"></path><path d="M22 2l-7 20-4-9-9-4 20-7z"></path></svg>',
+        instagram: '<svg viewBox="0 0 24 24" class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="5"></rect><circle cx="12" cy="12" r="4"></circle><path d="M17.5 6.5h.01"></path></svg>',
+        facebook: '<svg viewBox="0 0 24 24" class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 8h3V4h-3c-3 0-5 2-5 5v3H6v4h3v5h4v-5h3l1-4h-4V9c0-.6.4-1 1-1z"></path></svg>',
+        youtube: '<svg viewBox="0 0 24 24" class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 12s0-5-1.3-6.3C19.4 4.4 12 4.4 12 4.4s-7.4 0-8.7 1.3C2 7 2 12 2 12s0 5 1.3 6.3C4.6 19.6 12 19.6 12 19.6s7.4 0 8.7-1.3C22 17 22 12 22 12z"></path><path d="M10 9l5 3-5 3z"></path></svg>',
+        tiktok: '<svg viewBox="0 0 24 24" class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 4v10.5a4.5 4.5 0 1 1-4-4.47"></path><path d="M14 4c1.2 2.4 3.1 3.8 6 4"></path></svg>'
+      };
+
+      return icons[type] || "";
+    }
+
+    function renderSocialLinks() {
+      const networks = [
+        ["telegram", "telegram_url", "Telegram"],
+        ["instagram", "instagram_url", "Instagram"],
+        ["facebook", "facebook_url", "Facebook"],
+        ["youtube", "youtube_url", "YouTube"],
+        ["tiktok", "tiktok_url", "TikTok"]
+      ];
+
+      const html = networks
+        .filter((item) => getSetting(item[1], ""))
+        .map((item) => {
+          const [type, key, label] = item;
+
+          return `
+            <a href="${escapeHtml(getSetting(key))}" target="_blank" rel="noopener" aria-label="${label}" title="${label}"
+              class="grid h-10 w-10 place-items-center rounded-xl border border-slate-700 text-slate-300 transition hover:-translate-y-0.5 hover:border-emerald-400 hover:bg-emerald-400 hover:text-slate-950">
+              ${socialIcon(type)}
+            </a>
+          `;
+        })
+        .join("");
+
+      $("socialLinks").innerHTML = html;
+    }
+
+    function applySettings() {
+      const siteName = getSetting("site_name", "QurilishInfo");
+      const tagLine = getSetting("site_tagline", "Qurilishdagi to‘g‘ri qarorlar uchun amaliy ma’lumot");
+      const description = getSetting(
+        "site_description",
+        "Uy qurish, ruxsatnoma, smeta, ta'mirlash va qurilishdagi huquqlar bo'yicha amaliy ma'lumotlar."
+      );
+
+      $("siteName").innerHTML = escapeHtml(siteName).replace("Info", '<span class="text-qgreen">Info</span>');
+      $("footerSiteName").innerHTML = escapeHtml(siteName).replace("Info", '<span class="text-emerald-400">Info</span>');
+      $("copyrightSiteName").textContent = siteName;
+      $("siteTagline").textContent = tagLine;
+      $("ctaTitle").textContent = getSetting("cta_title", "Qurilish bo‘yicha savolingiz bormi?");
+      $("ctaText").textContent = getSetting(
+        "cta_text",
+        "Uy qurish, hujjatlar, xarajat, ta’mirlash va qurilishdagi huquqlaringiz bo‘yicha kerakli ma’lumotlarni toping."
+      );
+      $("aboutText").textContent = getSetting(
+        "about_text",
+        "QurilishInfo — uy qurish, uy sotib olish, ruxsatnoma, ta’mirlash va qurilish nazorati bo‘yicha amaliy ma’lumotlar platformasi."
+      );
+      $("editorialPolicy").textContent = getSetting(
+        "editorial_policy",
+        "Reklama va tahririy materiallar alohida belgilanadi."
+      );
+
+      document.title = `${siteName} — Qurilish bo‘yicha amaliy ma’lumotlar`;
+      document.querySelector('meta[name="description"]').setAttribute("content", description);
+
+      updateExternalLinks();
+      renderSocialLinks();
+    }
+
+    function getPublishedArticles() {
+      const now = new Date();
+
+      return state.articles.filter((article) => {
+        if (article.status && article.status !== "published") {
+          return false;
+        }
+
+        if (article.published_at) {
+          const publishDate = new Date(String(article.published_at).replace(" ", "T") + "Z");
+
+          if (!Number.isNaN(publishDate.getTime()) && publishDate > now) {
+            return false;
+          }
+        }
+
+        return true;
+      });
+    }
+
+    function sortArticles(articles) {
+      return [...articles].sort((a, b) => {
+        const aDate = new Date(String(a.published_at || a.created_at || "").replace(" ", "T") + "Z").getTime() || 0;
+        const bDate = new Date(String(b.published_at || b.created_at || "").replace(" ", "T") + "Z").getTime() || 0;
+
+        return bDate - aDate || Number(b.id) - Number(a.id);
+      });
+    }
+
+    function renderImportantNotice(publishedArticles) {
+      const pinned = publishedArticles.find((article) => Number(article.is_pinned) === 1);
+      const customTitle = getSetting("important_notice_title", "");
+      const customUrl = getSetting("important_notice_url", "");
+      const section = $("importantSection");
+
+      if (customTitle || pinned) {
+        $("importantTitle").textContent = customTitle || pinned.title;
+
+        if (customUrl) {
+          $("importantLink").href = customUrl;
+          $("importantLink").target = "_blank";
+          $("importantLink").rel = "noopener";
+          $("importantLink").onclick = null;
+        } else {
+          $("importantLink").href = "#top";
+          $("importantLink").target = "";
+          $("importantLink").onclick = (event) => {
+            event.preventDefault();
+            openArticle(pinned.id);
+          };
+        }
+
+        section.classList.remove("hidden");
+      } else {
+        section.classList.add("hidden");
+      }
+    }
+
+    function renderHero(publishedArticles) {
+      const featured = publishedArticles.find((article) => Number(article.is_featured) === 1) || publishedArticles[0];
+      const slot = $("heroSlot");
+
+      if (!featured) {
+        slot.innerHTML = `
+          <div class="max-w-xl text-center">
+            <div class="mx-auto grid h-16 w-16 place-items-center rounded-2xl bg-sky-100 text-qblue dark:bg-sky-950/60 dark:text-sky-300">
+              <svg viewBox="0 0 24 24" class="h-8 w-8" fill="none" stroke="currentColor" stroke-width="1.8">
+                <path d="M3 21h18"></path><path d="M5 21V10l7-6 7 6v11"></path>
+              </svg>
+            </div>
+            <h1 class="mt-5 font-display text-3xl font-extrabold text-qnavy dark:text-white">QurilishInfo’ga xush kelibsiz</h1>
+            <p class="mt-3 text-slate-600 dark:text-slate-400">Maqolalarni admin panel orqali qo‘shing. Ular shu yerda avtomatik chiqadi.</p>
+          </div>
+        `;
+        return;
+      }
+
+      const date = formatDate(featured.published_at || featured.created_at);
+
+      slot.innerHTML = `
+        <article class="grid overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-xl shadow-slate-900/5 dark:border-slate-800 dark:bg-slate-900 lg:grid-cols-[1.12fr_.88fr]">
+          <button type="button" data-article-id="${featured.id}" class="group relative min-h-[270px] overflow-hidden text-left lg:min-h-full">
+            <div class="absolute inset-0 bg-cover bg-center transition duration-700 group-hover:scale-105" style="${imageStyle(featured)}"></div>
+            <div class="absolute inset-0 bg-gradient-to-t from-slate-950/70 via-slate-950/10 to-transparent"></div>
+            <div class="absolute bottom-5 left-5 right-5 flex items-center justify-between gap-3">
+              <span class="rounded-full bg-white/95 px-3 py-1.5 text-xs font-extrabold text-qblue shadow-sm">${escapeHtml(featured.category)}</span>
+              <span class="text-xs font-semibold text-white/90">${escapeHtml(articleTypeText(featured.article_type))}</span>
+            </div>
+          </button>
+
+          <div class="flex flex-col justify-center p-6 sm:p-9">
+            <div class="flex items-center gap-3 text-xs font-semibold text-slate-500 dark:text-slate-400">
+              <span>${date || "Yangi material"}</span>
+              <span class="h-1 w-1 rounded-full bg-qgreen"></span>
+              <span>${escapeHtml(featured.minutes || 5)} daqiqalik o‘qish</span>
+            </div>
+
+            <h1 class="mt-4 font-display text-3xl font-extrabold leading-tight tracking-tight text-qnavy sm:text-4xl dark:text-white">
+              ${escapeHtml(featured.title)}
+            </h1>
+
+            <p class="mt-4 text-base leading-7 text-slate-600 dark:text-slate-400">
+              ${escapeHtml(featured.lead)}
+            </p>
+
+            <button type="button" data-article-id="${featured.id}" class="mt-7 inline-flex w-fit items-center gap-2 rounded-xl bg-qblue px-5 py-3.5 text-sm font-bold text-white shadow-lg shadow-sky-900/15 transition hover:-translate-y-0.5 hover:bg-qnavy">
+              Batafsil o‘qish
+              <svg viewBox="0 0 24 24" class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M5 12h14"></path><path d="M13 6l6 6-6 6"></path>
+              </svg>
+            </button>
+          </div>
+        </article>
+      `;
+    }
+
+    function filteredArticles() {
+      const articles = sortArticles(getPublishedArticles());
+      const query = state.query.trim().toLowerCase();
+
+      return articles.filter((article) => {
+        const categoryMatches = state.category === "Barchasi" || article.category === state.category;
+        const searchable = [
+          article.title,
+          article.lead,
+          article.body,
+          article.category,
+          article.tags,
+          article.article_type
+        ].join(" ").toLowerCase();
+
+        const queryMatches = !query || searchable.includes(query);
+
+        return categoryMatches && queryMatches;
+      });
+    }
+
+    function renderArticleCard(article, index) {
+      const date = formatDate(article.published_at || article.created_at);
+      const tags = String(article.tags || "")
+        .split(",")
+        .map((tag) => tag.trim())
+        .filter(Boolean)
+        .slice(0, 2);
+
+      return `
+        <article class="article-card animate-fade-up delay-${Math.min(index % 4, 3)} overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm transition duration-300 hover:-translate-y-1 hover:shadow-xl dark:border-slate-800 dark:bg-slate-900">
+          <button type="button" data-article-id="${article.id}" class="group block w-full text-left">
+            <div class="relative h-48 overflow-hidden">
+              <div class="article-image absolute inset-0 bg-cover bg-center transition duration-700" style="${imageStyle(article)}"></div>
+              <div class="absolute left-4 top-4">
+                <span class="rounded-full bg-white/95 px-3 py-1.5 text-xs font-extrabold text-qblue shadow-sm">${escapeHtml(article.category)}</span>
+              </div>
+              ${Number(article.is_advertisement) === 1 ? '<div class="absolute right-4 top-4 rounded-full bg-amber-300 px-3 py-1.5 text-xs font-extrabold text-slate-900">Reklama</div>' : ""}
+            </div>
+
+            <div class="p-5">
+              <div class="flex items-center gap-2 text-xs font-semibold text-slate-500 dark:text-slate-400">
+                <span>${date || articleTypeText(article.article_type)}</span>
+                <span class="h-1 w-1 rounded-full bg-qgreen"></span>
+                <span>${escapeHtml(article.minutes || 5)} daqiqa</span>
+              </div>
+
+              <h3 class="article-title mt-3 font-display text-xl font-extrabold leading-snug transition dark:text-white">
+                ${escapeHtml(article.title)}
+              </h3>
+
+              <p class="mt-3 text-sm leading-6 text-slate-600 dark:text-slate-400">
+                ${escapeHtml(trimText(article.lead, 145))}
+              </p>
+
+              ${tags.length ? `
+                <div class="mt-4 flex flex-wrap gap-2">
+                  ${tags.map((tag) => `<span class="rounded-md bg-sky-50 px-2 py-1 text-[11px] font-bold text-qblue dark:bg-sky-950/60 dark:text-sky-300">#${escapeHtml(tag)}</span>`).join("")}
+                </div>
+              ` : ""}
+            </div>
+          </button>
+        </article>
+      `;
+    }
+
+    function renderArticles() {
+      const articles = filteredArticles();
+      const grid = $("articlesGrid");
+      const empty = $("articlesEmpty");
+      const heading = $("articlesHeading");
+      const clearButton = $("clearFilterButton");
+
+      const isFiltered = state.category !== "Barchasi" || Boolean(state.query.trim());
+
+      if (state.query.trim()) {
+        heading.textContent = `“${state.query.trim()}” bo‘yicha natijalar`;
+      } else if (state.category !== "Barchasi") {
+        heading.textContent = state.category;
+      } else {
+        heading.textContent = "So‘nggi maqolalar";
+      }
+
+      clearButton.classList.toggle("hidden", !isFiltered);
+      clearButton.classList.toggle("inline-flex", isFiltered);
+
+      if (!articles.length) {
+        grid.innerHTML = "";
+        empty.classList.remove("hidden");
+        return;
+      }
+
+      empty.classList.add("hidden");
+      grid.innerHTML = articles.map(renderArticleCard).join("");
+    }
+
+    function renderAdvertisements() {
+      const now = new Date();
+
+      const ads = state.advertisements.filter((ad) => {
+        if (ad.status && ad.status !== "active") {
+          return false;
+        }
+
+        if (ad.starts_at) {
+          const startsAt = new Date(ad.starts_at);
+
+          if (!Number.isNaN(startsAt.getTime()) && startsAt > now) {
+            return false;
+          }
+        }
+
+        if (ad.ends_at) {
+          const endsAt = new Date(ad.ends_at);
+
+          if (!Number.isNaN(endsAt.getTime()) && endsAt < now) {
+            return false;
+          }
+        }
+
+        return true;
+      });
+
+      const section = $("adsSection");
+
+      if (!ads.length) {
+        section.classList.add("hidden");
+        return;
+      }
+
+      section.classList.remove("hidden");
+
+      $("adsGrid").innerHTML = ads.map((ad) => {
+        const image = ad.image_url
+          ? `<div class="h-48 bg-cover bg-center md:h-auto" style="background-image:linear-gradient(180deg,rgba(7,59,97,.08),rgba(7,59,97,.48)),url('${escapeHtml(ad.image_url)}')"></div>`
+          : `<div class="grid h-48 place-items-center bg-gradient-to-br from-qblue to-qgreen text-white md:h-auto">
+              <svg viewBox="0 0 24 24" class="h-12 w-12" fill="none" stroke="currentColor" stroke-width="1.7">
+                <path d="M3 21h18M5 18h14M6 18V9M10 18V9M14 18V9M18 18V9M3 9h18L12 3 3 9z"></path>
+              </svg>
+            </div>`;
+
+        const link = ad.target_url || getSetting("contact_url", DEFAULTS.CONTACT_URL);
+
+        return `
+          <article class="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm dark:border-slate-800 dark:bg-slate-900 md:grid md:grid-cols-[190px_1fr]">
+            ${image}
+            <div class="p-6">
+              <span class="rounded-full bg-amber-100 px-3 py-1.5 text-xs font-extrabold text-amber-800 dark:bg-amber-950/50 dark:text-amber-300">${escapeHtml(ad.label || "Reklama")}</span>
+              <h3 class="mt-4 font-display text-2xl font-extrabold text-qnavy dark:text-white">${escapeHtml(ad.title)}</h3>
+              <p class="mt-3 text-sm leading-6 text-slate-600 dark:text-slate-400">${escapeHtml(ad.description)}</p>
+              ${ad.company_name ? `<p class="mt-3 text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">${escapeHtml(ad.company_name)}</p>` : ""}
+              <a href="${escapeHtml(link)}" target="_blank" rel="noopener" class="mt-5 inline-flex items-center gap-2 text-sm font-bold text-qblue hover:text-qgreen dark:text-sky-300">
+                Batafsil
+                <svg viewBox="0 0 24 24" class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14"></path><path d="M13 6l6 6-6 6"></path></svg>
+              </a>
+            </div>
+          </article>
+        `;
+      }).join("");
+    }
+
+    function parseSteps(value) {
+      return String(value || "")
+        .split(/\n+/)
+        .map((step) => step.replace(/^\s*(\d+[.)]|[-•])\s*/, "").trim())
+        .filter(Boolean);
+    }
+
+    function openArticle(id) {
+      const article = state.articles.find((item) => String(item.id) === String(id));
+
+      if (!article) {
+        return;
+      }
+
+      $("modalImage").style.cssText = imageStyle(article);
+      const paragraphs = String(article.body || "").split(/\n\n+/).filter(Boolean);
+      const steps = parseSteps(article.steps);
+      const tags = String(article.tags || "").split(",").map((tag) => tag.trim()).filter(Boolean);
+      const date = formatDate(article.published_at || article.created_at);
+      const telegramUrl = getSetting("telegram_url", DEFAULTS.TELEGRAM_URL);
+
+      let html = `
+        <div class="flex flex-wrap items-center gap-2 text-xs font-bold">
+          <span class="rounded-full bg-sky-100 px-3 py-1.5 text-qblue dark:bg-sky-950/60 dark:text-sky-300">${escapeHtml(article.category)}</span>
+          <span class="rounded-full bg-emerald-100 px-3 py-1.5 text-qgreen dark:bg-emerald-950/50 dark:text-emerald-300">${escapeHtml(articleTypeText(article.article_type))}</span>
+          ${Number(article.is_advertisement) === 1 ? '<span class="rounded-full bg-amber-100 px-3 py-1.5 text-amber-800 dark:bg-amber-950/50 dark:text-amber-300">Reklama</span>' : ""}
+        </div>
+
+        <h1 class="mt-5 font-display text-3xl font-extrabold leading-tight tracking-tight text-qnavy sm:text-5xl dark:text-white">${escapeHtml(article.title)}</h1>
+
+        <p class="mt-5 text-lg leading-8 text-slate-600 dark:text-slate-300">${escapeHtml(article.lead)}</p>
+
+        <div class="mt-5 flex flex-wrap items-center gap-x-4 gap-y-2 text-sm text-slate-500 dark:text-slate-400">
+          ${article.author ? `<span>Muallif: <strong class="text-slate-700 dark:text-slate-200">${escapeHtml(article.author)}</strong></span>` : ""}
+          ${date ? `<span>${escapeHtml(date)}</span>` : ""}
+          <span>${escapeHtml(article.minutes || 5)} daqiqalik o‘qish</span>
+        </div>
+
+        ${article.image_caption ? `
+          <div class="mt-6 border-l-4 border-qgreen bg-emerald-50 px-4 py-3 text-sm text-emerald-950 dark:bg-emerald-950/30 dark:text-emerald-100">
+            <strong>Rasm izohi:</strong> ${escapeHtml(article.image_caption)}
+            ${article.image_credit ? `<span class="block mt-1 text-xs opacity-75">Manba: ${escapeHtml(article.image_credit)}</span>` : ""}
+          </div>
+        ` : ""}
+      `;
+
+      html += `<div class="prose-like mt-8 space-y-5">`;
+
+      paragraphs.forEach((paragraph) => {
+        html += `<p class="text-[17px] leading-8 text-slate-700 dark:text-slate-300">${escapeHtml(paragraph)}</p>`;
+      });
+
+      html += `</div>`;
+
+      if (steps.length) {
+        html += `
+          <section class="mt-9 rounded-2xl border border-sky-100 bg-sky-50 p-5 dark:border-sky-900/50 dark:bg-sky-950/25 sm:p-6">
+            <h2 class="font-display text-2xl font-extrabold text-qnavy dark:text-white">Nima qilish kerak?</h2>
+            <ol class="mt-5 space-y-4">
+              ${steps.map((step, index) => `
+                <li class="flex gap-3 text-slate-700 dark:text-slate-300">
+                  <span class="grid h-7 w-7 shrink-0 place-items-center rounded-full bg-qblue text-xs font-extrabold text-white">${index + 1}</span>
+                  <span class="pt-0.5 leading-6">${escapeHtml(step)}</span>
+                </li>
+              `).join("")}
+            </ol>
+          </section>
+        `;
+      }
+
+      if (article.warning) {
+        html += `
+          <section class="mt-7 rounded-2xl border border-amber-200 bg-amber-50 p-5 dark:border-amber-900/50 dark:bg-amber-950/25">
+            <div class="flex gap-3">
+              <span class="grid h-9 w-9 shrink-0 place-items-center rounded-xl bg-amber-200 text-amber-900 dark:bg-amber-900 dark:text-amber-100">
+                <svg viewBox="0 0 24 24" class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 9v4M12 17h.01"></path><path d="M10.3 3.3L2.8 17a2 2 0 0 0 1.8 3h14.8a2 2 0 0 0 1.8-3L13.7 3.3a2 2 0 0 0-3.4 0z"></path></svg>
+              </span>
+              <div>
+                <h2 class="font-display text-xl font-extrabold text-amber-900 dark:text-amber-200">E’tibor bering</h2>
+                <p class="mt-2 leading-7 text-amber-900/85 dark:text-amber-100/85">${escapeHtml(article.warning)}</p>
+              </div>
+            </div>
+          </section>
+        `;
+      }
+
+      if (article.source_name || article.source_url || article.document_no || article.updated) {
+        html += `
+          <section class="mt-7 rounded-2xl border border-slate-200 bg-slate-50 p-5 dark:border-slate-800 dark:bg-slate-950">
+            <h2 class="font-display text-xl font-extrabold text-qnavy dark:text-white">Rasmiy manba</h2>
+            <div class="mt-4 space-y-2 text-sm leading-6 text-slate-600 dark:text-slate-400">
+              ${article.source_name ? `<p><strong class="text-slate-800 dark:text-slate-200">Manba:</strong> ${escapeHtml(article.source_name)}</p>` : ""}
+              ${article.source_url ? `<p><a href="${escapeHtml(article.source_url)}" target="_blank" rel="noopener" class="font-bold text-qblue underline decoration-qgreen underline-offset-4 hover:text-qgreen dark:text-sky-300">Rasmiy manbani ochish</a></p>` : ""}
+              ${article.document_no ? `<p><strong class="text-slate-800 dark:text-slate-200">Hujjat / manba:</strong> ${escapeHtml(article.document_no)}</p>` : ""}
+              ${article.updated ? `<p><strong class="text-slate-800 dark:text-slate-200">Yangilangan sana:</strong> ${escapeHtml(formatDate(article.updated))}</p>` : ""}
+            </div>
+          </section>
+        `;
+      }
+
+      if (tags.length) {
+        html += `
+          <div class="mt-7 flex flex-wrap gap-2">
+            ${tags.map((tag) => `<span class="rounded-lg bg-slate-100 px-3 py-1.5 text-xs font-bold text-slate-600 dark:bg-slate-800 dark:text-slate-300">#${escapeHtml(tag)}</span>`).join("")}
+          </div>
+        `;
+      }
+
+      html += `
+        <div class="mt-9 flex flex-col gap-3 border-t border-slate-200 pt-7 sm:flex-row sm:items-center sm:justify-between dark:border-slate-800">
+          <div>
+            <h2 class="font-display text-xl font-extrabold text-qnavy dark:text-white">Savolingiz bormi?</h2>
+            <p class="mt-1 text-sm text-slate-600 dark:text-slate-400">Telegram orqali tahririyatga yozing.</p>
+          </div>
+          <a href="${escapeHtml(telegramUrl)}" target="_blank" rel="noopener" class="inline-flex items-center justify-center gap-2 rounded-xl bg-qgreen px-5 py-3 font-bold text-white hover:bg-qgreen-dark">
+            Telegramda yozish
+            <svg viewBox="0 0 24 24" class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 2L11 13"></path><path d="M22 2l-7 20-4-9-9-4 20-7z"></path></svg>
+          </a>
+        </div>
+      `;
+
+      $("modalArticleContent").innerHTML = html;
+      $("articleModal").classList.remove("hidden");
+      document.body.style.overflow = "hidden";
+      $("articleModalClose").focus();
+    }
+
+    function closeArticle() {
+      $("articleModal").classList.add("hidden");
+      document.body.style.overflow = "";
+    }
+
+    function setCategory(category) {
+      state.category = category;
+      state.query = "";
+      $("searchInput").value = "";
+
+      renderArticles();
+
+      document.querySelectorAll("[data-category]").forEach((element) => {
+        const isActive = element.getAttribute("data-category") === category;
+
+        if (element.classList.contains("desktop-category-link")) {
+          element.classList.toggle("bg-qblue", isActive);
+          element.classList.toggle("text-white", isActive);
+        }
+      });
+
+      document.getElementById("latest").scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+
+    function openMobileMenu() {
+      $("mobileMenu").classList.remove("-translate-x-full");
+      $("mobileOverlay").classList.remove("hidden");
+      document.body.style.overflow = "hidden";
+    }
+
+    function closeMobileMenu() {
+      $("mobileMenu").classList.add("-translate-x-full");
+      $("mobileOverlay").classList.add("hidden");
+      document.body.style.overflow = "";
+    }
+
+    async function getJson(url, fallback) {
+      try {
+        const response = await fetch(url);
+
+        if (!response.ok) {
+          return fallback;
+        }
+
+        return await response.json();
+      } catch (error) {
+        return fallback;
+      }
+    }
+
+    async function loadSite() {
+      const [articles, settings, advertisements] = await Promise.all([
+        getJson("/api/articles", []),
+        getJson("/api/settings", {}),
+        getJson("/api/advertisements", [])
+      ]);
+
+      state.articles = Array.isArray(articles) ? articles : [];
+      state.settings = settings || {};
+      state.advertisements = Array.isArray(advertisements) ? advertisements : [];
+
+      applySettings();
+
+      const published = sortArticles(getPublishedArticles());
+
+      renderImportantNotice(published);
+      renderHero(published);
+      renderArticles();
+      renderAdvertisements();
+    }
+
+    document.addEventListener("click", (event) => {
+      const articleButton = event.target.closest("[data-article-id]");
+
+      if (articleButton) {
+        openArticle(articleButton.getAttribute("data-article-id"));
+      }
+
+      const categoryButton = event.target.closest("[data-category]");
+
+      if (categoryButton) {
+        setCategory(categoryButton.getAttribute("data-category"));
+        closeMobileMenu();
+      }
     });
 
-    applyTheme(localStorage.getItem('theme') || 'light');
+    $("searchButton").addEventListener("click", () => {
+      $("searchPanel").classList.toggle("hidden");
 
-    // Language toggle
-    const langButton = document.getElementById('langButton');
-    let currentLang = 'uz';
-    
-    langButton.addEventListener('click', () => {
-      currentLang = currentLang === 'uz' ? 'ru' : 'uz';
-      langButton.textContent = currentLang.toUpperCase();
+      if (!$("searchPanel").classList.contains("hidden")) {
+        $("searchInput").focus();
+      }
     });
+
+    $("searchInput").addEventListener("input", (event) => {
+      state.query = event.target.value;
+      state.category = "Barchasi";
+      renderArticles();
+    });
+
+    $("clearFilterButton").addEventListener("click", () => {
+      state.category = "Barchasi";
+      state.query = "";
+      $("searchInput").value = "";
+      renderArticles();
+    });
+
+    $("themeButton").addEventListener("click", () => {
+      applyTheme(document.documentElement.classList.contains("dark") ? "light" : "dark");
+    });
+
+    $("mobileMenuButton").addEventListener("click", openMobileMenu);
+    $("mobileCloseButton").addEventListener("click", closeMobileMenu);
+    $("mobileOverlay").addEventListener("click", closeMobileMenu);
+
+    $("articleModalClose").addEventListener("click", closeArticle);
+
+    $("articleModal").addEventListener("click", (event) => {
+      if (event.target === $("articleModal")) {
+        closeArticle();
+      }
+    });
+
+    document.addEventListener("keydown", (event) => {
+      if (event.key === "Escape") {
+        closeArticle();
+        closeMobileMenu();
+      }
+    });
+
+    $("currentYear").textContent = new Date().getFullYear();
+
+    initializeTheme();
+    loadSite();
   </script>
 </body>
 </html>
