@@ -1,11 +1,20 @@
 const sqlite3 = require("sqlite3").verbose();
 const path = require("path");
 
-const DB_PATH = path.join(__dirname, "data", "qurilishinfo.db");
+function getDbPath() {
+  // Render persistent disk yoki local
+  if (process.env.RENDER_EXTERNAL_PERSISTENT_DISK) {
+    return "/render/data/qurilishinfo.db";
+  }
+
+  return path.join(__dirname, "data", "qurilishinfo.db");
+}
 
 function openDatabase() {
   return new Promise((resolve, reject) => {
-    const db = new sqlite3.Database(DB_PATH, sqlite3.OPEN_READWRITE | sqlite3.OPEN_CREATE, (err) => {
+    const dbPath = getDbPath();
+
+    const db = new sqlite3.Database(dbPath, sqlite3.OPEN_READWRITE | sqlite3.OPEN_CREATE, (err) => {
       if (err) {
         reject(err);
       } else {
@@ -22,11 +31,11 @@ function openDatabase() {
 
 function runSql(db, sql, params = []) {
   return new Promise((resolve, reject) => {
-    db.run(sql, params, (err) => {
+    db.run(sql, params, function (err) {
       if (err) {
         reject(err);
       } else {
-        resolve();
+        resolve(this);
       }
     });
   });
@@ -231,5 +240,6 @@ module.exports = {
   initializeDatabase,
   runSql,
   getSql,
-  allSql
+  allSql,
+  getDbPath
 };
