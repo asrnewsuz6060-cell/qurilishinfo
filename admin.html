@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>QurilishInfo — Admin panel</title>
+<style>
+:root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);
+  --bg:#EDEFF0;--surface:#FFFFFF;--ink:#1B252D;--muted:#5A6771;--line:#D6DBDF;--brand:#F2B705;--brand-ink:#1B1B1B;--danger:#C0392B;--ok:#2E7D4F;--shadow:0 1px 2px rgba(27,37,45,.07)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#11171C;--surface:#1A232A;--ink:#E9EEF1;--muted:#98A6AF;--line:#2A363F;--shadow:none}}
+*,*::before,*::after{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 15px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+button,input,textarea,select{font:inherit;color:inherit}
+:focus-visible{outline:3px solid var(--brand);outline-offset:2px;border-radius:6px}
+.wrap{max-width:760px;margin:0 auto;padding:16px}
+h1{font-size:22px;margin:8px 0 16px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:16px;margin-bottom:16px;box-shadow:var(--shadow)}
+label{display:block;font-weight:600;margin:12px 0 6px;font-size:14px}
+input,textarea,select{width:100%;padding:11px 12px;border-radius:10px;border:1px solid var(--line);background:var(--bg);color:var(--ink)}
+textarea{min-height:140px;resize:vertical}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:0;border-radius:10px;padding:11px 16px;font-weight:600;background:var(--brand);color:var(--brand-ink);min-height:44px;cursor:pointer}
+.btn.ghost{background:transparent;border:1px solid var(--line);color:var(--ink)}
+.btn.danger{background:var(--danger);color:#fff}
+.row{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}
+.msg{font-size:14px;margin-top:10px;padding:10px 12px;border-radius:8px}
+.msg.err{background:rgba(192,57,43,.12);color:var(--danger)}
+.msg.ok{background:rgba(46,125,79,.12);color:var(--ok)}
+.hidden{display:none}
+.item{border-top:1px solid var(--line);padding:12px 0;display:grid;gap:6px}
+.item:first-child{border-top:0}
+.item .top{display:flex;justify-content:space-between;gap:10px;align-items:baseline}
+.item .cat{font-size:12px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.03em}
+.item h3{margin:0;font-size:16px}
+.item .actions{display:flex;gap:8px;margin-top:6px}
+.topbar{display:flex;justify-content:space-between;align-items:center;gap:10px}
+.grow{flex:1}
+small.hint{color:var(--muted);display:block;margin-top:4px}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div id="loginView" class="card">
+    <h1>QurilishInfo — kirish</h1>
+    <label for="lu">Login</label>
+    <input id="lu" autocomplete="username">
+    <label for="lp">Parol</label>
+    <input id="lp" type="password" autocomplete="current-password">
+    <div class="row"><button class="btn" id="loginBtn">Kirish</button></div>
+    <div id="loginMsg"></div>
+  </div>
+
+  <div id="adminView" class="hidden">
+    <div class="topbar">
+      <h1>Admin panel</h1>
+      <span class="grow"></span>
+      <button class="btn ghost" id="pwToggle">Parolni almashtirish</button>
+      <button class="btn ghost" id="logoutBtn">Chiqish</button>
+    </div>
+
+    <div class="card hidden" id="pwCard">
+      <h2 style="margin-top:0;font-size:17px">Parolni almashtirish</h2>
+      <label>Joriy parol</label><input id="pwCurrent" type="password">
+      <label>Yangi parol (kamida 8 belgi)</label><input id="pwNew" type="password">
+      <div class="row"><button class="btn" id="pwSave">Saqlash</button></div>
+      <div id="pwMsg"></div>
+    </div>
+
+    <div class="card">
+      <h2 style="margin-top:0;font-size:17px" id="formTitle">Yangi maqola</h2>
+      <input type="hidden" id="editId">
+      <label>Bo'lim</label>
+      <input id="fCat" placeholder="Masalan: Ruxsatnoma">
+      <label>Sarlavha</label>
+      <input id="fTitle">
+      <label>Qisqacha (lead)</label>
+      <input id="fLead">
+      <label>O'qish vaqti (daqiqa)</label>
+      <input id="fMin" type="number" min="1" value="5">
+      <label>Matn</label>
+      <textarea id="fBody" placeholder="Har bir abzasni bo'sh qatordan so'ng yozing"></textarea>
+      <small class="hint">Abzaslarni ajratish uchun ular orasida bitta bo'sh qator qoldiring.</small>
+      <div class="row">
+        <button class="btn" id="saveBtn">Saqlash</button>
+        <button class="btn ghost hidden" id="cancelEdit">Bekor qilish</button>
+      </div>
+      <div id="formMsg"></div>
+    </div>
+
+    <div class="card">
+      <h2 style="margin-top:0;font-size:17px">Maqolalar</h2>
+      <div id="list">Yuklanmoqda...</div>
+    </div>
+  </div>
+
+</div>
+<script>
+var $ = function(id){return document.getElementById(id)};
+var articles = [];
+
+function showMsg(el, text, ok){ el.className = 'msg ' + (ok?'ok':'err'); el.textContent = text; }
+function clearMsg(el){ el.className=''; el.textContent=''; }
+function esc(s){ return String(s).replace(/[&<>"']/g,function(m){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[m]}); }
+
+function api(url, opts){
+  opts = opts || {};
+  opts.headers = Object.assign({'Content-Type':'application/json'}, opts.headers||{});
+  opts.credentials = 'same-origin';
+  return fetch(url, opts).then(function(r){
+    return r.json().then(function(data){
+      if(!r.ok) throw new Error(data.error || 'Xatolik yuz berdi');
+      return data;
+    });
+  });
+}
+
+function checkLogin(){
+  api('/api/admin/check').then(function(d){
+    if(d.loggedIn){ showAdmin(); } else { showLogin(); }
+  }).catch(function(){ showLogin(); });
+}
+function showLogin(){ $("loginView").classList.remove('hidden'); $("adminView").classList.add('hidden'); }
+function showAdmin(){ $("loginView").classList.add('hidden'); $("adminView").classList.remove('hidden'); loadArticles(); }
+
+$("loginBtn").addEventListener('click', function(){
+  clearMsg($("loginMsg"));
+  api('/api/login', {method:'POST', body: JSON.stringify({username:$("lu").value, password:$("lp").value})})
+    .then(function(){ $("lp").value=''; showAdmin(); })
+    .catch(function(e){ showMsg($("loginMsg"), e.message, false); });
+});
+$("logoutBtn").addEventListener('click', function(){
+  api('/api/logout', {method:'POST'}).then(showLogin);
+});
+
+$("pwToggle").addEventListener('click', function(){ $("pwCard").classList.toggle('hidden'); });
+$("pwSave").addEventListener('click', function(){
+  clearMsg($("pwMsg"));
+  api('/api/admin/change-password', {method:'POST', body: JSON.stringify({currentPassword:$("pwCurrent").value, newPassword:$("pwNew").value})})
+    .then(function(){ showMsg($("pwMsg"), "Parol almashtirildi.", true); $("pwCurrent").value=''; $("pwNew").value=''; })
+    .catch(function(e){ showMsg($("pwMsg"), e.message, false); });
+});
+
+function loadArticles(){
+  api('/api/admin/articles').then(function(data){
+    articles = data;
+    renderList();
+  }).catch(function(e){ $("list").textContent = e.message; });
+}
+
+function renderList(){
+  if(!articles.length){ $("list").innerHTML = '<p>Hozircha maqola yo\'q.</p>'; return; }
+  $("list").innerHTML = articles.map(function(a){
+    return '<div class="item">'
+      + '<div class="top"><span class="cat">'+esc(a.category)+'</span><span>'+esc(a.created_at)+'</span></div>'
+      + '<h3>'+esc(a.title)+'</h3>'
+      + '<div class="actions"><button class="btn ghost" data-edit="'+a.id+'">Tahrirlash</button><button class="btn danger" data-del="'+a.id+'">O\'chirish</button></div>'
+      + '</div>';
+  }).join('');
+}
+
+$("list").addEventListener('click', function(e){
+  var editId = e.target.getAttribute('data-edit');
+  var delId = e.target.getAttribute('data-del');
+  if(editId){ startEdit(editId); }
+  if(delId){
+    if(!confirm("Maqolani o'chirishni tasdiqlaysizmi?")) return;
+    api('/api/admin/articles/'+delId, {method:'DELETE'}).then(loadArticles);
+  }
+});
+
+function startEdit(id){
+  var a = articles.filter(function(x){return x.id==id})[0]; if(!a) return;
+  $("editId").value = a.id;
+  $("fCat").value = a.category;
+  $("fTitle").value = a.title;
+  $("fLead").value = a.lead;
+  $("fMin").value = a.minutes;
+  $("fBody").value = a.body;
+  $("formTitle").textContent = "Maqolani tahrirlash";
+  $("cancelEdit").classList.remove('hidden');
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+function resetForm(){
+  $("editId").value=''; $("fCat").value=''; $("fTitle").value=''; $("fLead").value=''; $("fMin").value=5; $("fBody").value='';
+  $("formTitle").textContent = "Yangi maqola";
+  $("cancelEdit").classList.add('hidden');
+}
+$("cancelEdit").addEventListener('click', resetForm);
+
+$("saveBtn").addEventListener('click', function(){
+  clearMsg($("formMsg"));
+  var payload = {category:$("fCat").value.trim(), title:$("fTitle").value.trim(), lead:$("fLead").value.trim(), minutes:$("fMin").value, body:$("fBody").value.trim()};
+  if(!payload.category || !payload.title || !payload.lead || !payload.body){
+    showMsg($("formMsg"), "Barcha maydonlarni to'ldiring.", false); return;
+  }
+  var id = $("editId").value;
+  var req = id ? api('/api/admin/articles/'+id, {method:'PUT', body: JSON.stringify(payload)})
+               : api('/api/admin/articles', {method:'POST', body: JSON.stringify(payload)});
+  req.then(function(){ showMsg($("formMsg"), "Saqlandi.", true); resetForm(); loadArticles(); })
+     .catch(function(e){ showMsg($("formMsg"), e.message, false); });
+});
+
+checkLogin();
+</script>
+</body>
+</html>
