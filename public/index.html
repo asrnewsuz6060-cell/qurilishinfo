@@ -10,90 +10,791 @@
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Onest:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
 :root{
-  box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);
-  --bg:#EDEFF0;--surface:#FFFFFF;--ink:#1B252D;--muted:#5A6771;--line:#D6DBDF;
-  --brand:#F2B705;--brand-ink:#1B1B1B;--accent:#A64B00;--dark:#1F2A33;--dark-ink:#F1F4F6;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+  --bg:#EDEFF0;
+  --surface:#FFFFFF;
+  --ink:#1B252D;
+  --muted:#5A6771;
+  --line:#D6DBDF;
+  --brand:#F2B705;
+  --brand-ink:#1B1B1B;
+  --accent:#A64B00;
+  --dark:#1F2A33;
+  --dark-ink:#F1F4F6;
+  --warning-bg:#FFF2BE;
+  --warning-ink:#704A00;
+  --soft:#F7F9FA;
   --shadow:0 1px 2px rgba(27,37,45,.07);
   --head:"Bricolage Grotesque","Trebuchet MS",system-ui,sans-serif;
   --body:"Onest",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
 }
-@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--bg:#11171C;--surface:#1A232A;--ink:#E9EEF1;--muted:#98A6AF;--line:#2A363F;--accent:#F0A24A;--dark:#0C1216;--shadow:none;}}
-:root[data-theme="dark"]{--bg:#11171C;--surface:#1A232A;--ink:#E9EEF1;--muted:#98A6AF;--line:#2A363F;--accent:#F0A24A;--dark:#0C1216;--shadow:none;}
-html{scroll-padding-top:calc(env(safe-area-inset-top,0px) + 72px);scroll-behavior:smooth}
-*,*::before,*::after{box-sizing:border-box}
-body{margin:0;background:var(--bg);color:var(--ink);font:400 16px/1.55 var(--body);-webkit-text-size-adjust:100%}
-a{color:inherit}
-button{font:inherit;color:inherit;cursor:pointer}
-:focus-visible{outline:3px solid var(--brand);outline-offset:2px;border-radius:6px}
-.wrap{max-width:1080px;margin:0 auto;padding:0 16px}
-header.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:var(--dark);color:var(--dark-ink)}
-.bar{display:flex;align-items:center;gap:12px;height:60px}
-.logo{font:800 24px/1 var(--head);letter-spacing:-.02em;text-decoration:none;display:flex;align-items:center;gap:8px;color:var(--dark-ink)}
-.logo .mark{width:26px;height:26px;background:var(--brand);clip-path:polygon(0 100%,0 40%,50% 0,100% 40%,100% 100%,62% 100%,62% 62%,38% 62%,38% 100%)}
-.logo i{font-style:normal;font-weight:600;color:var(--brand)}
-.grow{flex:1}
-.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:0;border-radius:10px;padding:10px 16px;font-weight:600;text-decoration:none;background:var(--brand);color:var(--brand-ink);min-height:44px}
-.btn.ghost{background:transparent;color:var(--ink);border:1px solid var(--line)}
-.iconbtn{width:44px;height:44px;border-radius:10px;display:grid;place-items:center;background:transparent;border:1px solid rgba(255,255,255,.25);color:var(--dark-ink)}
-.iconbtn svg{width:20px;height:20px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round}
-.search{display:none;padding-bottom:12px}
-.search.on{display:block}
-.search input{width:100%;padding:12px 14px;border-radius:10px;border:0;background:var(--surface);color:var(--ink);font:inherit}
-.tools{padding:12px 0 4px}
-.chips{display:flex;gap:8px;overflow-x:auto;padding:2px 0 10px;scrollbar-width:none}
-.chips::-webkit-scrollbar{display:none}
-.chip{flex:0 0 auto;border:1px solid var(--line);background:var(--surface);border-radius:10px;padding:8px 14px;font-weight:500;min-height:40px}
-.chip[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
-.art{position:relative;overflow:hidden;background:var(--c1)}
-.art::before{content:"";position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.17) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.17) 1px,transparent 1px);background-size:22px 22px}
-.art::after{content:"";position:absolute;right:0;bottom:0;width:46%;height:46%;background:var(--c2);clip-path:polygon(100% 0,100% 100%,0 100%)}
-.tag{position:absolute;left:12px;top:12px;z-index:1;background:var(--surface);color:var(--ink);font-weight:600;font-size:13px;padding:4px 10px;border-radius:6px}
-.lead{display:block;text-decoration:none;background:var(--surface);border:1px solid var(--line);border-radius:14px;overflow:hidden;margin-top:8px;box-shadow:var(--shadow);text-align:left;width:100%;padding:0}
-.lead .art{height:180px}
-.lead .txt{padding:16px 16px 18px}
-.lead h1{margin:0 0 8px;font:800 clamp(26px,6.5vw,38px)/1.08 var(--head);letter-spacing:-.02em;text-wrap:balance}
-.lead p{margin:0 0 10px;color:var(--muted)}
-.meta{font-size:14px;color:var(--muted)}
-.grid{display:grid;gap:22px;margin-top:20px}
-h2.sec{font:800 22px/1.1 var(--head);margin:0 0 12px;letter-spacing:-.01em}
-.list{display:grid;gap:12px}
-.card{display:grid;grid-template-columns:96px 1fr;gap:12px;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:10px;text-align:left;width:100%;box-shadow:var(--shadow)}
-.card .art{border-radius:8px;min-height:88px}
-.card h3{margin:2px 0 6px;font:600 17px/1.28 var(--head);text-wrap:balance}
-.card .cat{font-size:13px;color:var(--accent);font-weight:600}
-.empty{padding:28px 16px;text-align:center;color:var(--muted);background:var(--surface);border:1px dashed var(--line);border-radius:12px}
-.rank{margin:0;padding:0;list-style:none;background:var(--surface);border:1px solid var(--line);border-radius:12px}
-.rank li{border-top:1px solid var(--line)}
-.rank li:first-child{border-top:0}
-.rank button{all:unset;box-sizing:border-box;display:grid;grid-template-columns:32px 1fr;gap:10px;padding:14px;cursor:pointer;width:100%}
-.rank b{font:800 26px/1 var(--head);color:var(--accent)}
-.rank span{font-weight:500;line-height:1.35}
-.faq{margin-top:30px}
-details{background:var(--surface);border:1px solid var(--line);border-radius:12px;margin-bottom:8px}
-summary{list-style:none;cursor:pointer;padding:14px 16px;font-weight:600;display:flex;justify-content:space-between;gap:12px;min-height:48px;align-items:center}
-summary::-webkit-details-marker{display:none}
-summary::after{content:"+";font:800 22px/1 var(--head);color:var(--accent)}
-details[open] summary::after{content:"\2212"}
-details div{padding:0 16px 16px;color:var(--muted)}
-.tg{margin-top:28px;background:var(--dark);color:var(--dark-ink);border-radius:16px;padding:22px 18px;display:grid;gap:12px}
-.tg h2{margin:0;font:800 clamp(22px,5vw,30px)/1.12 var(--head);text-wrap:balance}
-.tg p{margin:0;opacity:.9;max-width:54ch}
-.reader{position:fixed;inset:0;z-index:40;background:var(--bg);overflow-y:auto;display:none;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
-.reader.on{display:block}
-.reader .art{height:140px}
-.reader article{max-width:680px;margin:0 auto;padding:18px 16px 60px}
-.reader h1{font:800 clamp(26px,6vw,38px)/1.1 var(--head);margin:8px 0 10px;letter-spacing:-.02em;text-wrap:balance}
-.reader p{font-size:18px;line-height:1.65;margin:0 0 16px;max-width:65ch}
-.note{font-size:15px;color:var(--muted);border-left:4px solid var(--brand);padding:8px 12px;background:var(--surface);border-radius:0 8px 8px 0;margin:20px 0}
-.rbar{position:sticky;top:0;background:var(--surface);border-bottom:1px solid var(--line);padding:10px 16px;display:flex;gap:10px;align-items:center}
-footer{margin:36px 0 28px;color:var(--muted);font-size:14px;border-top:1px solid var(--line);padding-top:16px;display:grid;gap:6px}
+:root[data-theme="dark"]{
+  --bg:#11171C;
+  --surface:#1A232A;
+  --ink:#E9EEF1;
+  --muted:#98A6AF;
+  --line:#2A363F;
+  --accent:#F0A24A;
+  --dark:#0C1216;
+  --dark-ink:#F1F4F6;
+  --warning-bg:#513D08;
+  --warning-ink:#FFE28A;
+  --soft:#152027;
+  --shadow:none;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#11171C;
+    --surface:#1A232A;
+    --ink:#E9EEF1;
+    --muted:#98A6AF;
+    --line:#2A363F;
+    --accent:#F0A24A;
+    --dark:#0C1216;
+    --dark-ink:#F1F4F6;
+    --warning-bg:#513D08;
+    --warning-ink:#FFE28A;
+    --soft:#152027;
+    --shadow:none;
+  }
+}
+html{
+  scroll-padding-top:calc(env(safe-area-inset-top,0px) + 72px);
+  scroll-behavior:smooth;
+}
+*,*::before,*::after{
+  box-sizing:border-box;
+}
+body{
+  margin:0;
+  background:var(--bg);
+  color:var(--ink);
+  font:400 16px/1.55 var(--body);
+  -webkit-text-size-adjust:100%;
+}
+a{
+  color:inherit;
+}
+button,input,select,textarea{
+  font:inherit;
+  color:inherit;
+}
+button{
+  cursor:pointer;
+}
+:focus-visible{
+  outline:3px solid var(--brand);
+  outline-offset:2px;
+  border-radius:6px;
+}
+.wrap{
+  max-width:1080px;
+  margin:0 auto;
+  padding:0 16px;
+}
+header.top{
+  position:sticky;
+  top:env(safe-area-inset-top,0px);
+  z-index:20;
+  background:var(--dark);
+  color:var(--dark-ink);
+}
+.bar{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  height:60px;
+}
+.logo{
+  font:800 24px/1 var(--head);
+  letter-spacing:-.02em;
+  text-decoration:none;
+  display:flex;
+  align-items:center;
+  gap:8px;
+  color:var(--dark-ink);
+}
+.logo .mark{
+  width:26px;
+  height:26px;
+  background:var(--brand);
+  clip-path:polygon(0 100%,0 40%,50% 0,100% 40%,100% 100%,62% 100%,62% 62%,38% 62%,38% 100%);
+}
+.logo i{
+  font-style:normal;
+  font-weight:600;
+  color:var(--brand);
+}
+.grow{
+  flex:1;
+}
+.btn{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:8px;
+  border:0;
+  border-radius:10px;
+  padding:10px 16px;
+  font-weight:600;
+  text-decoration:none;
+  background:var(--brand);
+  color:var(--brand-ink);
+  min-height:44px;
+}
+.btn:hover{
+  filter:brightness(.96);
+}
+.btn.ghost{
+  background:transparent;
+  color:var(--ink);
+  border:1px solid var(--line);
+}
+.btn.dark{
+  background:var(--dark);
+  color:var(--dark-ink);
+}
+.btn.full{
+  width:100%;
+}
+.iconbtn{
+  width:44px;
+  height:44px;
+  border-radius:10px;
+  display:grid;
+  place-items:center;
+  background:transparent;
+  border:1px solid rgba(255,255,255,.25);
+  color:var(--dark-ink);
+}
+.iconbtn svg{
+  width:20px;
+  height:20px;
+  stroke:currentColor;
+  fill:none;
+  stroke-width:2;
+  stroke-linecap:round;
+}
+.search{
+  display:none;
+  padding-bottom:12px;
+}
+.search.on{
+  display:block;
+}
+.search input{
+  width:100%;
+  padding:12px 14px;
+  border-radius:10px;
+  border:0;
+  background:var(--surface);
+  color:var(--ink);
+  font:inherit;
+}
+.tools{
+  padding:12px 0 4px;
+}
+.chips{
+  display:flex;
+  gap:8px;
+  overflow-x:auto;
+  padding:2px 0 10px;
+  scrollbar-width:none;
+}
+.chips::-webkit-scrollbar{
+  display:none;
+}
+.chip{
+  flex:0 0 auto;
+  border:1px solid var(--line);
+  background:var(--surface);
+  border-radius:10px;
+  padding:8px 14px;
+  font-weight:500;
+  min-height:40px;
+}
+.chip[aria-pressed="true"]{
+  background:var(--ink);
+  color:var(--bg);
+  border-color:var(--ink);
+}
+.art{
+  position:relative;
+  overflow:hidden;
+  background:var(--c1);
+}
+.art::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  background-image:linear-gradient(rgba(255,255,255,.17) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.17) 1px,transparent 1px);
+  background-size:22px 22px;
+}
+.art::after{
+  content:"";
+  position:absolute;
+  right:0;
+  bottom:0;
+  width:46%;
+  height:46%;
+  background:var(--c2);
+  clip-path:polygon(100% 0,100% 100%,0 100%);
+}
+.art.has-image{
+  background-position:center;
+  background-size:cover;
+}
+.art.has-image::before{
+  background:linear-gradient(180deg,rgba(0,0,0,.05),rgba(0,0,0,.42));
+}
+.art.has-image::after{
+  display:none;
+}
+.tag{
+  position:absolute;
+  left:12px;
+  top:12px;
+  z-index:1;
+  background:var(--surface);
+  color:var(--ink);
+  font-weight:600;
+  font-size:13px;
+  padding:4px 10px;
+  border-radius:6px;
+}
+.lead{
+  display:block;
+  text-decoration:none;
+  background:var(--surface);
+  border:1px solid var(--line);
+  border-radius:14px;
+  overflow:hidden;
+  margin-top:8px;
+  box-shadow:var(--shadow);
+  text-align:left;
+  width:100%;
+  padding:0;
+}
+.lead .art{
+  height:180px;
+}
+.lead .txt{
+  padding:16px 16px 18px;
+}
+.lead h1{
+  margin:0 0 8px;
+  font:800 clamp(26px,6.5vw,38px)/1.08 var(--head);
+  letter-spacing:-.02em;
+  text-wrap:balance;
+}
+.lead p{
+  margin:0 0 10px;
+  color:var(--muted);
+}
+.meta{
+  font-size:14px;
+  color:var(--muted);
+}
+.grid{
+  display:grid;
+  gap:22px;
+  margin-top:20px;
+}
+h2.sec{
+  font:800 22px/1.1 var(--head);
+  margin:0 0 12px;
+  letter-spacing:-.01em;
+}
+.list{
+  display:grid;
+  gap:12px;
+}
+.card{
+  display:grid;
+  grid-template-columns:96px 1fr;
+  gap:12px;
+  background:var(--surface);
+  border:1px solid var(--line);
+  border-radius:12px;
+  padding:10px;
+  text-align:left;
+  width:100%;
+  box-shadow:var(--shadow);
+}
+.card .art{
+  border-radius:8px;
+  min-height:88px;
+}
+.card h3{
+  margin:2px 0 6px;
+  font:600 17px/1.28 var(--head);
+  text-wrap:balance;
+}
+.card .cat{
+  font-size:13px;
+  color:var(--accent);
+  font-weight:600;
+}
+.empty{
+  padding:28px 16px;
+  text-align:center;
+  color:var(--muted);
+  background:var(--surface);
+  border:1px dashed var(--line);
+  border-radius:12px;
+}
+.rank{
+  margin:0;
+  padding:0;
+  list-style:none;
+  background:var(--surface);
+  border:1px solid var(--line);
+  border-radius:12px;
+}
+.rank li{
+  border-top:1px solid var(--line);
+}
+.rank li:first-child{
+  border-top:0;
+}
+.rank button{
+  all:unset;
+  box-sizing:border-box;
+  display:grid;
+  grid-template-columns:32px 1fr;
+  gap:10px;
+  padding:14px;
+  cursor:pointer;
+  width:100%;
+}
+.rank b{
+  font:800 26px/1 var(--head);
+  color:var(--accent);
+}
+.rank span{
+  font-weight:500;
+  line-height:1.35;
+}
+.cta{
+  margin-top:24px;
+  padding:22px 18px;
+  border-radius:16px;
+  color:var(--brand-ink);
+  background:var(--brand);
+}
+.cta h2{
+  margin:0 0 8px;
+  font:800 clamp(23px,5vw,31px)/1.1 var(--head);
+  text-wrap:balance;
+}
+.cta p{
+  margin:0 0 16px;
+  max-width:65ch;
+}
+.cta .btn{
+  background:var(--dark);
+  color:var(--dark-ink);
+}
+.official{
+  margin-top:30px;
+}
+.official-grid{
+  display:grid;
+  gap:12px;
+}
+.official-card{
+  background:var(--surface);
+  border:1px solid var(--line);
+  border-radius:12px;
+  padding:16px;
+  box-shadow:var(--shadow);
+}
+.official-card small{
+  display:block;
+  color:var(--accent);
+  font-weight:600;
+  margin-bottom:7px;
+}
+.official-card h3{
+  margin:0 0 12px;
+  font:600 18px/1.25 var(--head);
+}
+.official-card .btn{
+  min-height:38px;
+  padding:8px 12px;
+  font-size:14px;
+}
+.ads-section{
+  margin-top:30px;
+}
+.ads-list{
+  display:grid;
+  gap:12px;
+}
+.ad-card{
+  display:grid;
+  gap:14px;
+  background:var(--surface);
+  border:1px solid var(--line);
+  border-radius:12px;
+  padding:12px;
+  box-shadow:var(--shadow);
+}
+.ad-image{
+  width:100%;
+  min-height:155px;
+  border-radius:9px;
+  background:var(--soft);
+  background-position:center;
+  background-size:cover;
+}
+.ad-label{
+  display:inline-flex;
+  width:max-content;
+  padding:4px 9px;
+  border-radius:999px;
+  color:var(--accent);
+  background:var(--warning-bg);
+  font-size:12px;
+  font-weight:600;
+}
+.ad-card h3{
+  margin:7px 0;
+  font:600 19px/1.25 var(--head);
+}
+.ad-card p{
+  margin:0 0 12px;
+  color:var(--muted);
+}
+.faq{
+  margin-top:30px;
+}
+details{
+  background:var(--surface);
+  border:1px solid var(--line);
+  border-radius:12px;
+  margin-bottom:8px;
+}
+summary{
+  list-style:none;
+  cursor:pointer;
+  padding:14px 16px;
+  font-weight:600;
+  display:flex;
+  justify-content:space-between;
+  gap:12px;
+  min-height:48px;
+  align-items:center;
+}
+summary::-webkit-details-marker{
+  display:none;
+}
+summary::after{
+  content:"+";
+  font:800 22px/1 var(--head);
+  color:var(--accent);
+}
+details[open] summary::after{
+  content:"−";
+}
+details div{
+  padding:0 16px 16px;
+  color:var(--muted);
+}
+.appeal{
+  margin-top:30px;
+  padding:22px 18px;
+  border-radius:16px;
+  background:var(--surface);
+  border:1px solid var(--line);
+}
+.appeal h2{
+  margin:0 0 7px;
+  font:800 clamp(23px,5vw,30px)/1.1 var(--head);
+}
+.appeal>p{
+  margin:0 0 18px;
+  color:var(--muted);
+}
+.form-grid{
+  display:grid;
+  gap:12px;
+}
+.field{
+  display:grid;
+  gap:6px;
+}
+.field label{
+  font-size:14px;
+  font-weight:600;
+}
+.field input,.field select,.field textarea{
+  width:100%;
+  border:1px solid var(--line);
+  background:var(--bg);
+  color:var(--ink);
+  border-radius:10px;
+  padding:11px 12px;
+}
+.field textarea{
+  min-height:122px;
+  resize:vertical;
+}
+.checkbox{
+  display:flex;
+  align-items:flex-start;
+  gap:9px;
+  margin:6px 0 12px;
+}
+.checkbox input{
+  width:18px;
+  height:18px;
+  margin-top:3px;
+  accent-color:var(--accent);
+}
+.checkbox label{
+  color:var(--muted);
+  font-size:14px;
+}
+.form-status{
+  margin-top:12px;
+  color:var(--muted);
+  font-size:14px;
+  min-height:20px;
+}
+.form-status.error{
+  color:#A40000;
+}
+.form-status.success{
+  color:#076B42;
+}
+.warning{
+  margin-top:16px;
+  padding:12px;
+  border-left:4px solid var(--brand);
+  border-radius:0 8px 8px 0;
+  color:var(--warning-ink);
+  background:var(--warning-bg);
+  font-size:14px;
+}
+.trust{
+  margin-top:30px;
+  padding:22px 18px;
+  border-radius:16px;
+  background:var(--soft);
+}
+.trust h2{
+  margin:0 0 16px;
+  font:800 24px/1.1 var(--head);
+}
+.trust-grid{
+  display:grid;
+  gap:14px;
+}
+.trust-item h3{
+  margin:0 0 5px;
+  font:600 17px/1.25 var(--head);
+}
+.trust-item p{
+  margin:0;
+  color:var(--muted);
+  font-size:15px;
+}
+.about{
+  margin-top:30px;
+  padding:22px 18px;
+  border-radius:16px;
+  background:var(--surface);
+  border:1px solid var(--line);
+}
+.about h2{
+  margin:0 0 10px;
+  font:800 24px/1.1 var(--head);
+}
+.about p{
+  margin:0;
+  color:var(--muted);
+}
+.tg{
+  margin-top:28px;
+  background:var(--dark);
+  color:var(--dark-ink);
+  border-radius:16px;
+  padding:22px 18px;
+  display:grid;
+  gap:12px;
+}
+.tg h2{
+  margin:0;
+  font:800 clamp(22px,5vw,30px)/1.12 var(--head);
+  text-wrap:balance;
+}
+.tg p{
+  margin:0;
+  opacity:.9;
+  max-width:54ch;
+}
+.socials{
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+  margin-top:8px;
+}
+.socials a{
+  display:inline-flex;
+  align-items:center;
+  min-height:36px;
+  padding:7px 11px;
+  text-decoration:none;
+  border:1px solid var(--line);
+  border-radius:8px;
+  background:var(--surface);
+  font-weight:600;
+}
+footer{
+  margin:36px 0 28px;
+  color:var(--muted);
+  font-size:14px;
+  border-top:1px solid var(--line);
+  padding-top:16px;
+  display:grid;
+  gap:8px;
+}
+.reader{
+  position:fixed;
+  inset:0;
+  z-index:40;
+  background:var(--bg);
+  overflow-y:auto;
+  display:none;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+}
+.reader.on{
+  display:block;
+}
+.reader .art{
+  height:170px;
+}
+.reader article{
+  max-width:680px;
+  margin:0 auto;
+  padding:18px 16px 60px;
+}
+.reader h1{
+  font:800 clamp(26px,6vw,38px)/1.1 var(--head);
+  margin:8px 0 10px;
+  letter-spacing:-.02em;
+  text-wrap:balance;
+}
+.reader p{
+  font-size:18px;
+  line-height:1.65;
+  margin:0 0 16px;
+  max-width:65ch;
+}
+.reader h2{
+  margin:28px 0 12px;
+  font:800 22px/1.15 var(--head);
+}
+.reader ol{
+  padding-left:22px;
+  margin:0 0 18px;
+}
+.reader li{
+  margin-bottom:9px;
+}
+.note{
+  font-size:15px;
+  color:var(--muted);
+  border-left:4px solid var(--brand);
+  padding:8px 12px;
+  background:var(--surface);
+  border-radius:0 8px 8px 0;
+  margin:20px 0;
+}
+.warning-note{
+  margin:20px 0;
+  padding:13px;
+  border-left:4px solid var(--brand);
+  border-radius:0 8px 8px 0;
+  color:var(--warning-ink);
+  background:var(--warning-bg);
+}
+.source-box{
+  margin:20px 0;
+  padding:14px;
+  background:var(--surface);
+  border:1px solid var(--line);
+  border-radius:10px;
+}
+.source-box p{
+  margin:5px 0;
+  font-size:15px;
+}
+.source-box a{
+  color:var(--accent);
+  font-weight:600;
+}
+.rbar{
+  position:sticky;
+  top:0;
+  z-index:3;
+  background:var(--surface);
+  border-bottom:1px solid var(--line);
+  padding:10px 16px;
+  display:flex;
+  gap:10px;
+  align-items:center;
+}
+@media (min-width:620px){
+  .official-grid{
+    grid-template-columns:repeat(3,1fr);
+  }
+  .ads-list{
+    grid-template-columns:repeat(2,1fr);
+  }
+  .trust-grid{
+    grid-template-columns:repeat(2,1fr);
+  }
+  .form-grid.two{
+    grid-template-columns:repeat(2,1fr);
+  }
+}
 @media (min-width:760px){
-  .grid{grid-template-columns:1fr 320px;gap:28px}
-  .lead{display:grid;grid-template-columns:1.1fr 1fr}
-  .lead .art{height:100%;min-height:280px}
-  .lead .txt{padding:24px;align-self:center}
-  .card{grid-template-columns:130px 1fr;padding:12px}
-  .side{position:sticky;top:96px;align-self:start}
+  .grid{
+    grid-template-columns:1fr 320px;
+    gap:28px;
+  }
+  .lead{
+    display:grid;
+    grid-template-columns:1.1fr 1fr;
+  }
+  .lead .art{
+    height:100%;
+    min-height:280px;
+  }
+  .lead .txt{
+    padding:24px;
+    align-self:center;
+  }
+  .card{
+    grid-template-columns:130px 1fr;
+    padding:12px;
+  }
+  .side{
+    position:sticky;
+    top:96px;
+    align-self:start;
+  }
+  .ad-card{
+    grid-template-columns:140px 1fr;
+  }
+  .ad-image{
+    min-height:100%;
+  }
 }
 </style>
 </head>
@@ -101,136 +802,733 @@ footer{margin:36px 0 28px;color:var(--muted);font-size:14px;border-top:1px solid
 <header class="top">
   <div class="wrap">
     <div class="bar">
-      <a class="logo" href="#top" id="top"><span class="mark" aria-hidden="true"></span><span>Qurilish<i>Info</i></span></a>
+      <a class="logo" href="#top" id="top">
+        <span class="mark" aria-hidden="true"></span>
+        <span><span id="logoName">Qurilish</span><i>Info</i></span>
+      </a>
+
       <span class="grow"></span>
-      <button class="iconbtn" id="searchToggle" aria-label="Qidirish" aria-expanded="false">
-        <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg>
+
+      <button class="iconbtn" id="themeToggle" type="button" aria-label="Qorong‘i yoki yorug‘ mavzuni almashtirish" title="Mavzuni almashtirish">
+        <span id="themeIcon">◐</span>
       </button>
+
+      <button class="iconbtn" id="searchToggle" type="button" aria-label="Qidirish" aria-expanded="false">
+        <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"></circle><path d="M20 20l-4-4"></path></svg>
+      </button>
+
       <a class="btn tgLink" href="#" target="_blank" rel="noopener">Telegram</a>
     </div>
-    <div class="search" id="search"><input id="q" type="search" placeholder="Savolingizni yozing: masalan, ruxsatnoma" aria-label="Maqola qidirish"></div>
+
+    <div class="search" id="search">
+      <input id="q" type="search" placeholder="Savolingizni yozing: masalan, ruxsatnoma" aria-label="Maqola qidirish">
+    </div>
   </div>
 </header>
+
 <main class="wrap">
-  <div class="tools"><div class="chips" id="chips" role="group" aria-label="Bo'limlar"></div></div>
+  <div class="tools">
+    <div class="chips" id="chips" role="group" aria-label="Bo‘limlar"></div>
+  </div>
+
   <div id="leadSlot"></div>
+
+  <section class="cta" aria-labelledby="ctaTitle">
+    <h2 id="ctaTitle">Qurilishda muammo bormi?</h2>
+    <p id="ctaText">Ruxsatnoma, noqonuniy qurilish, uy sifati, shartnoma yoki ta’mirlash bo‘yicha savolingizni yuboring.</p>
+    <a class="btn" href="#appeal" aria-label="Murojaat formasiga o‘tish">Murojaat yuborish</a>
+  </section>
+
   <div class="grid">
     <section aria-labelledby="latestH">
-      <h2 class="sec" id="latestH">So'nggi maqolalar</h2>
+      <h2 class="sec" id="latestH">So‘nggi maqolalar</h2>
       <div class="list" id="list"><div class="empty">Yuklanmoqda...</div></div>
     </section>
+
     <aside class="side" aria-labelledby="topH">
-      <h2 class="sec" id="topH">Ko'p o'qilganlar</h2>
+      <h2 class="sec" id="topH">Ko‘p o‘qilganlar</h2>
       <ol class="rank" id="rank"></ol>
     </aside>
   </div>
+
+  <section class="official" aria-labelledby="officialH">
+    <h2 class="sec" id="officialH">Bugun rasmiy manbalarda</h2>
+    <div class="official-grid">
+      <article class="official-card">
+        <small>Vazirlik xabari</small>
+        <h3>Qurilish sohasidagi muhim yangiliklarni sodda tilda izohlaymiz</h3>
+        <a class="btn ghost" href="#latestH">Tushuntirib beramiz</a>
+      </article>
+      <article class="official-card">
+        <small>Inspeksiya xabari</small>
+        <h3>Qurilish nazorati va xavfsizlik masalalariga oid foydali ma’lumotlar</h3>
+        <a class="btn ghost" href="#latestH">Batafsil</a>
+      </article>
+      <article class="official-card">
+        <small>Lex.uz hujjati</small>
+        <h3>Qurilish tartiblariga oid rasmiy hujjatlar haqida ma’lumot</h3>
+        <a class="btn ghost" href="https://lex.uz" target="_blank" rel="noopener">Batafsil</a>
+      </article>
+    </div>
+  </section>
+
+  <section class="ads-section" id="adsSection" aria-labelledby="adsH" hidden>
+    <h2 class="sec" id="adsH">Reklama va hamkorlik materiallari</h2>
+    <div class="ads-list" id="adsList"></div>
+  </section>
+
   <section class="faq" aria-labelledby="faqH">
     <h2 class="sec" id="faqH">Tez-tez beriladigan savollar</h2>
     <div id="faqList"></div>
   </section>
+
+  <section class="appeal" id="appeal" aria-labelledby="appealH">
+    <h2 id="appealH">Murojaat yuborish</h2>
+    <p>Qurilish bo‘yicha savol yoki muammoingizni yuboring. Muhim holatlarda vakolatli idoraga ham murojaat qiling.</p>
+
+    <form id="appealForm">
+      <div class="form-grid two">
+        <div class="field">
+          <label for="appealName">Ism (ixtiyoriy)</label>
+          <input id="appealName" name="name" autocomplete="name" placeholder="Ismingiz">
+        </div>
+
+        <div class="field">
+          <label for="appealPhone">Telefon (ixtiyoriy)</label>
+          <input id="appealPhone" name="phone" type="tel" autocomplete="tel" placeholder="+998 90 123 45 67">
+        </div>
+
+        <div class="field">
+          <label for="appealRegion">Hudud</label>
+          <input id="appealRegion" name="region" required placeholder="Viloyat yoki tuman">
+        </div>
+
+        <div class="field">
+          <label for="appealTopic">Mavzu</label>
+          <select id="appealTopic" name="topic" required>
+            <option value="">Mavzuni tanlang</option>
+            <option value="Ruxsatnoma">Ruxsatnoma</option>
+            <option value="Uy qurish">Uy qurish</option>
+            <option value="Uy sotib olish">Uy sotib olish</option>
+            <option value="Inspeksiya">Inspeksiya</option>
+            <option value="Shartnoma">Shartnoma</option>
+            <option value="Materiallar">Materiallar</option>
+            <option value="Boshqa">Boshqa</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="field" style="margin-top:12px">
+        <label for="appealMessage">Savol yoki muammo</label>
+        <textarea id="appealMessage" name="message" required placeholder="Muammoni imkon qadar aniq yozing"></textarea>
+      </div>
+
+      <p class="meta" style="margin:10px 0 0">Faylni Telegram orqali yuborishingiz mumkin.</p>
+
+      <div class="checkbox">
+        <input id="appealConsent" type="checkbox" required>
+        <label for="appealConsent">Murojaatim tahririyat tomonidan ko‘rib chiqilishiga roziman.</label>
+      </div>
+
+      <button class="btn full" type="submit" aria-label="Murojaatni yuborish">Murojaat yuborish</button>
+      <div id="appealStatus" class="form-status" role="status"></div>
+    </form>
+
+    <div class="warning">
+      <strong>E’tibor bering:</strong> QurilishInfo davlat organi emas. Bu forma rasmiy ariza o‘rnini bosmaydi. Favqulodda yoki rasmiy murojaat zarur bo‘lgan holatda vakolatli idoraga ham murojaat qiling.
+    </div>
+  </section>
+
+  <section class="trust" aria-labelledby="trustH">
+    <h2 id="trustH">Nega QurilishInfo?</h2>
+    <div class="trust-grid">
+      <article class="trust-item">
+        <h3>Rasmiy manbaga tayangan</h3>
+        <p>Ma’lumotlarni rasmiy hujjatlar va davlat organlari e’lonlari asosida tushuntiramiz.</p>
+      </article>
+      <article class="trust-item">
+        <h3>Fuqaro uchun sodda</h3>
+        <p>Murakkab qurilish va ruxsatnoma masalalarini tushunarli tilda bayon qilamiz.</p>
+      </article>
+      <article class="trust-item">
+        <h3>Savol-javob maydoni</h3>
+        <p>Qurilishdagi muammolar bo‘yicha ko‘p beriladigan savollarga javob topasiz.</p>
+      </article>
+      <article class="trust-item">
+        <h3>Reklama aniq belgilanadi</h3>
+        <p>Reklama va tahririy materiallar alohida belgilanadi.</p>
+      </article>
+    </div>
+  </section>
+
+  <section class="about" aria-labelledby="aboutH">
+    <h2 id="aboutH">Biz haqimizda</h2>
+    <p id="aboutText">QurilishInfo — uy qurish, uy sotib olish, ruxsatnoma, ta’mirlash va qurilish nazorati bo‘yicha amaliy ma’lumotlar platformasi.</p>
+  </section>
+
   <section class="tg">
     <h2>Savolingiz bormi? Yozing, maqola qilib javob beramiz</h2>
-    <p>Telegram kanalimizga qo'shiling va savolingizni yuboring.</p>
+    <p>Telegram kanalimizga qo‘shiling va savolingizni yuboring.</p>
     <a class="btn tgLink" href="#" target="_blank" rel="noopener">Savol yuborish</a>
   </section>
+
   <footer>
-    <div><strong>QurilishInfo</strong>: mustaqil axborot loyihasi. Rasmiy davlat idorasi sayti emas.</div>
-    <div>Maqolalardagi ma'lumot umumiy xarakterda. Qaror qilishdan oldin rasmiy manbani tekshiring.</div>
-    <div>Aloqa va reklama: <span id="contact"></span></div>
+    <div><strong id="footerSiteName">QurilishInfo</strong>: mustaqil axborot loyihasi. Rasmiy davlat idorasi sayti emas.</div>
+    <div id="editorialPolicy">Maqolalardagi ma’lumot umumiy xarakterda. Qaror qilishdan oldin rasmiy manbani tekshiring.</div>
+    <div>Aloqa va reklama: <a id="contactLink" href="#" target="_blank" rel="noopener"><span id="contact"></span></a></div>
+    <div id="socials" class="socials" aria-label="Ijtimoiy tarmoqlar"></div>
   </footer>
 </main>
+
 <div class="reader" id="reader" role="dialog" aria-modal="true" aria-label="Maqola">
-  <div class="rbar"><button class="btn ghost" id="back">Orqaga</button><span class="grow"></span><a class="btn tgLink" href="#" target="_blank" rel="noopener">Telegram</a></div>
+  <div class="rbar">
+    <button class="btn ghost" id="back" type="button">Orqaga</button>
+    <span class="grow"></span>
+    <a class="btn tgLink" href="#" target="_blank" rel="noopener">Telegram</a>
+  </div>
   <div class="art" id="rArt"></div>
   <article id="rBody"></article>
 </div>
+
 <script>
 var TELEGRAM_URL = "https://t.me/qurilishinfo";
 var CONTACT = "@qurilishinfo_admin";
+var CONTACT_URL = "https://t.me/qurilishinfo_admin";
+
 var FAQ = [
-  {q:"Uy qurish uchun ruxsatnoma kerakmi?",a:"Ko'p hollarda ha, lekin talablar qurilish turi va joyiga qarab farq qiladi. Aniq ro'yxatni mahalliy qurilish organidan tekshiring."},
-  {q:"Yangi uy sotib olishdan oldin nimani tekshirish kerak?",a:"Egalik va qurilish hujjatlarini, binoning fizik holatini va sotuvchining ma'lumot berishini tekshiring."},
-  {q:"Ustaga oldindan pul berish xavfsizmi?",a:"Butun summani oldindan bermang. To'lovni ish bosqichlariga bog'lab, yozma shartnoma bilan qiling."},
-  {q:"Ta'mirlashda devorni buzish mumkinmi?",a:"Avval devor yuk ko'taruvchi yoki yo'qligini mutaxassis bilan aniqlang."},
-  {q:"Sizga savol qanday yuboraman?",a:"Telegram kanalimizga yozing, eng ko'p so'ralganlariga maqola qilib javob beramiz."}
+  {
+    q:"Uy qurish uchun ruxsatnoma kerakmi?",
+    a:"Ko‘p hollarda ha, lekin talablar qurilish turi va joyiga qarab farq qiladi. Aniq ro‘yxatni mahalliy qurilish organidan tekshiring."
+  },
+  {
+    q:"Yangi uy sotib olishdan oldin nimani tekshirish kerak?",
+    a:"Egalik va qurilish hujjatlarini, binoning fizik holatini va sotuvchining ma’lumot berishini tekshiring."
+  },
+  {
+    q:"Ustaga oldindan pul berish xavfsizmi?",
+    a:"Butun summani oldindan bermang. To‘lovni ish bosqichlariga bog‘lab, yozma shartnoma bilan qiling."
+  },
+  {
+    q:"Ta’mirlashda devorni buzish mumkinmi?",
+    a:"Avval devor yuk ko‘taruvchi yoki yo‘qligini mutaxassis bilan aniqlang."
+  },
+  {
+    q:"Sizga savol qanday yuboraman?",
+    a:"Saytdagi murojaat formasini to‘ldiring yoki Telegram orqali yozing."
+  }
 ];
 
-var COLORS = {"Ruxsatnoma":["#1F4E79","#F2B705"],"Uy qurish":["#3A4A57","#F2B705"],"Uy sotib olish":["#7A3E2E","#F2B705"],"Materiallar":["#2F6B4F","#F2B705"],"Savol-javob":["#5B3E8A","#F2B705"],"Yangiliklar":["#8A3B12","#F2B705"]};
-var state = {cat:"Barchasi", q:""};
+var COLORS = {
+  "Ruxsatnoma":["#1F4E79","#F2B705"],
+  "Uy qurish":["#3A4A57","#F2B705"],
+  "Uy sotib olish":["#7A3E2E","#F2B705"],
+  "Materiallar":["#2F6B4F","#F2B705"],
+  "Savol-javob":["#5B3E8A","#F2B705"],
+  "Yangiliklar":["#8A3B12","#F2B705"],
+  "Inspeksiya izohlaydi":["#315A7D","#F2B705"],
+  "Qaror sodda tilda":["#70502D","#F2B705"],
+  "Rasmiy xabarlar":["#7A3A4D","#F2B705"]
+};
+
+var state = {
+  cat:"Barchasi",
+  q:"",
+  settings:{}
+};
+
 var ARTICLES = [];
-var $ = function(id){return document.getElementById(id)};
 
-function artStyle(cat){ var c = COLORS[cat]||["#1F4E79","#F2B705"]; return "--c1:"+c[0]+";--c2:"+c[1]; }
-function esc(s){ return String(s).replace(/[&<>"']/g,function(m){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[m]}); }
+var $ = function(id) {
+  return document.getElementById(id);
+};
 
-function filtered(){
-  var q = state.q.trim().toLowerCase();
-  return ARTICLES.filter(function(a){
-    var okCat = state.cat==="Barchasi" || a.category===state.cat;
-    var okQ = !q || (a.title+" "+a.lead).toLowerCase().indexOf(q)>-1;
-    return okCat && okQ;
+function esc(value) {
+  return String(value == null ? "" : value).replace(/[&<>"']/g, function(match) {
+    return {
+      "&":"&amp;",
+      "<":"&lt;",
+      ">":"&gt;",
+      '"':"&quot;",
+      "'":"&#39;"
+    }[match];
   });
 }
-function renderChips(){
-  var cats = ["Barchasi"]; ARTICLES.forEach(function(a){ if(cats.indexOf(a.category)<0) cats.push(a.category); });
-  $("chips").innerHTML = cats.map(function(c){ return '<button class="chip" aria-pressed="'+(c===state.cat)+'" data-cat="'+esc(c)+'">'+esc(c)+'</button>'; }).join("");
+
+function artStyle(category, imageUrl) {
+  var colors = COLORS[category] || ["#1F4E79","#F2B705"];
+  var style = "--c1:" + colors[0] + ";--c2:" + colors[1] + ";";
+
+  if (imageUrl) {
+    style += "background-image:url(&quot;" + esc(imageUrl) + "&quot;);";
+  }
+
+  return style;
 }
-function render(){
+
+function artClass(imageUrl) {
+  return imageUrl ? "art has-image" : "art";
+}
+
+function formattedDate(value) {
+  if (!value) {
+    return "";
+  }
+
+  var date = new Date(value + (value.length === 10 ? "T00:00:00" : ""));
+
+  if (isNaN(date.getTime())) {
+    return value;
+  }
+
+  return new Intl.DateTimeFormat("uz-UZ", {
+    year:"numeric",
+    month:"long",
+    day:"numeric"
+  }).format(date);
+}
+
+function filtered() {
+  var query = state.q.trim().toLowerCase();
+
+  return ARTICLES.filter(function(article) {
+    var categoryMatches = state.cat === "Barchasi" || article.category === state.cat;
+    var searchText = (article.title + " " + article.lead + " " + article.body).toLowerCase();
+    var queryMatches = !query || searchText.indexOf(query) > -1;
+
+    return categoryMatches && queryMatches;
+  });
+}
+
+function renderChips() {
+  var categories = ["Barchasi"];
+
+  ARTICLES.forEach(function(article) {
+    if (categories.indexOf(article.category) < 0) {
+      categories.push(article.category);
+    }
+  });
+
+  $("chips").innerHTML = categories.map(function(category) {
+    return '<button class="chip" type="button" aria-pressed="' + (category === state.cat) + '" data-cat="' + esc(category) + '">' + esc(category) + '</button>';
+  }).join("");
+}
+
+function render() {
   var items = filtered();
   var lead = $("leadSlot");
-  if(items.length){
-    var a = items[0];
-    lead.innerHTML = '<button class="lead" data-id="'+a.id+'"><div class="art" style="'+artStyle(a.category)+'"><span class="tag">'+esc(a.category)+'</span></div><div class="txt"><h1>'+esc(a.title)+'</h1><p>'+esc(a.lead)+'</p><span class="meta">'+a.minutes+' daqiqalik o\'qish</span></div></button>';
-  } else lead.innerHTML = "";
+
+  if (items.length) {
+    var article = items[0];
+
+    lead.innerHTML =
+      '<button class="lead" type="button" data-id="' + article.id + '">' +
+        '<div class="' + artClass(article.image_url) + '" style="' + artStyle(article.category, article.image_url) + '">' +
+          '<span class="tag">' + esc(article.category) + '</span>' +
+        '</div>' +
+        '<div class="txt">' +
+          '<h1>' + esc(article.title) + '</h1>' +
+          '<p>' + esc(article.lead) + '</p>' +
+          '<span class="meta">' + esc(article.minutes || 5) + ' daqiqalik o‘qish</span>' +
+        '</div>' +
+      '</button>';
+  } else {
+    lead.innerHTML = "";
+  }
+
   var rest = items.slice(1);
+
   $("list").innerHTML = items.length
-    ? (rest.length ? rest.map(function(a){
-        return '<button class="card" data-id="'+a.id+'"><div class="art" style="'+artStyle(a.category)+'"></div><div><span class="cat">'+esc(a.category)+'</span><h3>'+esc(a.title)+'</h3><span class="meta">'+a.minutes+' daqiqa</span></div></button>';
-      }).join("") : '<div class="empty">Bu bo\'limda boshqa maqola hozircha yo\'q.</div>')
+    ? (
+      rest.length
+        ? rest.map(function(article) {
+          return (
+            '<button class="card" type="button" data-id="' + article.id + '">' +
+              '<div class="' + artClass(article.image_url) + '" style="' + artStyle(article.category, article.image_url) + '"></div>' +
+              '<div>' +
+                '<span class="cat">' + esc(article.category) + '</span>' +
+                '<h3>' + esc(article.title) + '</h3>' +
+                '<span class="meta">' + esc(article.minutes || 5) + ' daqiqa</span>' +
+              '</div>' +
+            '</button>'
+          );
+        }).join("")
+        : '<div class="empty">Bu bo‘limda boshqa maqola hozircha yo‘q.</div>'
+    )
     : '<div class="empty">Hech narsa topilmadi.</div>';
 }
-function renderRank(){
-  $("rank").innerHTML = ARTICLES.slice(0,5).map(function(a,i){ return '<li><button data-id="'+a.id+'"><b>'+(i+1)+'</b><span>'+esc(a.title)+'</span></button></li>'; }).join("");
-}
-function renderFaq(){ $("faqList").innerHTML = FAQ.map(function(f){ return '<details><summary>'+esc(f.q)+'</summary><div>'+esc(f.a)+'</div></details>'; }).join(""); }
 
-function openArticle(id){
-  var a = ARTICLES.filter(function(x){return x.id==id})[0]; if(!a) return;
-  $("rArt").setAttribute("style", artStyle(a.category));
-  var paras = String(a.body).split(/\n\n+/);
-  $("rBody").innerHTML = '<span class="meta">'+esc(a.category)+' &middot; '+a.minutes+' daqiqalik o\'qish</span><h1>'+esc(a.title)+'</h1>'
-    + paras.map(function(p){return '<p>'+esc(p)+'</p>'}).join("")
-    + '<div class="note">Bu maqola umumiy ma\'lumot uchun. Qaror qilishdan oldin rasmiy manbani tekshiring.</div>'
-    + '<a class="btn tgLink" href="#" target="_blank" rel="noopener">Savolingizni Telegramda yozing</a>';
+function renderRank() {
+  $("rank").innerHTML = ARTICLES.slice(0, 5).map(function(article, index) {
+    return (
+      '<li>' +
+        '<button type="button" data-id="' + article.id + '">' +
+          '<b>' + (index + 1) + '</b>' +
+          '<span>' + esc(article.title) + '</span>' +
+        '</button>' +
+      '</li>'
+    );
+  }).join("");
+}
+
+function renderFaq() {
+  $("faqList").innerHTML = FAQ.map(function(item) {
+    return '<details><summary>' + esc(item.q) + '</summary><div>' + esc(item.a) + '</div></details>';
+  }).join("");
+}
+
+function renderAds(ads) {
+  var section = $("adsSection");
+  var list = $("adsList");
+
+  if (!ads || !ads.length) {
+    section.hidden = true;
+    list.innerHTML = "";
+    return;
+  }
+
+  section.hidden = false;
+
+  list.innerHTML = ads.map(function(ad) {
+    var image = ad.image_url
+      ? '<div class="ad-image" style="background-image:url(&quot;' + esc(ad.image_url) + '&quot;)"></div>'
+      : '<div class="ad-image"></div>';
+
+    var button = ad.target_url
+      ? '<a class="btn ghost" href="' + esc(ad.target_url) + '" target="_blank" rel="noopener">Batafsil</a>'
+      : '<a class="btn ghost tgContactLink" href="#" target="_blank" rel="noopener">Hamkorlik bo‘yicha yozish</a>';
+
+    return (
+      '<article class="ad-card">' +
+        image +
+        '<div>' +
+          '<span class="ad-label">' + esc(ad.label || "Reklama") + '</span>' +
+          '<h3>' + esc(ad.title) + '</h3>' +
+          '<p>' + esc(ad.description) + '</p>' +
+          (ad.company_name ? '<p class="meta">' + esc(ad.company_name) + '</p>' : "") +
+          button +
+        '</div>' +
+      '</article>'
+    );
+  }).join("");
+
   bindLinks();
-  var r = $("reader"); r.classList.add("on"); r.scrollTop = 0; $("back").focus();
+}
+
+function renderSocials(settings) {
+  var items = [
+    ["instagram_url", "Instagram"],
+    ["facebook_url", "Facebook"],
+    ["youtube_url", "YouTube"],
+    ["tiktok_url", "TikTok"],
+    ["telegram_url", "Telegram"]
+  ];
+
+  var links = items.filter(function(item) {
+    return settings[item[0]];
+  }).map(function(item) {
+    return '<a href="' + esc(settings[item[0]]) + '" target="_blank" rel="noopener">' + item[1] + '</a>';
+  });
+
+  $("socials").innerHTML = links.join("");
+}
+
+function applySettings(settings) {
+  state.settings = settings || {};
+
+  if (settings.site_name) {
+    $("footerSiteName").textContent = settings.site_name;
+  }
+
+  if (settings.site_description) {
+    document.querySelector('meta[name="description"]').setAttribute("content", settings.site_description);
+  }
+
+  if (settings.telegram_url) {
+    TELEGRAM_URL = settings.telegram_url;
+  }
+
+  if (settings.contact) {
+    CONTACT = settings.contact;
+  }
+
+  if (settings.contact_url) {
+    CONTACT_URL = settings.contact_url;
+  }
+
+  if (settings.cta_title) {
+    $("ctaTitle").textContent = settings.cta_title;
+  }
+
+  if (settings.cta_text) {
+    $("ctaText").textContent = settings.cta_text;
+  }
+
+  if (settings.about_text) {
+    $("aboutText").textContent = settings.about_text;
+  }
+
+  if (settings.editorial_policy) {
+    $("editorialPolicy").textContent = settings.editorial_policy;
+  }
+
+  $("contact").textContent = CONTACT;
+  $("contactLink").href = CONTACT_URL;
+  bindLinks();
+  renderSocials(settings);
+}
+
+function openArticle(id) {
+  var article = ARTICLES.filter(function(item) {
+    return String(item.id) === String(id);
+  })[0];
+
+  if (!article) {
+    return;
+  }
+
+  $("rArt").className = artClass(article.image_url);
+  $("rArt").setAttribute("style", artStyle(article.category, article.image_url));
+
+  var paragraphs = String(article.body || "").split(/\n\n+/).filter(Boolean);
+  var steps = String(article.steps || "").split(/\n+/).map(function(step) {
+    return step.replace(/^\s*(\d+[.)]|[-•])\s*/, "").trim();
+  }).filter(Boolean);
+
+  var content =
+    '<span class="meta">' + esc(article.category) + ' · ' + esc(article.minutes || 5) + ' daqiqalik o‘qish</span>' +
+    '<h1>' + esc(article.title) + '</h1>' +
+    (article.author ? '<p class="meta">Muallif: ' + esc(article.author) + '</p>' : "") +
+    '<h2>Qisqa javob</h2>' +
+    paragraphs.map(function(paragraph) {
+      return '<p>' + esc(paragraph) + '</p>';
+    }).join("");
+
+  if (steps.length) {
+    content += '<h2>Nima qilish kerak?</h2><ol>' + steps.map(function(step) {
+      return '<li>' + esc(step) + '</li>';
+    }).join("") + '</ol>';
+  }
+
+  if (article.warning) {
+    content += '<div class="warning-note"><strong>E’tibor bering:</strong><br>' + esc(article.warning) + '</div>';
+  }
+
+  if (article.source_name || article.source_url || article.document_no || article.updated) {
+    content += '<div class="source-box"><strong>Rasmiy manba</strong>';
+
+    if (article.source_name) {
+      content += '<p>' + esc(article.source_name) + '</p>';
+    }
+
+    if (article.source_url) {
+      content += '<p><a href="' + esc(article.source_url) + '" target="_blank" rel="noopener">Manbani ochish</a></p>';
+    }
+
+    if (article.document_no) {
+      content += '<p><strong>Hujjat / manba:</strong> ' + esc(article.document_no) + '</p>';
+    }
+
+    if (article.updated) {
+      content += '<p><strong>Yangilangan sana:</strong> ' + esc(formattedDate(article.updated)) + '</p>';
+    }
+
+    content += '</div>';
+  }
+
+  content +=
+    '<div class="note">Bu maqola umumiy ma’lumot uchun. Qaror qilishdan oldin rasmiy manbani tekshiring.</div>' +
+    '<a class="btn tgLink" href="#" target="_blank" rel="noopener">Savolingizni Telegramda yozing</a>';
+
+  $("rBody").innerHTML = content;
+  bindLinks();
+
+  var reader = $("reader");
+  reader.classList.add("on");
+  reader.scrollTop = 0;
+  $("back").focus();
   document.body.style.overflow = "hidden";
 }
-function closeArticle(){ $("reader").classList.remove("on"); document.body.style.overflow = ""; }
-function bindLinks(){ Array.prototype.forEach.call(document.querySelectorAll(".tgLink"),function(el){ el.href = TELEGRAM_URL; }); }
 
-document.addEventListener("click",function(e){
-  var chip = e.target.closest(".chip");
-  if(chip){ state.cat = chip.getAttribute("data-cat"); renderChips(); render(); return; }
-  var open = e.target.closest("[data-id]");
-  if(open){ openArticle(open.getAttribute("data-id")); }
-});
-$("back").addEventListener("click",closeArticle);
-document.addEventListener("keydown",function(e){ if(e.key==="Escape") closeArticle(); });
-$("searchToggle").addEventListener("click",function(){
-  var s = $("search"), on = s.classList.toggle("on");
-  this.setAttribute("aria-expanded", on);
-  if(on) $("q").focus(); else { $("q").value=""; state.q=""; render(); }
-});
-$("q").addEventListener("input",function(){ state.q = this.value; render(); });
-$("contact").textContent = CONTACT;
-bindLinks(); renderFaq();
+function closeArticle() {
+  $("reader").classList.remove("on");
+  document.body.style.overflow = "";
+}
 
-fetch('/api/articles').then(function(r){return r.json()}).then(function(data){
-  ARTICLES = data;
-  renderChips(); render(); renderRank();
-}).catch(function(){
-  $("list").innerHTML = '<div class="empty">Maqolalarni yuklab bo\'lmadi. Server ishlab turganini tekshiring.</div>';
+function bindLinks() {
+  Array.prototype.forEach.call(document.querySelectorAll(".tgLink"), function(element) {
+    element.href = TELEGRAM_URL;
+  });
+
+  Array.prototype.forEach.call(document.querySelectorAll(".tgContactLink"), function(element) {
+    element.href = CONTACT_URL;
+  });
+}
+
+function setTheme(theme) {
+  document.documentElement.setAttribute("data-theme", theme);
+  localStorage.setItem("qurilishinfo-theme", theme);
+  $("themeIcon").textContent = theme === "dark" ? "☀" : "◐";
+}
+
+function initTheme() {
+  var saved = localStorage.getItem("qurilishinfo-theme");
+
+  if (saved === "light" || saved === "dark") {
+    setTheme(saved);
+    return;
+  }
+
+  var isDark = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
+  setTheme(isDark ? "dark" : "light");
+}
+
+async function sendAppeal(event) {
+  event.preventDefault();
+
+  var status = $("appealStatus");
+  var submitButton = event.target.querySelector('button[type="submit"]');
+
+  var payload = {
+    name: $("appealName").value.trim(),
+    phone: $("appealPhone").value.trim(),
+    region: $("appealRegion").value.trim(),
+    topic: $("appealTopic").value,
+    message: $("appealMessage").value.trim()
+  };
+
+  if (!payload.region || !payload.topic || !payload.message || !$("appealConsent").checked) {
+    status.textContent = "Iltimos, majburiy maydonlarni va rozilik belgisini to‘ldiring.";
+    status.className = "form-status error";
+    return;
+  }
+
+  status.textContent = "Murojaat saqlanmoqda...";
+  status.className = "form-status";
+  submitButton.disabled = true;
+
+  try {
+    var response = await fetch("/api/appeals", {
+      method:"POST",
+      headers:{"Content-Type":"application/json"},
+      body:JSON.stringify(payload)
+    });
+
+    var result = await response.json();
+
+    if (!response.ok) {
+      throw new Error(result.error || "Murojaatni yuborib bo‘lmadi.");
+    }
+
+    status.textContent = "Murojaatingiz qabul qilindi. Telegram oynasi ochiladi.";
+    status.className = "form-status success";
+
+    var telegramText =
+      "QurilishInfo uchun murojaat:\n\n" +
+      "Mavzu: " + payload.topic + "\n" +
+      "Hudud: " + payload.region + "\n" +
+      "Savol: " + payload.message +
+      (payload.name ? "\nIsm: " + payload.name : "") +
+      (payload.phone ? "\nTelefon: " + payload.phone : "");
+
+    var telegramUrl = TELEGRAM_URL + "?text=" + encodeURIComponent(telegramText);
+    window.open(telegramUrl, "_blank", "noopener");
+
+    event.target.reset();
+  } catch (error) {
+    status.textContent = error.message || "Xatolik yuz berdi.";
+    status.className = "form-status error";
+  } finally {
+    submitButton.disabled = false;
+  }
+}
+
+document.addEventListener("click", function(event) {
+  var chip = event.target.closest(".chip");
+
+  if (chip) {
+    state.cat = chip.getAttribute("data-cat");
+    renderChips();
+    render();
+    return;
+  }
+
+  var openButton = event.target.closest("[data-id]");
+
+  if (openButton) {
+    openArticle(openButton.getAttribute("data-id"));
+  }
+});
+
+$("back").addEventListener("click", closeArticle);
+
+document.addEventListener("keydown", function(event) {
+  if (event.key === "Escape" && $("reader").classList.contains("on")) {
+    closeArticle();
+  }
+});
+
+$("searchToggle").addEventListener("click", function() {
+  var search = $("search");
+  var isOpen = search.classList.toggle("on");
+
+  this.setAttribute("aria-expanded", isOpen);
+
+  if (isOpen) {
+    $("q").focus();
+  } else {
+    $("q").value = "";
+    state.q = "";
+    render();
+  }
+});
+
+$("q").addEventListener("input", function() {
+  state.q = this.value;
+  render();
+});
+
+$("themeToggle").addEventListener("click", function() {
+  var current = document.documentElement.getAttribute("data-theme") || "light";
+  setTheme(current === "dark" ? "light" : "dark");
+});
+
+$("appealForm").addEventListener("submit", sendAppeal);
+
+initTheme();
+renderFaq();
+bindLinks();
+
+Promise.all([
+  fetch("/api/articles").then(function(response) {
+    if (!response.ok) {
+      throw new Error("Maqolalarni yuklab bo‘lmadi.");
+    }
+
+    return response.json();
+  }),
+  fetch("/api/settings").then(function(response) {
+    if (!response.ok) {
+      return {};
+    }
+
+    return response.json();
+  }),
+  fetch("/api/advertisements").then(function(response) {
+    if (!response.ok) {
+      return [];
+    }
+
+    return response.json();
+  })
+]).then(function(results) {
+  ARTICLES = Array.isArray(results[0]) ? results[0] : [];
+  applySettings(results[1] || {});
+  renderAds(Array.isArray(results[2]) ? results[2] : []);
+  renderChips();
+  render();
+  renderRank();
+}).catch(function() {
+  $("list").innerHTML = '<div class="empty">Maqolalarni yuklab bo‘lmadi. Server ishlab turganini tekshiring.</div>';
 });
 </script>
 </body>
