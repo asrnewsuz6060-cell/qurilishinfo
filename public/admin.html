@@ -908,4 +908,1278 @@
 
         <div class="field">
           <label for="loginPassword">Parol</label>
-          <input id="loginPassword" name="password" type="password" autocomplete="current-password" requ
+          <input id="loginPassword" name="password" type="password" autocomplete="current-password" required>
+        </div>
+
+        <button class="btn btn-primary full-width" type="submit" aria-label="Admin panelga kirish">
+          Kirish
+        </button>
+
+        <div id="loginError" class="error-message" role="alert"></div>
+      </form>
+    </section>
+  </main>
+
+  <div id="adminShell" class="admin-shell hidden">
+    <aside id="sidebar" class="sidebar" aria-label="Admin menyusi">
+      <div class="brand">
+        <div class="brand-mark" aria-hidden="true">QI</div>
+        <div>
+          <h1>QurilishInfo</h1>
+          <p>Admin panel</p>
+        </div>
+      </div>
+
+      <nav class="side-nav">
+        <button class="nav-button active" data-view="dashboard" type="button">
+          <span class="nav-icon">▦</span>
+          Boshqaruv paneli
+        </button>
+
+        <button class="nav-button" data-view="articles" type="button">
+          <span class="nav-icon">▤</span>
+          Maqolalar
+        </button>
+
+        <button class="nav-button" data-view="articleForm" type="button">
+          <span class="nav-icon">＋</span>
+          Yangi maqola
+        </button>
+
+        <button class="nav-button" data-view="advertisements" type="button">
+          <span class="nav-icon">▣</span>
+          Reklama
+        </button>
+
+        <button class="nav-button" data-view="appeals" type="button">
+          <span class="nav-icon">✉</span>
+          Murojaatlar
+        </button>
+
+        <button class="nav-button" data-view="settings" type="button">
+          <span class="nav-icon">⚙</span>
+          Sayt sozlamalari
+        </button>
+
+        <button class="nav-button" data-view="password" type="button">
+          <span class="nav-icon">🔒</span>
+          Parol
+        </button>
+      </nav>
+
+      <div class="side-footer">
+        <p>Saytingizni tashqi oynada tekshirib ko‘ring.</p>
+        <a href="/" target="_blank" rel="noopener">↗ Saytni ochish</a>
+      </div>
+    </aside>
+
+    <div id="overlay" class="overlay"></div>
+
+    <section class="workspace">
+      <header class="topbar">
+        <div class="topbar-left">
+          <button id="menuButton" class="menu-button" type="button" aria-label="Menyuni ochish">☰</button>
+          <div>
+            <h1 id="pageTitle" class="page-title">Boshqaruv paneli</h1>
+            <p id="pageSubtitle" class="page-subtitle">Tahririyat faoliyati bo‘yicha umumiy ko‘rinish</p>
+          </div>
+        </div>
+
+        <div class="topbar-actions">
+          <div class="admin-user">
+            <strong id="adminUsername">Admin</strong>
+            <span>Tahririyat boshqaruvi</span>
+          </div>
+
+          <a href="/" target="_blank" rel="noopener" class="btn btn-light">Saytni ochish</a>
+          <button id="logoutButton" type="button" class="btn btn-dark" aria-label="Admin paneldan chiqish">Chiqish</button>
+        </div>
+      </header>
+
+      <main class="main-content">
+        <div id="globalNotice" class="notice" role="alert"></div>
+
+        <section id="dashboardView" class="view active">
+          <div class="hero-panel">
+            <div>
+              <h2>Assalomu alaykum, tahririyat!</h2>
+              <p>Bu yerda QurilishInfo saytidagi maqolalar, murojaatlar, reklama va saytning asosiy ma’lumotlarini boshqarishingiz mumkin.</p>
+            </div>
+
+            <button class="btn btn-warning" type="button" data-go-view="articleForm">
+              ＋ Yangi maqola qo‘shish
+            </button>
+          </div>
+
+          <div class="stats-grid">
+            <article class="stat-card">
+              <span class="stat-label">Jami maqolalar</span>
+              <strong id="statArticles">0</strong>
+              <span class="stat-hint">Barcha materiallar</span>
+            </article>
+
+            <article class="stat-card">
+              <span class="stat-label">Qoralamalar</span>
+              <strong id="statDrafts">0</strong>
+              <span class="stat-hint">Hali e’lon qilinmagan</span>
+            </article>
+
+            <article class="stat-card">
+              <span class="stat-label">Faol reklamalar</span>
+              <strong id="statAds">0</strong>
+              <span class="stat-hint">Hamkorlik materiallari</span>
+            </article>
+
+            <article class="stat-card">
+              <span class="stat-label">Yangi murojaatlar</span>
+              <strong id="statAppeals">0</strong>
+              <span class="stat-hint">Javob kutayotgan savollar</span>
+            </article>
+          </div>
+
+          <div class="dashboard-grid">
+            <section class="panel">
+              <header class="panel-header">
+                <h3>So‘nggi maqolalar</h3>
+                <button class="btn btn-light btn-small" type="button" data-go-view="articles">Barchasini ko‘rish</button>
+              </header>
+              <div id="recentArticles" class="panel-body recent-list"></div>
+            </section>
+
+            <section class="panel">
+              <header class="panel-header">
+                <h3>Tezkor amallar</h3>
+              </header>
+              <div class="panel-body quick-actions">
+                <button class="btn btn-primary" type="button" data-go-view="articleForm">＋ Maqola yozish</button>
+                <button class="btn btn-light" type="button" data-go-view="advertisements">▣ Reklama joylashtirish</button>
+                <button class="btn btn-light" type="button" data-go-view="appeals">✉ Murojaatlarni ko‘rish</button>
+                <button class="btn btn-light" type="button" data-go-view="settings">⚙ Sayt sozlamalari</button>
+              </div>
+            </section>
+          </div>
+        </section>
+
+        <section id="articlesView" class="view">
+          <div class="section-heading">
+            <div>
+              <h2>Maqolalar</h2>
+              <p>Materiallarni qidiring, tahrirlang yoki o‘chiring.</p>
+            </div>
+            <button class="btn btn-primary" type="button" data-go-view="articleForm">＋ Yangi maqola</button>
+          </div>
+
+          <section class="table-card">
+            <div class="toolbar">
+              <input id="articleSearch" type="search" placeholder="Sarlavha yoki rukn bo‘yicha qidirish" aria-label="Maqolalarni qidirish">
+
+              <select id="articleStatusFilter" aria-label="Maqola holatini filtrlash">
+                <option value="">Barcha holatlar</option>
+                <option value="published">E’lon qilingan</option>
+                <option value="draft">Qoralama</option>
+                <option value="archived">Arxiv</option>
+              </select>
+            </div>
+
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Maqola</th>
+                    <th>Rukn</th>
+                    <th>Holat</th>
+                    <th>Sana</th>
+                    <th>Amallar</th>
+                  </tr>
+                </thead>
+                <tbody id="articlesTableBody"></tbody>
+              </table>
+            </div>
+          </section>
+        </section>
+
+        <section id="articleFormView" class="view">
+          <div class="section-heading">
+            <div>
+              <h2 id="articleFormTitle">Yangi maqola qo‘shish</h2>
+              <p>Materialni to‘liq kiriting. Qoralama holatida saqlab, keyin e’lon qilishingiz ham mumkin.</p>
+            </div>
+            <button id="cancelArticleEdit" class="btn btn-light hidden" type="button">Bekor qilish</button>
+          </div>
+
+          <form id="articleForm" class="form-card">
+            <input id="articleId" type="hidden">
+
+            <div class="form-grid">
+              <div class="field">
+                <label for="articleCategory">Rukn</label>
+                <select id="articleCategory" required>
+                  <option value="">Ruknni tanlang</option>
+                  <option value="Savol-javob">Savol-javob</option>
+                  <option value="Uy qurish">Uy qurish</option>
+                  <option value="Uy sotib olish">Uy sotib olish</option>
+                  <option value="Inspeksiya izohlaydi">Inspeksiya izohlaydi</option>
+                  <option value="Qaror sodda tilda">Qaror sodda tilda</option>
+                  <option value="Rasmiy xabarlar">Rasmiy xabarlar</option>
+                  <option value="Ruxsatnoma">Ruxsatnoma</option>
+                  <option value="Materiallar">Materiallar</option>
+                  <option value="Yangiliklar">Yangiliklar</option>
+                </select>
+              </div>
+
+              <div class="field">
+                <label for="articleStatus">Holat</label>
+                <select id="articleStatus" required>
+                  <option value="published">E’lon qilingan</option>
+                  <option value="draft">Qoralama</option>
+                  <option value="archived">Arxiv</option>
+                </select>
+              </div>
+
+              <div class="field field-full">
+                <label for="articleTitle">Maqola sarlavhasi</label>
+                <input id="articleTitle" required placeholder="Masalan: Uy sotib olishdan oldin tekshiriladigan 7 hujjat">
+              </div>
+
+              <div class="field field-full">
+                <label for="articleLead">Qisqacha izoh</label>
+                <textarea id="articleLead" required placeholder="Maqolaning 1–2 jumlalik qisqacha mazmuni"></textarea>
+              </div>
+
+              <div class="field field-full">
+                <label for="articleBody">To‘liq maqola matni</label>
+                <textarea id="articleBody" required placeholder="Maqola matnini shu yerga yozing. Paragraflarni bo‘sh qator bilan ajrating."></textarea>
+              </div>
+
+              <div class="field">
+                <label for="articleMinutes">O‘qish vaqti (daqiqada)</label>
+                <input id="articleMinutes" type="number" min="1" value="5" required>
+              </div>
+
+              <div class="field">
+                <label for="articleAuthor">Muallif</label>
+                <input id="articleAuthor" value="QurilishInfo tahririyati">
+              </div>
+
+              <div class="field field-full">
+                <label for="articleImageUrl">Rasm havolasi</label>
+                <input id="articleImageUrl" type="url" placeholder="https://...">
+                <p class="help-text">Hozircha rasmni internetdagi to‘g‘ridan-to‘g‘ri havola orqali biriktiring.</p>
+              </div>
+            </div>
+
+            <hr class="form-divider">
+
+            <h3 style="margin: 0 0 16px; color: var(--navy);">Rasmiy manba va foydali bloklar</h3>
+
+            <div class="form-grid">
+              <div class="field">
+                <label for="articleSourceName">Rasmiy manba nomi</label>
+                <input id="articleSourceName" placeholder="Masalan: Lex.uz">
+              </div>
+
+              <div class="field">
+                <label for="articleSourceUrl">Rasmiy manba havolasi</label>
+                <input id="articleSourceUrl" type="url" placeholder="https://lex.uz/...">
+              </div>
+
+              <div class="field">
+                <label for="articleDocumentNo">Hujjat / manba raqami</label>
+                <input id="articleDocumentNo" placeholder="Masalan: PQ-123">
+              </div>
+
+              <div class="field">
+                <label for="articleUpdated">Yangilangan sana</label>
+                <input id="articleUpdated" type="date">
+              </div>
+
+              <div class="field field-full">
+                <label for="articleSteps">Nima qilish kerak? Qadamlar</label>
+                <textarea id="articleSteps" placeholder="Har bir qadamni yangi qatordan yozing.&#10;1-qadam&#10;2-qadam&#10;3-qadam"></textarea>
+              </div>
+
+              <div class="field field-full">
+                <label for="articleWarning">E’tibor bering</label>
+                <textarea id="articleWarning" placeholder="Muhim ogohlantirish yoki eslatmani yozing"></textarea>
+              </div>
+            </div>
+
+            <div class="form-actions">
+              <button class="btn btn-primary" type="submit">Saqlash</button>
+              <button id="saveAsDraftButton" class="btn btn-warning" type="button">Qoralama qilib saqlash</button>
+              <button id="resetArticleFormButton" class="btn btn-light" type="button">Tozalash</button>
+            </div>
+          </form>
+        </section>
+
+        <section id="advertisementsView" class="view">
+          <div class="section-heading">
+            <div>
+              <h2>Reklama va hamkorlik materiallari</h2>
+              <p>Reklama materiallari tahririy maqolalardan alohida belgilanadi.</p>
+            </div>
+          </div>
+
+          <form id="advertisementForm" class="form-card">
+            <input id="advertisementId" type="hidden">
+
+            <div class="form-grid">
+              <div class="field">
+                <label for="adLabel">Belgi</label>
+                <select id="adLabel">
+                  <option value="Reklama">Reklama</option>
+                  <option value="Hamkorlik materiali">Hamkorlik materiali</option>
+                </select>
+              </div>
+
+              <div class="field">
+                <label for="adStatus">Holat</label>
+                <select id="adStatus">
+                  <option value="active">Faol</option>
+                  <option value="inactive">Nofaol</option>
+                </select>
+              </div>
+
+              <div class="field">
+                <label for="adCompanyName">Kompaniya nomi</label>
+                <input id="adCompanyName" placeholder="Masalan: ABC Qurilish">
+              </div>
+
+              <div class="field">
+                <label for="adTargetUrl">Havola</label>
+                <input id="adTargetUrl" type="url" placeholder="https://...">
+              </div>
+
+              <div class="field field-full">
+                <label for="adTitle">Sarlavha</label>
+                <input id="adTitle" required placeholder="Reklama materialining sarlavhasi">
+              </div>
+
+              <div class="field field-full">
+                <label for="adDescription">Qisqacha tavsif</label>
+                <textarea id="adDescription" required placeholder="Hamkorlik materiali haqida qisqa va aniq ma’lumot"></textarea>
+              </div>
+
+              <div class="field field-full">
+                <label for="adImageUrl">Banner yoki rasm havolasi</label>
+                <input id="adImageUrl" type="url" placeholder="https://...">
+              </div>
+            </div>
+
+            <div class="form-actions">
+              <button class="btn btn-primary" type="submit">Reklamani saqlash</button>
+              <button id="cancelAdEdit" class="btn btn-light hidden" type="button">Bekor qilish</button>
+            </div>
+          </form>
+
+          <div style="height: 22px"></div>
+
+          <section class="table-card">
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Material</th>
+                    <th>Kompaniya</th>
+                    <th>Belgi</th>
+                    <th>Holat</th>
+                    <th>Amallar</th>
+                  </tr>
+                </thead>
+                <tbody id="advertisementsTableBody"></tbody>
+              </table>
+            </div>
+          </section>
+        </section>
+
+        <section id="appealsView" class="view">
+          <div class="section-heading">
+            <div>
+              <h2>Murojaatlar</h2>
+              <p>Saytdagi forma orqali kelgan savollarni nazorat qiling.</p>
+            </div>
+          </div>
+
+          <section class="table-card">
+            <div class="toolbar">
+              <select id="appealStatusFilter" aria-label="Murojaat holatini filtrlash">
+                <option value="">Barcha murojaatlar</option>
+                <option value="new">Yangi</option>
+                <option value="reviewing">Ko‘rib chiqilmoqda</option>
+                <option value="answered">Javob berildi</option>
+                <option value="archived">Arxiv</option>
+              </select>
+            </div>
+
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Murojaat</th>
+                    <th>Hudud va mavzu</th>
+                    <th>Sana</th>
+                    <th>Holat</th>
+                  </tr>
+                </thead>
+                <tbody id="appealsTableBody"></tbody>
+              </table>
+            </div>
+          </section>
+        </section>
+
+        <section id="settingsView" class="view">
+          <div class="section-heading">
+            <div>
+              <h2>Sayt sozlamalari</h2>
+              <p>“Biz haqimizda”, aloqa va ijtimoiy tarmoq manzillarini shu yerda yangilang.</p>
+            </div>
+          </div>
+
+          <form id="settingsForm" class="form-card">
+            <h3 style="margin: 0 0 16px; color: var(--navy);">Asosiy ma’lumotlar</h3>
+
+            <div class="form-grid">
+              <div class="field">
+                <label for="settingSiteName">Sayt nomi</label>
+                <input id="settingSiteName" required>
+              </div>
+
+              <div class="field">
+                <label for="settingContact">Aloqa nomi</label>
+                <input id="settingContact" placeholder="@qurilishinfo_admin">
+              </div>
+
+              <div class="field field-full">
+                <label for="settingDescription">Qisqa tavsif</label>
+                <textarea id="settingDescription"></textarea>
+              </div>
+
+              <div class="field field-full">
+                <label for="settingAbout">Biz haqimizda</label>
+                <textarea id="settingAbout"></textarea>
+              </div>
+
+              <div class="field field-full">
+                <label for="settingEditorialPolicy">Tahririyat va reklama qoidasi</label>
+                <textarea id="settingEditorialPolicy"></textarea>
+              </div>
+            </div>
+
+            <hr class="form-divider">
+
+            <h3 style="margin: 0 0 16px; color: var(--navy);">Murojaat bloki</h3>
+
+            <div class="form-grid">
+              <div class="field">
+                <label for="settingCtaTitle">CTA sarlavhasi</label>
+                <input id="settingCtaTitle">
+              </div>
+
+              <div class="field">
+                <label for="settingTelegramUrl">Telegram kanal yoki bot havolasi</label>
+                <input id="settingTelegramUrl" type="url" placeholder="https://t.me/...">
+              </div>
+
+              <div class="field field-full">
+                <label for="settingCtaText">CTA matni</label>
+                <textarea id="settingCtaText"></textarea>
+              </div>
+
+              <div class="field">
+                <label for="settingContactUrl">Reklama / aloqa Telegram havolasi</label>
+                <input id="settingContactUrl" type="url" placeholder="https://t.me/...">
+              </div>
+            </div>
+
+            <hr class="form-divider">
+
+            <h3 style="margin: 0 0 16px; color: var(--navy);">Ijtimoiy tarmoqlar</h3>
+
+            <div class="form-grid">
+              <div class="field">
+                <label for="settingInstagramUrl">Instagram havolasi</label>
+                <input id="settingInstagramUrl" type="url" placeholder="https://instagram.com/...">
+              </div>
+
+              <div class="field">
+                <label for="settingFacebookUrl">Facebook havolasi</label>
+                <input id="settingFacebookUrl" type="url" placeholder="https://facebook.com/...">
+              </div>
+
+              <div class="field">
+                <label for="settingYoutubeUrl">YouTube havolasi</label>
+                <input id="settingYoutubeUrl" type="url" placeholder="https://youtube.com/...">
+              </div>
+
+              <div class="field">
+                <label for="settingTiktokUrl">TikTok havolasi</label>
+                <input id="settingTiktokUrl" type="url" placeholder="https://tiktok.com/@...">
+              </div>
+            </div>
+
+            <div class="form-actions">
+              <button class="btn btn-primary" type="submit">Sozlamalarni saqlash</button>
+            </div>
+          </form>
+        </section>
+
+        <section id="passwordView" class="view">
+          <div class="section-heading">
+            <div>
+              <h2>Parolni almashtirish</h2>
+              <p>Hisobingiz xavfsizligi uchun kuchli va boshqalarga noma’lum parol qo‘ying.</p>
+            </div>
+          </div>
+
+          <form id="passwordForm" class="form-card" style="max-width: 650px">
+            <div class="field">
+              <label for="currentPassword">Joriy parol</label>
+              <input id="currentPassword" type="password" autocomplete="current-password" required>
+            </div>
+
+            <div class="field">
+              <label for="newPassword">Yangi parol</label>
+              <input id="newPassword" type="password" minlength="8" autocomplete="new-password" required>
+              <p class="help-text">Kamida 8 belgi ishlating. Harf, raqam va belgilar aralash bo‘lsa yaxshi.</p>
+            </div>
+
+            <div class="field">
+              <label for="newPasswordAgain">Yangi parolni qayta kiriting</label>
+              <input id="newPasswordAgain" type="password" minlength="8" autocomplete="new-password" required>
+            </div>
+
+            <div class="form-actions">
+              <button class="btn btn-primary" type="submit">Parolni yangilash</button>
+            </div>
+          </form>
+        </section>
+      </main>
+    </section>
+  </div>
+
+  <script>
+    const state = {
+      articles: [],
+      advertisements: [],
+      appeals: [],
+      settings: {},
+      currentView: "dashboard",
+      adminUsername: ""
+    };
+
+    const VIEW_META = {
+      dashboard: {
+        title: "Boshqaruv paneli",
+        subtitle: "Tahririyat faoliyati bo‘yicha umumiy ko‘rinish"
+      },
+      articles: {
+        title: "Maqolalar",
+        subtitle: "Barcha materiallarni boshqaring"
+      },
+      articleForm: {
+        title: "Maqola muharriri",
+        subtitle: "Yangi material yozing yoki mavjudini tahrirlang"
+      },
+      advertisements: {
+        title: "Reklama",
+        subtitle: "Hamkorlik materiallari va reklama bloklari"
+      },
+      appeals: {
+        title: "Murojaatlar",
+        subtitle: "Foydalanuvchilardan kelgan savollar"
+      },
+      settings: {
+        title: "Sayt sozlamalari",
+        subtitle: "Aloqa, ijtimoiy tarmoqlar va tahririy ma’lumotlar"
+      },
+      password: {
+        title: "Parol",
+        subtitle: "Admin hisobingiz xavfsizligi"
+      }
+    };
+
+    async function api(url, options = {}) {
+      const config = {
+        credentials: "same-origin",
+        headers: {
+          ...(options.body ? { "Content-Type": "application/json" } : {}),
+          ...(options.headers || {})
+        },
+        ...options
+      };
+
+      const response = await fetch(url, config);
+
+      let payload = null;
+
+      try {
+        payload = await response.json();
+      } catch (error) {
+        payload = null;
+      }
+
+      if (!response.ok) {
+        throw new Error(payload?.error || "So‘rovni bajarishda xatolik yuz berdi");
+      }
+
+      return payload;
+    }
+
+    function showNotice(message, type = "success") {
+      const notice = document.getElementById("globalNotice");
+      notice.textContent = message;
+      notice.className = `notice ${type}`;
+
+      window.clearTimeout(showNotice.timer);
+
+      showNotice.timer = window.setTimeout(() => {
+        notice.className = "notice";
+        notice.textContent = "";
+      }, 5000);
+    }
+
+    function escapeHtml(value) {
+      return String(value ?? "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+    }
+
+    function formatDate(value) {
+      if (!value) {
+        return "—";
+      }
+
+      const date = new Date(value.replace(" ", "T") + (value.includes("Z") ? "" : "Z"));
+
+      if (Number.isNaN(date.getTime())) {
+        return value;
+      }
+
+      return new Intl.DateTimeFormat("uz-UZ", {
+        year: "numeric",
+        month: "short",
+        day: "numeric",
+        hour: "2-digit",
+        minute: "2-digit"
+      }).format(date);
+    }
+
+    function articleStatusText(status) {
+      const map = {
+        published: "E’lon qilingan",
+        draft: "Qoralama",
+        archived: "Arxiv"
+      };
+
+      return map[status] || status || "E’lon qilingan";
+    }
+
+    function appealStatusText(status) {
+      const map = {
+        new: "Yangi",
+        reviewing: "Ko‘rib chiqilmoqda",
+        answered: "Javob berildi",
+        archived: "Arxiv"
+      };
+
+      return map[status] || status;
+    }
+
+    function adStatusText(status) {
+      return status === "inactive" ? "Nofaol" : "Faol";
+    }
+
+    function statusBadge(status, type) {
+      const normalized = String(status || "").toLowerCase();
+      const suffix = type === "article"
+        ? (normalized === "published" ? "published" : normalized === "draft" ? "draft" : "archived")
+        : type === "appeal"
+          ? normalized
+          : (normalized === "active" ? "active" : "inactive");
+
+      const text = type === "article"
+        ? articleStatusText(normalized)
+        : type === "appeal"
+          ? appealStatusText(normalized)
+          : adStatusText(normalized);
+
+      return `<span class="badge badge-${suffix}">${escapeHtml(text)}</span>`;
+    }
+
+    function showView(viewName) {
+      const target = document.getElementById(`${viewName}View`);
+
+      if (!target) {
+        return;
+      }
+
+      state.currentView = viewName;
+
+      document.querySelectorAll(".view").forEach((view) => {
+        view.classList.remove("active");
+      });
+
+      target.classList.add("active");
+
+      document.querySelectorAll(".nav-button").forEach((button) => {
+        button.classList.toggle("active", button.dataset.view === viewName);
+      });
+
+      const meta = VIEW_META[viewName] || VIEW_META.dashboard;
+
+      document.getElementById("pageTitle").textContent = meta.title;
+      document.getElementById("pageSubtitle").textContent = meta.subtitle;
+
+      closeMobileMenu();
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    function openMobileMenu() {
+      document.getElementById("sidebar").classList.add("open");
+      document.getElementById("overlay").classList.add("open");
+    }
+
+    function closeMobileMenu() {
+      document.getElementById("sidebar").classList.remove("open");
+      document.getElementById("overlay").classList.remove("open");
+    }
+
+    async function loadAllData() {
+      const [articles, advertisements, appeals, settings] = await Promise.all([
+        api("/api/admin/articles"),
+        api("/api/admin/advertisements"),
+        api("/api/admin/appeals"),
+        api("/api/admin/settings")
+      ]);
+
+      state.articles = Array.isArray(articles) ? articles : [];
+      state.advertisements = Array.isArray(advertisements) ? advertisements : [];
+      state.appeals = Array.isArray(appeals) ? appeals : [];
+      state.settings = settings || {};
+
+      renderDashboard();
+      renderArticles();
+      renderAdvertisements();
+      renderAppeals();
+      fillSettingsForm();
+    }
+
+    function renderDashboard() {
+      const totalArticles = state.articles.length;
+      const draftArticles = state.articles.filter((article) => article.status === "draft").length;
+      const activeAds = state.advertisements.filter((ad) => ad.status === "active").length;
+      const newAppeals = state.appeals.filter((appeal) => appeal.status === "new").length;
+
+      document.getElementById("statArticles").textContent = totalArticles;
+      document.getElementById("statDrafts").textContent = draftArticles;
+      document.getElementById("statAds").textContent = activeAds;
+      document.getElementById("statAppeals").textContent = newAppeals;
+
+      const recentContainer = document.getElementById("recentArticles");
+      const latest = state.articles.slice(0, 5);
+
+      if (!latest.length) {
+        recentContainer.innerHTML = '<div class="empty-state">Hozircha maqola yo‘q. Birinchi materialni yozishni boshlang.</div>';
+        return;
+      }
+
+      recentContainer.innerHTML = latest.map((article) => `
+        <article class="recent-item">
+          <strong>${escapeHtml(article.title)}</strong>
+          <span>${escapeHtml(article.category)} · ${articleStatusText(article.status)} · ${formatDate(article.created_at)}</span>
+        </article>
+      `).join("");
+    }
+
+    function renderArticles() {
+      const query = document.getElementById("articleSearch").value.trim().toLowerCase();
+      const status = document.getElementById("articleStatusFilter").value;
+
+      const rows = state.articles.filter((article) => {
+        const haystack = `${article.title} ${article.category} ${article.lead}`.toLowerCase();
+        const matchesQuery = !query || haystack.includes(query);
+        const matchesStatus = !status || article.status === status;
+
+        return matchesQuery && matchesStatus;
+      });
+
+      const tbody = document.getElementById("articlesTableBody");
+
+      if (!rows.length) {
+        tbody.innerHTML = '<tr><td colspan="5"><div class="empty-state">Mos maqola topilmadi.</div></td></tr>';
+        return;
+      }
+
+      tbody.innerHTML = rows.map((article) => `
+        <tr>
+          <td class="article-title">
+            ${escapeHtml(article.title)}
+            <small>${escapeHtml(article.lead || "")}</small>
+          </td>
+          <td>${escapeHtml(article.category)}</td>
+          <td>${statusBadge(article.status, "article")}</td>
+          <td>${formatDate(article.created_at)}</td>
+          <td>
+            <div class="actions-cell">
+              <button class="btn btn-light btn-small" type="button" onclick="editArticle(${article.id})">Tahrirlash</button>
+              <button class="btn btn-danger btn-small" type="button" onclick="deleteArticle(${article.id})">O‘chirish</button>
+            </div>
+          </td>
+        </tr>
+      `).join("");
+    }
+
+    function renderAdvertisements() {
+      const tbody = document.getElementById("advertisementsTableBody");
+
+      if (!state.advertisements.length) {
+        tbody.innerHTML = '<tr><td colspan="5"><div class="empty-state">Hozircha reklama materiali yo‘q.</div></td></tr>';
+        return;
+      }
+
+      tbody.innerHTML = state.advertisements.map((ad) => `
+        <tr>
+          <td class="article-title">
+            ${escapeHtml(ad.title)}
+            <small>${escapeHtml(ad.description || "")}</small>
+          </td>
+          <td>${escapeHtml(ad.company_name || "—")}</td>
+          <td><span class="badge badge-new">${escapeHtml(ad.label || "Reklama")}</span></td>
+          <td>${statusBadge(ad.status, "advertisement")}</td>
+          <td>
+            <div class="actions-cell">
+              <button class="btn btn-light btn-small" type="button" onclick="editAdvertisement(${ad.id})">Tahrirlash</button>
+              <button class="btn btn-danger btn-small" type="button" onclick="deleteAdvertisement(${ad.id})">O‘chirish</button>
+            </div>
+          </td>
+        </tr>
+      `).join("");
+    }
+
+    function renderAppeals() {
+      const filter = document.getElementById("appealStatusFilter").value;
+
+      const rows = state.appeals.filter((appeal) => {
+        return !filter || appeal.status === filter;
+      });
+
+      const tbody = document.getElementById("appealsTableBody");
+
+      if (!rows.length) {
+        tbody.innerHTML = '<tr><td colspan="4"><div class="empty-state">Hozircha murojaat yo‘q.</div></td></tr>';
+        return;
+      }
+
+      tbody.innerHTML = rows.map((appeal) => `
+        <tr>
+          <td>
+            <strong>${escapeHtml(appeal.name || "Ism ko‘rsatilmagan")}</strong><br>
+            <span style="color: var(--muted)">${escapeHtml(appeal.phone || "Telefon ko‘rsatilmagan")}</span>
+            <p style="margin: 8px 0 0; white-space: pre-wrap">${escapeHtml(appeal.message)}</p>
+          </td>
+          <td>
+            <strong>${escapeHtml(appeal.topic)}</strong><br>
+            <span style="color: var(--muted)">${escapeHtml(appeal.region)}</span>
+          </td>
+          <td>${formatDate(appeal.created_at)}</td>
+          <td>
+            <select class="status-select" aria-label="Murojaat holati" onchange="updateAppealStatus(${appeal.id}, this.value)">
+              <option value="new" ${appeal.status === "new" ? "selected" : ""}>Yangi</option>
+              <option value="reviewing" ${appeal.status === "reviewing" ? "selected" : ""}>Ko‘rib chiqilmoqda</option>
+              <option value="answered" ${appeal.status === "answered" ? "selected" : ""}>Javob berildi</option>
+              <option value="archived" ${appeal.status === "archived" ? "selected" : ""}>Arxiv</option>
+            </select>
+          </td>
+        </tr>
+      `).join("");
+    }
+
+    function fillSettingsForm() {
+      const settings = state.settings;
+
+      document.getElementById("settingSiteName").value = settings.site_name || "QurilishInfo";
+      document.getElementById("settingContact").value = settings.contact || "";
+      document.getElementById("settingDescription").value = settings.site_description || "";
+      document.getElementById("settingAbout").value = settings.about_text || "";
+      document.getElementById("settingEditorialPolicy").value = settings.editorial_policy || "";
+      document.getElementById("settingCtaTitle").value = settings.cta_title || "";
+      document.getElementById("settingCtaText").value = settings.cta_text || "";
+      document.getElementById("settingTelegramUrl").value = settings.telegram_url || "";
+      document.getElementById("settingContactUrl").value = settings.contact_url || "";
+      document.getElementById("settingInstagramUrl").value = settings.instagram_url || "";
+      document.getElementById("settingFacebookUrl").value = settings.facebook_url || "";
+      document.getElementById("settingYoutubeUrl").value = settings.youtube_url || "";
+      document.getElementById("settingTiktokUrl").value = settings.tiktok_url || "";
+    }
+
+    function resetArticleForm() {
+      document.getElementById("articleForm").reset();
+      document.getElementById("articleId").value = "";
+      document.getElementById("articleMinutes").value = 5;
+      document.getElementById("articleStatus").value = "published";
+      document.getElementById("articleAuthor").value = "QurilishInfo tahririyati";
+      document.getElementById("articleFormTitle").textContent = "Yangi maqola qo‘shish";
+      document.getElementById("cancelArticleEdit").classList.add("hidden");
+    }
+
+    function resetAdvertisementForm() {
+      document.getElementById("advertisementForm").reset();
+      document.getElementById("advertisementId").value = "";
+      document.getElementById("adLabel").value = "Reklama";
+      document.getElementById("adStatus").value = "active";
+      document.getElementById("cancelAdEdit").classList.add("hidden");
+    }
+
+    window.editArticle = function editArticle(id) {
+      const article = state.articles.find((item) => Number(item.id) === Number(id));
+
+      if (!article) {
+        showNotice("Maqola topilmadi", "error");
+        return;
+      }
+
+      document.getElementById("articleId").value = article.id;
+      document.getElementById("articleCategory").value = article.category || "";
+      document.getElementById("articleStatus").value = article.status || "published";
+      document.getElementById("articleTitle").value = article.title || "";
+      document.getElementById("articleLead").value = article.lead || "";
+      document.getElementById("articleBody").value = article.body || "";
+      document.getElementById("articleMinutes").value = article.minutes || 5;
+      document.getElementById("articleAuthor").value = article.author || "QurilishInfo tahririyati";
+      document.getElementById("articleImageUrl").value = article.image_url || "";
+      document.getElementById("articleSourceName").value = article.source_name || "";
+      document.getElementById("articleSourceUrl").value = article.source_url || "";
+      document.getElementById("articleDocumentNo").value = article.document_no || "";
+      document.getElementById("articleUpdated").value = article.updated || "";
+      document.getElementById("articleSteps").value = article.steps || "";
+      document.getElementById("articleWarning").value = article.warning || "";
+      document.getElementById("articleFormTitle").textContent = "Maqolani tahrirlash";
+      document.getElementById("cancelArticleEdit").classList.remove("hidden");
+
+      showView("articleForm");
+    };
+
+    window.deleteArticle = async function deleteArticle(id) {
+      const article = state.articles.find((item) => Number(item.id) === Number(id));
+      const title = article ? article.title : "ushbu maqola";
+
+      if (!window.confirm(`“${title}” maqolasini o‘chirmoqchimisiz? Bu amalni qaytarib bo‘lmaydi.`)) {
+        return;
+      }
+
+      try {
+        await api(`/api/admin/articles/${id}`, {
+          method: "DELETE"
+        });
+
+        await loadAllData();
+        showNotice("Maqola o‘chirildi.");
+      } catch (error) {
+        showNotice(error.message, "error");
+      }
+    };
+
+    window.editAdvertisement = function editAdvertisement(id) {
+      const ad = state.advertisements.find((item) => Number(item.id) === Number(id));
+
+      if (!ad) {
+        showNotice("Reklama materiali topilmadi", "error");
+        return;
+      }
+
+      document.getElementById("advertisementId").value = ad.id;
+      document.getElementById("adLabel").value = ad.label || "Reklama";
+      document.getElementById("adStatus").value = ad.status || "active";
+      document.getElementById("adCompanyName").value = ad.company_name || "";
+      document.getElementById("adTargetUrl").value = ad.target_url || "";
+      document.getElementById("adTitle").value = ad.title || "";
+      document.getElementById("adDescription").value = ad.description || "";
+      document.getElementById("adImageUrl").value = ad.image_url || "";
+      document.getElementById("cancelAdEdit").classList.remove("hidden");
+
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    };
+
+    window.deleteAdvertisement = async function deleteAdvertisement(id) {
+      const ad = state.advertisements.find((item) => Number(item.id) === Number(id));
+      const title = ad ? ad.title : "ushbu reklama";
+
+      if (!window.confirm(`“${title}” materialini o‘chirmoqchimisiz?`)) {
+        return;
+      }
+
+      try {
+        await api(`/api/admin/advertisements/${id}`, {
+          method: "DELETE"
+        });
+
+        await loadAllData();
+        showNotice("Reklama materiali o‘chirildi.");
+      } catch (error) {
+        showNotice(error.message, "error");
+      }
+    };
+
+    window.updateAppealStatus = async function updateAppealStatus(id, status) {
+      try {
+        await api(`/api/admin/appeals/${id}/status`, {
+          method: "PUT",
+          body: JSON.stringify({ status })
+        });
+
+        await loadAllData();
+        showNotice("Murojaat holati yangilandi.");
+      } catch (error) {
+        showNotice(error.message, "error");
+      }
+    };
+
+    async function handleLogin(event) {
+      event.preventDefault();
+
+      const errorBox = document.getElementById("loginError");
+      errorBox.textContent = "";
+
+      const username = document.getElementById("loginUsername").value.trim();
+      const password = document.getElementById("loginPassword").value;
+
+      try {
+        const result = await api("/api/login", {
+          method: "POST",
+          body: JSON.stringify({ username, password })
+        });
+
+        state.adminUsername = result.username || username;
+
+        document.getElementById("adminUsername").textContent = state.adminUsername;
+        document.getElementById("loginScreen").classList.add("hidden");
+        document.getElementById("adminShell").classList.remove("hidden");
+
+        await loadAllData();
+        showView("dashboard");
+      } catch (error) {
+        errorBox.textContent = error.message;
+      }
+    }
+
+    async function handleArticleSubmit(event, forceDraft = false) {
+      event.preventDefault();
+
+      const id = document.getElementById("articleId").value;
+      const payload = {
+        category: document.getElementById("articleCategory").value,
+        status: forceDraft ? "draft" : document.getElementById("articleStatus").value,
+        title: document.getElementById("articleTitle").value.trim(),
+        lead: document.getElementById("articleLead").value.trim(),
+        body: document.getElementById("articleBody").value.trim(),
+        minutes: Number(document.getElementById("articleMinutes").value) || 5,
+        author: document.getElementById("articleAuthor").value.trim(),
+        image_url: document.getElementById("articleImageUrl").value.trim(),
+        source_name: document.getElementById("articleSourceName").value.trim(),
+        source_url: document.getElementById("articleSourceUrl").value.trim(),
+        document_no: document.getElementById("articleDocumentNo").value.trim(),
+        updated: document.getElementById("articleUpdated").value,
+        steps: document.getElementById("articleSteps").value.trim(),
+        warning: document.getElementById("articleWarning").value.trim()
+      };
+
+      try {
+        const url = id ? `/api/admin/articles/${id}` : "/api/admin/articles";
+        const method = id ? "PUT" : "POST";
+
+        await api(url, {
+          method,
+          body: JSON.stringify(payload)
+        });
+
+        await loadAllData();
+        resetArticleForm();
+        showView("articles");
+        showNotice(forceDraft ? "Maqola qoralama sifatida saqlandi." : "Maqola muvaffaqiyatli saqlandi.");
+      } catch (error) {
+        showNotice(error.message, "error");
+      }
+    }
+
+    async function handleAdvertisementSubmit(event) {
+      event.preventDefault();
+
+      const id = document.getElementById("advertisementId").value;
+      const payload = {
+        label: document.getElementById("adLabel").value,
+        status: document.getElementById("adStatus").value,
+        company_name: document.getElementById("adCompanyName").value.trim(),
+        target_url: document.getElementById("adTargetUrl").value.trim(),
+        title: document.getElementById("adTitle").value.trim(),
+        description: document.getElementById("adDescription").value.trim(),
+        image_url: document.getElementById("adImageUrl").value.trim()
+      };
+
+      try {
+        const url = id ? `/api/admin/advertisements/${id}` : "/api/admin/advertisements";
+        const method = id ? "PUT" : "POST";
+
+        await api(url, {
+          method,
+          body: JSON.stringify(payload)
+        });
+
+        await loadAllData();
+        resetAdvertisementForm();
+        showNotice("Reklama materiali saqlandi.");
+      } catch (error) {
+        showNotice(error.message, "error");
+      }
+    }
+
+    async function handleSettingsSubmit(event) {
+      event.preventDefault();
+
+      const payload = {
+        site_name: document.getElementById("settingSiteName").value.trim(),
+        contact: document.getElementById("settingContact").value.trim(),
+        site_description: document.getElementById("settingDescription").value.trim(),
+        about_text: document.getElementById("settingAbout").value.trim(),
+        editorial_policy: document.getElementById("settingEditorialPolicy").value.trim(),
+        cta_title: document.getElementById("settingCtaTitle").value.trim(),
+        cta_text: document.getElementById("settingCtaText").value.trim(),
+        telegram_url: document.getElementById("settingTelegramUrl").value.trim(),
+        contact_url: document.getElementById("settingContactUrl").value.trim(),
+        instagram_url: document.getElementById("settingInstagramUrl").value.trim(),
+        facebook_url: document.getElementById("settingFacebookUrl").value.trim(),
+        youtube_url: document.getElementById("settingYoutubeUrl").value.trim(),
+        tiktok_url: document.getElementById("settingTiktokUrl").value.trim()
+      };
+
+      try {
+        await api("/api/admin/settings", {
+          method: "PUT",
+          body: JSON.stringify(payload)
+        });
+
+        await loadAllData();
+        showNotice("Sayt sozlamalari saqlandi.");
+      } catch (error) {
+        showNotice(error.message, "error");
+      }
+    }
+
+    async function handlePasswordSubmit(event) {
+      event.preventDefault();
+
+      const currentPassword = document.getElementById("currentPassword").value;
+      const newPassword = document.getElementById("newPassword").value;
+      const newPasswordAgain = document.getElementById("newPasswordAgain").value;
+
+      if (newPassword !== newPasswordAgain) {
+        showNotice("Yangi parollar bir xil emas.", "error");
+        return;
+      }
+
+      try {
+        await api("/api/admin/change-password", {
+          method: "POST",
+          body: JSON.stringify({
+            currentPassword,
+            newPassword
+          })
+        });
+
+        document.getElementById("passwordForm").reset();
+        showNotice("Parol muvaffaqiyatli yangilandi.");
+      } catch (error) {
+        showNotice(error.message, "error");
+      }
+    }
+
+    async function handleLogout() {
+      try {
+        await api("/api/logout", {
+          method: "POST"
+        });
+      } catch (error) {
+      }
+
+      window.location.reload();
+    }
+
+    async function checkSession() {
+      try {
+        const result = await api("/api/admin/check");
+
+        if (!result.loggedIn) {
+          return;
+        }
+
+        state.adminUsername = result.username || "Admin";
+        document.getElementById("adminUsername").textContent = state.adminUsername;
+        document.getElementById("loginScreen").classList.add("hidden");
+        document.getElementById("adminShell").classList.remove("hidden");
+
+        await loadAllData();
+      } catch (error) {
+      }
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+      document.getElementById("loginForm").addEventListener("submit", handleLogin);
+      document.getElementById("articleForm").addEventListener("submit", (event) => handleArticleSubmit(event, false));
+      document.getElementById("advertisementForm").addEventListener("submit", handleAdvertisementSubmit);
+      document.getElementById("settingsForm").addEventListener("submit", handleSettingsSubmit);
+      document.getElementById("passwordForm").addEventListener("submit", handlePasswordSubmit);
+      document.getElementById("logoutButton").addEventListener("click", handleLogout);
+
+      document.getElementById("articleSearch").addEventListener("input", renderArticles);
+      document.getElementById("articleStatusFilter").addEventListener("change", renderArticles);
+      document.getElementById("appealStatusFilter").addEventListener("change", renderAppeals);
+
+      document.getElementById("saveAsDraftButton").addEventListener("click", () => {
+        const form = document.getElementById("articleForm");
+
+        if (!form.reportValidity()) {
+          return;
+        }
+
+        handleArticleSubmit(new Event("submit"), true);
+      });
+
+      document.getElementById("resetArticleFormButton").addEventListener("click", resetArticleForm);
+
+      document.getElementById("cancelArticleEdit").addEventListener("click", () => {
+        resetArticleForm();
+        showView("articles");
+      });
+
+      document.getElementById("cancelAdEdit").addEventListener("click", resetAdvertisementForm);
+
+      document.querySelectorAll(".nav-button").forEach((button) => {
+        button.addEventListener("click", () => {
+          if (button.dataset.view === "articleForm") {
+            resetArticleForm();
+          }
+
+          showView(button.dataset.view);
+        });
+      });
+
+      document.querySelectorAll("[data-go-view]").forEach((button) => {
+        button.addEventListener("click", () => {
+          if (button.dataset.goView === "articleForm") {
+            resetArticleForm();
+          }
+
+          showView(button.dataset.goView);
+        });
+      });
+
+      document.getElementById("menuButton").addEventListener("click", openMobileMenu);
+      document.getElementById("overlay").addEventListener("click", closeMobileMenu);
+
+      checkSession();
+    });
+  </script>
+</body>
+</html>
