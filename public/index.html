@@ -6,14 +6,11 @@
   <title>QurilishInfo — Qurilish jarayonidagi barcha savollaringizga javob</title>
   <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
     body { font-family: 'Inter', sans-serif; }
-    @keyframes slide-left {
-      from { transform: translateX(100%); }
-      to { transform: translateX(0); }
-    }
-    .animate-slide-left { animation: slide-left 0.5s ease; }
+    .carousel-slide { display: none; opacity: 0; transition: opacity 0.6s ease; }
+    .carousel-slide.active { display: block; opacity: 1; }
   </style>
 </head>
 <body class="bg-gray-50 text-gray-900 dark:bg-gray-950 dark:text-gray-100">
@@ -21,8 +18,6 @@
   <!-- Header -->
   <header class="sticky top-0 z-50 border-b bg-white/95 backdrop-blur dark:border-gray-800 dark:bg-gray-950/95">
     <div class="mx-auto flex h-20 max-w-7xl items-center justify-between px-4 lg:px-8">
-      
-      <!-- Logo -->
       <a href="#" class="flex items-center gap-3">
         <div class="grid h-12 w-12 place-items-center rounded-xl bg-gradient-to-br from-blue-600 to-blue-800 text-white shadow-lg">
           <svg class="h-7 w-7" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
@@ -35,9 +30,8 @@
         </div>
       </a>
 
-      <!-- Desktop Menu -->
       <nav class="hidden items-center gap-6 lg:flex">
-        <a href="#" class="text-sm font-semibold text-blue-800 hover:text-green-600 dark:text-white">Bosh sahifa</a>
+        <a href="#" class="text-sm font-semibold text-blue-800">Bosh sahifa</a>
         <a href="#uy-qurish" class="text-sm font-medium text-gray-700 hover:text-blue-800 dark:text-gray-300">Uy qurish</a>
         <a href="#kadastr" class="text-sm font-medium text-gray-700 hover:text-blue-800 dark:text-gray-300">Kadastr</a>
         <a href="#ruxsatnomalar" class="text-sm font-medium text-gray-700 hover:text-blue-800 dark:text-gray-300">Ruxsatnomalar</a>
@@ -45,30 +39,8 @@
         <a href="#qonunchilik" class="text-sm font-medium text-gray-700 hover:text-blue-800 dark:text-gray-300">Qonunchilik</a>
       </nav>
 
-      <!-- Right side -->
       <div class="flex items-center gap-3">
-        <!-- Social icons -->
-        <div class="hidden items-center gap-2 lg:flex">
-          <a href="#" class="grid h-9 w-9 place-items-center rounded-lg bg-blue-50 text-blue-600 hover:bg-blue-100 dark:bg-gray-800 dark:text-blue-400">
-            <svg class="h-5 w-5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8c-.15 1.58-.8 5.42-1.13 7.19-.14.75-.42 1-.68 1.03-.58.05-1.02-.38-1.58-.75-.88-.58-1.38-.94-2.23-1.5-.99-.65-.35-1.01.22-1.59.15-.15 2.71-2.48 2.76-2.69.01-.03.01-.14-.07-.2-.08-.06-.19-.04-.27-.02-.11.02-1.93 1.23-5.46 3.62-.51.35-.98.52-1.4.51-.46-.01-1.35-.26-2.01-.48-.81-.27-1.46-.42-1.4-.88.03-.24.37-.49 1.03-.74 4.04-1.76 6.74-2.92 8.09-3.48 3.87-1.6 4.67-1.89 5.19-1.89.11 0 .37.03.54.17.14.12.18.28.2.45-.02.07-.02.13-.02.25z"></path></svg>
-          </a>
-          <a href="#" class="grid h-9 w-9 place-items-center rounded-lg bg-red-50 text-red-600 hover:bg-red-100 dark:bg-gray-800 dark:text-red-400">
-            <svg class="h-5 w-5" fill="currentColor" viewBox="0 0 24 24"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"></path></svg>
-          </a>
-        </div>
-
-        <!-- Language -->
-        <button id="langButton" class="rounded-lg border border-gray-300 px-3 py-2 text-sm font-bold hover:border-blue-600 dark:border-gray-700 dark:hover:border-blue-400">UZ</button>
-
-        <!-- Search -->
-        <button class="grid h-10 w-10 place-items-center rounded-lg bg-gray-100 text-gray-700 hover:bg-gray-200 dark:bg-gray-800 dark:text-gray-300">
-          <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-            <circle cx="11" cy="11" r="8"></circle>
-            <path d="M21 21l-4.35-4.35"></path>
-          </svg>
-        </button>
-
-        <!-- Theme -->
+        <button id="langButton" class="rounded-lg border border-gray-300 px-3 py-2 text-sm font-bold hover:border-blue-600 dark:border-gray-700">UZ</button>
         <button id="themeButton" class="grid h-10 w-10 place-items-center rounded-lg bg-gray-100 text-gray-700 hover:bg-gray-200 dark:bg-gray-800 dark:text-gray-300">
           <svg id="themeIcon" class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
             <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
@@ -79,45 +51,107 @@
   </header>
 
   <main>
-    <!-- Hero Section -->
-    <section class="relative overflow-hidden bg-gradient-to-br from-blue-600 via-blue-700 to-green-600 py-20 lg:py-28">
-      <div class="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PHBhdHRlcm4gaWQ9ImdyaWQiIHdpZHRoPSI2MCIgaGVpZ2h0PSI2MCIgcGF0dGVyblVuaXRzPSJ1c2VyU3BhY2VPblVzZSI+PHBhdGggZD0iTSAxMCAwIEwgMCAwIDAgMTAiIGZpbGw9Im5vbmUiIHN0cm9rZT0id2hpdGUiIHN0cm9rZS1vcGFjaXR5PSIwLjA1IiBzdHJva2Utd2lkdGg9IjEiLz48L3BhdHRlcm4+PC9kZWZzPjxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjZ3JpZCkiLz48L3N2Zz4=')] opacity-20"></div>
-      
-      <div class="relative mx-auto max-w-7xl px-4 text-center lg:px-8">
-        <h1 class="text-4xl font-extrabold tracking-tight text-white sm:text-5xl lg:text-6xl">
-          Qurilish jarayonidagi barcha<br class="hidden sm:block" /> savollaringizga javob
-        </h1>
-        <p class="mx-auto mt-6 max-w-2xl text-lg text-blue-100">
-          Rasmiy talablar, qadamlar, narxlar va hujjatlar — oddiy tilda
-        </p>
-
-        <!-- Search box -->
-        <div class="mx-auto mt-10 max-w-2xl">
-          <div class="relative">
-            <input type="text" placeholder="Masalan: 500 kvadrat, kadastr, ruxsatnoma..." class="w-full rounded-2xl border-0 bg-white/95 px-6 py-5 pl-14 text-gray-900 shadow-xl backdrop-blur focus:ring-2 focus:ring-green-400">
-            <svg class="absolute left-5 top-1/2 h-6 w-6 -translate-y-1/2 text-gray-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-              <circle cx="11" cy="11" r="8"></circle>
-              <path d="M21 21l-4.35-4.35"></path>
-            </svg>
+    <!-- Carousel Section -->
+    <section class="relative">
+      <div id="carouselContainer" class="relative h-[500px] overflow-hidden bg-gray-900">
+        
+        <!-- Slide 1 -->
+        <div class="carousel-slide active absolute inset-0">
+          <div class="absolute inset-0 bg-gradient-to-r from-blue-900/90 to-blue-600/50"></div>
+          <div class="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1541888946425-d81bb19240f5?w=1600')] bg-cover bg-center opacity-30"></div>
+          <div class="relative flex h-full items-center">
+            <div class="mx-auto max-w-7xl px-4 lg:px-8">
+              <div class="max-w-2xl">
+                <span class="inline-block rounded-full bg-green-500/20 px-4 py-1.5 text-sm font-bold text-green-300 backdrop-blur">YANGI QAROR</span>
+                <h1 class="mt-6 text-4xl font-extrabold leading-tight text-white sm:text-5xl lg:text-6xl">
+                  1 oktabrdan qurilish ruxsatnomalari yangi tartibda beriladi
+                </h1>
+                <p class="mt-4 text-lg text-gray-200">
+                  Endi 500 m² gacha bo'lgan uylar inspeksiyadan ro'yxatdan o'tmaydi. Jarayon 3 barobar tezlashadi.
+                </p>
+                <div class="mt-8 flex gap-4">
+                  <a href="#qonunchilik" class="rounded-xl bg-white px-8 py-4 font-bold text-blue-900 hover:bg-gray-100">Batafsil</a>
+                  <a href="#uy-qurish" class="rounded-xl bg-white/10 px-8 py-4 font-bold text-white backdrop-blur hover:bg-white/20">Uy qurish</a>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
 
-        <!-- Quick buttons -->
-        <div class="mt-10 flex flex-wrap justify-center gap-4">
-          <a href="#uy-qurish" class="rounded-xl bg-white px-8 py-4 font-bold text-blue-700 shadow-lg hover:bg-gray-50 hover:shadow-xl">🏠 Uy qurish</a>
-          <a href="#kadastr" class="rounded-xl bg-white/10 px-8 py-4 font-bold text-white backdrop-blur hover:bg-white/20">📍 Kadastr</a>
-          <a href="#ruxsatnomalar" class="rounded-xl bg-white/10 px-8 py-4 font-bold text-white backdrop-blur hover:bg-white/20">📄 Ruxsatnomalar</a>
+        <!-- Slide 2 -->
+        <div class="carousel-slide absolute inset-0">
+          <div class="absolute inset-0 bg-gradient-to-r from-green-900/90 to-green-600/50"></div>
+          <div class="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1503387762-592deb58ef4e?w=1600')] bg-cover bg-center opacity-30"></div>
+          <div class="relative flex h-full items-center">
+            <div class="mx-auto max-w-7xl px-4 lg:px-8">
+              <div class="max-w-2xl">
+                <span class="inline-block rounded-full bg-blue-500/20 px-4 py-1.5 text-sm font-bold text-blue-300 backdrop-blur">KADASTR</span>
+                <h1 class="mt-6 text-4xl font-extrabold leading-tight text-white sm:text-5xl lg:text-6xl">
+                  Kadastr xarajatlari 2026-yilda o'zgardi
+                </h1>
+                <p class="mt-4 text-lg text-gray-200">
+                  100 m² gacha yer uchun davlat boji 1.25 BHM. To'lovlar jadvali va online ariza topshirish imkoniyati.
+                </p>
+                <div class="mt-8 flex gap-4">
+                  <a href="#kadastr" class="rounded-xl bg-white px-8 py-4 font-bold text-green-900 hover:bg-gray-100">Batafsil</a>
+                  <a href="#" class="rounded-xl bg-white/10 px-8 py-4 font-bold text-white backdrop-blur hover:bg-white/20">Hisoblash</a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Slide 3 -->
+        <div class="carousel-slide absolute inset-0">
+          <div class="absolute inset-0 bg-gradient-to-r from-purple-900/90 to-purple-600/50"></div>
+          <div class="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1589829545856-d10d557cf95f?w=1600')] bg-cover bg-center opacity-30"></div>
+          <div class="relative flex h-full items-center">
+            <div class="mx-auto max-w-7xl px-4 lg:px-8">
+              <div class="max-w-2xl">
+                <span class="inline-block rounded-full bg-yellow-500/20 px-4 py-1.5 text-sm font-bold text-yellow-300 backdrop-blur">TADBIRKORLAR</span>
+                <h1 class="mt-6 text-4xl font-extrabold leading-tight text-white sm:text-5xl lg:text-6xl">
+                  "Shaffof qurilish" tizimi ishga tushdi
+                </h1>
+                <p class="mt-4 text-lg text-gray-200">
+                  Qurilish kompaniyalari reytingi, shaffof xarid platformasi va yangi imkoniyatlar.
+                </p>
+                <div class="mt-8 flex gap-4">
+                  <a href="#tadbirkorlar" class="rounded-xl bg-white px-8 py-4 font-bold text-purple-900 hover:bg-gray-100">Batafsil</a>
+                  <a href="#reklama" class="rounded-xl bg-white/10 px-8 py-4 font-bold text-white backdrop-blur hover:bg-white/20">Reklama</a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Controls -->
+        <button id="carouselPrev" class="absolute left-4 top-1/2 z-10 -translate-y-1/2 rounded-full bg-white/10 p-3 text-white backdrop-blur transition hover:bg-white/20">
+          <svg class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path d="M15 19l-7-7 7-7"></path>
+          </svg>
+        </button>
+        <button id="carouselNext" class="absolute right-4 top-1/2 z-10 -translate-y-1/2 rounded-full bg-white/10 p-3 text-white backdrop-blur transition hover:bg-white/20">
+          <svg class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path d="M9 5l7 7-7 7"></path>
+          </svg>
+        </button>
+
+        <!-- Dots -->
+        <div class="absolute bottom-6 left-0 right-0 flex justify-center gap-2">
+          <button data-slide="0" class="carousel-dot h-2 w-2 rounded-full bg-white/50 transition hover:bg-white"></button>
+          <button data-slide="1" class="carousel-dot h-2 w-2 rounded-full bg-white/50 transition hover:bg-white"></button>
+          <button data-slide="2" class="carousel-dot h-2 w-2 rounded-full bg-white/50 transition hover:bg-white"></button>
         </div>
       </div>
     </section>
 
     <!-- Breaking News Ticker -->
-    <section class="border-b bg-green-50 dark:border-gray-800 dark:bg-gray-900">
+    <section class="border-b bg-blue-50 dark:border-gray-800 dark:bg-gray-900">
       <div class="mx-auto flex max-w-7xl items-center gap-4 px-4 py-3 lg:px-8">
-        <span class="flex-shrink-0 rounded-lg bg-green-600 px-3 py-1.5 text-xs font-bold text-white">YANGI</span>
+        <span class="flex-shrink-0 rounded-lg bg-red-600 px-3 py-1.5 text-xs font-bold text-white">DOLZARB</span>
         <div class="flex-1 overflow-hidden">
-          <p class="whitespace-nowrap text-sm font-medium text-green-900 dark:text-green-100 animate-slide-left">
-            1 oktabrdan qurilish ruxsatnomalari yangi tartibda beriladi • 500 m² gacha uylar inspeksiyadan ro'yxatdan o'tmaydi • Yangi "Shaffof qurilish" tizimi ishga tushdi
+          <p class="text-sm font-medium text-gray-900 dark:text-gray-100">
+            500 m² gacha uylar inspeksiyadan ro'yxatdan o'tmaydi • Kadastr narxlar yangilandi • 1 oktabrdan yangi tartib
           </p>
         </div>
       </div>
@@ -141,19 +175,19 @@
               <h3 class="text-xl font-bold text-gray-900 dark:text-white">Uy qurish</h3>
             </div>
             <ul class="mt-6 space-y-4">
-              <li class="group/item">
+              <li>
                 <a href="#" class="block text-sm font-medium text-gray-700 hover:text-blue-600 dark:text-gray-300 dark:hover:text-blue-400">
                   500 m² qoidasi: nimalar o'zgardi?
                 </a>
                 <span class="text-xs text-gray-500">26 sentyabr 2026</span>
               </li>
-              <li class="group/item">
+              <li>
                 <a href="#" class="block text-sm font-medium text-gray-700 hover:text-blue-600 dark:text-gray-300 dark:hover:text-blue-400">
                   Loyiha (ART) qanday tayyorlanadi?
                 </a>
                 <span class="text-xs text-gray-500">25 sentyabr 2026</span>
               </li>
-              <li class="group/item">
+              <li>
                 <a href="#" class="block text-sm font-medium text-gray-700 hover:text-blue-600 dark:text-gray-300 dark:hover:text-blue-400">
                   Foydalanishga qabul qilish tartibi
                 </a>
@@ -173,19 +207,19 @@
               <h3 class="text-xl font-bold text-gray-900 dark:text-white">Kadastr</h3>
             </div>
             <ul class="mt-6 space-y-4">
-              <li class="group/item">
+              <li>
                 <a href="#" class="block text-sm font-medium text-gray-700 hover:text-blue-600 dark:text-gray-300 dark:hover:text-blue-400">
                   Kadastr xarajatlari: 2026 narxlar
                 </a>
                 <span class="text-xs text-gray-500">26 sentyabr 2026</span>
               </li>
-              <li class="group/item">
+              <li>
                 <a href="#" class="block text-sm font-medium text-gray-700 hover:text-blue-600 dark:text-gray-300 dark:hover:text-blue-400">
                   My.gov.uz orqali kadastr olish
                 </a>
                 <span class="text-xs text-gray-500">25 sentyabr 2026</span>
               </li>
-              <li class="group/item">
+              <li>
                 <a href="#" class="block text-sm font-medium text-gray-700 hover:text-blue-600 dark:text-gray-300 dark:hover:text-blue-400">
                   Yer hujjatlarini rasmiylashtirish
                 </a>
@@ -205,19 +239,19 @@
               <h3 class="text-xl font-bold text-gray-900 dark:text-white">Qonunchilik</h3>
             </div>
             <ul class="mt-6 space-y-4">
-              <li class="group/item">
+              <li>
                 <a href="#" class="block text-sm font-medium text-gray-700 hover:text-blue-600 dark:text-gray-300 dark:hover:text-blue-400">
                   666-son qaror: asosiy o'zgarishlar
                 </a>
                 <span class="text-xs text-gray-500">26 sentyabr 2026</span>
               </li>
-              <li class="group/item">
+              <li>
                 <a href="#" class="block text-sm font-medium text-gray-700 hover:text-blue-600 dark:text-gray-300 dark:hover:text-blue-400">
                   200-son qaror: to'liq matn
                 </a>
                 <span class="text-xs text-gray-500">24 sentyabr 2026</span>
               </li>
-              <li class="group/item">
+              <li>
                 <a href="#" class="block text-sm font-medium text-gray-700 hover:text-blue-600 dark:text-gray-300 dark:hover:text-blue-400">
                   1 oktabr 2026: yangi tartib
                 </a>
@@ -228,81 +262,77 @@
         </div>
       </div>
     </section>
-
-    <!-- CTA Section -->
-    <section class="border-y bg-gray-100 py-16 dark:border-gray-800 dark:bg-gray-900">
-      <div class="mx-auto max-w-7xl px-4 text-center lg:px-8">
-        <h2 class="text-3xl font-bold text-gray-900 dark:text-white">Tadbirkormisiz?</h2>
-        <p class="mx-auto mt-4 max-w-2xl text-gray-600 dark:text-gray-400">
-          Qurilish kompaniyasi, material yetkazib beruvchi yoki xizmat ko'rsatuvchi tashkilotmisiz? Reklama joylashtiring!
-        </p>
-        <a href="#reklama" class="mt-8 inline-flex items-center gap-2 rounded-xl bg-blue-600 px-8 py-4 font-bold text-white shadow-lg hover:bg-blue-700">
-          Reklama joylashtirish
-          <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-            <path d="M5 12h14M13 6l6 6-6 6"></path>
-          </svg>
-        </a>
-      </div>
-    </section>
   </main>
 
   <!-- Footer -->
   <footer class="border-t bg-white py-12 dark:border-gray-800 dark:bg-gray-950">
     <div class="mx-auto max-w-7xl px-4 lg:px-8">
-      <div class="grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
-        <div>
-          <div class="flex items-center gap-3">
-            <div class="grid h-10 w-10 place-items-center rounded-xl bg-gradient-to-br from-blue-600 to-blue-800 text-white">
-              <svg class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                <path d="M3 21h18M5 21V10l7-6 7 6v11M9 21v-6h6v6"></path>
-              </svg>
-            </div>
-            <div class="text-xl font-bold text-blue-800 dark:text-white">Qurilish<span class="text-green-600">Info</span></div>
-          </div>
-          <p class="mt-4 text-sm text-gray-600 dark:text-gray-400">
-            Qurilish jarayonidagi barcha rasmiy ma'lumotlar bir joyda. Vaqt va pulni tejang!
-          </p>
-        </div>
-
-        <div>
-          <h3 class="font-bold text-gray-900 dark:text-white">Sahifalar</h3>
-          <ul class="mt-4 space-y-2 text-sm text-gray-600 dark:text-gray-400">
-            <li><a href="#" class="hover:text-blue-600 dark:hover:text-blue-400">Bosh sahifa</a></li>
-            <li><a href="#uy-qurish" class="hover:text-blue-600 dark:hover:text-blue-400">Uy qurish</a></li>
-            <li><a href="#kadastr" class="hover:text-blue-600 dark:hover:text-blue-400">Kadastr</a></li>
-            <li><a href="#qonunchilik" class="hover:text-blue-600 dark:hover:text-blue-400">Qonunchilik</a></li>
-          </ul>
-        </div>
-
-        <div>
-          <h3 class="font-bold text-gray-900 dark:text-white">Aloqa</h3>
-          <ul class="mt-4 space-y-2 text-sm text-gray-600 dark:text-gray-400">
-            <li>info@qurilishinfo.uz</li>
-            <li>+998 90 123-45-67</li>
-            <li>Toshkent sh.</li>
-          </ul>
-        </div>
-
-        <div>
-          <h3 class="font-bold text-gray-900 dark:text-white">Ijtimoiy tarmoqlar</h3>
-          <div class="mt-4 flex gap-3">
-            <a href="#" class="grid h-10 w-10 place-items-center rounded-lg bg-blue-50 text-blue-600 hover:bg-blue-100 dark:bg-gray-800 dark:text-blue-400">
-              <svg class="h-5 w-5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8c-.15 1.58-.8 5.42-1.13 7.19-.14.75-.42 1-.68 1.03-.58.05-1.02-.38-1.58-.75-.88-.58-1.38-.94-2.23-1.5-.99-.65-.35-1.01.22-1.59.15-.15 2.71-2.48 2.76-2.69.01-.03.01-.14-.07-.2-.08-.06-.19-.04-.27-.02-.11.02-1.93 1.23-5.46 3.62-.51.35-.98.52-1.4.51-.46-.01-1.35-.26-2.01-.48-.81-.27-1.46-.42-1.4-.88.03-.24.37-.49 1.03-.74 4.04-1.76 6.74-2.92 8.09-3.48 3.87-1.6 4.67-1.89 5.19-1.89.11 0 .37.03.54.17.14.12.18.28.2.45-.02.07-.02.13-.02.25z"></path></svg>
-            </a>
-            <a href="#" class="grid h-10 w-10 place-items-center rounded-lg bg-red-50 text-red-600 hover:bg-red-100 dark:bg-gray-800 dark:text-red-400">
-              <svg class="h-5 w-5" fill="currentColor" viewBox="0 0 24 24"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"></path></svg>
-            </a>
-          </div>
-        </div>
-      </div>
-
-      <div class="mt-12 border-t pt-8 text-center text-sm text-gray-500 dark:border-gray-800 dark:text-gray-400">
+      <div class="text-center text-sm text-gray-500 dark:text-gray-400">
         © 2026 QurilishInfo. Barcha huquqlar himoyalangan.
       </div>
     </div>
   </footer>
 
   <script>
+    // Carousel
+    const slides = document.querySelectorAll('.carousel-slide');
+    const dots = document.querySelectorAll('.carousel-dot');
+    const prevBtn = document.getElementById('carouselPrev');
+    const nextBtn = document.getElementById('carouselNext');
+    let currentIndex = 0;
+    let autoSlide;
+
+    function showSlide(index) {
+      slides.forEach((slide, i) => {
+        slide.classList.toggle('active', i === index);
+      });
+      dots.forEach((dot, i) => {
+        dot.classList.toggle('bg-white', i === index);
+        dot.classList.toggle('bg-white/50', i !== index);
+      });
+      currentIndex = index;
+    }
+
+    function nextSlide() {
+      const nextIndex = (currentIndex + 1) % slides.length;
+      showSlide(nextIndex);
+    }
+
+    function prevSlide() {
+      const prevIndex = (currentIndex - 1 + slides.length) % slides.length;
+      showSlide(prevIndex);
+    }
+
+    function startAutoSlide() {
+      autoSlide = setInterval(nextSlide, 5000);
+    }
+
+    function stopAutoSlide() {
+      clearInterval(autoSlide);
+    }
+
+    nextBtn.addEventListener('click', () => {
+      nextSlide();
+      stopAutoSlide();
+      startAutoSlide();
+    });
+
+    prevBtn.addEventListener('click', () => {
+      prevSlide();
+      stopAutoSlide();
+      startAutoSlide();
+    });
+
+    dots.forEach((dot, index) => {
+      dot.addEventListener('click', () => {
+        showSlide(index);
+        stopAutoSlide();
+        startAutoSlide();
+      });
+    });
+
+    startAutoSlide();
+
     // Theme toggle
     const themeButton = document.getElementById('themeButton');
     const themeIcon = document.getElementById('themeIcon');
@@ -320,8 +350,7 @@
       applyTheme(isDark ? 'light' : 'dark');
     });
 
-    const savedTheme = localStorage.getItem('theme') || 'light';
-    applyTheme(savedTheme);
+    applyTheme(localStorage.getItem('theme') || 'light');
 
     // Language toggle
     const langButton = document.getElementById('langButton');
