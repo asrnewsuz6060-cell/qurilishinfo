@@ -279,4 +279,76 @@ function seedArticles() {
         "Yer va ro'yxatdan o'tkazish masalalarida kadastr organlari, hududiy qurilish tartiblari bo'yicha tegishli mahalliy organlar, nazorat va xavfsizlik masalalarida esa vakolatli inspeksiya yoki boshqa idoralar muhim bo'lishi mumkin.",
         "Murojaat qilishdan oldin mavjud hujjatlar, manzil, fotosurat va boshqa dalillarni tayyorlab qo'yish foydali."
       ]),
-      steps: "Muammo turini
+      steps: "Muammo turini aniq belgilang\nYer va mulk bo'yicha hujjatlarni tayyorlang\nTegishli idora vakolatini aniqlang\nMurojaatni yozma yoki elektron shaklda yuboring\nJavob va hujjatlarni saqlab qo'ying",
+      warning: "Vakolatlar hudud va holatga qarab farq qilishi mumkin. Rasmiy manba yoki tegishli idora orqali aniq tartibni tekshiring."
+    },
+    {
+      category: "Uy sotib olish",
+      article_type: "guide",
+      tags: "uy sotib olish,kadastr,shartnoma,hujjatlar",
+      title: "Uy sotib olishdan oldin tekshiriladigan asosiy hujjatlar",
+      lead: "Kadastr, egalik, shartnoma va binoning texnik holatini tekshirish bo'yicha qisqa ro'yxat.",
+      minutes: 7,
+      is_featured: 0,
+      is_pinned: 0,
+      body: paragraphs([
+        "Uy sotib olayotganda faqat narx va joylashuvga emas, balki huquqiy va texnik holatga ham e'tibor bering.",
+        "Sotuvchidan mulkka egalik hujjatlari, kadastr ma'lumotlari va kerakli boshqa rasmiy ma'lumotlarni so'rang.",
+        "Shubhali joy bo'lsa, mustaqil mutaxassis yoki malakali yurist bilan maslahatlashish xaridorni katta xavfdan saqlashi mumkin."
+      ]),
+      steps: "Sotuvchi va mulk hujjatlarini tekshiring\nKadastr ma'lumotlarini solishtiring\nUyda yoriq, namlik va kommunikatsiyalarni ko'ring\nTo'lov shartlarini yozma belgilang\nShartnomani rasmiylashtiring",
+      warning: "Hujjatlar to'liq tekshirilmasdan katta miqdordagi oldindan to'lovni bermang."
+    }
+  ];
+
+  const insert = db.prepare(`
+    INSERT INTO articles (
+      category,
+      article_type,
+      tags,
+      title,
+      lead,
+      body,
+      minutes,
+      is_featured,
+      is_pinned,
+      steps,
+      warning,
+      status,
+      published_at
+    )
+    VALUES (
+      @category,
+      @article_type,
+      @tags,
+      @title,
+      @lead,
+      @body,
+      @minutes,
+      @is_featured,
+      @is_pinned,
+      @steps,
+      @warning,
+      'published',
+      datetime('now')
+    )
+  `);
+
+  const insertMany = db.transaction((rows) => {
+    for (const row of rows) {
+      insert.run(row);
+    }
+  });
+
+  insertMany(seed);
+
+  console.log(
+    `[QurilishInfo] ${seed.length} ta boshlang'ich amaliy maqola qo'shildi.`
+  );
+}
+
+seedAdmin();
+seedSettings();
+seedArticles();
+
+module.exports = db;
