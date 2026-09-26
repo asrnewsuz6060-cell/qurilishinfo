@@ -216,4 +216,88 @@ function seedArticles() {
       lead: "Loyiha, material, ish haqi va kutilmagan xarajatlar uchun zaxira.",
       minutes: 6,
       body: p([
-        "Xarajatni guruhlarga bo'ling: loyiha va hujjatlar, poydevor va
+        "Xarajatni guruhlarga bo'ling: loyiha va hujjatlar, poydevor va karkas, tom, pardozlash, kommunikatsiyalar.",
+        "Har guruh uchun kamida ikki-uch ustadan alohida narx oling va yozma saqlang.",
+        "Kutilmagan xarajatlar uchun umumiy summaning bir qismini zaxira sifatida ajrating."
+      ])
+    },
+    {
+      category: "Materiallar",
+      title: "Qurilish materialini tanlashda ko'p qilinadigan xatolar",
+      lead: "Narx va sifat o'rtasida to'g'ri tanlov qilish uchun nimalarga qarash kerak.",
+      minutes: 5,
+      body: p([
+        "Faqat arzon narxga qarab tanlamang, material sertifikatini so'rang.",
+        "Bir necha do'kondan bir xil o'lcham va markadagi mahsulotlarni solishtiring.",
+        "Kerak bo'lgandan biroz ko'proq oling, keyin xuddi shu partiyani topish qiyin bo'lishi mumkin."
+      ])
+    },
+    {
+      category: "Savol-javob",
+      title: "Usta bilan shartnoma tuzishda nimalar yozilishi kerak",
+      lead: "Ish hajmi, muddat, to'lov va kafolat bandlarini aniq belgilash.",
+      minutes: 5,
+      body: p([
+        "Og'zaki kelishuv o'rniga yozma shartnoma tuzing: ish turi, hajmi, muddat va narx aniq yozilsin.",
+        "To'lovni bosqichlarga bo'lish yaxshi: har tugagan bosqichdan keyin to'lanadi.",
+        "Kafolat muddati va kamchilik chiqsa kim tuzatishi ham shartnomada yozilsin."
+      ])
+    },
+    {
+      category: "Ruxsatnoma",
+      title: "Ta'mirlashda ruxsat kerak bo'ladimi",
+      lead: "Oddiy ta'mirlash va konstruksiyaga tegadigan o'zgartirishning farqi.",
+      minutes: 5,
+      body: p([
+        "Bo'yash, pol almashtirish odatda konstruksiyaga tegmaydi, lekin devor buzish boshqa masala.",
+        "Yuk ko'taruvchi devorga tegishdan oldin mutaxassis xulosasi va ruxsat haqida aniqlab oling.",
+        "Ko'p qavatli uyda umumiy qismlarga ta'sir qiluvchi ishlar qo'shimcha tartibga ega bo'lishi mumkin."
+      ])
+    },
+    {
+      category: "Uy qurish",
+      title: "Qurilish bosqichlari: poydevordan tomgacha",
+      lead: "Qurilish ketma-ketligi va har bosqichda nimani nazorat qilish kerak.",
+      minutes: 8,
+      body: p([
+        "Odatda ketma-ketlik: loyiha, yer ishlari va poydevor, devor va karkas, tom, kommunikatsiyalar, pardozlash.",
+        "Har bosqich tugagach keyingisiga o'tishdan oldin ishning sifatini tekshiring.",
+        "Fotosuratlar va yozuvlar saqlang, keyinchalik nizo chiqsa yordam beradi."
+      ])
+    },
+    {
+      category: "Yangiliklar",
+      title: "Qurilish sohasidagi qonun o'zgarishlarini qanday kuzatish kerak",
+      lead: "Yangi qoidalardan xabardor bo'lish uchun ishonchli manbalar.",
+      minutes: 4,
+      body: p([
+        "Rasmiy huquqiy hujjatlar bazasi va tegishli idoralarning ochiq e'lonlarini muntazam kuzating.",
+        "Ijtimoiy tarmoqdagi gaplarga emas, hujjatning o'ziga qarang: kuchga kirgan sana muhim.",
+        "Har bir yangilik yonida manba havolasi bo'lishi ishonchni oshiradi."
+      ])
+    }
+  ];
+
+  const insert = db.prepare(`
+    INSERT INTO articles (category, title, lead, body, minutes)
+    VALUES (@category, @title, @lead, @body, @minutes)
+  `);
+
+  const insertMany = db.transaction((rows) => {
+    for (const row of rows) {
+      insert.run(row);
+    }
+  });
+
+  insertMany(seed);
+
+  console.log(
+    `[QurilishInfo] ${seed.length} ta boshlang'ich maqola qo'shildi.`
+  );
+}
+
+seedAdmin();
+seedSettings();
+seedArticles();
+
+module.exports = db;
