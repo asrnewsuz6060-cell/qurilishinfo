@@ -1,497 +1,1913 @@
 <!DOCTYPE html>
-<html lang="uz">
+<html lang="uz" class="scroll-smooth">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>QurilishInfo — qurilish bo'yicha yangiliklar va savollarga javoblar</title>
-<meta name="description" content="Ruxsatnoma, uy qurish, uy sotib olish va materiallar bo'yicha aniq savol-javoblar va yangiliklar.">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Sora:wght@600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-<script src="https://cdn.tailwindcss.com"></script>
-<script>
-tailwind.config = {
-  darkMode: 'media',
-  theme: {
-    extend: {
-      fontFamily: { display: ['Sora','system-ui','sans-serif'], sans: ['Inter','system-ui','sans-serif'] },
-      colors: { ink: '#0B1220', amber: { 450: '#F5A524' } },
-      animation: { blob: 'blob 16s infinite' },
-      keyframes: {
-        blob: {
-          '0%, 100%': { transform: 'translate(0px,0px) scale(1)' },
-          '33%': { transform: 'translate(30px,-40px) scale(1.1)' },
-          '66%': { transform: 'translate(-20px,20px) scale(0.95)' }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+
+  <title>QurilishInfo — qurilish sohasi yangiliklari va amaliy ma’lumotlar</title>
+  <meta name="description" content="Qurilish, uy qurish, kadastr, ruxsatnomalar, ta’mirlash va qurilish materiallari haqida ishonchli yangiliklar va amaliy ma’lumotlar.">
+  <meta name="robots" content="index, follow">
+  <meta name="theme-color" content="#0B1220">
+
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="QurilishInfo — qurilish sohasi axborot platformasi">
+  <meta property="og:description" content="Qurilish sohasi yangiliklari, rasmiy xabarlar va amaliy yo‘riqnomalar.">
+  <meta property="og:site_name" content="QurilishInfo">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          fontFamily: {
+            display: ["Sora", "system-ui", "sans-serif"],
+            sans: ["Inter", "system-ui", "sans-serif"]
+          },
+          colors: {
+            ink: "#0B1220",
+            amber: {
+              450: "#F5A524"
+            }
+          },
+          animation: {
+            blob: "blob 16s infinite",
+            pulseSoft: "pulseSoft 2.5s ease-in-out infinite"
+          },
+          keyframes: {
+            blob: {
+              "0%, 100%": {
+                transform: "translate(0px, 0px) scale(1)"
+              },
+              "33%": {
+                transform: "translate(30px, -40px) scale(1.1)"
+              },
+              "66%": {
+                transform: "translate(-20px, 20px) scale(.95)"
+              }
+            },
+            pulseSoft: {
+              "0%, 100%": {
+                opacity: ".65"
+              },
+              "50%": {
+                opacity: "1"
+              }
+            }
+          }
         }
       }
+    };
+  </script>
+
+  <style>
+    html {
+      scroll-behavior: smooth;
     }
-  }
-}
-</script>
-<style>
-  html{scroll-behavior:smooth}
-  body{font-family:Inter,system-ui,sans-serif}
-  .font-display{font-family:Sora,system-ui,sans-serif}
-  .reveal{opacity:0;transform:translateY(24px);transition:opacity .7s ease, transform .7s ease}
-  .reveal.show{opacity:1;transform:translateY(0)}
-  .glass{backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)}
-  .icon{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
-  .diag-tape{background-image:repeating-linear-gradient(45deg,#0B1220 0 14px,#F5A524 14px 28px)}
-  .rich p{margin:0 0 1rem;font-size:1.125rem;line-height:1.7}
-  .rich h2{font-family:Sora,system-ui,sans-serif;font-weight:800;font-size:1.35rem;margin:1.5rem 0 .75rem}
-  .rich ul{padding-left:1.25rem;margin:0 0 1rem}
-  .rich a{color:#D97706;text-decoration:underline}
-</style>
+
+    body {
+      font-family: Inter, system-ui, sans-serif;
+    }
+
+    .font-display {
+      font-family: Sora, system-ui, sans-serif;
+    }
+
+    .glass {
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+    }
+
+    .icon {
+      width: 22px;
+      height: 22px;
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 1.8;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .diag-tape {
+      background-image: repeating-linear-gradient(
+        45deg,
+        #0B1220 0 14px,
+        #F5A524 14px 28px
+      );
+    }
+
+    .rich p {
+      margin: 0 0 1rem;
+      font-size: 1.08rem;
+      line-height: 1.75;
+    }
+
+    .rich h2 {
+      margin: 1.7rem 0 .8rem;
+      font-family: Sora, system-ui, sans-serif;
+      font-size: 1.35rem;
+      font-weight: 800;
+    }
+
+    .rich h3 {
+      margin: 1.3rem 0 .6rem;
+      font-family: Sora, system-ui, sans-serif;
+      font-size: 1.15rem;
+      font-weight: 800;
+    }
+
+    .rich ul,
+    .rich ol {
+      margin: 0 0 1rem;
+      padding-left: 1.4rem;
+    }
+
+    .rich li {
+      margin-bottom: .45rem;
+    }
+
+    .rich a {
+      color: #D97706;
+      text-decoration: underline;
+    }
+
+    .rich img {
+      width: 100%;
+      height: auto;
+      margin: 1.25rem 0;
+      border-radius: 1rem;
+    }
+
+    .hide-scrollbar {
+      scrollbar-width: none;
+    }
+
+    .hide-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+
+    .line-clamp-1 {
+      display: -webkit-box;
+      overflow: hidden;
+      -webkit-box-orient: vertical;
+      -webkit-line-clamp: 1;
+    }
+
+    .line-clamp-2 {
+      display: -webkit-box;
+      overflow: hidden;
+      -webkit-box-orient: vertical;
+      -webkit-line-clamp: 2;
+    }
+
+    .skeleton {
+      position: relative;
+      overflow: hidden;
+      background: #e2e8f0;
+    }
+
+    .dark .skeleton {
+      background: #1e293b;
+    }
+
+    .skeleton::after {
+      position: absolute;
+      inset: 0;
+      content: "";
+      background: linear-gradient(
+        90deg,
+        transparent,
+        rgba(255, 255, 255, .45),
+        transparent
+      );
+      animation: skeletonMove 1.4s infinite;
+      transform: translateX(-100%);
+    }
+
+    @keyframes skeletonMove {
+      to {
+        transform: translateX(100%);
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *,
+      *::before,
+      *::after {
+        scroll-behavior: auto !important;
+        animation-duration: .01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: .01ms !important;
+      }
+    }
+  </style>
 </head>
+
 <body class="bg-slate-50 text-ink dark:bg-slate-950 dark:text-slate-100">
 
-<!-- ===== Header ===== -->
-<header class="sticky top-0 z-40 glass bg-ink/90 text-white">
-  <div class="max-w-7xl mx-auto px-4 flex items-center gap-3 h-16">
-    <a href="#top" class="flex items-center gap-2 font-display font-extrabold text-xl tracking-tight">
-      <span class="w-3 h-7 diag-tape rounded-sm rotate-6"></span>
-      QurilishInfo
-    </a>
-    <nav class="hidden md:flex items-center gap-1 ml-4 text-sm font-medium">
-      <a href="#top" class="px-3 py-2 rounded-lg hover:bg-white/10 transition">Bosh sahifa</a>
-      <a href="#about" class="px-3 py-2 rounded-lg hover:bg-white/10 transition">Biz haqimizda</a>
-      <a href="#ads" class="px-3 py-2 rounded-lg hover:bg-white/10 transition">Reklama</a>
-      <a href="#contact" class="px-3 py-2 rounded-lg hover:bg-white/10 transition">Murojaat</a>
-    </nav>
-    <span class="flex-1"></span>
-    <button id="searchBtn" class="w-10 h-10 rounded-xl border border-white/15 grid place-items-center hover:bg-white/10 transition">
-      <svg class="icon" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg>
-    </button>
-    <a href="#" class="tgLink hidden sm:inline-flex items-center gap-2 bg-amber-450 text-ink font-semibold px-4 py-2.5 rounded-xl hover:brightness-95 active:scale-95 transition" target="_blank" rel="noopener">
-      <svg class="icon w-4 h-4" viewBox="0 0 24 24"><path d="M22 2 11 13"/><path d="M22 2 15 22l-4-9-9-4 20-7Z"/></svg>
-      Telegram
-    </a>
-  </div>
-  <div id="searchBox" class="hidden max-w-7xl mx-auto px-4 pb-3">
-    <input id="q" class="w-full rounded-xl bg-white/10 placeholder-white/50 px-4 py-3 outline-none focus:ring-2 ring-amber-450" placeholder="Savolingizni yozing: masalan, ruxsatnoma">
-  </div>
-</header>
+  <header class="sticky top-0 z-40 border-b border-white/10 bg-ink/95 text-white glass">
+    <div class="mx-auto flex h-16 max-w-7xl items-center gap-3 px-4">
+      <a href="#top" class="flex items-center gap-2 font-display text-xl font-extrabold tracking-tight">
+        <span class="h-7 w-3 rotate-6 rounded-sm diag-tape"></span>
+        <span id="brandName">QurilishInfo</span>
+      </a>
 
-<main id="top">
+      <nav class="ml-4 hidden items-center gap-1 text-sm font-medium md:flex">
+        <a href="#top" data-i18n="nav.home" class="rounded-lg px-3 py-2 transition hover:bg-white/10">Bosh sahifa</a>
+        <a href="#latest" data-i18n="nav.news" class="rounded-lg px-3 py-2 transition hover:bg-white/10">Yangiliklar</a>
+        <a href="#about" data-i18n="nav.about" class="rounded-lg px-3 py-2 transition hover:bg-white/10">Biz haqimizda</a>
+        <a href="#ads" data-i18n="nav.ads" class="rounded-lg px-3 py-2 transition hover:bg-white/10">Reklama</a>
+        <a href="#contact" data-i18n="nav.contact" class="rounded-lg px-3 py-2 transition hover:bg-white/10">Aloqa</a>
+      </nav>
 
-  <!-- ===== Hero ===== -->
-  <section class="relative overflow-hidden bg-ink text-white">
-    <div class="absolute -top-24 -left-24 w-96 h-96 bg-amber-450/30 rounded-full blur-3xl animate-blob"></div>
-    <div class="absolute top-40 -right-16 w-80 h-80 bg-blue-500/20 rounded-full blur-3xl animate-blob" style="animation-delay:4s"></div>
-    <div class="relative max-w-7xl mx-auto px-4 py-16 md:py-24">
-      <p class="reveal show inline-flex items-center gap-2 text-amber-450 font-semibold text-sm bg-amber-450/10 px-3 py-1.5 rounded-full">
-        <svg class="icon w-4 h-4" viewBox="0 0 24 24"><path d="M12 2 2 7l10 5 10-5-10-5Z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
-        Mustaqil qurilish axboroti
-      </p>
-      <h1 class="reveal show font-display font-extrabold text-4xl md:text-6xl mt-5 leading-[1.05] tracking-tight max-w-2xl">
-        Qurilish bo'yicha <span class="text-amber-450">aniq javoblar</span>, ishonchli manbadan
-      </h1>
-      <p class="reveal show mt-5 text-white/70 max-w-xl text-lg" style="transition-delay:.1s">
-        Ruxsatnoma, uy qurish, uy sotib olish va materiallar bo'yicha amaliy tajriba asosidagi maqolalar.
-      </p>
-      <div class="reveal show mt-8 flex flex-wrap gap-3" style="transition-delay:.2s">
-        <a href="#latest" class="bg-amber-450 text-ink font-semibold px-6 py-3.5 rounded-xl hover:brightness-95 active:scale-95 transition">Maqolalarni ko'rish</a>
-        <a href="#about" class="border border-white/25 px-6 py-3.5 rounded-xl font-semibold hover:bg-white/10 transition">Biz haqimizda</a>
-      </div>
-      <div class="reveal show mt-12 grid grid-cols-3 gap-6 max-w-md" style="transition-delay:.3s">
-        <div><b class="font-display text-3xl font-extrabold count" data-to="0" id="statArtHero">0</b><div class="text-white/60 text-sm mt-1">maqola</div></div>
-        <div><b class="font-display text-3xl font-extrabold count" data-to="0" id="statCatHero">0</b><div class="text-white/60 text-sm mt-1">bo'lim</div></div>
-        <div><b class="font-display text-3xl font-extrabold count" data-to="0" id="statViewsHero">0</b><div class="text-white/60 text-sm mt-1">ko'rish</div></div>
-      </div>
-    </div>
-  </section>
+      <span class="flex-1"></span>
 
-  <!-- ===== Carousel ===== -->
-  <section class="max-w-7xl mx-auto px-4 -mt-8 md:-mt-12 relative z-10">
-    <div id="car" class="relative rounded-3xl overflow-hidden shadow-2xl shadow-slate-900/10 bg-white dark:bg-slate-900 group" hidden>
-      <div id="carTrack" class="flex transition-transform duration-500 ease-out"></div>
-      <button id="carPrev" class="absolute left-3 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-black/40 text-white grid place-items-center opacity-0 group-hover:opacity-100 transition">
-        <svg class="icon" viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg>
+      <button
+        id="searchBtn"
+        type="button"
+        aria-label="Qidiruv"
+        class="grid h-10 w-10 place-items-center rounded-xl border border-white/15 transition hover:bg-white/10"
+      >
+        <svg class="icon" viewBox="0 0 24 24">
+          <circle cx="11" cy="11" r="7"></circle>
+          <path d="m20 20-4-4"></path>
+        </svg>
       </button>
-      <button id="carNext" class="absolute right-3 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-black/40 text-white grid place-items-center opacity-0 group-hover:opacity-100 transition">
-        <svg class="icon" viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg>
+
+      <button
+        id="themeBtn"
+        type="button"
+        aria-label="Dark mode"
+        class="grid h-10 w-10 place-items-center rounded-xl border border-white/15 transition hover:bg-white/10"
+      >
+        <svg id="themeIcon" class="icon" viewBox="0 0 24 24">
+          <circle cx="12" cy="12" r="4"></circle>
+          <path d="M12 2v2"></path>
+          <path d="M12 20v2"></path>
+          <path d="m4.93 4.93 1.41 1.41"></path>
+          <path d="m17.66 17.66 1.41 1.41"></path>
+          <path d="M2 12h2"></path>
+          <path d="M20 12h2"></path>
+          <path d="m6.34 17.66-1.41 1.41"></path>
+          <path d="m19.07 4.93-1.41 1.41"></path>
+        </svg>
       </button>
-      <div id="carDots" class="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-1.5"></div>
+
+      <button
+        id="langBtn"
+        type="button"
+        class="hidden rounded-xl border border-white/15 px-3 py-2 text-xs font-bold transition hover:bg-white/10 sm:block"
+      >
+        RU
+      </button>
+
+      <a
+        id="headerTelegram"
+        href="https://t.me/qurilishinfo"
+        target="_blank"
+        rel="noopener"
+        class="hidden items-center gap-2 rounded-xl bg-amber-450 px-4 py-2.5 font-semibold text-ink transition hover:brightness-95 active:scale-95 sm:inline-flex"
+      >
+        <svg class="icon h-4 w-4" viewBox="0 0 24 24">
+          <path d="m22 2-11 11"></path>
+          <path d="m22 2-7 20-4-9-9-4 20-7Z"></path>
+        </svg>
+        Telegram
+      </a>
+
+      <button
+        id="mobileMenuBtn"
+        type="button"
+        aria-label="Menyu"
+        class="grid h-10 w-10 place-items-center rounded-xl border border-white/15 md:hidden"
+      >
+        <svg class="icon" viewBox="0 0 24 24">
+          <path d="M4 6h16"></path>
+          <path d="M4 12h16"></path>
+          <path d="M4 18h16"></path>
+        </svg>
+      </button>
     </div>
-  </section>
 
-  <!-- ===== Category chips ===== -->
-  <section class="max-w-7xl mx-auto px-4 mt-10">
-    <div id="chips" class="flex gap-2 overflow-x-auto pb-1 md:flex-wrap md:overflow-visible"></div>
-  </section>
-
-  <!-- ===== Latest + Rank ===== -->
-  <section id="latest" class="max-w-7xl mx-auto px-4 mt-6 grid md:grid-cols-[1fr_320px] gap-8">
-    <div>
-      <div class="flex items-center justify-between mb-4">
-        <h2 class="font-display font-extrabold text-2xl reveal show">So'nggi maqolalar</h2>
+    <div id="mobileMenu" class="hidden border-t border-white/10 px-4 py-3 md:hidden">
+      <div class="grid gap-1 text-sm">
+        <a href="#top" class="rounded-lg px-3 py-2 hover:bg-white/10">Bosh sahifa</a>
+        <a href="#latest" class="rounded-lg px-3 py-2 hover:bg-white/10">Yangiliklar</a>
+        <a href="#about" class="rounded-lg px-3 py-2 hover:bg-white/10">Biz haqimizda</a>
+        <a href="#ads" class="rounded-lg px-3 py-2 hover:bg-white/10">Reklama</a>
+        <a href="#contact" class="rounded-lg px-3 py-2 hover:bg-white/10">Aloqa</a>
       </div>
-      <div id="list" class="grid gap-4 lg:grid-cols-2"><p class="text-slate-400">Yuklanmoqda...</p></div>
     </div>
-    <aside class="space-y-6">
-      <div class="reveal show">
-        <h2 class="font-display font-extrabold text-xl mb-3 flex items-center gap-2">
-          <svg class="icon w-5 h-5 text-amber-450" viewBox="0 0 24 24"><path d="M8 21h8"/><path d="M12 17v4"/><path d="M7 4h10v5a5 5 0 0 1-10 0V4Z"/><path d="M17 6h2a2 2 0 0 1 0 4h-2"/><path d="M7 6H5a2 2 0 0 0 0 4h2"/></svg>
-          Ko'p o'qilganlar
-        </h2>
-        <ol id="rank" class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 divide-y divide-slate-200 dark:divide-slate-800 overflow-hidden"></ol>
-      </div>
-      <div class="reveal show rounded-2xl border-2 border-dashed border-slate-300 dark:border-slate-700 p-5 text-center">
-        <p class="text-xs uppercase tracking-wide text-slate-400 font-semibold mb-2">Reklama</p>
-        <p class="font-display font-bold mb-1">Bu yerda reklamangiz bo'lishi mumkin</p>
-        <p class="text-sm text-slate-500 mb-4">Qurilish materiallari va ustalar uchun</p>
-        <a href="#ads" class="inline-flex text-sm font-semibold text-amber-600 hover:underline">Batafsil →</a>
-      </div>
-    </aside>
-  </section>
 
-  <!-- ===== About ===== -->
-  <section id="about" class="max-w-7xl mx-auto px-4 mt-20">
-    <div class="reveal show bg-ink text-white rounded-3xl p-8 md:p-12 relative overflow-hidden">
-      <div class="absolute -bottom-20 -right-20 w-72 h-72 bg-amber-450/15 rounded-full blur-3xl"></div>
-      <div class="relative grid md:grid-cols-2 gap-10 items-center">
+    <div id="searchBox" class="mx-auto hidden max-w-7xl px-4 pb-3">
+      <div class="relative">
+        <input
+          id="q"
+          type="search"
+          autocomplete="off"
+          data-i18n-placeholder="search.placeholder"
+          placeholder="Savolingizni yozing: masalan, ruxsatnoma"
+          class="w-full rounded-xl bg-white/10 px-4 py-3 pr-12 text-white outline-none placeholder:text-white/50 focus:ring-2 focus:ring-amber-450"
+        >
+        <svg class="icon absolute right-4 top-1/2 h-5 w-5 -translate-y-1/2 text-white/50" viewBox="0 0 24 24">
+          <circle cx="11" cy="11" r="7"></circle>
+          <path d="m20 20-4-4"></path>
+        </svg>
+      </div>
+    </div>
+  </header>
+
+  <main id="top">
+
+    <section class="relative overflow-hidden bg-ink text-white">
+      <div class="absolute -left-24 -top-24 h-96 w-96 animate-blob rounded-full bg-amber-450/30 blur-3xl"></div>
+      <div class="absolute -right-16 top-40 h-80 w-80 animate-blob rounded-full bg-blue-500/20 blur-3xl" style="animation-delay:4s"></div>
+
+      <div class="relative mx-auto max-w-7xl px-4 py-16 md:py-24">
+        <p class="inline-flex items-center gap-2 rounded-full bg-amber-450/10 px-3 py-1.5 text-sm font-semibold text-amber-450">
+          <svg class="icon h-4 w-4" viewBox="0 0 24 24">
+            <path d="m12 2 10 5-10 5L2 7l10-5Z"></path>
+            <path d="m2 17 10 5 10-5"></path>
+            <path d="m2 12 10 5 10-5"></path>
+          </svg>
+          <span data-i18n="hero.badge">Mustaqil qurilish axboroti</span>
+        </p>
+
+        <h1 class="mt-5 max-w-3xl font-display text-4xl font-extrabold leading-[1.05] tracking-tight md:text-6xl">
+          <span data-i18n="hero.title1">Qurilish bo‘yicha</span>
+          <span class="text-amber-450" data-i18n="hero.title2">aniq javoblar</span>,
+          <span data-i18n="hero.title3">ishonchli manbadan</span>
+        </h1>
+
+        <p class="mt-5 max-w-2xl text-lg text-white/70" data-i18n="hero.description">
+          Ruxsatnoma, uy qurish, kadastr, ta’mirlash va qurilish materiallari bo‘yicha amaliy maqolalar.
+        </p>
+
+        <div class="mt-8 flex flex-wrap gap-3">
+          <a
+            href="#latest"
+            data-i18n="hero.button"
+            class="rounded-xl bg-amber-450 px-6 py-3.5 font-semibold text-ink transition hover:brightness-95 active:scale-95"
+          >
+            Maqolalarni ko‘rish
+          </a>
+
+          <a
+            href="#about"
+            data-i18n="hero.about"
+            class="rounded-xl border border-white/25 px-6 py-3.5 font-semibold transition hover:bg-white/10"
+          >
+            Biz haqimizda
+          </a>
+        </div>
+
+        <div class="mt-12 grid max-w-md grid-cols-3 gap-6">
+          <div>
+            <b id="statArtHero" class="font-display text-3xl font-extrabold">0</b>
+            <div class="mt-1 text-sm text-white/60" data-i18n="stats.articles">maqola</div>
+          </div>
+          <div>
+            <b id="statCatHero" class="font-display text-3xl font-extrabold">0</b>
+            <div class="mt-1 text-sm text-white/60" data-i18n="stats.categories">bo‘lim</div>
+          </div>
+          <div>
+            <b id="statViewsHero" class="font-display text-3xl font-extrabold">0</b>
+            <div class="mt-1 text-sm text-white/60" data-i18n="stats.views">ko‘rish</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="relative z-10 mx-auto -mt-8 max-w-7xl px-4 md:-mt-12">
+      <div id="car" class="group relative hidden overflow-hidden rounded-3xl bg-white shadow-2xl shadow-slate-900/10 dark:bg-slate-900">
+        <div id="carTrack" class="flex transition-transform duration-500 ease-out"></div>
+
+        <button
+          id="carPrev"
+          type="button"
+          aria-label="Oldingi"
+          class="absolute left-3 top-1/2 grid h-10 w-10 -translate-y-1/2 place-items-center rounded-full bg-black/40 text-white opacity-0 transition group-hover:opacity-100"
+        >
+          <svg class="icon" viewBox="0 0 24 24">
+            <path d="m15 18-6-6 6-6"></path>
+          </svg>
+        </button>
+
+        <button
+          id="carNext"
+          type="button"
+          aria-label="Keyingi"
+          class="absolute right-3 top-1/2 grid h-10 w-10 -translate-y-1/2 place-items-center rounded-full bg-black/40 text-white opacity-0 transition group-hover:opacity-100"
+        >
+          <svg class="icon" viewBox="0 0 24 24">
+            <path d="m9 18 6-6-6-6"></path>
+          </svg>
+        </button>
+
+        <div id="carDots" class="absolute bottom-4 left-1/2 flex -translate-x-1/2 gap-1.5"></div>
+      </div>
+    </section>
+
+    <section class="mx-auto mt-10 max-w-7xl px-4">
+      <div id="chips" class="hide-scrollbar flex gap-2 overflow-x-auto pb-1 md:flex-wrap md:overflow-visible"></div>
+    </section>
+
+    <section id="latest" class="mx-auto mt-6 grid max-w-7xl gap-8 px-4 md:grid-cols-[1fr_320px]">
+      <div>
+        <div class="mb-4 flex items-center justify-between gap-4">
+          <h2 class="font-display text-2xl font-extrabold" data-i18n="latest.title">So‘nggi maqolalar</h2>
+          <span id="resultCount" class="text-sm text-slate-400"></span>
+        </div>
+
+        <div id="list" class="grid gap-4 lg:grid-cols-2">
+          <div class="skeleton h-28 rounded-2xl"></div>
+          <div class="skeleton h-28 rounded-2xl"></div>
+          <div class="skeleton h-28 rounded-2xl"></div>
+          <div class="skeleton h-28 rounded-2xl"></div>
+        </div>
+      </div>
+
+      <aside class="space-y-6">
         <div>
-          <h2 class="font-display font-extrabold text-3xl mb-4">Biz haqimizda</h2>
-          <p class="text-white/70 leading-relaxed">QurilishInfo — qurilish sohasidagi amaliy tajriba asosida yuritiladigan mustaqil axborot loyihasi. Maqsadimiz: uy quruvchilar, xaridorlar va ustalar uchun aniq, tushunarli javoblar berish.</p>
-          <p class="text-white/50 text-sm mt-4">Rasmiy davlat idorasi emas — mustaqil tashabbus. Muhim qarorlardan oldin rasmiy manbani tekshiring.</p>
+          <h2 class="mb-3 flex items-center gap-2 font-display text-xl font-extrabold">
+            <svg class="icon h-5 w-5 text-amber-450" viewBox="0 0 24 24">
+              <path d="M8 21h8"></path>
+              <path d="M12 17v4"></path>
+              <path d="M7 4h10v5a5 5 0 0 1-10 0V4Z"></path>
+              <path d="M17 6h2a2 2 0 0 1 0 4h-2"></path>
+              <path d="M7 6H5a2 2 0 0 0 0 4h2"></path>
+            </svg>
+            <span data-i18n="rank.title">Ko‘p o‘qilganlar</span>
+          </h2>
+
+          <ol id="rank" class="divide-y divide-slate-200 overflow-hidden rounded-2xl border border-slate-200 bg-white dark:divide-slate-800 dark:border-slate-800 dark:bg-slate-900"></ol>
         </div>
-        <div class="grid grid-cols-1 gap-4">
-          <div class="flex gap-3 items-start bg-white/5 rounded-xl p-4">
-            <svg class="icon w-6 h-6 text-amber-450 flex-shrink-0" viewBox="0 0 24 24"><path d="M12 2 3 6v6c0 5 4 9 9 10 5-1 9-5 9-10V6l-9-4Z"/><path d="m9 12 2 2 4-4"/></svg>
-            <div><b class="font-semibold">Ishonchli manba</b><p class="text-white/60 text-sm mt-0.5">Amaliy tajriba asosidagi maqolalar</p></div>
+
+        <div class="rounded-2xl border-2 border-dashed border-slate-300 p-5 text-center dark:border-slate-700">
+          <p class="mb-2 text-xs font-semibold uppercase tracking-wide text-slate-400" data-i18n="ads.label">Reklama</p>
+          <p class="mb-1 font-display font-bold" data-i18n="ads.sidebarTitle">Bu yerda reklamangiz bo‘lishi mumkin</p>
+          <p class="mb-4 text-sm text-slate-500" data-i18n="ads.sidebarText">Qurilish materiallari va ustalar uchun</p>
+          <a href="#ads" class="text-sm font-semibold text-amber-600 hover:underline" data-i18n="ads.more">Batafsil →</a>
+        </div>
+      </aside>
+    </section>
+
+    <section id="about" class="mx-auto mt-20 max-w-7xl px-4">
+      <div class="relative overflow-hidden rounded-3xl bg-ink p-8 text-white md:p-12">
+        <div class="absolute -bottom-20 -right-20 h-72 w-72 rounded-full bg-amber-450/15 blur-3xl"></div>
+
+        <div class="relative grid items-center gap-10 md:grid-cols-2">
+          <div>
+            <h2 class="mb-4 font-display text-3xl font-extrabold" data-i18n="about.title">Biz haqimizda</h2>
+            <p class="leading-relaxed text-white/70" data-i18n="about.text">
+              QurilishInfo — qurilish sohasidagi yangiliklar, rasmiy xabarlar va amaliy ma’lumotlarni yorituvchi mustaqil axborot loyihasi.
+            </p>
+            <p class="mt-4 text-sm text-white/50" data-i18n="about.note">
+              Rasmiy davlat idorasi emas. Muhim qarorlar oldidan rasmiy manbani tekshiring.
+            </p>
           </div>
-          <div class="flex gap-3 items-start bg-white/5 rounded-xl p-4">
-            <svg class="icon w-6 h-6 text-amber-450 flex-shrink-0" viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2Z"/></svg>
-            <div><b class="font-semibold">Doimiy yangilanish</b><p class="text-white/60 text-sm mt-0.5">Qonun va me'yor o'zgarishlari kuzatiladi</p></div>
-          </div>
-          <div class="flex gap-3 items-start bg-white/5 rounded-xl p-4">
-            <svg class="icon w-6 h-6 text-amber-450 flex-shrink-0" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
-            <div><b class="font-semibold">Hamjamiyat uchun</b><p class="text-white/60 text-sm mt-0.5">Savollaringizga real javob beramiz</p></div>
+
+          <div class="grid gap-4">
+            <div class="flex items-start gap-3 rounded-xl bg-white/5 p-4">
+              <svg class="icon h-6 w-6 flex-shrink-0 text-amber-450" viewBox="0 0 24 24">
+                <path d="m12 2 9 4v6c0 5-4 9-9 10-5-1-9-5-9-10V6l9-4Z"></path>
+                <path d="m9 12 2 2 4-4"></path>
+              </svg>
+              <div>
+                <b class="font-semibold" data-i18n="about.card1Title">Ishonchli manba</b>
+                <p class="mt-0.5 text-sm text-white/60" data-i18n="about.card1Text">Rasmiy manbalar va tahririy tekshiruv.</p>
+              </div>
+            </div>
+
+            <div class="flex items-start gap-3 rounded-xl bg-white/5 p-4">
+              <svg class="icon h-6 w-6 flex-shrink-0 text-amber-450" viewBox="0 0 24 24">
+                <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+                <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2Z"></path>
+              </svg>
+              <div>
+                <b class="font-semibold" data-i18n="about.card2Title">Amaliy ma’lumot</b>
+                <p class="mt-0.5 text-sm text-white/60" data-i18n="about.card2Text">Qurilish jarayonlarini oddiy tilda tushuntiramiz.</p>
+              </div>
+            </div>
+
+            <div class="flex items-start gap-3 rounded-xl bg-white/5 p-4">
+              <svg class="icon h-6 w-6 flex-shrink-0 text-amber-450" viewBox="0 0 24 24">
+                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                <circle cx="9" cy="7" r="4"></circle>
+                <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+              </svg>
+              <div>
+                <b class="font-semibold" data-i18n="about.card3Title">Jamiyat uchun</b>
+                <p class="mt-0.5 text-sm text-white/60" data-i18n="about.card3Text">Fuqarolar va tadbirkorlar uchun foydali platforma.</p>
+              </div>
+            </div>
           </div>
         </div>
       </div>
-    </div>
-  </section>
+    </section>
 
-  <!-- ===== FAQ ===== -->
-  <section class="max-w-7xl mx-auto px-4 mt-16">
-    <h2 class="font-display font-extrabold text-2xl mb-4 reveal show">Tez-tez beriladigan savollar</h2>
-    <div id="faq" class="space-y-2"></div>
-  </section>
+    <section class="mx-auto mt-16 max-w-7xl px-4">
+      <h2 class="mb-4 font-display text-2xl font-extrabold" data-i18n="faq.title">Tez-tez beriladigan savollar</h2>
+      <div id="faq" class="space-y-2"></div>
+    </section>
 
-  <!-- ===== Ads ===== -->
-  <section id="ads" class="max-w-7xl mx-auto px-4 mt-16">
-    <div class="reveal show bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-8 md:p-12">
-      <h2 class="font-display font-extrabold text-2xl mb-2">Reklama joylashtirish</h2>
-      <p class="text-slate-500 mb-6 max-w-xl">Qurilish materiallari sotuvchilari, quruvchi kompaniyalar va ustalar uchun formatlar:</p>
-      <div class="grid md:grid-cols-3 gap-4 mb-6">
-        <div class="flex gap-3 items-start p-4 rounded-xl bg-slate-50 dark:bg-slate-800/60">
-          <svg class="icon w-5 h-5 text-amber-600 flex-shrink-0" viewBox="0 0 24 24"><path d="M3 11v3a1 1 0 0 0 1 1h3l5 4V6l-5 4H4a1 1 0 0 0-1 1Z"/><path d="M16 9a3 3 0 0 1 0 6"/><path d="M19 6a7 7 0 0 1 0 12"/></svg>
-          <span class="text-sm font-medium">Maqola ichida banner</span>
+    <section id="ads" class="mx-auto mt-16 max-w-7xl px-4">
+      <div class="rounded-3xl border border-slate-200 bg-white p-8 dark:border-slate-800 dark:bg-slate-900 md:p-12">
+        <h2 class="mb-2 font-display text-2xl font-extrabold" data-i18n="ads.title">Reklama joylashtirish</h2>
+        <p class="mb-6 max-w-xl text-slate-500" data-i18n="ads.description">
+          Qurilish materiallari sotuvchilari, quruvchi kompaniyalar va ustalar uchun reklama formatlari.
+        </p>
+
+        <div class="mb-6 grid gap-4 md:grid-cols-3">
+          <div class="flex items-start gap-3 rounded-xl bg-slate-50 p-4 dark:bg-slate-800/60">
+            <svg class="icon h-5 w-5 flex-shrink-0 text-amber-600" viewBox="0 0 24 24">
+              <path d="M3 11v3a1 1 0 0 0 1 1h3l5 4V6l-5 4H4a1 1 0 0 0-1 1Z"></path>
+              <path d="M16 9a3 3 0 0 1 0 6"></path>
+              <path d="M19 6a7 7 0 0 1 0 12"></path>
+            </svg>
+            <span class="text-sm font-medium" data-i18n="ads.card1">Maqola ichida banner</span>
+          </div>
+
+          <div class="flex items-start gap-3 rounded-xl bg-slate-50 p-4 dark:bg-slate-800/60">
+            <svg class="icon h-5 w-5 flex-shrink-0 text-amber-600" viewBox="0 0 24 24">
+              <path d="M3 3v18h18"></path>
+              <path d="M18 17V9"></path>
+              <path d="M13 17V5"></path>
+              <path d="M8 17v-3"></path>
+            </svg>
+            <span class="text-sm font-medium" data-i18n="ads.card2">Telegram post</span>
+          </div>
+
+          <div class="flex items-start gap-3 rounded-xl bg-slate-50 p-4 dark:bg-slate-800/60">
+            <svg class="icon h-5 w-5 flex-shrink-0 text-amber-600" viewBox="0 0 24 24">
+              <rect x="3" y="3" width="7" height="7" rx="1"></rect>
+              <rect x="14" y="3" width="7" height="7" rx="1"></rect>
+              <rect x="14" y="14" width="7" height="7" rx="1"></rect>
+              <rect x="3" y="14" width="7" height="7" rx="1"></rect>
+            </svg>
+            <span class="text-sm font-medium" data-i18n="ads.card3">Kompaniyalar katalogi</span>
+          </div>
         </div>
-        <div class="flex gap-3 items-start p-4 rounded-xl bg-slate-50 dark:bg-slate-800/60">
-          <svg class="icon w-5 h-5 text-amber-600 flex-shrink-0" viewBox="0 0 24 24"><path d="M3 3v18h18"/><path d="M18 17V9"/><path d="M13 17V5"/><path d="M8 17v-3"/></svg>
-          <span class="text-sm font-medium">Telegram post</span>
-        </div>
-        <div class="flex gap-3 items-start p-4 rounded-xl bg-slate-50 dark:bg-slate-800/60">
-          <svg class="icon w-5 h-5 text-amber-600 flex-shrink-0" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/></svg>
-          <span class="text-sm font-medium">Kompaniyalar katalogi</span>
-        </div>
+
+        <a
+          id="adLink"
+          href="https://t.me/qurilishinfo_admin"
+          target="_blank"
+          rel="noopener"
+          class="inline-flex items-center gap-2 rounded-xl bg-ink px-6 py-3 font-semibold text-white transition hover:opacity-90 active:scale-95"
+          data-i18n="ads.contact"
+        >
+          Reklama bo‘yicha yozish
+        </a>
       </div>
-      <a href="#" id="adLink" target="_blank" rel="noopener" class="inline-flex items-center gap-2 bg-ink text-white font-semibold px-6 py-3 rounded-xl hover:opacity-90 active:scale-95 transition">Reklama bo'yicha yozish</a>
-    </div>
-  </section>
+    </section>
 
-  <!-- ===== Contact ===== -->
-  <section id="contact" class="max-w-7xl mx-auto px-4 mt-16 mb-20">
-    <h2 class="font-display font-extrabold text-2xl mb-4 reveal show">Murojaat</h2>
-    <div class="grid md:grid-cols-3 gap-4 mb-6">
-      <a href="#" class="tgLink reveal show flex items-center gap-3 p-4 rounded-2xl border border-slate-200 dark:border-slate-800 hover:border-amber-450 transition" target="_blank" rel="noopener">
-        <svg class="icon w-5 h-5 text-amber-600" viewBox="0 0 24 24"><path d="M22 2 11 13"/><path d="M22 2 15 22l-4-9-9-4 20-7Z"/></svg>
-        <div><p class="text-xs text-slate-400 uppercase font-semibold">Telegram</p><p class="font-semibold">Kanalga yozish</p></div>
-      </a>
-      <a href="#" id="emailLink" class="reveal show flex items-center gap-3 p-4 rounded-2xl border border-slate-200 dark:border-slate-800 hover:border-amber-450 transition">
-        <svg class="icon w-5 h-5 text-amber-600" viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 6-10 7L2 6"/></svg>
-        <div><p class="text-xs text-slate-400 uppercase font-semibold">Email</p><p class="font-semibold" id="emailText">—</p></div>
-      </a>
-      <a href="#" id="phoneLink" class="reveal show flex items-center gap-3 p-4 rounded-2xl border border-slate-200 dark:border-slate-800 hover:border-amber-450 transition">
-        <svg class="icon w-5 h-5 text-amber-600" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.362 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.338 1.85.573 2.81.7A2 2 0 0 1 22 16.92Z"/></svg>
-        <div><p class="text-xs text-slate-400 uppercase font-semibold">Telefon</p><p class="font-semibold" id="phoneText">—</p></div>
-      </a>
-    </div>
-    <form id="contactForm" class="reveal show grid gap-3 max-w-xl">
-      <input id="cfName" class="rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 px-4 py-3 outline-none focus:ring-2 ring-amber-450" placeholder="Ismingiz" required>
-      <textarea id="cfMsg" class="rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 px-4 py-3 outline-none focus:ring-2 ring-amber-450 min-h-28" placeholder="Savolingiz yoki taklifingiz" required></textarea>
-      <button class="justify-self-start bg-amber-450 text-ink font-semibold px-6 py-3 rounded-xl hover:brightness-95 active:scale-95 transition" type="submit">Telegram orqali yuborish</button>
-    </form>
-  </section>
+    <section id="contact" class="mx-auto mb-20 mt-16 max-w-7xl px-4">
+      <h2 class="mb-4 font-display text-2xl font-extrabold" data-i18n="contact.title">Aloqa</h2>
 
-</main>
+      <div class="mb-6 grid gap-4 md:grid-cols-3">
+        <a
+          id="telegramContact"
+          href="https://t.me/qurilishinfo"
+          target="_blank"
+          rel="noopener"
+          class="flex items-center gap-3 rounded-2xl border border-slate-200 p-4 transition hover:border-amber-450 dark:border-slate-800"
+        >
+          <svg class="icon h-5 w-5 text-amber-600" viewBox="0 0 24 24">
+            <path d="m22 2-11 11"></path>
+            <path d="m22 2-7 20-4-9-9-4 20-7Z"></path>
+          </svg>
+          <div>
+            <p class="text-xs font-semibold uppercase text-slate-400">Telegram</p>
+            <p class="font-semibold" data-i18n="contact.telegram">Kanalga yozish</p>
+          </div>
+        </a>
 
-<!-- ===== Footer ===== -->
-<footer class="bg-ink text-white/70">
-  <div class="max-w-7xl mx-auto px-4 py-10">
-    <div class="flex flex-col md:flex-row md:items-center justify-between gap-6">
-      <div class="flex items-center gap-2 text-white font-display font-extrabold text-lg">
-        <span class="w-2.5 h-6 diag-tape rounded-sm rotate-6"></span> QurilishInfo
+        <a
+          id="emailLink"
+          href="mailto:info@qurilishinfo.uz"
+          class="flex items-center gap-3 rounded-2xl border border-slate-200 p-4 transition hover:border-amber-450 dark:border-slate-800"
+        >
+          <svg class="icon h-5 w-5 text-amber-600" viewBox="0 0 24 24">
+            <rect x="2" y="4" width="20" height="16" rx="2"></rect>
+            <path d="m22 6-10 7L2 6"></path>
+          </svg>
+          <div>
+            <p class="text-xs font-semibold uppercase text-slate-400">Email</p>
+            <p id="emailText" class="font-semibold">info@qurilishinfo.uz</p>
+          </div>
+        </a>
+
+        <a
+          id="phoneLink"
+          href="tel:+998900000000"
+          class="flex items-center gap-3 rounded-2xl border border-slate-200 p-4 transition hover:border-amber-450 dark:border-slate-800"
+        >
+          <svg class="icon h-5 w-5 text-amber-600" viewBox="0 0 24 24">
+            <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6A19.79 19.79 0 0 1 .14 4.18 2 2 0 0 1 2.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L6.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92Z"></path>
+          </svg>
+          <div>
+            <p class="text-xs font-semibold uppercase text-slate-400">Telefon</p>
+            <p id="phoneText" class="font-semibold">+998 90 000 00 00</p>
+          </div>
+        </a>
       </div>
-      <div class="flex gap-3" id="socialIcons"></div>
+
+      <form id="contactForm" class="grid max-w-xl gap-3">
+        <input
+          id="cfName"
+          required
+          maxlength="100"
+          placeholder="Ismingiz"
+          data-i18n-placeholder="contact.name"
+          class="rounded-xl border border-slate-200 bg-white px-4 py-3 outline-none focus:ring-2 focus:ring-amber-450 dark:border-slate-800 dark:bg-slate-900"
+        >
+
+        <input
+          id="cfContact"
+          maxlength="120"
+          placeholder="Telefon yoki email"
+          data-i18n-placeholder="contact.phoneEmail"
+          class="rounded-xl border border-slate-200 bg-white px-4 py-3 outline-none focus:ring-2 focus:ring-amber-450 dark:border-slate-800 dark:bg-slate-900"
+        >
+
+        <textarea
+          id="cfMsg"
+          required
+          maxlength="3000"
+          placeholder="Savolingiz yoki taklifingiz"
+          data-i18n-placeholder="contact.message"
+          class="min-h-28 rounded-xl border border-slate-200 bg-white px-4 py-3 outline-none focus:ring-2 focus:ring-amber-450 dark:border-slate-800 dark:bg-slate-900"
+        ></textarea>
+
+        <button
+          type="submit"
+          class="justify-self-start rounded-xl bg-amber-450 px-6 py-3 font-semibold text-ink transition hover:brightness-95 active:scale-95"
+          data-i18n="contact.send"
+        >
+          Yuborish
+        </button>
+
+        <p id="contactStatus" class="hidden text-sm"></p>
+      </form>
+    </section>
+  </main>
+
+  <footer class="bg-ink text-white/70">
+    <div class="mx-auto max-w-7xl px-4 py-10">
+      <div class="flex flex-col justify-between gap-6 md:flex-row md:items-center">
+        <div class="flex items-center gap-2 font-display text-lg font-extrabold text-white">
+          <span class="h-6 w-2.5 rotate-6 rounded-sm diag-tape"></span>
+          <span id="footerBrand">QurilishInfo</span>
+        </div>
+
+        <div id="socialIcons" class="flex gap-3"></div>
+      </div>
+
+      <div class="mt-8 space-y-1 border-t border-white/10 pt-6 text-sm">
+        <p>
+          <b id="footerBrandText" class="text-white/90">QurilishInfo</b>:
+          <span data-i18n="footer.independent">mustaqil axborot loyihasi. Rasmiy davlat idorasi sayti emas.</span>
+        </p>
+        <p data-i18n="footer.warning">
+          Maqolalardagi ma’lumot umumiy xarakterda. Muhim qarorlar oldidan rasmiy manbani tekshiring.
+        </p>
+        <p>
+          <span data-i18n="footer.contact">Aloqa va reklama:</span>
+          <span id="contactText"></span>
+        </p>
+      </div>
     </div>
-    <div class="border-t border-white/10 mt-8 pt-6 text-sm space-y-1">
-      <p><b class="text-white/90">QurilishInfo</b>: mustaqil axborot loyihasi. Rasmiy davlat idorasi sayti emas.</p>
-      <p>Maqolalardagi ma'lumot umumiy xarakterda. Qaror qilishdan oldin rasmiy manbani tekshiring.</p>
-      <p>Aloqa va reklama: <span id="contact_"></span></p>
+  </footer>
+
+  <div id="reader" class="fixed inset-0 z-50 hidden overflow-y-auto bg-slate-50 dark:bg-slate-950">
+    <div class="sticky top-0 flex items-center gap-3 border-b border-slate-200 bg-white/90 px-4 py-3 glass dark:border-slate-800 dark:bg-slate-900/90">
+      <button
+        id="readerBack"
+        type="button"
+        class="rounded-xl border border-slate-200 px-4 py-2 text-sm font-semibold transition hover:bg-slate-100 dark:border-slate-700 dark:hover:bg-slate-800"
+        data-i18n="reader.back"
+      >
+        ← Orqaga
+      </button>
+
+      <button
+        id="readerShare"
+        type="button"
+        class="ml-auto rounded-xl border border-slate-200 px-4 py-2 text-sm font-semibold transition hover:bg-slate-100 dark:border-slate-700 dark:hover:bg-slate-800"
+        data-i18n="reader.share"
+      >
+        Ulashish
+      </button>
     </div>
+
+    <article id="readerBody" class="mx-auto max-w-3xl px-4 py-8"></article>
   </div>
-</footer>
 
-<!-- ===== Reader (article modal) ===== -->
-<div id="reader" class="fixed inset-0 z-50 bg-slate-50 dark:bg-slate-950 overflow-y-auto hidden">
-  <div class="sticky top-0 bg-white/90 dark:bg-slate-900/90 glass border-b border-slate-200 dark:border-slate-800 px-4 py-3 flex items-center gap-3">
-    <button id="readerBack" class="px-4 py-2 rounded-xl border border-slate-200 dark:border-slate-700 font-semibold text-sm hover:bg-slate-100 dark:hover:bg-slate-800 transition">← Orqaga</button>
-  </div>
-  <article id="readerBody" class="max-w-2xl mx-auto px-4 py-8"></article>
-</div>
+  <div id="toast" class="pointer-events-none fixed bottom-5 left-1/2 z-[60] hidden -translate-x-1/2 rounded-xl bg-ink px-5 py-3 text-sm font-semibold text-white shadow-xl"></div>
 
-<script>
-/* ====== SOZLAMALAR ====== */
-var TELEGRAM_URL = "https://t.me/qurilishinfo";
-var CONTACT = "@qurilishinfo_admin";
-var CONTACT_URL = "https://t.me/qurilishinfo_admin";
-var EMAIL = "info@qurilishinfo.uz";
-var PHONE = "+998 90 000 00 00";
-var SOCIAL = { telegram: "https://t.me/qurilishinfo", instagram: "", facebook: "", youtube: "" };
-var FAQ = [
-  {q:"Uy qurish uchun ruxsatnoma kerakmi?",a:"Ko'p hollarda ha, lekin talablar qurilish turi va joyiga qarab farq qiladi. Aniq ro'yxatni mahalliy qurilish organidan tekshiring."},
-  {q:"Yangi uy sotib olishdan oldin nimani tekshirish kerak?",a:"Egalik va qurilish hujjatlarini, binoning fizik holatini va sotuvchining ma'lumot berishini tekshiring."},
-  {q:"Ustaga oldindan pul berish xavfsizmi?",a:"Butun summani oldindan bermang. To'lovni ish bosqichlariga bog'lab, yozma shartnoma bilan qiling."},
-  {q:"Ta'mirlashda devorni buzish mumkinmi?",a:"Avval devor yuk ko'taruvchi yoki yo'qligini mutaxassis bilan aniqlang."},
-  {q:"Sizga savol qanday yuboraman?",a:"Telegram kanalimizga yozing, eng ko'p so'ralganlariga maqola qilib javob beramiz."}
-];
-/* Kategoriya nomiga qarab ikonka (mos kelmasa umumiy ikonka ishlatiladi) */
-var ICON_MAP = {
-  'Ruxsatnoma':'file-check', 'Uy qurish':'hammer', 'Uy sotib olish':'home',
-  'Materiallar':'package', 'Savol-javob':'question', 'Yangiliklar':'news'
-};
-var ICONS = {
-  'file-check':'<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8Z"/><path d="M14 2v6h6"/><path d="m9 15 2 2 4-4"/>',
-  'hammer':'<path d="m15 12-8.5 8.5a1.5 1.5 0 0 1-2-2L13 10"/><path d="M17.64 15 22 10.64"/><path d="m20.91 11.7-1.25-1.25c-.6-.6-.93-1.4-.93-2.25v-.86L16.01 5.6a5.56 5.56 0 0 0-3.94-1.64H8l3.91 3.91"/>',
-  'home':'<path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2Z"/><path d="M9 22V12h6v10"/>',
-  'package':'<path d="M16.5 9.4 7.5 4.21"/><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"/><path d="m3.3 7 8.7 5 8.7-5"/><path d="M12 22V12"/>',
-  'question':'<circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><path d="M12 17h.01"/>',
-  'news':'<path d="M4 22h16a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v16a2 2 0 0 1-2 2Zm0 0a2 2 0 0 1-2-2v-9c0-1.1.9-2 2-2h2"/><path d="M18 14h-8"/><path d="M15 18h-5"/><path d="M10 6h8v4h-8V6Z"/>',
-  'eye':'<path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/>'
-};
-var SOCIAL_ICONS = {
-  telegram:'<path d="M22 2 11 13"/><path d="M22 2 15 22l-4-9-9-4 20-7Z"/>',
-  instagram:'<rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1"/>',
-  facebook:'<path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3Z"/>',
-  youtube:'<rect x="2" y="6" width="20" height="12" rx="3"/><path d="m10 9 5 3-5 3Z" fill="currentColor" stroke="none"/>'
-};
-/* ====== ~SOZLAMALAR TUGADI ====== */
+  <script>
+    const DEFAULT_SETTINGS = {
+      site_name: "QurilishInfo",
+      telegram_url: "https://t.me/qurilishinfo",
+      telegram_contact_url: "https://t.me/qurilishinfo_admin",
+      contact: "@qurilishinfo_admin",
+      email: "info@qurilishinfo.uz",
+      phone: "+998 90 000 00 00",
+      instagram: "",
+      facebook: "",
+      youtube: "",
+      ad_contact_url: "https://t.me/qurilishinfo_admin"
+    };
 
-var CATEGORIES = [], ARTICLES = [];
-var state = {cat:'Barchasi', q:''};
-var $ = function(id){return document.getElementById(id)};
-function esc(s){ return String(s).replace(/[&<>"']/g,function(m){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[m]}); }
-function svg(pathHtml, cls){ return '<svg class="'+(cls||'icon')+'" viewBox="0 0 24 24">'+pathHtml+'</svg>'; }
-function catColor(name){ var c=CATEGORIES.filter(function(x){return x.name===name})[0]; return c?c.color:'#2563EB'; }
-function catIconKey(name){ return ICON_MAP[name] || 'news'; }
-function catIcon(name){ return ICONS[catIconKey(name)]; }
-function renderBody(body){
-  var looksHtml = /<[a-z][\s\S]*>/i.test(body);
-  if(looksHtml) return body;
-  return String(body).split(/\n\n+/).map(function(p){ return '<p>'+esc(p)+'</p>'; }).join('');
-}
-function thumb(a, sizeCls){
-  if(a.cover_image_url) return '<img src="'+esc(a.cover_image_url)+'" alt="" loading="lazy" class="'+sizeCls+' object-cover rounded-xl">';
-  return '<div class="'+sizeCls+' rounded-xl grid place-items-center text-white flex-shrink-0" style="background:'+catColor(a.category)+'">'+svg(catIcon(a.category),'icon w-6 h-6')+'</div>';
-}
+    const FAQ = [
+      {
+        q: "Uy qurish uchun ruxsatnoma kerakmi?",
+        a: "Talablar qurilish turi, joylashuvi va loyiha xususiyatiga qarab farq qiladi. Aniq ma’lumotni tegishli rasmiy manbadan tekshiring."
+      },
+      {
+        q: "Uy sotib olishdan oldin nimani tekshirish kerak?",
+        a: "Kadastr va mulk hujjatlari, qurilishning qonuniyligi, sotuvchining vakolati va obyektning amaldagi holatini tekshiring."
+      },
+      {
+        q: "Ustaga oldindan pul berish xavfsizmi?",
+        a: "To‘liq summani oldindan bermang. To‘lovni ish bosqichlariga bog‘lang va yozma kelishuv yoki shartnoma tuzing."
+      },
+      {
+        q: "Ta’mirlashda devorni buzish mumkinmi?",
+        a: "Devor yuk ko‘taruvchi konstruksiya bo‘lishi mumkin. Har qanday buzishdan oldin mutaxassis xulosasini oling."
+      },
+      {
+        q: "QurilishInfo’ga qanday xabar yuboraman?",
+        a: "Aloqa bo‘limidagi forma yoki Telegram orqali tahririyatga yozishingiz mumkin."
+      }
+    ];
 
-/* ---------- Chips ---------- */
-function renderChips(){
-  var cats = ['Barchasi'].concat(CATEGORIES.map(function(c){return c.name}));
-  $("chips").innerHTML = cats.map(function(c){
-    var active = c===state.cat;
-    var icon = c==='Barchasi' ? '' : svg(catIcon(c),'icon w-4 h-4');
-    return '<button data-cat="'+esc(c)+'" class="chip flex items-center gap-1.5 flex-shrink-0 px-4 py-2 rounded-xl text-sm font-semibold border transition '+
-      (active ? 'bg-ink text-white border-ink' : 'bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-800 hover:border-amber-450')+'">'+icon+esc(c)+'</button>';
-  }).join('');
-}
-$("chips").addEventListener('click', function(e){
-  var b = e.target.closest('[data-cat]'); if(!b) return;
-  state.cat = b.getAttribute('data-cat'); renderChips(); renderList();
-});
+    const ICON_MAP = {
+      "Ruxsatnoma": "file-check",
+      "Uy qurish": "hammer",
+      "Uy sotib olish": "home",
+      "Materiallar": "package",
+      "Qurilish materiallari": "package",
+      "Savol-javob": "question",
+      "Yangiliklar": "news",
+      "Kadastr va hujjatlar": "file-check",
+      "Qurilish nazorati": "shield",
+      "Ta’mirlash": "hammer",
+      "Tahlil": "chart",
+      "default": "news"
+    };
 
-/* ---------- List ---------- */
-function filteredArticles(){
-  var q = state.q.trim().toLowerCase();
-  return ARTICLES.filter(function(a){
-    var okCat = state.cat==='Barchasi' || a.category===state.cat;
-    var okQ = !q || (a.title+' '+a.lead).toLowerCase().indexOf(q)>-1;
-    return okCat && okQ;
-  });
-}
-function renderList(){
-  var items = filteredArticles();
-  $("list").innerHTML = items.length ? items.map(function(a,i){
-    return '<button data-id="'+a.id+'" class="card reveal show text-left w-full bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-4 flex gap-4 hover:-translate-y-0.5 hover:shadow-lg transition" style="transition-delay:'+(i*30)+'ms">'
-      + thumb(a, 'w-14 h-14')
-      + '<div class="min-w-0"><span class="text-xs font-bold uppercase tracking-wide" style="color:'+catColor(a.category)+'">'+esc(a.category)+'</span>'
-      + '<h3 class="font-display font-bold text-base mt-0.5 truncate">'+esc(a.title)+'</h3>'
-      + '<p class="text-sm text-slate-500 mt-1 line-clamp-1">'+esc(a.lead)+'</p>'
-      + '<span class="text-xs text-slate-400 mt-1 inline-flex items-center gap-3">'+a.minutes+' daqiqa &middot; '+(a.views||0)+' ko\'rish</span></div>'
-      + '</button>';
-  }).join('') : '<p class="text-slate-400 text-center py-10">Hech narsa topilmadi.</p>';
-}
+    const ICONS = {
+      "file-check": '<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8Z"></path><path d="M14 2v6h6"></path><path d="m9 15 2 2 4-4"></path>',
+      "hammer": '<path d="m15 12-8.5 8.5a1.5 1.5 0 0 1-2-2L13 10"></path><path d="M17.64 15 22 10.64"></path><path d="m20.91 11.7-1.25-1.25c-.6-.6-.93-1.4-.93-2.25v-.86L16.01 5.6a5.56 5.56 0 0 0-3.94-1.64H8l3.91 3.91"></path>',
+      "home": '<path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2Z"></path><path d="M9 22V12h6v10"></path>',
+      "package": '<path d="M16.5 9.4 7.5 4.21"></path><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"></path><path d="m3.3 7 8.7 5 8.7-5"></path><path d="M12 22V12"></path>',
+      "question": '<circle cx="12" cy="12" r="10"></circle><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path><path d="M12 17h.01"></path>',
+      "news": '<path d="M4 22h16a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v16a2 2 0 0 1-2 2Zm0 0a2 2 0 0 1-2-2v-9c0-1.1.9-2 2-2h2"></path><path d="M18 14h-8"></path><path d="M15 18h-5"></path><path d="M10 6h8v4h-8V6Z"></path>',
+      "eye": '<path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7Z"></path><circle cx="12" cy="12" r="3"></circle>',
+      "shield": '<path d="M12 2 3 6v6c0 5 4 9 9 10 5-1 9-5 9-10V6l-9-4Z"></path><path d="m9 12 2 2 4-4"></path>',
+      "chart": '<path d="M3 3v18h18"></path><path d="m7 16 4-5 3 2 5-7"></path>'
+    };
 
-/* ---------- Rank ---------- */
-function renderRank(){
-  var top = ARTICLES.slice().sort(function(a,b){return (b.views||0)-(a.views||0)}).slice(0,5);
-  $("rank").innerHTML = top.map(function(a,i){
-    return '<li><button data-id="'+a.id+'" class="w-full text-left flex items-center gap-3 p-4 hover:bg-slate-50 dark:hover:bg-slate-800/60 transition">'
-      + '<span class="font-display font-extrabold text-xl w-6 text-amber-500">'+(i+1)+'</span>'
-      + '<span class="min-w-0"><span class="block font-medium text-sm leading-snug">'+esc(a.title)+'</span>'
-      + '<span class="text-xs text-slate-400 inline-flex items-center gap-1 mt-0.5">'+svg(ICONS.eye,'icon w-3.5 h-3.5')+(a.views||0)+' ko\'rish</span></span>'
-      + '</button></li>';
-  }).join('');
-}
+    const SOCIAL_ICONS = {
+      telegram: '<path d="m22 2-11 11"></path><path d="m22 2-7 20-4-9-9-4 20-7Z"></path>',
+      instagram: '<rect x="2" y="2" width="20" height="20" rx="5"></rect><circle cx="12" cy="12" r="4"></circle><circle cx="17.5" cy="6.5" r="1"></circle>',
+      facebook: '<path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3Z"></path>',
+      youtube: '<rect x="2" y="6" width="20" height="12" rx="3"></rect><path d="m10 9 5 3-5 3Z" fill="currentColor" stroke="none"></path>'
+    };
 
-/* ---------- FAQ ---------- */
-function renderFaq(){
-  $("faq").innerHTML = FAQ.map(function(f){
-    return '<details class="reveal show bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl group">'
-      + '<summary class="list-none cursor-pointer p-4 font-semibold flex justify-between items-center">'+esc(f.q)
-      + '<svg class="icon w-4 h-4 transition group-open:rotate-45" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></summary>'
-      + '<div class="px-4 pb-4 text-slate-500 text-sm">'+esc(f.a)+'</div></details>';
-  }).join('');
-}
+    const I18N = {
+      uz: {
+        "nav.home": "Bosh sahifa",
+        "nav.news": "Yangiliklar",
+        "nav.about": "Biz haqimizda",
+        "nav.ads": "Reklama",
+        "nav.contact": "Aloqa",
+        "search.placeholder": "Savolingizni yozing: masalan, ruxsatnoma",
+        "hero.badge": "Mustaqil qurilish axboroti",
+        "hero.title1": "Qurilish bo‘yicha",
+        "hero.title2": "aniq javoblar",
+        "hero.title3": "ishonchli manbadan",
+        "hero.description": "Ruxsatnoma, uy qurish, kadastr, ta’mirlash va qurilish materiallari bo‘yicha amaliy maqolalar.",
+        "hero.button": "Maqolalarni ko‘rish",
+        "hero.about": "Biz haqimizda",
+        "stats.articles": "maqola",
+        "stats.categories": "bo‘lim",
+        "stats.views": "ko‘rish",
+        "latest.title": "So‘nggi maqolalar",
+        "rank.title": "Ko‘p o‘qilganlar",
+        "ads.label": "Reklama",
+        "ads.sidebarTitle": "Bu yerda reklamangiz bo‘lishi mumkin",
+        "ads.sidebarText": "Qurilish materiallari va ustalar uchun",
+        "ads.more": "Batafsil →",
+        "about.title": "Biz haqimizda",
+        "about.text": "QurilishInfo — qurilish sohasidagi yangiliklar, rasmiy xabarlar va amaliy ma’lumotlarni yorituvchi mustaqil axborot loyihasi.",
+        "about.note": "Rasmiy davlat idorasi emas. Muhim qarorlar oldidan rasmiy manbani tekshiring.",
+        "about.card1Title": "Ishonchli manba",
+        "about.card1Text": "Rasmiy manbalar va tahririy tekshiruv.",
+        "about.card2Title": "Amaliy ma’lumot",
+        "about.card2Text": "Qurilish jarayonlarini oddiy tilda tushuntiramiz.",
+        "about.card3Title": "Jamiyat uchun",
+        "about.card3Text": "Fuqarolar va tadbirkorlar uchun foydali platforma.",
+        "faq.title": "Tez-tez beriladigan savollar",
+        "ads.title": "Reklama joylashtirish",
+        "ads.description": "Qurilish materiallari sotuvchilari, quruvchi kompaniyalar va ustalar uchun reklama formatlari.",
+        "ads.card1": "Maqola ichida banner",
+        "ads.card2": "Telegram post",
+        "ads.card3": "Kompaniyalar katalogi",
+        "ads.contact": "Reklama bo‘yicha yozish",
+        "contact.title": "Aloqa",
+        "contact.telegram": "Kanalga yozish",
+        "contact.name": "Ismingiz",
+        "contact.phoneEmail": "Telefon yoki email",
+        "contact.message": "Savolingiz yoki taklifingiz",
+        "contact.send": "Yuborish",
+        "footer.independent": "mustaqil axborot loyihasi. Rasmiy davlat idorasi sayti emas.",
+        "footer.warning": "Maqolalardagi ma’lumot umumiy xarakterda. Muhim qarorlar oldidan rasmiy manbani tekshiring.",
+        "footer.contact": "Aloqa va reklama:",
+        "reader.back": "← Orqaga",
+        "reader.share": "Ulashish",
+        "reader.disclaimer": "Bu maqola umumiy ma’lumot uchun. Muhim qarorlar oldidan rasmiy manbani tekshiring.",
+        "reader.source": "Rasmiy manba",
+        "reader.sourceOpen": "Manbani ochish",
+        "reader.telegram": "Savolingizni Telegramda yozing",
+        "system.loading": "Yuklanmoqda...",
+        "system.notFound": "Hech narsa topilmadi.",
+        "system.serverError": "Maqolalarni yuklab bo‘lmadi. Server ishlayotganini tekshiring.",
+        "system.sent": "Xabaringiz yuborildi.",
+        "system.sentFallback": "Forma ishlamadi. Telegram orqali yuborishingiz mumkin.",
+        "system.error": "Xatolik yuz berdi.",
+        "system.noArticles": "Hozircha maqolalar mavjud emas.",
+        "system.minutes": "daqiqa",
+        "system.views": "ko‘rish",
+        "system.all": "Barchasi",
+        "system.draft": "Qoralama"
+      },
+      ru: {
+        "nav.home": "Главная",
+        "nav.news": "Новости",
+        "nav.about": "О нас",
+        "nav.ads": "Реклама",
+        "nav.contact": "Контакты",
+        "search.placeholder": "Введите запрос, например: разрешение",
+        "hero.badge": "Независимая строительная информация",
+        "hero.title1": "Точные ответы",
+        "hero.title2": "о строительстве",
+        "hero.title3": "из надёжных источников",
+        "hero.description": "Практические материалы о разрешениях, строительстве дома, кадастре, ремонте и строительных материалах.",
+        "hero.button": "Смотреть статьи",
+        "hero.about": "О проекте",
+        "stats.articles": "статей",
+        "stats.categories": "разделов",
+        "stats.views": "просмотров",
+        "latest.title": "Последние статьи",
+        "rank.title": "Популярные статьи",
+        "ads.label": "Реклама",
+        "ads.sidebarTitle": "Здесь может быть ваша реклама",
+        "ads.sidebarText": "Для строительных компаний и мастеров",
+        "ads.more": "Подробнее →",
+        "about.title": "О нас",
+        "about.text": "QurilishInfo — независимый информационный проект о новостях строительства, официальных сообщениях и практических материалах.",
+        "about.note": "Не является государственным органом. Перед важными решениями проверяйте официальные источники.",
+        "about.card1Title": "Надёжные источники",
+        "about.card1Text": "Официальные источники и редакционная проверка.",
+        "about.card2Title": "Практическая информация",
+        "about.card2Text": "Объясняем строительные процессы простым языком.",
+        "about.card3Title": "Для общества",
+        "about.card3Text": "Полезная платформа для граждан и предпринимателей.",
+        "faq.title": "Часто задаваемые вопросы",
+        "ads.title": "Размещение рекламы",
+        "ads.description": "Рекламные форматы для продавцов материалов, строительных компаний и мастеров.",
+        "ads.card1": "Баннер в статье",
+        "ads.card2": "Пост в Telegram",
+        "ads.card3": "Каталог компаний",
+        "ads.contact": "Написать по рекламе",
+        "contact.title": "Контакты",
+        "contact.telegram": "Написать в канал",
+        "contact.name": "Ваше имя",
+        "contact.phoneEmail": "Телефон или email",
+        "contact.message": "Ваш вопрос или предложение",
+        "contact.send": "Отправить",
+        "footer.independent": "независимый информационный проект. Не является сайтом государственного органа.",
+        "footer.warning": "Информация в статьях носит общий характер. Перед важными решениями проверяйте официальный источник.",
+        "footer.contact": "Контакты и реклама:",
+        "reader.back": "← Назад",
+        "reader.share": "Поделиться",
+        "reader.disclaimer": "Статья носит информационный характер. Перед важными решениями проверяйте официальный источник.",
+        "reader.source": "Официальный источник",
+        "reader.sourceOpen": "Открыть источник",
+        "reader.telegram": "Написать в Telegram",
+        "system.loading": "Загрузка...",
+        "system.notFound": "Ничего не найдено.",
+        "system.serverError": "Не удалось загрузить статьи. Проверьте сервер.",
+        "system.sent": "Сообщение отправлено.",
+        "system.sentFallback": "Форма не сработала. Вы можете написать в Telegram.",
+        "system.error": "Произошла ошибка.",
+        "system.noArticles": "Статей пока нет.",
+        "system.minutes": "мин.",
+        "system.views": "просмотров",
+        "system.all": "Все",
+        "system.draft": "Черновик"
+      }
+    };
 
-/* ---------- Carousel ---------- */
-var carIndex=0, carTimer;
-function renderCarousel(){
-  var top = ARTICLES.slice().sort(function(a,b){return (b.views||0)-(a.views||0)}).slice(0,5);
-  var box = $("car");
-  if(!top.length){ box.hidden = true; return; }
-  box.hidden = false;
-  $("carTrack").innerHTML = top.map(function(a){
-    var bgStyle = a.cover_image_url
-      ? 'background-image:url(\''+esc(a.cover_image_url)+'\');background-size:cover;background-position:center'
-      : 'background:linear-gradient(135deg,'+catColor(a.category)+',#0B1220)';
-    return '<div class="w-full flex-shrink-0"><button data-id="'+a.id+'" class="w-full text-left grid md:grid-cols-2">'
-      + '<div class="h-56 md:h-80 grid place-items-center text-white relative overflow-hidden" style="'+bgStyle+'">'
-      + (a.cover_image_url ? '' : svg(catIcon(a.category),'w-20 h-20 opacity-30 icon'))
-      + '</div>'
-      + '<div class="p-6 md:p-10 flex flex-col justify-center">'
-      + '<span class="text-xs font-bold uppercase tracking-wide" style="color:'+catColor(a.category)+'">'+esc(a.category)+'</span>'
-      + '<h2 class="font-display font-extrabold text-2xl md:text-3xl mt-2 leading-tight">'+esc(a.title)+'</h2>'
-      + '<p class="text-slate-500 mt-3">'+esc(a.lead)+'</p>'
-      + '<span class="text-sm text-slate-400 mt-4">'+a.minutes+' daqiqalik o\'qish</span>'
-      + '</div></button></div>';
-  }).join('');
-  $("carDots").innerHTML = top.map(function(_,i){
-    return '<button data-i="'+i+'" class="dot w-2 h-2 rounded-full '+(i===0?'bg-amber-450 w-6':'bg-white/50')+' transition-all"></button>';
-  }).join('');
-  carIndex=0; posCar(); restartAuto();
-}
-function posCar(){
-  $("carTrack").style.transform = 'translateX(-'+(carIndex*100)+'%)';
-  Array.prototype.forEach.call($("carDots").children,function(d,i){
-    d.className = 'dot w-2 h-2 rounded-full transition-all ' + (i===carIndex?'bg-amber-450 w-6':'bg-white/50');
-  });
-}
-function carGo(d){ var n=$("carTrack").children.length; if(!n) return; carIndex=(carIndex+d+n)%n; posCar(); }
-function restartAuto(){ clearInterval(carTimer); carTimer=setInterval(function(){carGo(1)},5000); }
-$("carPrev").addEventListener('click',function(){carGo(-1);restartAuto()});
-$("carNext").addEventListener('click',function(){carGo(1);restartAuto()});
-$("carDots").addEventListener('click',function(e){var i=e.target.getAttribute('data-i');if(i!=null){carIndex=Number(i);posCar();restartAuto();}});
-(function(){
-  var startX=null;
-  $("car").addEventListener('touchstart',function(e){startX=e.touches[0].clientX},{passive:true});
-  $("car").addEventListener('touchend',function(e){
-    if(startX==null) return;
-    var dx=e.changedTouches[0].clientX-startX;
-    if(Math.abs(dx)>40){ carGo(dx<0?1:-1); restartAuto(); }
-    startX=null;
-  });
-})();
+    let SETTINGS = { ...DEFAULT_SETTINGS };
+    let CATEGORIES = [];
+    let ARTICLES = [];
+    let CURRENT_ARTICLE = null;
+    let CURRENT_LANG = localStorage.getItem("qi_lang") || "uz";
+    let CAR_INDEX = 0;
+    let CAR_TIMER = null;
 
-/* ---------- Reader (fetches from API, increments views) ---------- */
-document.addEventListener('click', function(e){
-  var b = e.target.closest('[data-id]'); if(!b) return;
-  var id = b.getAttribute('data-id');
-  fetch('/api/articles/'+id).then(function(r){return r.json()}).then(function(a){
-    if(!a || a.error) return;
-    $("readerBody").innerHTML =
-      '<span class="text-xs font-bold uppercase tracking-wide" style="color:'+catColor(a.category)+'">'+esc(a.category)+' &middot; '+a.minutes+' daqiqa &middot; '+(a.views||0)+' ko\'rish</span>'
-      + '<h1 class="font-display font-extrabold text-3xl mt-2 mb-6 leading-tight">'+esc(a.title)+'</h1>'
-      + '<div class="rich text-slate-600 dark:text-slate-300">'+renderBody(a.body)+'</div>'
-      + '<div class="mt-6 p-4 rounded-xl bg-amber-450/10 text-sm text-amber-700 dark:text-amber-400">Bu maqola umumiy ma\'lumot uchun. Qaror qilishdan oldin rasmiy manbani tekshiring.</div>'
-      + '<a href="'+TELEGRAM_URL+'" target="_blank" rel="noopener" class="tgLink inline-flex mt-5 items-center gap-2 bg-amber-450 text-ink font-semibold px-5 py-3 rounded-xl">Savolingizni Telegramda yozing</a>';
-    $("reader").classList.remove('hidden');
-    document.body.style.overflow='hidden';
-    var idx = ARTICLES.findIndex(function(x){return x.id==id});
-    if(idx>-1){ ARTICLES[idx].views = a.views; renderRank(); }
-  });
-});
-$("readerBack").addEventListener('click', function(){
-  $("reader").classList.add('hidden'); document.body.style.overflow='';
-});
-document.addEventListener('keydown', function(e){ if(e.key==='Escape') $("reader").classList.add('hidden'); });
+    const state = {
+      category: "Barchasi",
+      query: ""
+    };
 
-/* ---------- Search ---------- */
-$("searchBtn").addEventListener('click', function(){
-  var on = $("searchBox").classList.toggle('hidden');
-  if(!$("searchBox").classList.contains('hidden')) $("q").focus();
-});
-$("q").addEventListener('input', function(){ state.q = this.value; renderList(); });
+    const $ = (id) => document.getElementById(id);
 
-/* ---------- Contact / footer / social ---------- */
-function bindLinks(){ Array.prototype.forEach.call(document.querySelectorAll('.tgLink'), function(el){ el.href = TELEGRAM_URL; }); }
-$("contact_").textContent = CONTACT;
-$("emailText").textContent = EMAIL; $("emailLink").href = 'mailto:'+EMAIL;
-$("phoneText").textContent = PHONE; $("phoneLink").href = 'tel:'+PHONE.replace(/[^\d+]/g,'');
-$("adLink").href = CONTACT_URL;
-$("contactForm").addEventListener('submit', function(e){
-  e.preventDefault();
-  var name=$("cfName").value.trim(), msg=$("cfMsg").value.trim();
-  var text = encodeURIComponent('Ism: '+name+'\n\nXabar: '+msg);
-  window.open('https://t.me/share/url?url=&text='+text, '_blank', 'noopener');
-});
-(function renderSocial(){
-  var html='';
-  Object.keys(SOCIAL).forEach(function(k){
-    if(SOCIAL[k]) html += '<a href="'+esc(SOCIAL[k])+'" target="_blank" rel="noopener" aria-label="'+k+'" class="w-10 h-10 rounded-xl bg-white/10 grid place-items-center hover:bg-amber-450 hover:text-ink transition">'+svg(SOCIAL_ICONS[k],'icon w-4 h-4')+'</a>';
-  });
-  $("socialIcons").innerHTML = html;
-})();
+    function t(key) {
+      return I18N[CURRENT_LANG]?.[key] || I18N.uz[key] || key;
+    }
 
-/* ---------- Reveal on scroll (new cards get this class already; observe future too) ---------- */
-var io = new IntersectionObserver(function(entries){ entries.forEach(function(e){ if(e.isIntersecting) e.target.classList.add('show'); }); },{threshold:.1});
-function observeReveals(){ Array.prototype.forEach.call(document.querySelectorAll('.reveal:not(.show)'), function(el){ io.observe(el); }); }
+    function esc(value) {
+      return String(value ?? "")
+        .replace(/[&<>"']/g, (char) => ({
+          "&": "&amp;",
+          "<": "&lt;",
+          ">": "&gt;",
+          "\"": "&quot;",
+          "'": "&#39;"
+        }[char]));
+    }
 
-/* ---------- Count-up ---------- */
-function countUp(el){
-  var to = Number(el.getAttribute('data-to'))||0, cur=0, step=Math.max(1,Math.round(to/60));
-  var t=setInterval(function(){ cur+=step; if(cur>=to){cur=to;clearInterval(t);} el.textContent=cur.toLocaleString('uz'); },20);
-}
+    function safeUrl(value, fallback = "#") {
+      try {
+        const url = new URL(String(value || ""), window.location.origin);
+        if (["http:", "https:", "mailto:", "tel:"].includes(url.protocol)) {
+          return url.href;
+        }
+      } catch (_) {}
+      return fallback;
+    }
 
-/* ---------- Boot ---------- */
-bindLinks(); renderFaq();
-Promise.all([
-  fetch('/api/categories').then(function(r){return r.json()}),
-  fetch('/api/articles').then(function(r){return r.json()})
-]).then(function(res){
-  CATEGORIES = res[0]; ARTICLES = res[1];
-  renderChips(); renderList(); renderRank(); renderCarousel();
-  $("statArtHero").setAttribute('data-to', ARTICLES.length);
-  $("statCatHero").setAttribute('data-to', CATEGORIES.length);
-  $("statViewsHero").setAttribute('data-to', ARTICLES.reduce(function(s,a){return s+(a.views||0)},0));
-  countUp($("statArtHero")); countUp($("statCatHero")); countUp($("statViewsHero"));
-  observeReveals();
-}).catch(function(){
-  $("list").innerHTML = '<p class="text-red-500 text-center py-10">Maqolalarni yuklab bo\'lmadi. Server ishlab turganini tekshiring.</p>';
-});
-</script>
+    function svg(path, className = "icon") {
+      return `<svg class="${esc(className)}" viewBox="0 0 24 24">${path}</svg>`;
+    }
+
+    function normalizeSettings(raw) {
+      if (!raw || typeof raw !== "object") return { ...DEFAULT_SETTINGS };
+
+      const source = raw.settings || raw.data || raw;
+
+      return {
+        ...DEFAULT_SETTINGS,
+        ...source,
+        site_name: source.site_name || source.siteName || DEFAULT_SETTINGS.site_name,
+        telegram_url: source.telegram_url || source.telegram || DEFAULT_SETTINGS.telegram_url,
+        telegram_contact_url: source.telegram_contact_url || source.contact_url || DEFAULT_SETTINGS.telegram_contact_url,
+        ad_contact_url: source.ad_contact_url || source.telegram_contact_url || DEFAULT_SETTINGS.ad_contact_url
+      };
+    }
+
+    function normalizeCategory(category) {
+      if (typeof category === "string") {
+        return {
+          name: category,
+          color: "#2563EB"
+        };
+      }
+
+      return {
+        ...category,
+        name: category.name || category.title || "Yangiliklar",
+        color: category.color || "#2563EB"
+      };
+    }
+
+    function normalizeArticle(article) {
+      const item = article || {};
+
+      return {
+        ...item,
+        id: item.id ?? item.article_id ?? item._id ?? "",
+        slug: item.slug || item.url_slug || "",
+        title: item.title || item.title_uz || item.name || "Sarlavhasiz maqola",
+        title_ru: item.title_ru || item.title || item.title_uz || "Без названия",
+        lead: item.lead || item.excerpt || item.excerpt_uz || item.summary || "",
+        lead_ru: item.lead_ru || item.excerpt_ru || item.excerpt || item.excerpt_uz || "",
+        body: item.body || item.content || item.content_uz || item.text || "",
+        body_ru: item.body_ru || item.content_ru || item.content || item.content_uz || "",
+        category: typeof item.category === "object"
+          ? item.category.name
+          : (item.category || item.category_name || "Yangiliklar"),
+        cover_image_url: item.cover_image_url || item.cover_image || item.image || item.image_url || "",
+        minutes: Number(item.minutes || item.reading_time || item.read_time || 3),
+        views: Number(item.views || item.view_count || 0),
+        source_name: item.source_name || item.source || "",
+        source_url: item.source_url || "",
+        author: item.author || item.author_name || "QurilishInfo tahririyati",
+        published_at: item.published_at || item.created_at || "",
+        updated_at: item.updated_at || "",
+        status: item.status || "published",
+        seo_title: item.seo_title || "",
+        seo_description: item.seo_description || ""
+      };
+    }
+
+    function categoryByName(name) {
+      return CATEGORIES.find((category) => category.name === name);
+    }
+
+    function categoryColor(name) {
+      return categoryByName(name)?.color || "#2563EB";
+    }
+
+    function categoryIcon(name) {
+      const key = ICON_MAP[name] || ICON_MAP.default;
+      return ICONS[key];
+    }
+
+    function getArticleTitle(article) {
+      return CURRENT_LANG === "ru"
+        ? (article.title_ru || article.title)
+        : article.title;
+    }
+
+    function getArticleLead(article) {
+      return CURRENT_LANG === "ru"
+        ? (article.lead_ru || article.lead)
+        : article.lead;
+    }
+
+    function getArticleBody(article) {
+      return CURRENT_LANG === "ru"
+        ? (article.body_ru || article.body)
+        : article.body;
+    }
+
+    function formatDate(value) {
+      if (!value) return "";
+
+      const date = new Date(value);
+      if (Number.isNaN(date.getTime())) return "";
+
+      return new Intl.DateTimeFormat(
+        CURRENT_LANG === "ru" ? "ru-RU" : "uz-UZ",
+        {
+          day: "2-digit",
+          month: "long",
+          year: "numeric"
+        }
+      ).format(date);
+    }
+
+    function renderSafeBody(body) {
+      const text = String(body || "");
+
+      if (/<[a-z][\s\S]*>/i.test(text)) {
+        return sanitizeHtml(text);
+      }
+
+      return text
+        .split(/\n\n+/)
+        .filter(Boolean)
+        .map((paragraph) => `<p>${esc(paragraph).replace(/\n/g, "<br>")}</p>`)
+        .join("");
+    }
+
+    function sanitizeHtml(html) {
+      const template = document.createElement("template");
+      template.innerHTML = String(html || "");
+
+      template.content.querySelectorAll("script, iframe, object, embed, form, style").forEach((node) => {
+        node.remove();
+      });
+
+      template.content.querySelectorAll("*").forEach((node) => {
+        [...node.attributes].forEach((attribute) => {
+          const name = attribute.name.toLowerCase();
+          const value = attribute.value.trim().toLowerCase();
+
+          if (name.startsWith("on")) {
+            node.removeAttribute(attribute.name);
+          }
+
+          if (
+            ["href", "src", "action", "xlink:href"].includes(name) &&
+            (value.startsWith("javascript:") || value.startsWith("data:"))
+          ) {
+            node.removeAttribute(attribute.name);
+          }
+        });
+      });
+
+      return template.innerHTML;
+    }
+
+    function thumb(article, size = "h-16 w-16") {
+      if (article.cover_image_url) {
+        return `
+          <img
+            src="${esc(safeUrl(article.cover_image_url, ""))}"
+            alt="${esc(getArticleTitle(article))}"
+            loading="lazy"
+            class="${size} flex-shrink-0 rounded-xl object-cover"
+          >
+        `;
+      }
+
+      return `
+        <div
+          class="${size} grid flex-shrink-0 place-items-center rounded-xl text-white"
+          style="background:${esc(categoryColor(article.category))}"
+        >
+          ${svg(categoryIcon(article.category), "icon h-7 w-7")}
+        </div>
+      `;
+    }
+
+    function renderTranslations() {
+      document.documentElement.lang = CURRENT_LANG;
+
+      document.querySelectorAll("[data-i18n]").forEach((element) => {
+        const key = element.getAttribute("data-i18n");
+        const value = t(key);
+        if (value) element.textContent = value;
+      });
+
+      document.querySelectorAll("[data-i18n-placeholder]").forEach((element) => {
+        const key = element.getAttribute("data-i18n-placeholder");
+        element.placeholder = t(key);
+      });
+
+      $("langBtn").textContent = CURRENT_LANG === "uz" ? "RU" : "UZ";
+      document.title = CURRENT_LANG === "ru"
+        ? `${SETTINGS.site_name} — строительные новости и практическая информация`
+        : `${SETTINGS.site_name} — qurilish sohasi yangiliklari va amaliy ma’lumotlar`;
+    }
+
+    function applyTheme() {
+      const saved = localStorage.getItem("qi_theme");
+      const dark = saved === "dark" ||
+        (!saved && window.matchMedia("(prefers-color-scheme: dark)").matches);
+
+      document.documentElement.classList.toggle("dark", dark);
+    }
+
+    function toggleTheme() {
+      const isDark = document.documentElement.classList.toggle("dark");
+      localStorage.setItem("qi_theme", isDark ? "dark" : "light");
+    }
+
+    function renderSettings() {
+      const name = SETTINGS.site_name || "QurilishInfo";
+
+      $("brandName").textContent = name;
+      $("footerBrand").textContent = name;
+      $("footerBrandText").textContent = name;
+
+      const telegram = safeUrl(SETTINGS.telegram_url, "#");
+      const contactTelegram = safeUrl(SETTINGS.telegram_contact_url, telegram);
+      const adContact = safeUrl(SETTINGS.ad_contact_url, contactTelegram);
+
+      $("headerTelegram").href = telegram;
+      $("telegramContact").href = contactTelegram;
+      $("adLink").href = adContact;
+
+      $("emailText").textContent = SETTINGS.email || "—";
+      $("emailLink").href = SETTINGS.email ? `mailto:${SETTINGS.email}` : "#";
+
+      $("phoneText").textContent = SETTINGS.phone || "—";
+      $("phoneLink").href = SETTINGS.phone
+        ? `tel:${String(SETTINGS.phone).replace(/[^\d+]/g, "")}`
+        : "#";
+
+      $("contactText").textContent = SETTINGS.contact || SETTINGS.email || "—";
+
+      renderSocial();
+      renderTranslations();
+    }
+
+    function renderSocial() {
+      const links = {
+        telegram: SETTINGS.telegram_url,
+        instagram: SETTINGS.instagram,
+        facebook: SETTINGS.facebook,
+        youtube: SETTINGS.youtube
+      };
+
+      $("socialIcons").innerHTML = Object.entries(links)
+        .filter(([, url]) => url)
+        .map(([name, url]) => `
+          <a
+            href="${esc(safeUrl(url, "#"))}"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="${esc(name)}"
+            class="grid h-10 w-10 place-items-center rounded-xl bg-white/10 transition hover:bg-amber-450 hover:text-ink"
+          >
+            ${svg(SOCIAL_ICONS[name], "icon h-4 w-4")}
+          </a>
+        `)
+        .join("");
+    }
+
+    function renderChips() {
+      const all = [
+        {
+          name: "Barchasi",
+          color: "#0B1220"
+        },
+        ...CATEGORIES
+      ];
+
+      $("chips").innerHTML = all.map((category) => {
+        const active = state.category === category.name;
+        const icon = category.name === "Barchasi"
+          ? ""
+          : svg(categoryIcon(category.name), "icon h-4 w-4");
+
+        return `
+          <button
+            type="button"
+            data-category="${esc(category.name)}"
+            class="flex flex-shrink-0 items-center gap-1.5 rounded-xl border px-4 py-2 text-sm font-semibold transition ${
+              active
+                ? "border-ink bg-ink text-white dark:border-amber-450 dark:bg-amber-450 dark:text-ink"
+                : "border-slate-200 bg-white hover:border-amber-450 dark:border-slate-800 dark:bg-slate-900"
+            }"
+          >
+            ${icon}
+            ${esc(CURRENT_LANG === "ru" ? (category.title_ru || category.name) : category.name)}
+          </button>
+        `;
+      }).join("");
+    }
+
+    function filteredArticles() {
+      const query = state.query.trim().toLowerCase();
+
+      return ARTICLES.filter((article) => {
+        const categoryOk = state.category === "Barchasi" || article.category === state.category;
+
+        const searchable = [
+          getArticleTitle(article),
+          getArticleLead(article),
+          article.category,
+          article.source_name
+        ].join(" ").toLowerCase();
+
+        return categoryOk && (!query || searchable.includes(query));
+      });
+    }
+
+    function renderList() {
+      const items = filteredArticles();
+
+      $("resultCount").textContent = items.length
+        ? `${items.length} ${CURRENT_LANG === "ru" ? "материалов" : "ta material"}`
+        : "";
+
+      if (!items.length) {
+        $("list").innerHTML = `
+          <div class="col-span-full py-12 text-center text-slate-400">
+            <svg class="mx-auto mb-3 h-10 w-10 opacity-50" viewBox="0 0 24 24">
+              ${ICONS.news}
+            </svg>
+            <p>${esc(t(ARTICLES.length ? "system.notFound" : "system.noArticles"))}</p>
+          </div>
+        `;
+        return;
+      }
+
+      $("list").innerHTML = items.map((article) => `
+        <button
+          type="button"
+          data-article-id="${esc(article.id)}"
+          class="group flex w-full gap-4 rounded-2xl border border-slate-200 bg-white p-4 text-left transition hover:-translate-y-0.5 hover:shadow-lg dark:border-slate-800 dark:bg-slate-900"
+        >
+          ${thumb(article)}
+          <span class="min-w-0">
+            <span
+              class="text-xs font-bold uppercase tracking-wide"
+              style="color:${esc(categoryColor(article.category))}"
+            >
+              ${esc(article.category)}
+            </span>
+
+            <span class="mt-0.5 block line-clamp-2 font-display text-base font-bold">
+              ${esc(getArticleTitle(article))}
+            </span>
+
+            <span class="mt-1 block line-clamp-1 text-sm text-slate-500">
+              ${esc(getArticleLead(article))}
+            </span>
+
+            <span class="mt-1 inline-flex items-center gap-3 text-xs text-slate-400">
+              ${article.minutes} ${esc(t("system.minutes"))}
+              <span>·</span>
+              ${Number(article.views || 0).toLocaleString()} ${esc(t("system.views"))}
+            </span>
+          </span>
+        </button>
+      `).join("");
+    }
+
+    function renderRank() {
+      const top = [...ARTICLES]
+        .sort((a, b) => Number(b.views || 0) - Number(a.views || 0))
+        .slice(0, 5);
+
+      $("rank").innerHTML = top.length
+        ? top.map((article, index) => `
+          <li>
+            <button
+              type="button"
+              data-article-id="${esc(article.id)}"
+              class="flex w-full items-center gap-3 p-4 text-left transition hover:bg-slate-50 dark:hover:bg-slate-800/60"
+            >
+              <span class="w-6 font-display text-xl font-extrabold text-amber-500">${index + 1}</span>
+              <span class="min-w-0">
+                <span class="block line-clamp-2 text-sm font-medium leading-snug">
+                  ${esc(getArticleTitle(article))}
+                </span>
+                <span class="mt-0.5 inline-flex items-center gap-1 text-xs text-slate-400">
+                  ${svg(ICONS.eye, "icon h-3.5 w-3.5")}
+                  ${Number(article.views || 0).toLocaleString()} ${esc(t("system.views"))}
+                </span>
+              </span>
+            </button>
+          </li>
+        `).join("")
+        : `<li class="p-5 text-sm text-slate-400">${esc(t("system.noArticles"))}</li>`;
+    }
+
+    function renderFaq() {
+      $("faq").innerHTML = FAQ.map((item) => `
+        <details class="group rounded-xl border border-slate-200 bg-white dark:border-slate-800 dark:bg-slate-900">
+          <summary class="flex cursor-pointer list-none items-center justify-between gap-4 p-4 font-semibold">
+            <span>${esc(item.q)}</span>
+            <svg class="icon h-4 w-4 flex-shrink-0 transition group-open:rotate-45" viewBox="0 0 24 24">
+              <path d="M12 5v14"></path>
+              <path d="M5 12h14"></path>
+            </svg>
+          </summary>
+          <div class="px-4 pb-4 text-sm text-slate-500">${esc(item.a)}</div>
+        </details>
+      `).join("");
+    }
+
+    function renderCarousel() {
+      const top = [...ARTICLES]
+        .filter((article) => article.status !== "draft")
+        .sort((a, b) => Number(b.views || 0) - Number(a.views || 0))
+        .slice(0, 5);
+
+      if (!top.length) {
+        $("car").classList.add("hidden");
+        return;
+      }
+
+      $("car").classList.remove("hidden");
+
+      $("carTrack").innerHTML = top.map((article) => {
+        const image = article.cover_image_url
+          ? `background-image:url("${esc(safeUrl(article.cover_image_url, ""))}");background-size:cover;background-position:center`
+          : `background:linear-gradient(135deg,${esc(categoryColor(article.category))},#0B1220)`;
+
+        return `
+          <div class="w-full flex-shrink-0">
+            <button
+              type="button"
+              data-article-id="${esc(article.id)}"
+              class="grid w-full text-left md:grid-cols-2"
+            >
+              <div
+                class="relative grid h-56 place-items-center overflow-hidden text-white md:h-80"
+                style="${image}"
+              >
+                ${article.cover_image_url ? "" : svg(categoryIcon(article.category), "icon h-20 w-20 opacity-30")}
+              </div>
+
+              <div class="flex flex-col justify-center p-6 md:p-10">
+                <span
+                  class="text-xs font-bold uppercase tracking-wide"
+                  style="color:${esc(categoryColor(article.category))}"
+                >
+                  ${esc(article.category)}
+                </span>
+
+                <h2 class="mt-2 font-display text-2xl font-extrabold leading-tight md:text-3xl">
+                  ${esc(getArticleTitle(article))}
+                </h2>
+
+                <p class="mt-3 line-clamp-2 text-slate-500">
+                  ${esc(getArticleLead(article))}
+                </p>
+
+                <span class="mt-4 text-sm text-slate-400">
+                  ${article.minutes} ${esc(t("system.minutes"))}
+                </span>
+              </div>
+            </button>
+          </div>
+        `;
+      }).join("");
+
+      $("carDots").innerHTML = top.map((_, index) => `
+        <button
+          type="button"
+          data-carousel-index="${index}"
+          aria-label="${index + 1}"
+          class="h-2 rounded-full transition-all ${
+            index === 0 ? "w-6 bg-amber-450" : "w-2 bg-white/50"
+          }"
+        ></button>
+      `).join("");
+
+      CAR_INDEX = 0;
+      positionCarousel();
+      restartCarousel();
+    }
+
+    function positionCarousel() {
+      $("carTrack").style.transform = `translateX(-${CAR_INDEX * 100}%)`;
+
+      [...$("carDots").children].forEach((dot, index) => {
+        dot.className = `h-2 rounded-full transition-all ${
+          index === CAR_INDEX ? "w-6 bg-amber-450" : "w-2 bg-white/50"
+        }`;
+      });
+    }
+
+    function moveCarousel(direction) {
+      const total = $("carTrack").children.length;
+      if (!total) return;
+
+      CAR_INDEX = (CAR_INDEX + direction + total) % total;
+      positionCarousel();
+    }
+
+    function restartCarousel() {
+      clearInterval(CAR_TIMER);
+      CAR_TIMER = setInterval(() => moveCarousel(1), 6000);
+    }
+
+    async function fetchJson(url, options = {}) {
+      const response = await fetch(url, {
+        credentials: "same-origin",
+        ...options
+      });
+
+      if (!response.ok) {
+        throw new Error(`${response.status} ${response.statusText}`);
+      }
+
+      return response.json();
+    }
+
+    async function loadSettings() {
+      try {
+        const response = await fetchJson("/api/settings");
+        SETTINGS = normalizeSettings(response);
+      } catch (_) {
+        SETTINGS = { ...DEFAULT_SETTINGS };
+      }
+
+      renderSettings();
+    }
+
+    async function loadContent() {
+      try {
+        const [categoriesResponse, articlesResponse] = await Promise.all([
+          fetchJson("/api/categories"),
+          fetchJson("/api/articles")
+        ]);
+
+        const categories = Array.isArray(categoriesResponse)
+          ? categoriesResponse
+          : (categoriesResponse.categories || categoriesResponse.data || []);
+
+        const articles = Array.isArray(articlesResponse)
+          ? articlesResponse
+          : (articlesResponse.articles || articlesResponse.data || []);
+
+        CATEGORIES = categories.map(normalizeCategory);
+        ARTICLES = articles.map(normalizeArticle);
+
+        if (!CATEGORIES.length) {
+          CATEGORIES = [
+            { name: "Yangiliklar", color: "#2563EB" },
+            { name: "Uy qurish", color: "#16A34A" },
+            { name: "Kadastr va hujjatlar", color: "#9333EA" },
+            { name: "Ta’mirlash", color: "#EA580C" }
+          ];
+        }
+
+        renderTranslations();
+        renderChips();
+        renderList();
+        renderRank();
+        renderCarousel();
+
+        setHeroStats();
+      } catch (error) {
+        ARTICLES = [];
+        CATEGORIES = [];
+
+        $("list").innerHTML = `
+          <div class="col-span-full rounded-2xl border border-red-200 bg-red-50 p-6 text-center text-red-700 dark:border-red-900/50 dark:bg-red-950/30 dark:text-red-300">
+            ${esc(t("system.serverError"))}
+          </div>
+        `;
+
+        setHeroStats();
+        console.error("QurilishInfo API error:", error);
+      }
+    }
+
+    function setHeroStats() {
+      $("statArtHero").textContent = ARTICLES.length.toLocaleString();
+
+      $("statCatHero").textContent = CATEGORIES.length.toLocaleString();
+
+      const views = ARTICLES.reduce(
+        (sum, article) => sum + Number(article.views || 0),
+        0
+      );
+
+      $("statViewsHero").textContent = views.toLocaleString();
+    }
+
+    async function openArticle(articleId) {
+      const localArticle = ARTICLES.find((article) => String(article.id) === String(articleId));
+
+      let article = localArticle;
+
+      try {
+        const response = await fetchJson(`/api/articles/${encodeURIComponent(articleId)}`);
+        article = normalizeArticle(response.article || response.data || response);
+      } catch (_) {
+        if (!article) {
+          showToast(t("system.error"));
+          return;
+        }
+      }
+
+      if (!article) {
+        showToast(t("system.notFound"));
+        return;
+      }
+
+      CURRENT_ARTICLE = article;
+
+      const title = getArticleTitle(article);
+      const lead = getArticleLead(article);
+      const body = getArticleBody(article);
+
+      const image = article.cover_image_url
+        ? `<img src="${esc(safeUrl(article.cover_image_url, ""))}" alt="${esc(title)}" class="mb-7 w-full rounded-2xl object-cover">`
+        : "";
+
+      const source = article.source_url
+        ? `
+          <div class="mt-7 rounded-2xl border border-slate-200 bg-white p-5 dark:border-slate-800 dark:bg-slate-900">
+            <p class="mb-2 text-xs font-bold uppercase tracking-wide text-slate-400">
+              ${esc(t("reader.source"))}
+            </p>
+            <p class="mb-3 font-semibold">${esc(article.source_name || "Rasmiy manba")}</p>
+            <a
+              href="${esc(safeUrl(article.source_url, "#"))}"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="font-semibold text-amber-600 underline"
+            >
+              ${esc(t("reader.sourceOpen"))}
+            </a>
+          </div>
+        `
+        : "";
+
+      $("readerBody").innerHTML = `
+        <div class="mb-5 flex flex-wrap items-center gap-3 text-xs font-bold uppercase tracking-wide">
+          <span style="color:${esc(categoryColor(article.category))}">
+            ${esc(article.category)}
+          </span>
+          <span class="text-slate-400">·</span>
+          <span class="text-slate-400">
+            ${article.minutes} ${esc(t("system.minutes"))}
+          </span>
+          <span class="text-slate-400">·</span>
+          <span class="text-slate-400">
+            ${Number(article.views || 0).toLocaleString()} ${esc(t("system.views"))}
+          </span>
+        </div>
+
+        <h1 class="mb-5 font-display text-3xl font-extrabold leading-tight md:text-5xl">
+          ${esc(title)}
+        </h1>
+
+        <p class="mb-6 text-lg leading-relaxed text-slate-500">
+          ${esc(lead)}
+        </p>
+
+        <div class="mb-6 flex flex-wrap gap-3 text-sm text-slate-400">
+          ${article.author ? `<span>${esc(article.author)}</span>` : ""}
+          ${article.published_at ? `<span>· ${esc(formatDate(article.published_at))}</span>` : ""}
+          ${article.updated_at ? `<span>· ${esc(formatDate(article.updated_at))}</span>` : ""}
+        </div>
+
+        ${image}
+
+        <div class="rich text-slate-700 dark:text-slate-300">
+          ${renderSafeBody(body)}
+        </div>
+
+        ${source}
+
+        <div class="mt-8 rounded-2xl border border-amber-200 bg-amber-50 p-5 text-sm text-amber-800 dark:border-amber-900/50 dark:bg-amber-950/30 dark:text-amber-300">
+          ${esc(t("reader.disclaimer"))}
+        </div>
+
+        <a
+          href="${esc(safeUrl(SETTINGS.telegram_url, "#"))}"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="mt-5 inline-flex items-center gap-2 rounded-xl bg-amber-450 px-5 py-3 font-semibold text-ink"
+        >
+          <svg class="icon h-4 w-4" viewBox="0 0 24 24">
+            <path d="m22 2-11 11"></path>
+            <path d="m22 2-7 20-4-9-9-4 20-7Z"></path>
+          </svg>
+          ${esc(t("reader.telegram"))}
+        </a>
+      `;
+
+      $("reader").classList.remove("hidden");
+      document.body.style.overflow = "hidden";
+
+      const current = ARTICLES.find((item) => String(item.id) === String(articleId));
+      if (current) {
+        current.views = Number(current.views || 0) + 1;
+        renderRank();
+      }
+
+      updateArticleMeta(article);
+    }
+
+    function updateArticleMeta(article) {
+      const title = getArticleTitle(article);
+      const description = getArticleLead(article);
+
+      document.title = `${title} — ${SETTINGS.site_name}`;
+
+      let descriptionTag = document.querySelector('meta[name="description"]');
+      if (!descriptionTag) {
+        descriptionTag = document.createElement("meta");
+        descriptionTag.name = "description";
+        document.head.appendChild(descriptionTag);
+      }
+      descriptionTag.content = description || title;
+
+      let ld = document.getElementById("articleStructuredData");
+
+      if (!ld) {
+        ld = document.createElement("script");
+        ld.id = "articleStructuredData";
+        ld.type = "application/ld+json";
+        document.head.appendChild(ld);
+      }
+
+      ld.textContent = JSON.stringify({
+        "@context": "https://schema.org",
+        "@type": "NewsArticle",
+        headline: title,
+        description,
+        datePublished: article.published_at || undefined,
+        dateModified: article.updated_at || article.published_at || undefined,
+        author: {
+          "@type": "Person",
+          name: article.author || "QurilishInfo tahririyati"
+        },
+        publisher: {
+          "@type": "Organization",
+          name: SETTINGS.site_name
+        },
+        mainEntityOfPage: window.location.href,
+        image: article.cover_image_url ? [article.cover_image_url] : undefined
+      });
+    }
+
+    function closeReader() {
+      $("reader").classList.add("hidden");
+      document.body.style.overflow = "";
+      CURRENT_ARTICLE = null;
+      renderTranslations();
+    }
+
+    async function shareArticle() {
+      if (!CURRENT_ARTICLE) return;
+
+      const title = getArticleTitle(CURRENT_ARTICLE);
+      const url = window.location.href;
+
+      if (navigator.share) {
+        try {
+          await navigator.share({ title, text: title, url });
+          return;
+        } catch (_) {}
+      }
+
+      try {
+        await navigator.clipboard.writeText(url);
+        showToast(CURRENT_LANG === "ru" ? "Ссылка скопирована." : "Havola nusxalandi.");
+      } catch (_) {
+        showToast(url);
+      }
+    }
+
+    async function submitContact(event) {
+      event.preventDefault();
+
+      const name = $("cfName").value.trim();
+      const contact = $("cfContact").value.trim();
+      const message = $("cfMsg").value.trim();
+      const status = $("contactStatus");
+
+      if (!name || !message) return;
+
+      status.className = "text-sm text-slate-500";
+      status.textContent = t("system.loading");
+
+      try {
+        await fetchJson("/api/messages", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+            name,
+            contact,
+            message
+          })
+        });
+
+        status.className = "text-sm text-green-600";
+        status.textContent = t("system.sent");
+        $("contactForm").reset();
+      } catch (_) {
+        const shareText = encodeURIComponent(
+          `Ism: ${name}\nAloqa: ${contact}\n\nXabar: ${message}`
+        );
+
+        window.open(
+          `https://t.me/share/url?url=&text=${shareText}`,
+          "_blank",
+          "noopener,noreferrer"
+        );
+
+        status.className = "text-sm text-amber-600";
+        status.textContent = t("system.sentFallback");
+      }
+    }
+
+    function showToast(message) {
+      const toast = $("toast");
+      toast.textContent = message;
+      toast.classList.remove("hidden");
+
+      clearTimeout(showToast.timer);
+      showToast.timer = setTimeout(() => {
+        toast.classList.add("hidden");
+      }, 2600);
+    }
+
+    $("chips").addEventListener("click", (event) => {
+      const button = event.target.closest("[data-category]");
+      if (!button) return;
+
+      state.category = button.dataset.category;
+      renderChips();
+      renderList();
+    });
+
+    document.addEventListener("click", (event) => {
+      const button = event.target.closest("[data-article-id]");
+      if (!button) return;
+
+      openArticle(button.dataset.articleId);
+    });
+
+    $("searchBtn").addEventListener("click", () => {
+      $("searchBox").classList.toggle("hidden");
+
+      if (!$("searchBox").classList.contains("hidden")) {
+        $("q").focus();
+      }
+    });
+
+    $("q").addEventListener("input", (event) => {
+      state.query = event.target.value;
+      renderList();
+    });
+
+    $("themeBtn").addEventListener("click", toggleTheme);
+
+    $("langBtn").addEventListener("click", () => {
+      CURRENT_LANG = CURRENT_LANG === "uz" ? "ru" : "uz";
+      localStorage.setItem("qi_lang", CURRENT_LANG);
+
+      renderTranslations();
+      renderChips();
+      renderList();
+      renderRank();
+      renderCarousel();
+      renderFaq();
+
+      if (CURRENT_ARTICLE) {
+        openArticle(CURRENT_ARTICLE.id);
+      }
+    });
+
+    $("mobileMenuBtn").addEventListener("click", () => {
+      $("mobileMenu").classList.toggle("hidden");
+    });
+
+    $("mobileMenu").addEventListener("click", (event) => {
+      if (event.target.closest("a")) {
+        $("mobileMenu").classList.add("hidden");
+      }
+    });
+
+    $("carPrev").addEventListener("click", () => {
+      moveCarousel(-1);
+      restartCarousel();
+    });
+
+    $("carNext").addEventListener("click", () => {
+      moveCarousel(1);
+      restartCarousel();
+    });
+
+    $("carDots").addEventListener("click", (event) => {
+      const button = event.target.closest("[data-carousel-index]");
+      if (!button) return;
+
+      CAR_INDEX = Number(button.dataset.carouselIndex);
+      positionCarousel();
+      restartCarousel();
+    });
+
+    $("readerBack").addEventListener("click", closeReader);
+    $("readerShare").addEventListener("click", shareArticle);
+
+    $("contactForm").addEventListener("submit", submitContact);
+
+    document.addEventListener("keydown", (event) => {
+      if (event.key === "Escape") {
+        closeReader();
+      }
+    });
+
+    let touchStartX = null;
+
+    $("car").addEventListener("touchstart", (event) => {
+      touchStartX = event.touches[0].clientX;
+    }, { passive: true });
+
+    $("car").addEventListener("touchend", (event) => {
+      if (touchStartX === null) return;
+
+      const delta = event.changedTouches[0].clientX - touchStartX;
+
+      if (Math.abs(delta) > 40) {
+        moveCarousel(delta < 0 ? 1 : -1);
+        restartCarousel();
+      }
+
+      touchStartX = null;
+    }, { passive: true });
+
+    function initialize() {
+      applyTheme();
+      renderTranslations();
+      renderFaq();
+      renderSettings();
+
+      Promise.all([
+        loadSettings(),
+        loadContent()
+      ]);
+    }
+
+    initialize();
+  </script>
 </body>
 </html>
