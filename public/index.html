@@ -1,809 +1,497 @@
 <!DOCTYPE html>
-<html lang="uz" class="scroll-smooth">
+<html lang="uz">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>QurilishInfo — Qurilish va Uy-joy Portali</title>
-
-  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
-
-  <style type="text/tailwindcss">
-    @theme {
-      --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
-      --font-display: "Manrope", ui-sans-serif, system-ui, sans-serif;
-      --color-primary: #0b4f7c;
-      --color-primary-dark: #073b61;
-      --color-accent: #138a5b;
-      --color-accent-dark: #0c6d47;
-      --color-soft: #f3f7fa;
-      --color-border: #dce5eb;
-    }
-
-    @keyframes fadeInUp {
-      from {
-        opacity: 0;
-        transform: translateY(20px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>QurilishInfo — qurilish bo'yicha yangiliklar va savollarga javoblar</title>
+<meta name="description" content="Ruxsatnoma, uy qurish, uy sotib olish va materiallar bo'yicha aniq savol-javoblar va yangiliklar.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+tailwind.config = {
+  darkMode: 'media',
+  theme: {
+    extend: {
+      fontFamily: { display: ['Sora','system-ui','sans-serif'], sans: ['Inter','system-ui','sans-serif'] },
+      colors: { ink: '#0B1220', amber: { 450: '#F5A524' } },
+      animation: { blob: 'blob 16s infinite' },
+      keyframes: {
+        blob: {
+          '0%, 100%': { transform: 'translate(0px,0px) scale(1)' },
+          '33%': { transform: 'translate(30px,-40px) scale(1.1)' },
+          '66%': { transform: 'translate(-20px,20px) scale(0.95)' }
+        }
       }
     }
-
-    @keyframes fadeIn {
-      from {
-        opacity: 0;
-      }
-      to {
-        opacity: 1;
-      }
-    }
-
-    @keyframes slideInRight {
-      from {
-        opacity: 0;
-        transform: translateX(20px);
-      }
-      to {
-        opacity: 1;
-        transform: translateX(0);
-      }
-    }
-
-    @keyframes slideInLeft {
-      from {
-        opacity: 0;
-        transform: translateX(-20px);
-      }
-      to {
-        opacity: 1;
-        transform: translateX(0);
-      }
-    }
-
-    @keyframes pulse-slow {
-      0%, 100% {
-        opacity: 1;
-      }
-      50% {
-        opacity: 0.5;
-      }
-    }
-
-    .animate-fade-in-up {
-      animation: fadeInUp 0.6s ease-out;
-    }
-
-    .animate-fade-in {
-      animation: fadeIn 0.6s ease-out;
-    }
-
-    .animate-slide-right {
-      animation: slideInRight 0.6s ease-out;
-    }
-
-    .animate-slide-left {
-      animation: slideInLeft 0.6s ease-out;
-    }
-
-    .animate-pulse-slow {
-      animation: pulse-slow 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
-    }
-
-    .line-clamp-2 {
-      display: -webkit-box;
-      -webkit-line-clamp: 2;
-      -webkit-box-orient: vertical;
-      overflow: hidden;
-    }
-
-    .line-clamp-3 {
-      display: -webkit-box;
-      -webkit-line-clamp: 3;
-      -webkit-box-orient: vertical;
-      overflow: hidden;
-    }
-
-    .group:hover .group-hover\:translate-y-2 {
-      transform: translateY(8px);
-    }
-  </style>
-
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Manrope:wght@600;700;800&display=swap" rel="stylesheet">
+  }
+}
+</script>
+<style>
+  html{scroll-behavior:smooth}
+  body{font-family:Inter,system-ui,sans-serif}
+  .font-display{font-family:Sora,system-ui,sans-serif}
+  .reveal{opacity:0;transform:translateY(24px);transition:opacity .7s ease, transform .7s ease}
+  .reveal.show{opacity:1;transform:translateY(0)}
+  .glass{backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)}
+  .icon{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+  .diag-tape{background-image:repeating-linear-gradient(45deg,#0B1220 0 14px,#F5A524 14px 28px)}
+  .rich p{margin:0 0 1rem;font-size:1.125rem;line-height:1.7}
+  .rich h2{font-family:Sora,system-ui,sans-serif;font-weight:800;font-size:1.35rem;margin:1.5rem 0 .75rem}
+  .rich ul{padding-left:1.25rem;margin:0 0 1rem}
+  .rich a{color:#D97706;text-decoration:underline}
+</style>
 </head>
+<body class="bg-slate-50 text-ink dark:bg-slate-950 dark:text-slate-100">
 
-<body class="bg-white text-slate-900 antialiased dark:bg-slate-950 dark:text-slate-50">
+<!-- ===== Header ===== -->
+<header class="sticky top-0 z-40 glass bg-ink/90 text-white">
+  <div class="max-w-7xl mx-auto px-4 flex items-center gap-3 h-16">
+    <a href="#top" class="flex items-center gap-2 font-display font-extrabold text-xl tracking-tight">
+      <span class="w-3 h-7 diag-tape rounded-sm rotate-6"></span>
+      QurilishInfo
+    </a>
+    <nav class="hidden md:flex items-center gap-1 ml-4 text-sm font-medium">
+      <a href="#top" class="px-3 py-2 rounded-lg hover:bg-white/10 transition">Bosh sahifa</a>
+      <a href="#about" class="px-3 py-2 rounded-lg hover:bg-white/10 transition">Biz haqimizda</a>
+      <a href="#ads" class="px-3 py-2 rounded-lg hover:bg-white/10 transition">Reklama</a>
+      <a href="#contact" class="px-3 py-2 rounded-lg hover:bg-white/10 transition">Murojaat</a>
+    </nav>
+    <span class="flex-1"></span>
+    <button id="searchBtn" class="w-10 h-10 rounded-xl border border-white/15 grid place-items-center hover:bg-white/10 transition">
+      <svg class="icon" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg>
+    </button>
+    <a href="#" class="tgLink hidden sm:inline-flex items-center gap-2 bg-amber-450 text-ink font-semibold px-4 py-2.5 rounded-xl hover:brightness-95 active:scale-95 transition" target="_blank" rel="noopener">
+      <svg class="icon w-4 h-4" viewBox="0 0 24 24"><path d="M22 2 11 13"/><path d="M22 2 15 22l-4-9-9-4 20-7Z"/></svg>
+      Telegram
+    </a>
+  </div>
+  <div id="searchBox" class="hidden max-w-7xl mx-auto px-4 pb-3">
+    <input id="q" class="w-full rounded-xl bg-white/10 placeholder-white/50 px-4 py-3 outline-none focus:ring-2 ring-amber-450" placeholder="Savolingizni yozing: masalan, ruxsatnoma">
+  </div>
+</header>
 
-  <!-- HEADER -->
-  <header class="sticky top-0 z-40 border-b border-slate-200 bg-white/80 backdrop-blur-xl dark:border-slate-800 dark:bg-slate-950/80 transition-colors duration-300">
-    <div class="mx-auto max-w-7xl px-4 py-4 sm:px-6 lg:px-8">
-      <div class="flex items-center justify-between gap-4">
-        <!-- LOGO -->
-        <a href="/" class="flex items-center gap-3 group">
-          <div class="relative h-12 w-12 rounded-xl bg-gradient-to-br from-primary to-primary-dark flex items-center justify-center shadow-lg group-hover:shadow-xl transition-all duration-300 transform group-hover:scale-110">
-            <svg class="h-6 w-6 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-              <path d="M3 21h18M5 21V10l7-6 7 6v11M9 21v-6h6v6"></path>
-            </svg>
-          </div>
-          <div class="font-display font-extrabold tracking-tight">
-            <div class="text-xl text-primary dark:text-white">QurilishInfo</div>
-            <div class="text-xs text-accent font-semibold">Qurilish Portali</div>
-          </div>
-        </a>
+<main id="top">
 
-        <!-- NAV -->
-        <nav class="hidden gap-8 md:flex">
-          <a href="#articles" class="font-semibold text-slate-700 hover:text-primary dark:text-slate-300 dark:hover:text-white transition-colors duration-200">Maqolalar</a>
-          <a href="#features" class="font-semibold text-slate-700 hover:text-primary dark:text-slate-300 dark:hover:text-white transition-colors duration-200">Xususiyatlar</a>
-          <a href="#contact" class="font-semibold text-slate-700 hover:text-primary dark:text-slate-300 dark:hover:text-white transition-colors duration-200">Bog'lanish</a>
-        </nav>
-
-        <!-- BUTTONS -->
-        <div class="flex items-center gap-3">
-          <a href="/admin.html" class="hidden rounded-lg bg-primary px-5 py-2.5 font-semibold text-white hover:bg-primary-dark shadow-md hover:shadow-lg transition-all duration-200 transform hover:scale-105 sm:inline-flex">
-            Admin Panel
-          </a>
-
-          <button id="themeButton" class="rounded-lg border border-slate-300 bg-white p-2.5 text-slate-600 hover:bg-slate-50 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-300 dark:hover:bg-slate-800 transition-all duration-200">
-            <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <circle cx="12" cy="12" r="4"></circle>
-              <path d="M12 1v6m0 6v6M4.22 4.22l4.24 4.24m5.08 0l4.24-4.24M1 12h6m6 0h6M4.22 19.78l4.24-4.24m5.08 0l4.24 4.24"></path>
-            </svg>
-          </button>
-        </div>
-      </div>
-    </div>
-  </header>
-
-  <!-- HERO -->
-  <section class="relative overflow-hidden bg-gradient-to-br from-primary via-blue-900 to-primary-dark px-4 py-20 text-white sm:px-6 lg:px-8">
-    <!-- Animated Background -->
-    <div class="absolute inset-0 overflow-hidden">
-      <div class="absolute -top-40 -right-40 h-80 w-80 rounded-full bg-accent/20 blur-3xl animate-pulse-slow"></div>
-      <div class="absolute -bottom-40 -left-40 h-80 w-80 rounded-full bg-blue-400/20 blur-3xl animate-pulse-slow" style="animation-delay: 1s;"></div>
-    </div>
-
-    <div class="relative mx-auto max-w-7xl text-center">
-      <div class="mb-6 inline-block">
-        <span class="inline-flex items-center gap-2 rounded-full bg-white/10 px-4 py-2 text-sm font-semibold backdrop-blur-md border border-white/20">
-          <svg class="h-4 w-4 text-accent animate-pulse" viewBox="0 0 24 24" fill="currentColor">
-            <circle cx="12" cy="12" r="2"></circle>
-          </svg>
-          Eng yangi maqolalar
-        </span>
-      </div>
-
-      <h1 class="font-display text-4xl font-extrabold leading-tight sm:text-5xl lg:text-6xl animate-fade-in-up">
-        Qurilish va Uy-joy Sohasida
-        <br />
-        <span class="text-accent">Eng Yaxshi Manba</span>
-      </h1>
-
-      <p class="mx-auto mt-6 max-w-2xl text-lg text-blue-100 animate-fade-in-up" style="animation-delay: 0.1s;">
-        Qurilish, uy-joy, materiallar haqida barcha kerakli ma'lumotlarni bir joyda toping. Professional maslahatlar, yangiliklar va boshqa muhim ma'lumotlar.
+  <!-- ===== Hero ===== -->
+  <section class="relative overflow-hidden bg-ink text-white">
+    <div class="absolute -top-24 -left-24 w-96 h-96 bg-amber-450/30 rounded-full blur-3xl animate-blob"></div>
+    <div class="absolute top-40 -right-16 w-80 h-80 bg-blue-500/20 rounded-full blur-3xl animate-blob" style="animation-delay:4s"></div>
+    <div class="relative max-w-7xl mx-auto px-4 py-16 md:py-24">
+      <p class="reveal show inline-flex items-center gap-2 text-amber-450 font-semibold text-sm bg-amber-450/10 px-3 py-1.5 rounded-full">
+        <svg class="icon w-4 h-4" viewBox="0 0 24 24"><path d="M12 2 2 7l10 5 10-5-10-5Z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+        Mustaqil qurilish axboroti
       </p>
-
-      <div class="mt-10 flex flex-col justify-center gap-4 sm:flex-row animate-fade-in-up" style="animation-delay: 0.2s;">
-        <a href="#articles" class="inline-flex items-center justify-center gap-2 rounded-lg bg-accent px-8 py-4 font-bold text-white hover:bg-accent-dark shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-200">
-          <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-          </svg>
-          Maqolalarni o'qish
-        </a>
-
-        <a href="#contact" class="inline-flex items-center justify-center gap-2 rounded-lg border-2 border-white bg-transparent px-8 py-4 font-bold text-white hover:bg-white/10 backdrop-blur-sm transition-all duration-200">
-          <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
-          </svg>
-          Bog'lanish
-        </a>
+      <h1 class="reveal show font-display font-extrabold text-4xl md:text-6xl mt-5 leading-[1.05] tracking-tight max-w-2xl">
+        Qurilish bo'yicha <span class="text-amber-450">aniq javoblar</span>, ishonchli manbadan
+      </h1>
+      <p class="reveal show mt-5 text-white/70 max-w-xl text-lg" style="transition-delay:.1s">
+        Ruxsatnoma, uy qurish, uy sotib olish va materiallar bo'yicha amaliy tajriba asosidagi maqolalar.
+      </p>
+      <div class="reveal show mt-8 flex flex-wrap gap-3" style="transition-delay:.2s">
+        <a href="#latest" class="bg-amber-450 text-ink font-semibold px-6 py-3.5 rounded-xl hover:brightness-95 active:scale-95 transition">Maqolalarni ko'rish</a>
+        <a href="#about" class="border border-white/25 px-6 py-3.5 rounded-xl font-semibold hover:bg-white/10 transition">Biz haqimizda</a>
       </div>
-
-      <!-- Stats -->
-      <div class="mt-16 grid grid-cols-3 gap-4 sm:gap-8">
-        <div class="animate-fade-in-up" style="animation-delay: 0.3s;">
-          <div class="text-3xl font-bold" id="statArticles">0</div>
-          <p class="text-sm text-blue-100">Maqolalar</p>
-        </div>
-        <div class="animate-fade-in-up" style="animation-delay: 0.4s;">
-          <div class="text-3xl font-bold" id="statCategories">0</div>
-          <p class="text-sm text-blue-100">Ruknlar</p>
-        </div>
-        <div class="animate-fade-in-up" style="animation-delay: 0.5s;">
-          <div class="text-3xl font-bold" id="statUsers">1000+</div>
-          <p class="text-sm text-blue-100">Oylik o'quvchi</p>
-        </div>
+      <div class="reveal show mt-12 grid grid-cols-3 gap-6 max-w-md" style="transition-delay:.3s">
+        <div><b class="font-display text-3xl font-extrabold count" data-to="0" id="statArtHero">0</b><div class="text-white/60 text-sm mt-1">maqola</div></div>
+        <div><b class="font-display text-3xl font-extrabold count" data-to="0" id="statCatHero">0</b><div class="text-white/60 text-sm mt-1">bo'lim</div></div>
+        <div><b class="font-display text-3xl font-extrabold count" data-to="0" id="statViewsHero">0</b><div class="text-white/60 text-sm mt-1">ko'rish</div></div>
       </div>
     </div>
   </section>
 
-  <!-- FEATURES -->
-  <section id="features" class="mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:px-8">
-    <div class="mb-16 text-center">
-      <span class="inline-block rounded-full bg-accent/10 px-4 py-2 text-sm font-bold text-accent mb-4">XUSUSIYATLAR</span>
-      <h2 class="font-display text-3xl font-extrabold text-slate-900 dark:text-white sm:text-4xl">
-        Nega QurilishInfo?
-      </h2>
-    </div>
-
-    <div class="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
-      <!-- Feature 1 -->
-      <div class="group rounded-2xl border border-slate-200 bg-white p-8 shadow-sm hover:shadow-2xl dark:border-slate-800 dark:bg-slate-900 transition-all duration-300 transform hover:-translate-y-2">
-        <div class="mb-4 inline-flex h-14 w-14 items-center justify-center rounded-lg bg-accent/10">
-          <svg class="h-7 w-7 text-accent" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M12 6.253v13m0-13C6.504 6.253 2 10.756 2 16.5S6.504 26.747 12 26.747s10-4.504 10-10.247S17.496 6.253 12 6.253z"></path>
-            <path d="M12 6.253V2.5"></path>
-          </svg>
-        </div>
-        <h3 class="font-display text-xl font-bold text-slate-900 dark:text-white mb-2">Professional Maslahatlar</h3>
-        <p class="text-slate-600 dark:text-slate-400">Mutaxassis va tajribali mutaxassislardan olingan poyabzal maslahatlar</p>
-      </div>
-
-      <!-- Feature 2 -->
-      <div class="group rounded-2xl border border-slate-200 bg-white p-8 shadow-sm hover:shadow-2xl dark:border-slate-800 dark:bg-slate-900 transition-all duration-300 transform hover:-translate-y-2">
-        <div class="mb-4 inline-flex h-14 w-14 items-center justify-center rounded-lg bg-primary/10">
-          <svg class="h-7 w-7 text-primary" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <circle cx="12" cy="12" r="1"></circle>
-            <circle cx="19" cy="12" r="1"></circle>
-            <circle cx="5" cy="12" r="1"></circle>
-            <path d="M12 1v6m0 6v6"></path>
-          </svg>
-        </div>
-        <h3 class="font-display text-xl font-bold text-slate-900 dark:text-white mb-2">Yangi Yangiliklar</h3>
-        <p class="text-slate-600 dark:text-slate-400">Qurilish sohasidagi eng so'nggi va eng muhim yangiliklar</p>
-      </div>
-
-      <!-- Feature 3 -->
-      <div class="group rounded-2xl border border-slate-200 bg-white p-8 shadow-sm hover:shadow-2xl dark:border-slate-800 dark:bg-slate-900 transition-all duration-300 transform hover:-translate-y-2">
-        <div class="mb-4 inline-flex h-14 w-14 items-center justify-center rounded-lg bg-blue-500/10">
-          <svg class="h-7 w-7 text-blue-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm3.5-9c.83 0 1.5-.67 1.5-1.5S16.33 8 15.5 8 14 8.67 14 9.5s.67 1.5 1.5 1.5zm-7 0c.83 0 1.5-.67 1.5-1.5S9.33 8 8.5 8 7 8.67 7 9.5 7.67 11 8.5 11zm3.5 6.5c2.33 0 4.31-1.46 5.11-3.5H6.89c.8 2.04 2.78 3.5 5.11 3.5z"></path>
-          </svg>
-        </div>
-        <h3 class="font-display text-xl font-bold text-slate-900 dark:text-white mb-2">Qulay Interfeys</h3>
-        <p class="text-slate-600 dark:text-slate-400">Oson navigatsiya va tez qidiruv imkoniyatlari</p>
-      </div>
-
-      <!-- Feature 4 -->
-      <div class="group rounded-2xl border border-slate-200 bg-white p-8 shadow-sm hover:shadow-2xl dark:border-slate-800 dark:bg-slate-900 transition-all duration-300 transform hover:-translate-y-2">
-        <div class="mb-4 inline-flex h-14 w-14 items-center justify-center rounded-lg bg-green-500/10">
-          <svg class="h-7 w-7 text-green-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"></path>
-          </svg>
-        </div>
-        <h3 class="font-display text-xl font-bold text-slate-900 dark:text-white mb-2">Ishonchli Ma'lumotlar</h3>
-        <p class="text-slate-600 dark:text-slate-400">Tasdiqlanган ma'lumotlar va manbalari bilan</p>
-      </div>
-
-      <!-- Feature 5 -->
-      <div class="group rounded-2xl border border-slate-200 bg-white p-8 shadow-sm hover:shadow-2xl dark:border-slate-800 dark:bg-slate-900 transition-all duration-300 transform hover:-translate-y-2">
-        <div class="mb-4 inline-flex h-14 w-14 items-center justify-center rounded-lg bg-purple-500/10">
-          <svg class="h-7 w-7 text-purple-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <rect x="3" y="3" width="7" height="7"></rect>
-            <rect x="14" y="3" width="7" height="7"></rect>
-            <rect x="14" y="14" width="7" height="7"></rect>
-            <rect x="3" y="14" width="7" height="7"></rect>
-          </svg>
-        </div>
-        <h3 class="font-display text-xl font-bold text-slate-900 dark:text-white mb-2">Kategoriyalar</h3>
-        <p class="text-slate-600 dark:text-slate-400">Maqolalar turli ruknlar bo'yicha tashkil qilingan</p>
-      </div>
-
-      <!-- Feature 6 -->
-      <div class="group rounded-2xl border border-slate-200 bg-white p-8 shadow-sm hover:shadow-2xl dark:border-slate-800 dark:bg-slate-900 transition-all duration-300 transform hover:-translate-y-2">
-        <div class="mb-4 inline-flex h-14 w-14 items-center justify-center rounded-lg bg-orange-500/10">
-          <svg class="h-7 w-7 text-orange-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
-          </svg>
-        </div>
-        <h3 class="font-display text-xl font-bold text-slate-900 dark:text-white mb-2">24/7 Qo'llab-quvvatlash</h3>
-        <p class="text-slate-600 dark:text-slate-400">Savollaringiz uchun har vaqt aloqa</p>
-      </div>
-    </div>
-  </section>
-
-  <!-- ARTICLES -->
-  <section id="articles" class="mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:px-8">
-    <div class="mb-12">
-      <span class="inline-block rounded-full bg-primary/10 px-4 py-2 text-sm font-bold text-primary mb-4">MAQOLALAR</span>
-      <div class="flex flex-col justify-between gap-6 sm:flex-row sm:items-end">
-        <div>
-          <h2 class="font-display text-3xl font-extrabold text-slate-900 dark:text-white sm:text-4xl">
-            So'nggi Yangiliklar
-          </h2>
-          <p class="mt-2 text-slate-600 dark:text-slate-400">Qurilish va uy-joy sohasidagi eng dolzarb maqolalar</p>
-        </div>
-      </div>
-    </div>
-
-    <!-- FILTERS -->
-    <div class="mb-10 flex flex-wrap gap-2 pb-6 border-b border-slate-200 dark:border-slate-800">
-      <button class="filter-btn active inline-flex items-center gap-2 rounded-full border-2 border-primary bg-primary px-6 py-2.5 font-semibold text-white hover:bg-primary-dark transition-all duration-200" data-filter="all">
-        <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <circle cx="12" cy="12" r="1"></circle>
-        </svg>
-        Barchasi
+  <!-- ===== Carousel ===== -->
+  <section class="max-w-7xl mx-auto px-4 -mt-8 md:-mt-12 relative z-10">
+    <div id="car" class="relative rounded-3xl overflow-hidden shadow-2xl shadow-slate-900/10 bg-white dark:bg-slate-900 group" hidden>
+      <div id="carTrack" class="flex transition-transform duration-500 ease-out"></div>
+      <button id="carPrev" class="absolute left-3 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-black/40 text-white grid place-items-center opacity-0 group-hover:opacity-100 transition">
+        <svg class="icon" viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg>
       </button>
+      <button id="carNext" class="absolute right-3 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-black/40 text-white grid place-items-center opacity-0 group-hover:opacity-100 transition">
+        <svg class="icon" viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg>
+      </button>
+      <div id="carDots" class="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-1.5"></div>
     </div>
-
-    <div id="articlesContainer" class="grid gap-8 sm:grid-cols-2 lg:grid-cols-3"></div>
   </section>
 
-  <!-- FOOTER -->
-  <footer class="border-t border-slate-200 bg-slate-50 dark:border-slate-800 dark:bg-slate-900">
-    <div class="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
-      <div class="grid gap-12 sm:grid-cols-2 lg:grid-cols-4">
-        <!-- About -->
-        <div>
-          <div class="flex items-center gap-2 mb-4">
-            <div class="h-10 w-10 rounded-lg bg-gradient-to-br from-primary to-primary-dark flex items-center justify-center">
-              <svg class="h-5 w-5 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-                <path d="M3 21h18M5 21V10l7-6 7 6v11M9 21v-6h6v6"></path>
-              </svg>
-            </div>
-            <span class="font-display font-bold text-slate-900 dark:text-white">QurilishInfo</span>
-          </div>
-          <p id="aboutText" class="text-sm text-slate-600 dark:text-slate-400"></p>
-        </div>
+  <!-- ===== Category chips ===== -->
+  <section class="max-w-7xl mx-auto px-4 mt-10">
+    <div id="chips" class="flex gap-2 overflow-x-auto pb-1 md:flex-wrap md:overflow-visible"></div>
+  </section>
 
-        <!-- Sections -->
-        <div>
-          <h3 class="font-semibold text-slate-900 dark:text-white mb-4">Bo'limlar</h3>
-          <ul class="space-y-3">
-            <li><a href="#articles" class="text-sm text-slate-600 hover:text-primary dark:text-slate-400 transition-colors">Maqolalar</a></li>
-            <li><a href="#features" class="text-sm text-slate-600 hover:text-primary dark:text-slate-400 transition-colors">Xususiyatlar</a></li>
-            <li><a href="#contact" class="text-sm text-slate-600 hover:text-primary dark:text-slate-400 transition-colors">Bog'lanish</a></li>
-          </ul>
-        </div>
-
-        <!-- Social -->
-        <div>
-          <h3 class="font-semibold text-slate-900 dark:text-white mb-4">Ijtimoiy Tarmoqlar</h3>
-          <div class="space-y-3">
-            <a id="telegramLink" href="#" target="_blank" class="inline-flex items-center gap-2 text-sm text-slate-600 hover:text-primary dark:text-slate-400 transition-colors">
-              <svg class="h-4 w-4" viewBox="0 0 24 24" fill="currentColor">
-                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8c-.15 1.58-.8 5.42-1.13 7.19-.14.75-.42 1-.68 1.03-.58.05-1.02-.38-1.58-.75-.88-.58-1.38-.94-2.23-1.5-.99-.65-.35-1.01.22-1.59.15-.15 2.71-2.48 2.76-2.69.01-.03.02-.14-.07-.2-.09-.06-.22-.04-.31-.02-.13.02-2.28 1.45-6.44 4.27-.61.42-1.16.62-1.66.61-.55-.01-1.6-.31-2.38-.57-.96-.3-1.72-.46-1.65-.97.03-.33.49-.66 1.35-.91 5.29-1.63 8.81-2.71 10.56-3.26 5.05-1.57 6.1-1.84 6.78-1.86.15 0 .49.04.71.23.16.13.2.3.22.46-.01.13 0 .36 0 .58z"></path>
-              </svg>
-              Telegram
-            </a>
-            <a id="instagramLink" href="#" target="_blank" class="inline-flex items-center gap-2 text-sm text-slate-600 hover:text-primary dark:text-slate-400 transition-colors">
-              <svg class="h-4 w-4" viewBox="0 0 24 24" fill="currentColor">
-                <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm4.846-10.403c0 .795.645 1.44 1.44 1.44s1.44-.645 1.44-1.44-.645-1.44-1.44-1.44-1.44.645-1.44 1.44z"></path>
-              </svg>
-              Instagram
-            </a>
-            <a id="facebookLink" href="#" target="_blank" class="inline-flex items-center gap-2 text-sm text-slate-600 hover:text-primary dark:text-slate-400 transition-colors">
-              <svg class="h-4 w-4" viewBox="0 0 24 24" fill="currentColor">
-                <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"></path>
-              </svg>
-              Facebook
-            </a>
-          </div>
-        </div>
-
-        <!-- Contact -->
-        <div>
-          <h3 class="font-semibold text-slate-900 dark:text-white mb-4">Aloqa</h3>
-          <div class="space-y-3">
-            <div class="flex items-center gap-2">
-              <svg class="h-5 w-5 text-primary" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
-              </svg>
-              <span id="contactPhone" class="text-sm text-slate-600 dark:text-slate-400"></span>
-            </div>
-            <a href="/admin.html" class="inline-flex items-center gap-2 text-sm font-semibold text-primary hover:text-primary-dark transition-colors">
-              <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M12 6V2m0 4v8m0 8v2M6 12H2m4 0h8m8 0h2"></path>
-              </svg>
-              Admin Panel
-            </a>
-          </div>
-        </div>
+  <!-- ===== Latest + Rank ===== -->
+  <section id="latest" class="max-w-7xl mx-auto px-4 mt-6 grid md:grid-cols-[1fr_320px] gap-8">
+    <div>
+      <div class="flex items-center justify-between mb-4">
+        <h2 class="font-display font-extrabold text-2xl reveal show">So'nggi maqolalar</h2>
       </div>
+      <div id="list" class="grid gap-4 lg:grid-cols-2"><p class="text-slate-400">Yuklanmoqda...</p></div>
+    </div>
+    <aside class="space-y-6">
+      <div class="reveal show">
+        <h2 class="font-display font-extrabold text-xl mb-3 flex items-center gap-2">
+          <svg class="icon w-5 h-5 text-amber-450" viewBox="0 0 24 24"><path d="M8 21h8"/><path d="M12 17v4"/><path d="M7 4h10v5a5 5 0 0 1-10 0V4Z"/><path d="M17 6h2a2 2 0 0 1 0 4h-2"/><path d="M7 6H5a2 2 0 0 0 0 4h2"/></svg>
+          Ko'p o'qilganlar
+        </h2>
+        <ol id="rank" class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 divide-y divide-slate-200 dark:divide-slate-800 overflow-hidden"></ol>
+      </div>
+      <div class="reveal show rounded-2xl border-2 border-dashed border-slate-300 dark:border-slate-700 p-5 text-center">
+        <p class="text-xs uppercase tracking-wide text-slate-400 font-semibold mb-2">Reklama</p>
+        <p class="font-display font-bold mb-1">Bu yerda reklamangiz bo'lishi mumkin</p>
+        <p class="text-sm text-slate-500 mb-4">Qurilish materiallari va ustalar uchun</p>
+        <a href="#ads" class="inline-flex text-sm font-semibold text-amber-600 hover:underline">Batafsil →</a>
+      </div>
+    </aside>
+  </section>
 
-      <div class="mt-12 border-t border-slate-200 pt-8 text-center text-sm text-slate-600 dark:border-slate-800 dark:text-slate-400">
-        <p>&copy; 2026 QurilishInfo. Barcha huquqlar himoyalangan. | <a href="#" class="hover:text-primary">Maxfiylik siyosati</a></p>
+  <!-- ===== About ===== -->
+  <section id="about" class="max-w-7xl mx-auto px-4 mt-20">
+    <div class="reveal show bg-ink text-white rounded-3xl p-8 md:p-12 relative overflow-hidden">
+      <div class="absolute -bottom-20 -right-20 w-72 h-72 bg-amber-450/15 rounded-full blur-3xl"></div>
+      <div class="relative grid md:grid-cols-2 gap-10 items-center">
+        <div>
+          <h2 class="font-display font-extrabold text-3xl mb-4">Biz haqimizda</h2>
+          <p class="text-white/70 leading-relaxed">QurilishInfo — qurilish sohasidagi amaliy tajriba asosida yuritiladigan mustaqil axborot loyihasi. Maqsadimiz: uy quruvchilar, xaridorlar va ustalar uchun aniq, tushunarli javoblar berish.</p>
+          <p class="text-white/50 text-sm mt-4">Rasmiy davlat idorasi emas — mustaqil tashabbus. Muhim qarorlardan oldin rasmiy manbani tekshiring.</p>
+        </div>
+        <div class="grid grid-cols-1 gap-4">
+          <div class="flex gap-3 items-start bg-white/5 rounded-xl p-4">
+            <svg class="icon w-6 h-6 text-amber-450 flex-shrink-0" viewBox="0 0 24 24"><path d="M12 2 3 6v6c0 5 4 9 9 10 5-1 9-5 9-10V6l-9-4Z"/><path d="m9 12 2 2 4-4"/></svg>
+            <div><b class="font-semibold">Ishonchli manba</b><p class="text-white/60 text-sm mt-0.5">Amaliy tajriba asosidagi maqolalar</p></div>
+          </div>
+          <div class="flex gap-3 items-start bg-white/5 rounded-xl p-4">
+            <svg class="icon w-6 h-6 text-amber-450 flex-shrink-0" viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2Z"/></svg>
+            <div><b class="font-semibold">Doimiy yangilanish</b><p class="text-white/60 text-sm mt-0.5">Qonun va me'yor o'zgarishlari kuzatiladi</p></div>
+          </div>
+          <div class="flex gap-3 items-start bg-white/5 rounded-xl p-4">
+            <svg class="icon w-6 h-6 text-amber-450 flex-shrink-0" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+            <div><b class="font-semibold">Hamjamiyat uchun</b><p class="text-white/60 text-sm mt-0.5">Savollaringizga real javob beramiz</p></div>
+          </div>
+        </div>
       </div>
     </div>
-  </footer>
+  </section>
 
-  <!-- ARTICLE DETAIL MODAL -->
-  <div id="articleModal" class="fixed inset-0 z-50 hidden overflow-y-auto bg-slate-950/50 p-4 backdrop-blur-sm">
-    <div class="mx-auto max-w-3xl rounded-2xl bg-white shadow-2xl dark:bg-slate-900 animate-fade-in-up">
-      <div class="flex items-center justify-between border-b border-slate-200 px-6 py-4 dark:border-slate-800">
-        <h2 id="modalTitle" class="font-display text-2xl font-bold text-slate-900 dark:text-white"></h2>
-        <button onclick="closeModal()" class="rounded-lg hover:bg-slate-100 p-2 dark:hover:bg-slate-800 transition-colors">
-          <svg class="h-6 w-6 text-slate-600 dark:text-slate-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <line x1="18" y1="6" x2="6" y2="18"></line>
-            <line x1="6" y1="6" x2="18" y2="18"></line>
-          </svg>
-        </button>
-      </div>
+  <!-- ===== FAQ ===== -->
+  <section class="max-w-7xl mx-auto px-4 mt-16">
+    <h2 class="font-display font-extrabold text-2xl mb-4 reveal show">Tez-tez beriladigan savollar</h2>
+    <div id="faq" class="space-y-2"></div>
+  </section>
 
-      <div class="max-h-[80vh] overflow-y-auto px-6 py-6">
-        <div id="modalContent"></div>
+  <!-- ===== Ads ===== -->
+  <section id="ads" class="max-w-7xl mx-auto px-4 mt-16">
+    <div class="reveal show bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-8 md:p-12">
+      <h2 class="font-display font-extrabold text-2xl mb-2">Reklama joylashtirish</h2>
+      <p class="text-slate-500 mb-6 max-w-xl">Qurilish materiallari sotuvchilari, quruvchi kompaniyalar va ustalar uchun formatlar:</p>
+      <div class="grid md:grid-cols-3 gap-4 mb-6">
+        <div class="flex gap-3 items-start p-4 rounded-xl bg-slate-50 dark:bg-slate-800/60">
+          <svg class="icon w-5 h-5 text-amber-600 flex-shrink-0" viewBox="0 0 24 24"><path d="M3 11v3a1 1 0 0 0 1 1h3l5 4V6l-5 4H4a1 1 0 0 0-1 1Z"/><path d="M16 9a3 3 0 0 1 0 6"/><path d="M19 6a7 7 0 0 1 0 12"/></svg>
+          <span class="text-sm font-medium">Maqola ichida banner</span>
+        </div>
+        <div class="flex gap-3 items-start p-4 rounded-xl bg-slate-50 dark:bg-slate-800/60">
+          <svg class="icon w-5 h-5 text-amber-600 flex-shrink-0" viewBox="0 0 24 24"><path d="M3 3v18h18"/><path d="M18 17V9"/><path d="M13 17V5"/><path d="M8 17v-3"/></svg>
+          <span class="text-sm font-medium">Telegram post</span>
+        </div>
+        <div class="flex gap-3 items-start p-4 rounded-xl bg-slate-50 dark:bg-slate-800/60">
+          <svg class="icon w-5 h-5 text-amber-600 flex-shrink-0" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/></svg>
+          <span class="text-sm font-medium">Kompaniyalar katalogi</span>
+        </div>
       </div>
+      <a href="#" id="adLink" target="_blank" rel="noopener" class="inline-flex items-center gap-2 bg-ink text-white font-semibold px-6 py-3 rounded-xl hover:opacity-90 active:scale-95 transition">Reklama bo'yicha yozish</a>
+    </div>
+  </section>
+
+  <!-- ===== Contact ===== -->
+  <section id="contact" class="max-w-7xl mx-auto px-4 mt-16 mb-20">
+    <h2 class="font-display font-extrabold text-2xl mb-4 reveal show">Murojaat</h2>
+    <div class="grid md:grid-cols-3 gap-4 mb-6">
+      <a href="#" class="tgLink reveal show flex items-center gap-3 p-4 rounded-2xl border border-slate-200 dark:border-slate-800 hover:border-amber-450 transition" target="_blank" rel="noopener">
+        <svg class="icon w-5 h-5 text-amber-600" viewBox="0 0 24 24"><path d="M22 2 11 13"/><path d="M22 2 15 22l-4-9-9-4 20-7Z"/></svg>
+        <div><p class="text-xs text-slate-400 uppercase font-semibold">Telegram</p><p class="font-semibold">Kanalga yozish</p></div>
+      </a>
+      <a href="#" id="emailLink" class="reveal show flex items-center gap-3 p-4 rounded-2xl border border-slate-200 dark:border-slate-800 hover:border-amber-450 transition">
+        <svg class="icon w-5 h-5 text-amber-600" viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 6-10 7L2 6"/></svg>
+        <div><p class="text-xs text-slate-400 uppercase font-semibold">Email</p><p class="font-semibold" id="emailText">—</p></div>
+      </a>
+      <a href="#" id="phoneLink" class="reveal show flex items-center gap-3 p-4 rounded-2xl border border-slate-200 dark:border-slate-800 hover:border-amber-450 transition">
+        <svg class="icon w-5 h-5 text-amber-600" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.362 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.338 1.85.573 2.81.7A2 2 0 0 1 22 16.92Z"/></svg>
+        <div><p class="text-xs text-slate-400 uppercase font-semibold">Telefon</p><p class="font-semibold" id="phoneText">—</p></div>
+      </a>
+    </div>
+    <form id="contactForm" class="reveal show grid gap-3 max-w-xl">
+      <input id="cfName" class="rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 px-4 py-3 outline-none focus:ring-2 ring-amber-450" placeholder="Ismingiz" required>
+      <textarea id="cfMsg" class="rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 px-4 py-3 outline-none focus:ring-2 ring-amber-450 min-h-28" placeholder="Savolingiz yoki taklifingiz" required></textarea>
+      <button class="justify-self-start bg-amber-450 text-ink font-semibold px-6 py-3 rounded-xl hover:brightness-95 active:scale-95 transition" type="submit">Telegram orqali yuborish</button>
+    </form>
+  </section>
+
+</main>
+
+<!-- ===== Footer ===== -->
+<footer class="bg-ink text-white/70">
+  <div class="max-w-7xl mx-auto px-4 py-10">
+    <div class="flex flex-col md:flex-row md:items-center justify-between gap-6">
+      <div class="flex items-center gap-2 text-white font-display font-extrabold text-lg">
+        <span class="w-2.5 h-6 diag-tape rounded-sm rotate-6"></span> QurilishInfo
+      </div>
+      <div class="flex gap-3" id="socialIcons"></div>
+    </div>
+    <div class="border-t border-white/10 mt-8 pt-6 text-sm space-y-1">
+      <p><b class="text-white/90">QurilishInfo</b>: mustaqil axborot loyihasi. Rasmiy davlat idorasi sayti emas.</p>
+      <p>Maqolalardagi ma'lumot umumiy xarakterda. Qaror qilishdan oldin rasmiy manbani tekshiring.</p>
+      <p>Aloqa va reklama: <span id="contact_"></span></p>
     </div>
   </div>
+</footer>
 
-  <script>
-    // ====== CONSTANTS ======
-    const STORAGE_ARTICLES = 'qi_articles';
-    const STORAGE_CATEGORIES = 'qi_categories';
-    const STORAGE_SETTINGS = 'qi_settings';
-    const STORAGE_THEME = 'qi_theme';
+<!-- ===== Reader (article modal) ===== -->
+<div id="reader" class="fixed inset-0 z-50 bg-slate-50 dark:bg-slate-950 overflow-y-auto hidden">
+  <div class="sticky top-0 bg-white/90 dark:bg-slate-900/90 glass border-b border-slate-200 dark:border-slate-800 px-4 py-3 flex items-center gap-3">
+    <button id="readerBack" class="px-4 py-2 rounded-xl border border-slate-200 dark:border-slate-700 font-semibold text-sm hover:bg-slate-100 dark:hover:bg-slate-800 transition">← Orqaga</button>
+  </div>
+  <article id="readerBody" class="max-w-2xl mx-auto px-4 py-8"></article>
+</div>
 
-    // ====== STATE ======
-    let articles = JSON.parse(localStorage.getItem(STORAGE_ARTICLES)) || [];
-    let categories = JSON.parse(localStorage.getItem(STORAGE_CATEGORIES)) || [];
-    let settings = JSON.parse(localStorage.getItem(STORAGE_SETTINGS)) || {};
+<script>
+/* ====== SOZLAMALAR ====== */
+var TELEGRAM_URL = "https://t.me/qurilishinfo";
+var CONTACT = "@qurilishinfo_admin";
+var CONTACT_URL = "https://t.me/qurilishinfo_admin";
+var EMAIL = "info@qurilishinfo.uz";
+var PHONE = "+998 90 000 00 00";
+var SOCIAL = { telegram: "https://t.me/qurilishinfo", instagram: "", facebook: "", youtube: "" };
+var FAQ = [
+  {q:"Uy qurish uchun ruxsatnoma kerakmi?",a:"Ko'p hollarda ha, lekin talablar qurilish turi va joyiga qarab farq qiladi. Aniq ro'yxatni mahalliy qurilish organidan tekshiring."},
+  {q:"Yangi uy sotib olishdan oldin nimani tekshirish kerak?",a:"Egalik va qurilish hujjatlarini, binoning fizik holatini va sotuvchining ma'lumot berishini tekshiring."},
+  {q:"Ustaga oldindan pul berish xavfsizmi?",a:"Butun summani oldindan bermang. To'lovni ish bosqichlariga bog'lab, yozma shartnoma bilan qiling."},
+  {q:"Ta'mirlashda devorni buzish mumkinmi?",a:"Avval devor yuk ko'taruvchi yoki yo'qligini mutaxassis bilan aniqlang."},
+  {q:"Sizga savol qanday yuboraman?",a:"Telegram kanalimizga yozing, eng ko'p so'ralganlariga maqola qilib javob beramiz."}
+];
+/* Kategoriya nomiga qarab ikonka (mos kelmasa umumiy ikonka ishlatiladi) */
+var ICON_MAP = {
+  'Ruxsatnoma':'file-check', 'Uy qurish':'hammer', 'Uy sotib olish':'home',
+  'Materiallar':'package', 'Savol-javob':'question', 'Yangiliklar':'news'
+};
+var ICONS = {
+  'file-check':'<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8Z"/><path d="M14 2v6h6"/><path d="m9 15 2 2 4-4"/>',
+  'hammer':'<path d="m15 12-8.5 8.5a1.5 1.5 0 0 1-2-2L13 10"/><path d="M17.64 15 22 10.64"/><path d="m20.91 11.7-1.25-1.25c-.6-.6-.93-1.4-.93-2.25v-.86L16.01 5.6a5.56 5.56 0 0 0-3.94-1.64H8l3.91 3.91"/>',
+  'home':'<path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2Z"/><path d="M9 22V12h6v10"/>',
+  'package':'<path d="M16.5 9.4 7.5 4.21"/><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"/><path d="m3.3 7 8.7 5 8.7-5"/><path d="M12 22V12"/>',
+  'question':'<circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><path d="M12 17h.01"/>',
+  'news':'<path d="M4 22h16a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v16a2 2 0 0 1-2 2Zm0 0a2 2 0 0 1-2-2v-9c0-1.1.9-2 2-2h2"/><path d="M18 14h-8"/><path d="M15 18h-5"/><path d="M10 6h8v4h-8V6Z"/>',
+  'eye':'<path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/>'
+};
+var SOCIAL_ICONS = {
+  telegram:'<path d="M22 2 11 13"/><path d="M22 2 15 22l-4-9-9-4 20-7Z"/>',
+  instagram:'<rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1"/>',
+  facebook:'<path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3Z"/>',
+  youtube:'<rect x="2" y="6" width="20" height="12" rx="3"/><path d="m10 9 5 3-5 3Z" fill="currentColor" stroke="none"/>'
+};
+/* ====== ~SOZLAMALAR TUGADI ====== */
 
-    // ====== THEME ======
-    function initTheme() {
-      const saved = localStorage.getItem(STORAGE_THEME);
-      if (saved === 'dark') {
-        document.documentElement.classList.add('dark');
-        updateThemeIcon();
-      }
-    }
+var CATEGORIES = [], ARTICLES = [];
+var state = {cat:'Barchasi', q:''};
+var $ = function(id){return document.getElementById(id)};
+function esc(s){ return String(s).replace(/[&<>"']/g,function(m){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[m]}); }
+function svg(pathHtml, cls){ return '<svg class="'+(cls||'icon')+'" viewBox="0 0 24 24">'+pathHtml+'</svg>'; }
+function catColor(name){ var c=CATEGORIES.filter(function(x){return x.name===name})[0]; return c?c.color:'#2563EB'; }
+function catIconKey(name){ return ICON_MAP[name] || 'news'; }
+function catIcon(name){ return ICONS[catIconKey(name)]; }
+function renderBody(body){
+  var looksHtml = /<[a-z][\s\S]*>/i.test(body);
+  if(looksHtml) return body;
+  return String(body).split(/\n\n+/).map(function(p){ return '<p>'+esc(p)+'</p>'; }).join('');
+}
+function thumb(a, sizeCls){
+  if(a.cover_image_url) return '<img src="'+esc(a.cover_image_url)+'" alt="" loading="lazy" class="'+sizeCls+' object-cover rounded-xl">';
+  return '<div class="'+sizeCls+' rounded-xl grid place-items-center text-white flex-shrink-0" style="background:'+catColor(a.category)+'">'+svg(catIcon(a.category),'icon w-6 h-6')+'</div>';
+}
 
-    function updateThemeIcon() {
-      const isDark = document.documentElement.classList.contains('dark');
-      const btn = document.getElementById('themeButton');
-      if (isDark) {
-        btn.innerHTML = '<svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>';
-      } else {
-        btn.innerHTML = '<svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="4"></circle><path d="M12 1v6m0 6v6M4.22 4.22l4.24 4.24m5.08 0l4.24-4.24M1 12h6m6 0h6M4.22 19.78l4.24-4.24m5.08 0l4.24 4.24"></path></svg>';
-      }
-    }
+/* ---------- Chips ---------- */
+function renderChips(){
+  var cats = ['Barchasi'].concat(CATEGORIES.map(function(c){return c.name}));
+  $("chips").innerHTML = cats.map(function(c){
+    var active = c===state.cat;
+    var icon = c==='Barchasi' ? '' : svg(catIcon(c),'icon w-4 h-4');
+    return '<button data-cat="'+esc(c)+'" class="chip flex items-center gap-1.5 flex-shrink-0 px-4 py-2 rounded-xl text-sm font-semibold border transition '+
+      (active ? 'bg-ink text-white border-ink' : 'bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-800 hover:border-amber-450')+'">'+icon+esc(c)+'</button>';
+  }).join('');
+}
+$("chips").addEventListener('click', function(e){
+  var b = e.target.closest('[data-cat]'); if(!b) return;
+  state.cat = b.getAttribute('data-cat'); renderChips(); renderList();
+});
 
-    document.getElementById('themeButton').addEventListener('click', () => {
-      document.documentElement.classList.toggle('dark');
-      const isDark = document.documentElement.classList.contains('dark');
-      localStorage.setItem(STORAGE_THEME, isDark ? 'dark' : 'light');
-      updateThemeIcon();
-    });
+/* ---------- List ---------- */
+function filteredArticles(){
+  var q = state.q.trim().toLowerCase();
+  return ARTICLES.filter(function(a){
+    var okCat = state.cat==='Barchasi' || a.category===state.cat;
+    var okQ = !q || (a.title+' '+a.lead).toLowerCase().indexOf(q)>-1;
+    return okCat && okQ;
+  });
+}
+function renderList(){
+  var items = filteredArticles();
+  $("list").innerHTML = items.length ? items.map(function(a,i){
+    return '<button data-id="'+a.id+'" class="card reveal show text-left w-full bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-4 flex gap-4 hover:-translate-y-0.5 hover:shadow-lg transition" style="transition-delay:'+(i*30)+'ms">'
+      + thumb(a, 'w-14 h-14')
+      + '<div class="min-w-0"><span class="text-xs font-bold uppercase tracking-wide" style="color:'+catColor(a.category)+'">'+esc(a.category)+'</span>'
+      + '<h3 class="font-display font-bold text-base mt-0.5 truncate">'+esc(a.title)+'</h3>'
+      + '<p class="text-sm text-slate-500 mt-1 line-clamp-1">'+esc(a.lead)+'</p>'
+      + '<span class="text-xs text-slate-400 mt-1 inline-flex items-center gap-3">'+a.minutes+' daqiqa &middot; '+(a.views||0)+' ko\'rish</span></div>'
+      + '</button>';
+  }).join('') : '<p class="text-slate-400 text-center py-10">Hech narsa topilmadi.</p>';
+}
 
-    // ====== UTILITY ======
-    function escapeHtml(str) {
-      const map = { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' };
-      return String(str || '').replace(/[&<>"']/g, m => map[m]);
-    }
+/* ---------- Rank ---------- */
+function renderRank(){
+  var top = ARTICLES.slice().sort(function(a,b){return (b.views||0)-(a.views||0)}).slice(0,5);
+  $("rank").innerHTML = top.map(function(a,i){
+    return '<li><button data-id="'+a.id+'" class="w-full text-left flex items-center gap-3 p-4 hover:bg-slate-50 dark:hover:bg-slate-800/60 transition">'
+      + '<span class="font-display font-extrabold text-xl w-6 text-amber-500">'+(i+1)+'</span>'
+      + '<span class="min-w-0"><span class="block font-medium text-sm leading-snug">'+esc(a.title)+'</span>'
+      + '<span class="text-xs text-slate-400 inline-flex items-center gap-1 mt-0.5">'+svg(ICONS.eye,'icon w-3.5 h-3.5')+(a.views||0)+' ko\'rish</span></span>'
+      + '</button></li>';
+  }).join('');
+}
 
-    function formatDate(value) {
-      if (!value) return '';
-      const date = new Date(value);
-      if (isNaN(date.getTime())) return String(value);
-      return date.toLocaleDateString('uz-UZ', { year: 'numeric', month: 'long', day: 'numeric' });
-    }
+/* ---------- FAQ ---------- */
+function renderFaq(){
+  $("faq").innerHTML = FAQ.map(function(f){
+    return '<details class="reveal show bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl group">'
+      + '<summary class="list-none cursor-pointer p-4 font-semibold flex justify-between items-center">'+esc(f.q)
+      + '<svg class="icon w-4 h-4 transition group-open:rotate-45" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></summary>'
+      + '<div class="px-4 pb-4 text-slate-500 text-sm">'+esc(f.a)+'</div></details>';
+  }).join('');
+}
 
-    function articleTypeText(type) {
-      const map = {
-        'guide': 'Qo\'llanma',
-        'news': 'Yangilik',
-        'official': 'Rasmiy xabar',
-        'analysis': 'Tahlil',
-        'question': 'Savol-javob'
-      };
-      return map[type] || 'Maqola';
-    }
+/* ---------- Carousel ---------- */
+var carIndex=0, carTimer;
+function renderCarousel(){
+  var top = ARTICLES.slice().sort(function(a,b){return (b.views||0)-(a.views||0)}).slice(0,5);
+  var box = $("car");
+  if(!top.length){ box.hidden = true; return; }
+  box.hidden = false;
+  $("carTrack").innerHTML = top.map(function(a){
+    var bgStyle = a.cover_image_url
+      ? 'background-image:url(\''+esc(a.cover_image_url)+'\');background-size:cover;background-position:center'
+      : 'background:linear-gradient(135deg,'+catColor(a.category)+',#0B1220)';
+    return '<div class="w-full flex-shrink-0"><button data-id="'+a.id+'" class="w-full text-left grid md:grid-cols-2">'
+      + '<div class="h-56 md:h-80 grid place-items-center text-white relative overflow-hidden" style="'+bgStyle+'">'
+      + (a.cover_image_url ? '' : svg(catIcon(a.category),'w-20 h-20 opacity-30 icon'))
+      + '</div>'
+      + '<div class="p-6 md:p-10 flex flex-col justify-center">'
+      + '<span class="text-xs font-bold uppercase tracking-wide" style="color:'+catColor(a.category)+'">'+esc(a.category)+'</span>'
+      + '<h2 class="font-display font-extrabold text-2xl md:text-3xl mt-2 leading-tight">'+esc(a.title)+'</h2>'
+      + '<p class="text-slate-500 mt-3">'+esc(a.lead)+'</p>'
+      + '<span class="text-sm text-slate-400 mt-4">'+a.minutes+' daqiqalik o\'qish</span>'
+      + '</div></button></div>';
+  }).join('');
+  $("carDots").innerHTML = top.map(function(_,i){
+    return '<button data-i="'+i+'" class="dot w-2 h-2 rounded-full '+(i===0?'bg-amber-450 w-6':'bg-white/50')+' transition-all"></button>';
+  }).join('');
+  carIndex=0; posCar(); restartAuto();
+}
+function posCar(){
+  $("carTrack").style.transform = 'translateX(-'+(carIndex*100)+'%)';
+  Array.prototype.forEach.call($("carDots").children,function(d,i){
+    d.className = 'dot w-2 h-2 rounded-full transition-all ' + (i===carIndex?'bg-amber-450 w-6':'bg-white/50');
+  });
+}
+function carGo(d){ var n=$("carTrack").children.length; if(!n) return; carIndex=(carIndex+d+n)%n; posCar(); }
+function restartAuto(){ clearInterval(carTimer); carTimer=setInterval(function(){carGo(1)},5000); }
+$("carPrev").addEventListener('click',function(){carGo(-1);restartAuto()});
+$("carNext").addEventListener('click',function(){carGo(1);restartAuto()});
+$("carDots").addEventListener('click',function(e){var i=e.target.getAttribute('data-i');if(i!=null){carIndex=Number(i);posCar();restartAuto();}});
+(function(){
+  var startX=null;
+  $("car").addEventListener('touchstart',function(e){startX=e.touches[0].clientX},{passive:true});
+  $("car").addEventListener('touchend',function(e){
+    if(startX==null) return;
+    var dx=e.changedTouches[0].clientX-startX;
+    if(Math.abs(dx)>40){ carGo(dx<0?1:-1); restartAuto(); }
+    startX=null;
+  });
+})();
 
-    // ====== RENDER ======
-    function renderArticles() {
-      const container = document.getElementById('articlesContainer');
-      const published = articles.filter(a => a.status === 'published');
+/* ---------- Reader (fetches from API, increments views) ---------- */
+document.addEventListener('click', function(e){
+  var b = e.target.closest('[data-id]'); if(!b) return;
+  var id = b.getAttribute('data-id');
+  fetch('/api/articles/'+id).then(function(r){return r.json()}).then(function(a){
+    if(!a || a.error) return;
+    $("readerBody").innerHTML =
+      '<span class="text-xs font-bold uppercase tracking-wide" style="color:'+catColor(a.category)+'">'+esc(a.category)+' &middot; '+a.minutes+' daqiqa &middot; '+(a.views||0)+' ko\'rish</span>'
+      + '<h1 class="font-display font-extrabold text-3xl mt-2 mb-6 leading-tight">'+esc(a.title)+'</h1>'
+      + '<div class="rich text-slate-600 dark:text-slate-300">'+renderBody(a.body)+'</div>'
+      + '<div class="mt-6 p-4 rounded-xl bg-amber-450/10 text-sm text-amber-700 dark:text-amber-400">Bu maqola umumiy ma\'lumot uchun. Qaror qilishdan oldin rasmiy manbani tekshiring.</div>'
+      + '<a href="'+TELEGRAM_URL+'" target="_blank" rel="noopener" class="tgLink inline-flex mt-5 items-center gap-2 bg-amber-450 text-ink font-semibold px-5 py-3 rounded-xl">Savolingizni Telegramda yozing</a>';
+    $("reader").classList.remove('hidden');
+    document.body.style.overflow='hidden';
+    var idx = ARTICLES.findIndex(function(x){return x.id==id});
+    if(idx>-1){ ARTICLES[idx].views = a.views; renderRank(); }
+  });
+});
+$("readerBack").addEventListener('click', function(){
+  $("reader").classList.add('hidden'); document.body.style.overflow='';
+});
+document.addEventListener('keydown', function(e){ if(e.key==='Escape') $("reader").classList.add('hidden'); });
 
-      if (!published.length) {
-        container.innerHTML = '<div class="col-span-full rounded-xl bg-white p-12 text-center shadow dark:bg-slate-900"><p class="text-slate-500 dark:text-slate-400">Hozircha maqola yo\'q</p></div>';
-        return;
-      }
+/* ---------- Search ---------- */
+$("searchBtn").addEventListener('click', function(){
+  var on = $("searchBox").classList.toggle('hidden');
+  if(!$("searchBox").classList.contains('hidden')) $("q").focus();
+});
+$("q").addEventListener('input', function(){ state.q = this.value; renderList(); });
 
-      container.innerHTML = published.map((article, idx) => `
-        <div class="group animate-fade-in-up" style="animation-delay: ${idx * 0.1}s;">
-          <article class="overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm hover:shadow-xl dark:border-slate-800 dark:bg-slate-900 transition-all duration-300 transform hover:-translate-y-1 h-full flex flex-col">
-            <!-- IMAGE -->
-            <div class="relative h-48 overflow-hidden bg-gradient-to-br from-primary/20 to-accent/20 dark:from-primary/10 dark:to-accent/10">
-              ${article.image_url ? `
-                <img src="${escapeHtml(article.image_url)}" alt="${escapeHtml(article.title)}" class="h-full w-full object-cover group-hover:scale-110 transition-transform duration-300">
-              ` : `
-                <div class="h-full w-full bg-gradient-to-br from-primary to-accent flex items-center justify-center">
-                  <svg class="h-12 w-12 text-white/50" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                    <rect x="3" y="3" width="18" height="18" rx="2"></rect>
-                    <circle cx="8.5" cy="8.5" r="1.5"></circle>
-                    <path d="M21 15l-5-5L5 21"></path>
-                  </svg>
-                </div>
-              `}
-              <div class="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
-            </div>
+/* ---------- Contact / footer / social ---------- */
+function bindLinks(){ Array.prototype.forEach.call(document.querySelectorAll('.tgLink'), function(el){ el.href = TELEGRAM_URL; }); }
+$("contact_").textContent = CONTACT;
+$("emailText").textContent = EMAIL; $("emailLink").href = 'mailto:'+EMAIL;
+$("phoneText").textContent = PHONE; $("phoneLink").href = 'tel:'+PHONE.replace(/[^\d+]/g,'');
+$("adLink").href = CONTACT_URL;
+$("contactForm").addEventListener('submit', function(e){
+  e.preventDefault();
+  var name=$("cfName").value.trim(), msg=$("cfMsg").value.trim();
+  var text = encodeURIComponent('Ism: '+name+'\n\nXabar: '+msg);
+  window.open('https://t.me/share/url?url=&text='+text, '_blank', 'noopener');
+});
+(function renderSocial(){
+  var html='';
+  Object.keys(SOCIAL).forEach(function(k){
+    if(SOCIAL[k]) html += '<a href="'+esc(SOCIAL[k])+'" target="_blank" rel="noopener" aria-label="'+k+'" class="w-10 h-10 rounded-xl bg-white/10 grid place-items-center hover:bg-amber-450 hover:text-ink transition">'+svg(SOCIAL_ICONS[k],'icon w-4 h-4')+'</a>';
+  });
+  $("socialIcons").innerHTML = html;
+})();
 
-            <!-- CONTENT -->
-            <div class="flex flex-1 flex-col p-6">
-              <div class="mb-3 flex items-center gap-2">
-                <span class="inline-flex items-center gap-1 rounded-full bg-accent/10 px-3 py-1 text-xs font-bold text-accent">
-                  <svg class="h-3 w-3" viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm0-14c-3.31 0-6 2.69-6 6s2.69 6 6 6 6-2.69 6-6-2.69-6-6-6z"></path>
-                  </svg>
-                  ${escapeHtml(article.category)}
-                </span>
-                <span class="text-xs font-semibold text-slate-500 dark:text-slate-400">${articleTypeText(article.article_type)}</span>
-              </div>
+/* ---------- Reveal on scroll (new cards get this class already; observe future too) ---------- */
+var io = new IntersectionObserver(function(entries){ entries.forEach(function(e){ if(e.isIntersecting) e.target.classList.add('show'); }); },{threshold:.1});
+function observeReveals(){ Array.prototype.forEach.call(document.querySelectorAll('.reveal:not(.show)'), function(el){ io.observe(el); }); }
 
-              <h3 class="font-display text-lg font-bold text-slate-900 line-clamp-2 dark:text-white mb-2 group-hover:text-primary transition-colors">
-                ${escapeHtml(article.title)}
-              </h3>
+/* ---------- Count-up ---------- */
+function countUp(el){
+  var to = Number(el.getAttribute('data-to'))||0, cur=0, step=Math.max(1,Math.round(to/60));
+  var t=setInterval(function(){ cur+=step; if(cur>=to){cur=to;clearInterval(t);} el.textContent=cur.toLocaleString('uz'); },20);
+}
 
-              <p class="line-clamp-3 text-sm text-slate-600 dark:text-slate-400 mb-4">
-                ${escapeHtml(article.lead)}
-              </p>
-
-              <div class="mt-auto flex items-center justify-between text-xs text-slate-500 dark:text-slate-400 mb-4 border-t border-slate-100 dark:border-slate-800 pt-4">
-                <div class="flex items-center gap-2">
-                  ${article.author ? `
-                    <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                      <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-                      <circle cx="12" cy="7" r="4"></circle>
-                    </svg>
-                    <span>${escapeHtml(article.author)}</span>
-                  ` : ''}
-                </div>
-                <span>${formatDate(article.updated)}</span>
-              </div>
-
-              <button onclick="showArticleDetail(${article.id})" class="inline-flex items-center justify-center gap-2 rounded-lg bg-primary px-4 py-2.5 text-sm font-bold text-white hover:bg-primary-dark shadow-md hover:shadow-lg transition-all duration-200 transform hover:scale-105">
-                <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
-                  <polyline points="15 3 21 3 21 9"></polyline>
-                  <line x1="10" y1="14" x2="21" y2="3"></line>
-                </svg>
-                O'qish
-              </button>
-            </div>
-          </article>
-        </div>
-      `).join('');
-
-      // Update stats
-      document.getElementById('statArticles').textContent = published.length;
-      document.getElementById('statCategories').textContent = categories.filter(c => c.is_active).length;
-    }
-
-    function renderFooter() {
-      document.getElementById('aboutText').textContent = settings.about_text || 'QurilishInfo — qurilish va uy-joy sohasidagi yangiliklar portali.';
-      document.getElementById('contactPhone').textContent = settings.contact || '+998 90 123 45 67';
-
-      if (settings.telegram_url) document.getElementById('telegramLink').href = settings.telegram_url;
-      if (settings.instagram_url) document.getElementById('instagramLink').href = settings.instagram_url;
-      if (settings.facebook_url) document.getElementById('facebookLink').href = settings.facebook_url;
-
-      // Render filters
-      const filterContainer = document.querySelector('.filter-btn').parentElement;
-      filterContainer.querySelectorAll(':not(.filter-btn:first-child)').forEach(el => el.remove());
-
-      categories.filter(c => c.is_active).forEach(cat => {
-        const btn = document.createElement('button');
-        btn.className = 'filter-btn inline-flex items-center gap-2 rounded-full border-2 border-slate-300 px-6 py-2.5 font-semibold text-slate-600 hover:border-primary hover:text-primary dark:border-slate-700 dark:text-slate-300 transition-all duration-200';
-        btn.textContent = cat.name;
-        btn.dataset.filter = cat.name;
-        btn.onclick = () => filterArticles(cat.name);
-        filterContainer.appendChild(btn);
-      });
-    }
-
-    function filterArticles(category) {
-      const container = document.getElementById('articlesContainer');
-      const filtered = articles.filter(a => a.category === category && a.status === 'published');
-
-      // Update active button
-      document.querySelectorAll('.filter-btn').forEach(btn => {
-        btn.classList.remove('bg-primary', 'text-white', 'border-primary');
-        btn.classList.add('border-slate-300', 'text-slate-600', 'dark:border-slate-700', 'dark:text-slate-300');
-      });
-      event.target.classList.add('bg-primary', 'text-white', 'border-primary');
-      event.target.classList.remove('border-slate-300', 'text-slate-600', 'dark:border-slate-700', 'dark:text-slate-300');
-
-      if (!filtered.length) {
-        container.innerHTML = '<div class="col-span-full rounded-xl bg-white p-12 text-center shadow dark:bg-slate-900"><p class="text-slate-500 dark:text-slate-400">Bu kategoriyada maqola yo\'q</p></div>';
-        return;
-      }
-
-      container.innerHTML = filtered.map((article, idx) => `
-        <div class="group animate-fade-in-up" style="animation-delay: ${idx * 0.1}s;">
-          <article class="overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm hover:shadow-xl dark:border-slate-800 dark:bg-slate-900 transition-all duration-300 transform hover:-translate-y-1 h-full flex flex-col">
-            <div class="relative h-48 overflow-hidden bg-gradient-to-br from-primary/20 to-accent/20 dark:from-primary/10 dark:to-accent/10">
-              ${article.image_url ? `
-                <img src="${escapeHtml(article.image_url)}" alt="${escapeHtml(article.title)}" class="h-full w-full object-cover group-hover:scale-110 transition-transform duration-300">
-              ` : `
-                <div class="h-full w-full bg-gradient-to-br from-primary to-accent flex items-center justify-center">
-                  <svg class="h-12 w-12 text-white/50" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                    <rect x="3" y="3" width="18" height="18" rx="2"></rect>
-                    <circle cx="8.5" cy="8.5" r="1.5"></circle>
-                    <path d="M21 15l-5-5L5 21"></path>
-                  </svg>
-                </div>
-              `}
-              <div class="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
-            </div>
-
-            <div class="flex flex-1 flex-col p-6">
-              <div class="mb-3 flex items-center gap-2">
-                <span class="inline-flex items-center gap-1 rounded-full bg-accent/10 px-3 py-1 text-xs font-bold text-accent">
-                  <svg class="h-3 w-3" viewBox="0 0 24 24" fill="currentColor">
-                    <circle cx="12" cy="12" r="1"></circle>
-                  </svg>
-                  ${escapeHtml(article.category)}
-                </span>
-              </div>
-
-              <h3 class="font-display text-lg font-bold text-slate-900 line-clamp-2 dark:text-white mb-2">
-                ${escapeHtml(article.title)}
-              </h3>
-
-              <p class="line-clamp-3 text-sm text-slate-600 dark:text-slate-400 mb-4">
-                ${escapeHtml(article.lead)}
-              </p>
-
-              <div class="mt-auto flex items-center justify-between text-xs text-slate-500 dark:text-slate-400 mb-4 border-t border-slate-100 dark:border-slate-800 pt-4">
-                <span>${formatDate(article.updated)}</span>
-              </div>
-
-              <button onclick="showArticleDetail(${article.id})" class="inline-flex items-center justify-center gap-2 rounded-lg bg-primary px-4 py-2.5 text-sm font-bold text-white hover:bg-primary-dark shadow-md hover:shadow-lg transition-all duration-200 transform hover:scale-105">
-                <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
-                  <polyline points="15 3 21 3 21 9"></polyline>
-                  <line x1="10" y1="14" x2="21" y2="3"></line>
-                </svg>
-                O'qish
-              </button>
-            </div>
-          </article>
-        </div>
-      `).join('');
-    }
-
-    // ====== MODAL ======
-    function showArticleDetail(id) {
-      const article = articles.find(a => a.id === id);
-      if (!article) return;
-
-      document.getElementById('modalTitle').textContent = escapeHtml(article.title);
-
-      const content = document.getElementById('modalContent');
-      content.innerHTML = `
-        <div class="space-y-6">
-          <div class="flex flex-wrap gap-2">
-            <span class="inline-flex items-center gap-1 rounded-full bg-primary/10 px-3 py-1 text-sm font-bold text-primary">
-              ${escapeHtml(article.category)}
-            </span>
-            <span class="inline-flex items-center gap-1 rounded-full bg-slate-200 px-3 py-1 text-sm font-bold text-slate-700 dark:bg-slate-800 dark:text-slate-300">
-              ${articleTypeText(article.article_type)}
-            </span>
-          </div>
-
-          ${article.image_url ? `
-            <div class="rounded-lg overflow-hidden">
-              <img src="${escapeHtml(article.image_url)}" alt="${escapeHtml(article.title)}" class="w-full h-auto">
-              ${article.image_caption ? `<p class="mt-2 text-sm text-slate-600 dark:text-slate-400 italic">${escapeHtml(article.image_caption)}</p>` : ''}
-            </div>
-          ` : ''}
-
-          <div class="flex flex-wrap gap-4 text-sm text-slate-600 dark:text-slate-400 pb-4 border-b border-slate-200 dark:border-slate-800">
-            ${article.author ? `
-              <div class="flex items-center gap-2">
-                <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-                  <circle cx="12" cy="7" r="4"></circle>
-                </svg>
-                <strong>${escapeHtml(article.author)}</strong>
-              </div>
-            ` : ''}
-            <div class="flex items-center gap-2">
-              <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
-              </svg>
-              ${formatDate(article.updated)}
-            </div>
-            ${article.minutes ? `
-              <div class="flex items-center gap-2">
-                <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <circle cx="12" cy="12" r="10"></circle>
-                  <polyline points="12 6 12 12 16 14"></polyline>
-                </svg>
-                ${article.minutes} daqiqa o'qish
-              </div>
-            ` : ''}
-          </div>
-
-          <div class="prose prose-sm max-w-none dark:prose-invert space-y-4 text-slate-700 dark:text-slate-300">
-            <p class="font-semibold text-lg text-slate-900 dark:text-white">${escapeHtml(article.lead)}</p>
-
-            <div class="whitespace-pre-wrap leading-relaxed">
-              ${escapeHtml(article.body)}
-            </div>
-
-            ${article.steps ? `
-              <div class="mt-8 rounded-lg bg-slate-50 dark:bg-slate-800 p-6">
-                <h4 class="font-bold text-slate-900 dark:text-white mb-4 flex items-center gap-2">
-                  <svg class="h-5 w-5 text-primary" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>
-                  </svg>
-                  Tezkalar
-                </h4>
-                <div class="whitespace-pre-wrap text-sm">
-                  ${escapeHtml(article.steps)}
-                </div>
-              </div>
-            ` : ''}
-
-            ${article.warning ? `
-              <div class="mt-8 rounded-lg border-l-4 border-orange-500 bg-orange-50 p-6 dark:bg-orange-950/30">
-                <p class="font-bold text-orange-900 dark:text-orange-200 flex items-center gap-2 mb-2">
-                  <svg class="h-5 w-5" viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"></path>
-                  </svg>
-                  E'tibor bering
-                </p>
-                <p class="text-orange-800 dark:text-orange-300 whitespace-pre-wrap text-sm">
-                  ${escapeHtml(article.warning)}
-                </p>
-              </div>
-            ` : ''}
-
-            ${article.tags ? `
-              <div class="mt-8">
-                <p class="font-bold text-slate-900 dark:text-white mb-3 flex items-center gap-2">
-                  <svg class="h-5 w-5 text-primary" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path>
-                    <line x1="7" y1="7" x2="7.01" y2="7"></line>
-                  </svg>
-                  Teglar
-                </p>
-                <div class="flex flex-wrap gap-2">
-                  ${article.tags.split(',').map(tag => `
-                    <span class="inline-flex items-center gap-1 rounded-full bg-slate-200 px-3 py-1 text-sm font-semibold text-slate-700 dark:bg-slate-800 dark:text-slate-300">
-                      ${escapeHtml(tag.trim())}
-                    </span>
-                  `).join('')}
-                </div>
-              </div>
-            ` : ''}
-          </div>
-        </div>
-      `;
-
-      document.getElementById('articleModal').classList.remove('hidden');
-    }
-
-    function closeModal() {
-      document.getElementById('articleModal').classList.add('hidden');
-    }
-
-    document.getElementById('articleModal').addEventListener('click', (e) => {
-      if (e.target === document.getElementById('articleModal')) closeModal();
-    });
-
-    // ====== INIT ======
-    function init() {
-      articles = JSON.parse(localStorage.getItem(STORAGE_ARTICLES)) || [];
-      categories = JSON.parse(localStorage.getItem(STORAGE_CATEGORIES)) || [];
-      settings = JSON.parse(localStorage.getItem(STORAGE_SETTINGS)) || {};
-
-      renderArticles();
-      renderFooter();
-    }
-
-    initTheme();
-    init();
-
-    // Auto-refresh
-    setInterval(() => {
-      const newArticles = JSON.parse(localStorage.getItem(STORAGE_ARTICLES)) || [];
-      if (JSON.stringify(newArticles) !== JSON.stringify(articles)) {
-        init();
-      }
-    }, 2000);
-  </script>
+/* ---------- Boot ---------- */
+bindLinks(); renderFaq();
+Promise.all([
+  fetch('/api/categories').then(function(r){return r.json()}),
+  fetch('/api/articles').then(function(r){return r.json()})
+]).then(function(res){
+  CATEGORIES = res[0]; ARTICLES = res[1];
+  renderChips(); renderList(); renderRank(); renderCarousel();
+  $("statArtHero").setAttribute('data-to', ARTICLES.length);
+  $("statCatHero").setAttribute('data-to', CATEGORIES.length);
+  $("statViewsHero").setAttribute('data-to', ARTICLES.reduce(function(s,a){return s+(a.views||0)},0));
+  countUp($("statArtHero")); countUp($("statCatHero")); countUp($("statViewsHero"));
+  observeReveals();
+}).catch(function(){
+  $("list").innerHTML = '<p class="text-red-500 text-center py-10">Maqolalarni yuklab bo\'lmadi. Server ishlab turganini tekshiring.</p>';
+});
+</script>
 </body>
 </html>
