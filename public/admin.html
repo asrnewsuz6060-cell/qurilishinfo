@@ -1,1158 +1,469 @@
 <!DOCTYPE html>
-<html lang="uz" class="scroll-smooth">
+<html lang="uz">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-  <title>Admin — QurilishInfo</title>
-
-  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
-
-  <style type="text/tailwindcss">
-    @theme {
-      --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
-      --font-display: "Manrope", ui-sans-serif, system-ui, sans-serif;
-      --color-qblue: #0b4f7c;
-      --color-qnavy: #073b61;
-      --color-qgreen: #138a5b;
-      --color-qgreen-dark: #0c6d47;
-      --color-qsoft: #f3f7fa;
-      --color-qline: #dce5eb;
-      --color-qink: #17212b;
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>QurilishInfo — Admin panel</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+tailwind.config = {
+  darkMode: 'class',
+  theme: {
+    extend: {
+      fontFamily: { display: ['Sora','system-ui','sans-serif'], sans: ['Inter','system-ui','sans-serif'] },
+      colors: { ink: '#0B1220', amber: { 450: '#F5A524' } }
     }
-
-    @keyframes fade-in {
-      from {
-        opacity: 0;
-        transform: translateY(8px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-
-    .animate-fade-in {
-      animation: fade-in .25s ease both;
-    }
-
-    .tab-button.active {
-      background: #0b4f7c;
-      color: #fff;
-    }
-
-    .dark .tab-button.active {
-      background: #69b5e4;
-      color: #073b61;
-    }
-
-    .nav-item.active {
-      background: rgba(11, 79, 124, 0.12);
-      color: #0b4f7c;
-      border-right: 3px solid #0b4f7c;
-    }
-
-    .dark .nav-item.active {
-      background: rgba(105, 181, 228, 0.14);
-      color: #69b5e4;
-      border-right-color: #69b5e4;
-    }
-  </style>
-
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Manrope:wght@600;700;800&display=swap" rel="stylesheet">
+  }
+}
+</script>
+<style>
+  body{font-family:Inter,system-ui,sans-serif}
+  .font-display{font-family:Sora,system-ui,sans-serif}
+  .icon{width:20px;height:20px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+  .diag-tape{background-image:repeating-linear-gradient(45deg,#0B1220 0 14px,#F5A524 14px 28px)}
+  .rich{min-height:220px}
+  .rich p{margin:0 0 .85rem}
+  .rich h2{font-family:Sora,system-ui,sans-serif;font-weight:800;font-size:1.2rem;margin:1rem 0 .5rem}
+  .rich ul{padding-left:1.2rem;margin:0 0 .85rem}
+  .rich a{color:#D97706;text-decoration:underline}
+  .hidden-imp{display:none !important}
+</style>
 </head>
+<body class="bg-slate-50 text-ink dark:bg-slate-950 dark:text-slate-100">
 
-<body class="bg-qsoft text-qink antialiased transition-colors duration-300 dark:bg-slate-950 dark:text-slate-100">
-  <div id="mobileOverlay" class="fixed inset-0 z-40 hidden bg-slate-950/50 backdrop-blur-sm"></div>
-
-  <aside id="sidebar" class="fixed inset-y-0 left-0 z-50 flex w-[290px] max-w-[86vw] -translate-x-full flex-col border-r border-slate-200 bg-white shadow-xl transition-transform duration-300 dark:border-slate-800 dark:bg-slate-900 lg:translate-x-0">
-    <div class="flex items-center justify-between border-b border-slate-200 px-5 py-5 dark:border-slate-800">
-      <a href="/" class="flex items-center gap-3 font-display text-xl font-extrabold text-qnavy dark:text-white">
-        <span class="grid h-10 w-10 place-items-center rounded-xl bg-qblue text-white shadow-lg shadow-sky-900/20">
-          <svg viewBox="0 0 24 24" class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="2.2">
-            <path d="M3 21h18"></path><path d="M5 21V10l7-6 7 6v11"></path><path d="M9 21v-6h6v6"></path>
-          </svg>
-        </span>
-        <span>Admin <span class="text-qgreen">Panel</span></span>
-      </a>
-
-      <button id="sidebarCloseButton" type="button" class="grid h-10 w-10 place-items-center rounded-lg border border-slate-200 text-slate-600 dark:border-slate-700 dark:text-slate-300" aria-label="Menyuni yopish">
-        <svg viewBox="0 0 24 24" class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M6 6l12 12M18 6L6 18"></path>
-        </svg>
-      </button>
+<!-- ===== Login ===== -->
+<div id="loginView" class="min-h-screen grid place-items-center px-4">
+  <div class="w-full max-w-sm bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-6 shadow-xl">
+    <div class="flex items-center gap-2 font-display font-extrabold text-xl mb-6">
+      <span class="w-2.5 h-6 diag-tape rounded-sm rotate-6"></span> QurilishInfo
     </div>
+    <label class="block text-sm font-semibold mb-1">Login</label>
+    <input id="lu" autocomplete="username" class="w-full rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 px-4 py-2.5 mb-3 outline-none focus:ring-2 ring-amber-450">
+    <label class="block text-sm font-semibold mb-1">Parol</label>
+    <input id="lp" type="password" autocomplete="current-password" class="w-full rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 px-4 py-2.5 mb-4 outline-none focus:ring-2 ring-amber-450">
+    <button id="loginBtn" class="w-full bg-amber-450 text-ink font-semibold py-3 rounded-xl hover:brightness-95 active:scale-95 transition">Kirish</button>
+    <div id="loginMsg" class="mt-3 text-sm"></div>
+  </div>
+</div>
 
-    <nav class="flex-1 overflow-y-auto px-3 py-5">
-      <button type="button" data-tab="dashboard" class="nav-item active mb-1 flex w-full items-center gap-3 rounded-xl px-4 py-3 text-left font-semibold text-slate-700 transition hover:bg-slate-100 dark:text-slate-200 dark:hover:bg-slate-800">
-        <svg viewBox="0 0 24 24" class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M3 3h8v8H3zM13 3h8v8h-8zM3 13h8v8H3zM13 13h8v8h-8z"></path>
-        </svg>
-        <span>Dashboard</span>
-      </button>
+<!-- ===== App shell ===== -->
+<div id="appShell" class="hidden-imp min-h-screen">
+  <div id="overlay" class="fixed inset-0 bg-black/40 z-40 hidden"></div>
 
-      <button type="button" data-tab="articles" class="nav-item mb-1 flex w-full items-center gap-3 rounded-xl px-4 py-3 text-left font-semibold text-slate-700 transition hover:bg-slate-100 dark:text-slate-200 dark:hover:bg-slate-800">
-        <svg viewBox="0 0 24 24" class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M4 4h16v16H4z"></path><path d="M8 8h8M8 12h8M8 16h5"></path>
-        </svg>
-        <span>Maqolalar</span>
-      </button>
-
-      <button type="button" data-tab="categories" class="nav-item mb-1 flex w-full items-center gap-3 rounded-xl px-4 py-3 text-left font-semibold text-slate-700 transition hover:bg-slate-100 dark:text-slate-200 dark:hover:bg-slate-800">
-        <svg viewBox="0 0 24 24" class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M3 7h18M3 12h18M3 17h18"></path>
-        </svg>
-        <span>Ruknlar</span>
-      </button>
-
-      <button type="button" data-tab="advertisements" class="nav-item mb-1 flex w-full items-center gap-3 rounded-xl px-4 py-3 text-left font-semibold text-slate-700 transition hover:bg-slate-100 dark:text-slate-200 dark:hover:bg-slate-800">
-        <svg viewBox="0 0 24 24" class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M3 21h18M5 18h14M6 18V9M10 18V9M14 18V9M18 18V9M3 9h18L12 3 3 9z"></path>
-        </svg>
-        <span>Reklama</span>
-      </button>
-
-      <button type="button" data-tab="settings" class="nav-item mb-1 flex w-full items-center gap-3 rounded-xl px-4 py-3 text-left font-semibold text-slate-700 transition hover:bg-slate-100 dark:text-slate-200 dark:hover:bg-slate-800">
-        <svg viewBox="0 0 24 24" class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M12 20a8 8 0 1 0 0-16 8 8 0 0 0 0 16z"></path>
-          <path d="M12 14a2 2 0 1 0 0-4 2 2 0 0 0 0 4z"></path>
-        </svg>
-        <span>Sozlamalar</span>
-      </button>
-    </nav>
-
-    <div class="border-t border-slate-200 px-5 py-5 text-xs leading-5 text-slate-500 dark:border-slate-800 dark:text-slate-400">
-      QurilishInfo — Admin Panel<br>
-      v1.0.0
+  <nav id="sidebar" class="fixed inset-y-0 left-0 w-72 max-w-[82vw] bg-ink text-white z-50 -translate-x-full transition-transform duration-200 flex flex-col overflow-y-auto">
+    <div class="flex items-center gap-3 px-5 py-5 border-b border-white/10">
+      <div id="avatarLetter" class="w-9 h-9 rounded-lg bg-amber-450 text-ink font-extrabold grid place-items-center">A</div>
+      <b class="font-display">Admin panel</b>
     </div>
-  </aside>
+    <p class="text-[11px] uppercase tracking-wider text-white/40 font-semibold px-5 pt-4 pb-1">Asosiy</p>
+    <button class="navItem flex items-center gap-3 px-5 py-3 font-medium hover:bg-white/5" data-view="dashboard">
+      <svg class="icon" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="9" rx="1"/><rect x="14" y="3" width="7" height="5" rx="1"/><rect x="14" y="12" width="7" height="9" rx="1"/><rect x="3" y="16" width="7" height="5" rx="1"/></svg>
+      Boshqaruv paneli
+    </button>
+    <p class="text-[11px] uppercase tracking-wider text-white/40 font-semibold px-5 pt-4 pb-1">Kontent</p>
+    <button class="navItem flex items-center gap-3 px-5 py-3 font-medium hover:bg-white/5" data-view="articles">
+      <svg class="icon" viewBox="0 0 24 24"><path d="M4 22h16a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v16a2 2 0 0 1-2 2Zm0 0a2 2 0 0 1-2-2v-9c0-1.1.9-2 2-2h2"/><path d="M18 14h-8"/><path d="M15 18h-5"/><path d="M10 6h8v4h-8V6Z"/></svg>
+      Maqolalar
+    </button>
+    <button class="navItem flex items-center gap-3 px-5 py-3 font-medium hover:bg-white/5" data-view="categories">
+      <svg class="icon" viewBox="0 0 24 24"><path d="m20.59 13.41-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82Z"/><circle cx="7" cy="7" r="1"/></svg>
+      Kategoriyalar
+    </button>
+    <p class="text-[11px] uppercase tracking-wider text-white/40 font-semibold px-5 pt-4 pb-1">Tizim</p>
+    <button class="navItem flex items-center gap-3 px-5 py-3 font-medium hover:bg-white/5" data-view="settings">
+      <svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1Z"/></svg>
+      Sozlamalar
+    </button>
+    <button id="viewSiteBtn" class="flex items-center gap-3 px-5 py-3 font-medium hover:bg-white/5">
+      <svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M2 12h20"/><path d="M12 2a15 15 0 0 1 0 20 15 15 0 0 1 0-20Z"/></svg>
+      Saytni ko'rish
+    </button>
+    <button id="logoutBtn" class="flex items-center gap-3 px-5 py-3 font-medium text-amber-450 mt-auto hover:bg-white/5">
+      <svg class="icon" viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><path d="M16 17l5-5-5-5"/><path d="M21 12H9"/></svg>
+      Chiqish
+    </button>
+  </nav>
 
-  <div class="lg:pl-[290px]">
-    <header class="sticky top-0 z-30 border-b border-slate-200 bg-white/95 backdrop-blur-lg dark:border-slate-800 dark:bg-slate-950/95">
-      <div class="mx-auto flex h-[68px] max-w-7xl items-center justify-between gap-3 px-4 sm:px-6 lg:px-8">
-        <button id="sidebarOpenButton" type="button" class="grid h-10 w-10 place-items-center rounded-xl border border-slate-200 text-slate-700 lg:hidden dark:border-slate-700 dark:text-slate-200" aria-label="Menyuni ochish">
-          <svg viewBox="0 0 24 24" class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M4 7h16M4 12h16M4 17h16"></path>
-          </svg>
-        </button>
-
-        <div class="flex items-center gap-3">
-          <h1 id="pageTitle" class="font-display text-xl font-extrabold tracking-tight text-qnavy dark:text-white">Dashboard</h1>
-        </div>
-
-        <div class="flex items-center gap-2">
-          <a href="/" target="_blank" class="hidden items-center gap-2 rounded-xl border border-slate-300 bg-white px-4 py-2.5 text-sm font-bold text-slate-700 transition hover:border-qblue hover:text-qblue dark:border-slate-700 dark:bg-slate-900 dark:text-slate-200 sm:inline-flex">
-            <svg viewBox="0 0 24 24" class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><path d="M15 3h6v6"></path><path d="M10 14L21 3"></path>
-            </svg>
-            Saytni ochish
-          </a>
-
-          <button id="themeButton" type="button" class="grid h-10 w-10 place-items-center rounded-xl border border-slate-200 text-slate-700 hover:border-qblue hover:text-qblue dark:border-slate-700 dark:text-slate-200" aria-label="Mavzuni almashtirish">
-            <svg id="themeSunIcon" viewBox="0 0 24 24" class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2">
-              <circle cx="12" cy="12" r="4"></circle>
-              <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"></path>
-            </svg>
-          </button>
-        </div>
-      </div>
+  <div class="md:pl-0">
+    <header class="sticky top-0 z-30 bg-white/90 dark:bg-slate-900/90 backdrop-blur border-b border-slate-200 dark:border-slate-800 flex items-center gap-3 px-4 h-16">
+      <button id="menuBtn" class="w-10 h-10 rounded-xl border border-slate-200 dark:border-slate-700 grid place-items-center">
+        <svg class="icon" viewBox="0 0 24 24"><path d="M4 6h16"/><path d="M4 12h16"/><path d="M4 18h16"/></svg>
+      </button>
+      <h1 id="pageTitle" class="font-display font-bold text-lg flex-1">Boshqaruv paneli</h1>
+      <button id="themeBtn" class="w-10 h-10 rounded-xl border border-slate-200 dark:border-slate-700 grid place-items-center">
+        <svg class="icon" viewBox="0 0 24 24"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
+      </button>
     </header>
 
-    <main class="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
-      <!-- DASHBOARD -->
-      <section id="dashboardTab" class="tab-content animate-fade-in">
-        <div class="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
-          <div class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm dark:border-slate-800 dark:bg-slate-900">
-            <p class="text-xs font-bold uppercase tracking-[0.14em] text-slate-500 dark:text-slate-400">Maqolalar</p>
-            <p id="statArticles" class="mt-2 font-display text-3xl font-extrabold text-qnavy dark:text-white">0</p>
-            <p class="mt-1 text-xs text-slate-500 dark:text-slate-400">Jami maqolalar soni</p>
-          </div>
+    <div class="max-w-4xl mx-auto p-4 md:p-6">
 
-          <div class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm dark:border-slate-800 dark:bg-slate-900">
-            <p class="text-xs font-bold uppercase tracking-[0.14em] text-slate-500 dark:text-slate-400">Reklama</p>
-            <p id="statAds" class="mt-2 font-display text-3xl font-extrabold text-qnavy dark:text-white">0</p>
-            <p class="mt-1 text-xs text-slate-500 dark:text-slate-400">Faol reklamalar</p>
+      <!-- Dashboard -->
+      <section id="view-dashboard">
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+          <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-5">
+            <div class="font-display font-extrabold text-2xl" id="statArticles">0</div>
+            <div class="text-sm text-slate-500 mt-1">Jami maqolalar</div>
           </div>
-
-          <div class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm dark:border-slate-800 dark:bg-slate-900">
-            <p class="text-xs font-bold uppercase tracking-[0.14em] text-slate-500 dark:text-slate-400">Ruknlar</p>
-            <p id="statCategories" class="mt-2 font-display text-3xl font-extrabold text-qnavy dark:text-white">0</p>
-            <p class="mt-1 text-xs text-slate-500 dark:text-slate-400">Faol ruknlar</p>
+          <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-5">
+            <div class="font-display font-extrabold text-2xl text-emerald-600" id="statPublished">0</div>
+            <div class="text-sm text-slate-500 mt-1">Nashr qilingan</div>
           </div>
-
-          <div class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm dark:border-slate-800 dark:bg-slate-900">
-            <p class="text-xs font-bold uppercase tracking-[0.14em] text-slate-500 dark:text-slate-400">Tizim</p>
-            <p id="statStatus" class="mt-2 font-display text-3xl font-extrabold text-qnavy dark:text-white">OK</p>
-            <p class="mt-1 text-xs text-slate-500 dark:text-slate-400">Server holati</p>
+          <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-5">
+            <div class="font-display font-extrabold text-2xl text-slate-400" id="statDraft">0</div>
+            <div class="text-sm text-slate-500 mt-1">Qoralama</div>
           </div>
-        </div>
-
-        <div class="mt-8 rounded-2xl border border-slate-200 bg-white p-6 dark:border-slate-800 dark:bg-slate-900">
-          <h2 class="font-display text-xl font-extrabold text-qnavy dark:text-white">So'nggi maqolalar</h2>
-          <div id="dashboardArticles" class="mt-5 grid gap-4 sm:grid-cols-2 lg:grid-cols-3"></div>
+          <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-5">
+            <div class="font-display font-extrabold text-2xl text-amber-500" id="statViews">0</div>
+            <div class="text-sm text-slate-500 mt-1">Jami ko'rishlar</div>
+          </div>
         </div>
       </section>
 
-      <!-- MAQOLALAR -->
-      <section id="articlesTab" class="tab-content hidden animate-fade-in">
-        <div class="mb-6 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+      <!-- Articles list -->
+      <section id="view-articles" class="hidden-imp">
+        <div class="flex justify-end mb-4">
+          <button id="newArticleBtn" class="bg-amber-450 text-ink font-semibold px-4 py-2.5 rounded-xl hover:brightness-95 active:scale-95 transition">+ Yangi maqola</button>
+        </div>
+        <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl overflow-x-auto">
+          <table class="w-full text-sm">
+            <thead><tr class="text-left text-slate-400 uppercase text-xs">
+              <th class="p-3">Sarlavha</th><th class="p-3">Kategoriya</th><th class="p-3">Holat</th><th class="p-3">Ko'rish</th><th class="p-3">Sana</th><th class="p-3"></th>
+            </tr></thead>
+            <tbody id="articlesTbody"><tr><td class="p-3" colspan="6">Yuklanmoqda...</td></tr></tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- Article form -->
+      <section id="view-articleForm" class="hidden-imp">
+        <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-5 md:p-6 space-y-4">
+          <input type="hidden" id="editId">
+          <div class="grid md:grid-cols-2 gap-4">
+            <div>
+              <label class="block text-sm font-semibold mb-1">Kategoriya</label>
+              <select id="fCat" class="w-full rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 px-4 py-2.5 outline-none focus:ring-2 ring-amber-450"></select>
+            </div>
+            <div>
+              <label class="block text-sm font-semibold mb-1">Holat</label>
+              <select id="fStatus" class="w-full rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 px-4 py-2.5 outline-none focus:ring-2 ring-amber-450">
+                <option value="published">Nashr qilingan</option>
+                <option value="draft">Qoralama</option>
+              </select>
+            </div>
+          </div>
           <div>
-            <p class="text-sm font-bold uppercase tracking-[0.14em] text-qgreen">Maqolalar boshqaruvi</p>
-            <h2 class="mt-1 font-display text-3xl font-extrabold tracking-tight text-qnavy dark:text-white">Maqolalar ro'yxati</h2>
+            <label class="block text-sm font-semibold mb-1">Sarlavha</label>
+            <input id="fTitle" class="w-full rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 px-4 py-2.5 outline-none focus:ring-2 ring-amber-450">
           </div>
-
-          <button id="newArticleButton" type="button" class="inline-flex items-center gap-2 rounded-xl bg-qblue px-5 py-3 font-bold text-white shadow-lg shadow-sky-900/15 transition hover:-translate-y-0.5 hover:bg-qnavy">
-            <svg viewBox="0 0 24 24" class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M12 5v14M5 12h14"></path>
-            </svg>
-            Yangi maqola
-          </button>
-        </div>
-
-        <div class="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm dark:border-slate-800 dark:bg-slate-900">
-          <div class="overflow-x-auto">
-            <table class="min-w-full text-left text-sm">
-              <thead class="border-b border-slate-200 bg-slate-50 dark:border-slate-800 dark:bg-slate-950">
-                <tr>
-                  <th class="px-5 py-4 font-bold text-slate-600 dark:text-slate-300">Sarlavha</th>
-                  <th class="px-5 py-4 font-bold text-slate-600 dark:text-slate-300">Rukn</th>
-                  <th class="px-5 py-4 font-bold text-slate-600 dark:text-slate-300">Turi</th>
-                  <th class="px-5 py-4 font-bold text-slate-600 dark:text-slate-300">Holat</th>
-                  <th class="px-5 py-4 font-bold text-slate-600 dark:text-slate-300">Amallar</th>
-                </tr>
-              </thead>
-              <tbody id="articlesTableBody" class="divide-y divide-slate-200 dark:divide-slate-800"></tbody>
-            </table>
-          </div>
-        </div>
-      </section>
-
-      <!-- RUKNLAR -->
-      <section id="categoriesTab" class="tab-content hidden animate-fade-in">
-        <div class="mb-6 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
           <div>
-            <p class="text-sm font-bold uppercase tracking-[0.14em] text-qgreen">Ruknlar boshqaruvi</p>
-            <h2 class="mt-1 font-display text-3xl font-extrabold tracking-tight text-qnavy dark:text-white">Ruknlar ro'yxati</h2>
+            <label class="block text-sm font-semibold mb-1">Qisqacha (lead)</label>
+            <input id="fLead" class="w-full rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 px-4 py-2.5 outline-none focus:ring-2 ring-amber-450">
           </div>
-
-          <button id="newCategoryButton" type="button" class="inline-flex items-center gap-2 rounded-xl bg-qblue px-5 py-3 font-bold text-white shadow-lg shadow-sky-900/15 transition hover:-translate-y-0.5 hover:bg-qnavy">
-            <svg viewBox="0 0 24 24" class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M12 5v14M5 12h14"></path>
-            </svg>
-            Yangi rukn
-          </button>
-        </div>
-
-        <div class="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm dark:border-slate-800 dark:bg-slate-900">
-          <div class="overflow-x-auto">
-            <table class="min-w-full text-left text-sm">
-              <thead class="border-b border-slate-200 bg-slate-50 dark:border-slate-800 dark:bg-slate-950">
-                <tr>
-                  <th class="px-5 py-4 font-bold text-slate-600 dark:text-slate-300">Rukn nomi</th>
-                  <th class="px-5 py-4 font-bold text-slate-600 dark:text-slate-300">Slug</th>
-                  <th class="px-5 py-4 font-bold text-slate-600 dark:text-slate-300">Holat</th>
-                  <th class="px-5 py-4 font-bold text-slate-600 dark:text-slate-300">Amallar</th>
-                </tr>
-              </thead>
-              <tbody id="categoriesTableBody" class="divide-y divide-slate-200 dark:divide-slate-800"></tbody>
-            </table>
-          </div>
-        </div>
-      </section>
-
-      <!-- REKLAMA -->
-      <section id="advertisementsTab" class="tab-content hidden animate-fade-in">
-        <div class="mb-6 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
           <div>
-            <p class="text-sm font-bold uppercase tracking-[0.14em] text-qgreen">Reklama boshqaruvi</p>
-            <h2 class="mt-1 font-display text-3xl font-extrabold tracking-tight text-qnavy dark:text-white">Reklamalar ro'yxati</h2>
+            <label class="block text-sm font-semibold mb-1">Muqova rasm havolasi (ixtiyoriy)</label>
+            <input id="fCover" placeholder="https://..." class="w-full rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 px-4 py-2.5 outline-none focus:ring-2 ring-amber-450">
+            <p class="text-xs text-slate-400 mt-1">Rasmni biror joyga (Google Drive, Imgur) yuklab, ochiq havolasini shu yerga qo'ying.</p>
           </div>
-
-          <button id="newAdButton" type="button" class="inline-flex items-center gap-2 rounded-xl bg-qblue px-5 py-3 font-bold text-white shadow-lg shadow-sky-900/15 transition hover:-translate-y-0.5 hover:bg-qnavy">
-            <svg viewBox="0 0 24 24" class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M12 5v14M5 12h14"></path>
-            </svg>
-            Yangi reklama
-          </button>
-        </div>
-
-        <div class="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm dark:border-slate-800 dark:bg-slate-900">
-          <div class="overflow-x-auto">
-            <table class="min-w-full text-left text-sm">
-              <thead class="border-b border-slate-200 bg-slate-50 dark:border-slate-800 dark:bg-slate-950">
-                <tr>
-                  <th class="px-5 py-4 font-bold text-slate-600 dark:text-slate-300">Sarlavha</th>
-                  <th class="px-5 py-4 font-bold text-slate-600 dark:text-slate-300">Kompaniya</th>
-                  <th class="px-5 py-4 font-bold text-slate-600 dark:text-slate-300">Holat</th>
-                  <th class="px-5 py-4 font-bold text-slate-600 dark:text-slate-300">Amallar</th>
-                </tr>
-              </thead>
-              <tbody id="adsTableBody" class="divide-y divide-slate-200 dark:divide-slate-800"></tbody>
-            </table>
+          <div class="max-w-[160px]">
+            <label class="block text-sm font-semibold mb-1">O'qish vaqti (daq.)</label>
+            <input id="fMin" type="number" min="1" value="5" class="w-full rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 px-4 py-2.5 outline-none focus:ring-2 ring-amber-450">
           </div>
+          <div>
+            <label class="block text-sm font-semibold mb-1">Maqola matni</label>
+            <div class="flex flex-wrap gap-2 border border-slate-200 dark:border-slate-700 border-b-0 rounded-t-xl p-2 bg-slate-50 dark:bg-slate-800">
+              <button type="button" data-cmd="bold" class="px-3 py-1.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 font-bold text-sm">B</button>
+              <button type="button" data-cmd="italic" class="px-3 py-1.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 italic text-sm">I</button>
+              <button type="button" data-cmd="formatBlock" data-val="H2" class="px-3 py-1.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 font-bold text-sm">H2</button>
+              <button type="button" data-cmd="insertUnorderedList" class="px-3 py-1.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-sm">• Ro'yxat</button>
+              <button type="button" id="linkBtn" class="px-3 py-1.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-sm">🔗 Havola</button>
+              <button type="button" data-cmd="removeFormat" class="px-3 py-1.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-sm">Tozalash</button>
+            </div>
+            <div id="fBody" contenteditable="true" class="rich border border-slate-200 dark:border-slate-700 rounded-b-xl p-4 outline-none focus:ring-2 ring-amber-450 bg-white dark:bg-slate-900"></div>
+          </div>
+          <div class="flex gap-3">
+            <button id="saveArticleBtn" class="bg-amber-450 text-ink font-semibold px-5 py-2.5 rounded-xl hover:brightness-95 active:scale-95 transition">Saqlash</button>
+            <button id="cancelArticleBtn" class="border border-slate-200 dark:border-slate-700 font-semibold px-5 py-2.5 rounded-xl">Bekor qilish</button>
+          </div>
+          <div id="articleMsg" class="text-sm"></div>
         </div>
       </section>
 
-      <!-- SOZLAMALAR -->
-      <section id="settingsTab" class="tab-content hidden animate-fade-in">
-        <div class="mb-6">
-          <p class="text-sm font-bold uppercase tracking-[0.14em] text-qgreen">Sayt sozlamalari</p>
-          <h2 class="mt-1 font-display text-3xl font-extrabold tracking-tight text-qnavy dark:text-white">Asosiy sozlamalar</h2>
+      <!-- Categories -->
+      <section id="view-categories" class="hidden-imp">
+        <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-5 md:p-6 mb-5">
+          <h2 id="catFormTitle" class="font-display font-bold text-lg mb-3">Yangi kategoriya</h2>
+          <input type="hidden" id="catEditId">
+          <label class="block text-sm font-semibold mb-1">Nomi</label>
+          <input id="catName" class="w-full rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 px-4 py-2.5 mb-3 outline-none focus:ring-2 ring-amber-450">
+          <label class="block text-sm font-semibold mb-1">Rangi</label>
+          <div class="flex items-center gap-3 mb-4">
+            <input id="catColor" type="color" value="#1F4E79" class="w-14 h-11 rounded-lg border border-slate-200 dark:border-slate-700">
+            <span id="catColorHex" class="text-sm font-mono">#1F4E79</span>
+          </div>
+          <div class="flex gap-3">
+            <button id="saveCatBtn" class="bg-amber-450 text-ink font-semibold px-5 py-2.5 rounded-xl hover:brightness-95 active:scale-95 transition">Saqlash</button>
+            <button id="cancelCatBtn" class="hidden-imp border border-slate-200 dark:border-slate-700 font-semibold px-5 py-2.5 rounded-xl">Bekor qilish</button>
+          </div>
+          <div id="catMsg" class="text-sm mt-2"></div>
         </div>
+        <div id="catList" class="grid gap-3"></div>
+      </section>
 
-        <div class="rounded-2xl border border-slate-200 bg-white p-6 dark:border-slate-800 dark:bg-slate-900">
-          <form id="settingsForm" class="grid gap-5 sm:grid-cols-2">
-            <div>
-              <label class="block text-sm font-bold text-slate-700 dark:text-slate-200">Sayt nomi</label>
-              <input type="text" name="site_name" class="mt-1 w-full rounded-xl border border-slate-300 bg-slate-50 px-4 py-3 outline-none transition focus:border-qblue focus:bg-white focus:ring-4 focus:ring-sky-100 dark:border-slate-700 dark:bg-slate-950 dark:focus:border-sky-400 dark:focus:bg-slate-950 dark:focus:ring-sky-900/30">
-            </div>
-
-            <div>
-              <label class="block text-sm font-bold text-slate-700 dark:text-slate-200">Telegram URL</label>
-              <input type="url" name="telegram_url" class="mt-1 w-full rounded-xl border border-slate-300 bg-slate-50 px-4 py-3 outline-none transition focus:border-qblue focus:bg-white focus:ring-4 focus:ring-sky-100 dark:border-slate-700 dark:bg-slate-950 dark:focus:border-sky-400 dark:focus:bg-slate-950 dark:focus:ring-sky-900/30">
-            </div>
-
-            <div>
-              <label class="block text-sm font-bold text-slate-700 dark:text-slate-200">Instagram URL</label>
-              <input type="url" name="instagram_url" class="mt-1 w-full rounded-xl border border-slate-300 bg-slate-50 px-4 py-3 outline-none transition focus:border-qblue focus:bg-white focus:ring-4 focus:ring-sky-100 dark:border-slate-700 dark:bg-slate-950 dark:focus:border-sky-400 dark:focus:bg-slate-950 dark:focus:ring-sky-900/30">
-            </div>
-
-            <div>
-              <label class="block text-sm font-bold text-slate-700 dark:text-slate-200">Facebook URL</label>
-              <input type="url" name="facebook_url" class="mt-1 w-full rounded-xl border border-slate-300 bg-slate-50 px-4 py-3 outline-none transition focus:border-qblue focus:bg-white focus:ring-4 focus:ring-sky-100 dark:border-slate-700 dark:bg-slate-950 dark:focus:border-sky-400 dark:focus:bg-slate-950 dark:focus:ring-sky-900/30">
-            </div>
-
-            <div>
-              <label class="block text-sm font-bold text-slate-700 dark:text-slate-200">YouTube URL</label>
-              <input type="url" name="youtube_url" class="mt-1 w-full rounded-xl border border-slate-300 bg-slate-50 px-4 py-3 outline-none transition focus:border-qblue focus:bg-white focus:ring-4 focus:ring-sky-100 dark:border-slate-700 dark:bg-slate-950 dark:focus:border-sky-400 dark:focus:bg-slate-950 dark:focus:ring-sky-900/30">
-            </div>
-
-            <div>
-              <label class="block text-sm font-bold text-slate-700 dark:text-slate-200">TikTok URL</label>
-              <input type="url" name="tiktok_url" class="mt-1 w-full rounded-xl border border-slate-300 bg-slate-50 px-4 py-3 outline-none transition focus:border-qblue focus:bg-white focus:ring-4 focus:ring-sky-100 dark:border-slate-700 dark:bg-slate-950 dark:focus:border-sky-400 dark:focus:bg-slate-950 dark:focus:ring-sky-900/30">
-            </div>
-
-            <div class="sm:col-span-2">
-              <label class="block text-sm font-bold text-slate-700 dark:text-slate-200">Tahririyat kontakti</label>
-              <input type="text" name="contact" class="mt-1 w-full rounded-xl border border-slate-300 bg-slate-50 px-4 py-3 outline-none transition focus:border-qblue focus:bg-white focus:ring-4 focus:ring-sky-100 dark:border-slate-700 dark:bg-slate-950 dark:focus:border-sky-400 dark:focus:bg-slate-950 dark:focus:ring-sky-900/30">
-            </div>
-
-            <div class="sm:col-span-2">
-              <label class="block text-sm font-bold text-slate-700 dark:text-slate-200">Sayt haqida</label>
-              <textarea name="about_text" rows="4" class="mt-1 w-full rounded-xl border border-slate-300 bg-slate-50 px-4 py-3 outline-none transition focus:border-qblue focus:bg-white focus:ring-4 focus:ring-sky-100 dark:border-slate-700 dark:bg-slate-950 dark:focus:border-sky-400 dark:focus:bg-slate-950 dark:focus:ring-sky-900/30"></textarea>
-            </div>
-
-            <div class="sm:col-span-2">
-              <button type="submit" class="inline-flex items-center gap-2 rounded-xl bg-qblue px-5 py-3.5 font-bold text-white shadow-lg shadow-sky-900/15 transition hover:-translate-y-0.5 hover:bg-qnavy">
-                Saqlash
-                <svg viewBox="0 0 24 24" class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2">
-                  <path d="M5 12h14M13 6l6 6-6 6"></path>
-                </svg>
-              </button>
-            </div>
-          </form>
+      <!-- Settings -->
+      <section id="view-settings" class="hidden-imp">
+        <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-5 md:p-6">
+          <h2 class="font-display font-bold text-lg mb-3">Parolni almashtirish</h2>
+          <label class="block text-sm font-semibold mb-1">Joriy parol</label>
+          <input id="pwCurrent" type="password" class="w-full rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 px-4 py-2.5 mb-3 outline-none focus:ring-2 ring-amber-450">
+          <label class="block text-sm font-semibold mb-1">Yangi parol (kamida 8 belgi)</label>
+          <input id="pwNew" type="password" class="w-full rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 px-4 py-2.5 mb-4 outline-none focus:ring-2 ring-amber-450">
+          <button id="pwSave" class="bg-amber-450 text-ink font-semibold px-5 py-2.5 rounded-xl hover:brightness-95 active:scale-95 transition">Saqlash</button>
+          <div id="pwMsg" class="text-sm mt-2"></div>
         </div>
       </section>
-    </main>
-  </div>
 
-  <!-- MAQOLA MODAL -->
-  <div id="articleModal" class="fixed inset-0 z-[60] hidden overflow-y-auto bg-slate-950/70 p-0 backdrop-blur-sm sm:p-6">
-    <div class="mx-auto min-h-full max-w-4xl sm:flex sm:min-h-full sm:items-center">
-      <div class="relative min-h-screen w-full bg-white shadow-2xl dark:bg-slate-900 sm:min-h-0 sm:rounded-3xl">
-        <button id="articleModalClose" type="button" class="absolute right-4 top-4 z-10 grid h-11 w-11 place-items-center rounded-xl bg-white/95 text-slate-700 shadow-lg hover:text-qblue dark:bg-slate-800/95 dark:text-slate-200" aria-label="Oynani yopish">
-          <svg viewBox="0 0 24 24" class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M6 6l12 12M18 6L6 18"></path>
-          </svg>
-        </button>
-
-        <div class="max-h-[90vh] overflow-y-auto px-5 py-8 sm:px-10 sm:py-10">
-          <h2 id="articleModalTitle" class="font-display text-2xl font-extrabold text-qnavy dark:text-white">Yangi maqola</h2>
-
-          <form id="articleForm" class="mt-6 grid gap-5">
-            <input type="hidden" name="id">
-
-            <div>
-              <label class="block text-sm font-bold text-slate-700 dark:text-slate-200">Sarlavha *</label>
-              <input type="text" name="title" required class="mt-1 w-full rounded-xl border border-slate-300 bg-slate-50 px-4 py-3 outline-none transition focus:border-qblue focus:bg-white focus:ring-4 focus:ring-sky-100 dark:border-slate-700 dark:bg-slate-950 dark:focus:border-sky-400 dark:focus:bg-slate-950 dark:focus:ring-sky-900/30">
-            </div>
-
-            <div>
-              <label class="block text-sm font-bold text-slate-700 dark:text-slate-200">Rukn *</label>
-              <select name="category" required class="mt-1 w-full rounded-xl border border-slate-300 bg-slate-50 px-4 py-3 outline-none transition focus:border-qblue focus:bg-white focus:ring-4 focus:ring-sky-100 dark:border-slate-700 dark:bg-slate-950 dark:focus:border-sky-400 dark:focus:bg-slate-950 dark:focus:ring-sky-900/30"></select>
-            </div>
-
-            <div class="grid gap-5 sm:grid-cols-2">
-              <div>
-                <label class="block text-sm font-bold text-slate-700 dark:text-slate-200">Maqola turi</label>
-                <select name="article_type" required class="mt-1 w-full rounded-xl border border-slate-300 bg-slate-50 px-4 py-3 outline-none transition focus:border-qblue focus:bg-white focus:ring-4 focus:ring-sky-100 dark:border-slate-700 dark:bg-slate-950 dark:focus:border-sky-400 dark:focus:bg-slate-950 dark:focus:ring-sky-900/30">
-                  <option value="guide">Qo'llanma</option>
-                  <option value="news">Yangilik</option>
-                  <option value="official">Rasmiy xabar</option>
-                  <option value="analysis">Tahlil</option>
-                  <option value="question">Savol-javob</option>
-                </select>
-              </div>
-
-              <div>
-                <label class="block text-sm font-bold text-slate-700 dark:text-slate-200">Holat</label>
-                <select name="status" required class="mt-1 w-full rounded-xl border border-slate-300 bg-slate-50 px-4 py-3 outline-none transition focus:border-qblue focus:bg-white focus:ring-4 focus:ring-sky-100 dark:border-slate-700 dark:bg-slate-950 dark:focus:border-sky-400 dark:focus:bg-slate-950 dark:focus:ring-sky-900/30">
-                  <option value="draft">Qoralama</option>
-                  <option value="published">Chiqarilgan</option>
-                </select>
-              </div>
-            </div>
-
-            <div>
-              <label class="block text-sm font-bold text-slate-700 dark:text-slate-200">Lid (qisqa kirish) *</label>
-              <textarea name="lead" required rows="3" class="mt-1 w-full rounded-xl border border-slate-300 bg-slate-50 px-4 py-3 outline-none transition focus:border-qblue focus:bg-white focus:ring-4 focus:ring-sky-100 dark:border-slate-700 dark:bg-slate-950 dark:focus:border-sky-400 dark:focus:bg-slate-950 dark:focus:ring-sky-900/30"></textarea>
-            </div>
-
-            <div>
-              <label class="block text-sm font-bold text-slate-700 dark:text-slate-200">Asosiy matn *</label>
-              <textarea name="body" required rows="10" class="mt-1 w-full rounded-xl border border-slate-300 bg-slate-50 px-4 py-3 outline-none transition focus:border-qblue focus:bg-white focus:ring-4 focus:ring-sky-100 dark:border-slate-700 dark:bg-slate-950 dark:focus:border-sky-400 dark:focus:bg-slate-950 dark:focus:ring-sky-900/30"></textarea>
-            </div>
-
-            <div class="grid gap-5 sm:grid-cols-2">
-              <div>
-                <label class="block text-sm font-bold text-slate-700 dark:text-slate-200">Muallif</label>
-                <input type="text" name="author" class="mt-1 w-full rounded-xl border border-slate-300 bg-slate-50 px-4 py-3 outline-none transition focus:border-qblue focus:bg-white focus:ring-4 focus:ring-sky-100 dark:border-slate-700 dark:bg-slate-950 dark:focus:border-sky-400 dark:focus:bg-slate-950 dark:focus:ring-sky-900/30">
-              </div>
-
-              <div>
-                <label class="block text-sm font-bold text-slate-700 dark:text-slate-200">O'qish vaqti (daqiqada)</label>
-                <input type="number" name="minutes" min="1" value="5" class="mt-1 w-full rounded-xl border border-slate-300 bg-slate-50 px-4 py-3 outline-none transition focus:border-qblue focus:bg-white focus:ring-4 focus:ring-sky-100 dark:border-slate-700 dark:bg-slate-950 dark:focus:border-sky-400 dark:focus:bg-slate-950 dark:focus:ring-sky-900/30">
-              </div>
-            </div>
-
-            <div class="grid gap-5 sm:grid-cols-2">
-              <div>
-                <label class="block text-sm font-bold text-slate-700 dark:text-slate-200">Rasm URL</label>
-                <input type="url" name="image_url" class="mt-1 w-full rounded-xl border border-slate-300 bg-slate-50 px-4 py-3 outline-none transition focus:border-qblue focus:bg-white focus:ring-4 focus:ring-sky-100 dark:border-slate-700 dark:bg-slate-950 dark:focus:border-sky-400 dark:focus:bg-slate-950 dark:focus:ring-sky-900/30">
-              </div>
-
-              <div>
-                <label class="block text-sm font-bold text-slate-700 dark:text-slate-200">Rasm izohi</label>
-                <input type="text" name="image_caption" class="mt-1 w-full rounded-xl border border-slate-300 bg-slate-50 px-4 py-3 outline-none transition focus:border-qblue focus:bg-white focus:ring-4 focus:ring-sky-100 dark:border-slate-700 dark:bg-slate-950 dark:focus:border-sky-400 dark:focus:bg-slate-950 dark:focus:ring-sky-900/30">
-              </div>
-            </div>
-
-            <div>
-              <label class="block text-sm font-bold text-slate-700 dark:text-slate-200">Tezklar</label>
-              <textarea name="steps" rows="4" class="mt-1 w-full rounded-xl border border-slate-300 bg-slate-50 px-4 py-3 outline-none transition focus:border-qblue focus:bg-white focus:ring-4 focus:ring-sky-100 dark:border-slate-700 dark:bg-slate-950 dark:focus:border-sky-400 dark:focus:bg-slate-950 dark:focus:ring-sky-900/30"></textarea>
-            </div>
-
-            <div>
-              <label class="block text-sm font-bold text-slate-700 dark:text-slate-200">E'tibor bering</label>
-              <textarea name="warning" rows="3" class="mt-1 w-full rounded-xl border border-slate-300 bg-slate-50 px-4 py-3 outline-none transition focus:border-qblue focus:bg-white focus:ring-4 focus:ring-sky-100 dark:border-slate-700 dark:bg-slate-950 dark:focus:border-sky-400 dark:focus:bg-slate-950 dark:focus:ring-sky-900/30"></textarea>
-            </div>
-
-            <div class="grid gap-5 sm:grid-cols-2">
-              <div>
-                <label class="block text-sm font-bold text-slate-700 dark:text-slate-200">Manba nomi</label>
-                <input type="text" name="source_name" class="mt-1 w-full rounded-xl border border-slate-300 bg-slate-50 px-4 py-3 outline-none transition focus:border-qblue focus:bg-white focus:ring-4 focus:ring-sky-100 dark:border-slate-700 dark:bg-slate-950 dark:focus:border-sky-400 dark:focus:bg-slate-950 dark:focus:ring-sky-900/30">
-              </div>
-
-              <div>
-                <label class="block text-sm font-bold text-slate-700 dark:text-slate-200">Manba URL</label>
-                <input type="url" name="source_url" class="mt-1 w-full rounded-xl border border-slate-300 bg-slate-50 px-4 py-3 outline-none transition focus:border-qblue focus:bg-white focus:ring-4 focus:ring-sky-100 dark:border-slate-700 dark:bg-slate-950 dark:focus:border-sky-400 dark:focus:bg-slate-950 dark:focus:ring-sky-900/30">
-              </div>
-            </div>
-
-            <div>
-              <label class="block text-sm font-bold text-slate-700 dark:text-slate-200">Hujjat raqami / manba</label>
-              <input type="text" name="document_no" class="mt-1 w-full rounded-xl border border-slate-300 bg-slate-50 px-4 py-3 outline-none transition focus:border-qblue focus:bg-white focus:ring-4 focus:ring-sky-100 dark:border-slate-700 dark:bg-slate-950 dark:focus:border-sky-400 dark:focus:bg-slate-950 dark:focus:ring-sky-900/30">
-            </div>
-
-            <div class="grid gap-5 sm:grid-cols-2">
-              <div>
-                <label class="block text-sm font-bold text-slate-700 dark:text-slate-200">Yangilangan sana</label>
-                <input type="date" name="updated" class="mt-1 w-full rounded-xl border border-slate-300 bg-slate-50 px-4 py-3 outline-none transition focus:border-qblue focus:bg-white focus:ring-4 focus:ring-sky-100 dark:border-slate-700 dark:bg-slate-950 dark:focus:border-sky-400 dark:focus:bg-slate-950 dark:focus:ring-sky-900/30">
-              </div>
-
-              <div>
-                <label class="block text-sm font-bold text-slate-700 dark:text-slate-200">Chiqarilgan sana</label>
-                <input type="datetime-local" name="published_at" class="mt-1 w-full rounded-xl border border-slate-300 bg-slate-50 px-4 py-3 outline-none transition focus:border-qblue focus:bg-white focus:ring-4 focus:ring-sky-100 dark:border-slate-700 dark:bg-slate-950 dark:focus:border-sky-400 dark:focus:bg-slate-950 dark:focus:ring-sky-900/30">
-              </div>
-            </div>
-
-            <div>
-              <label class="block text-sm font-bold text-slate-700 dark:text-slate-200">Teglar</label>
-              <input type="text" name="tags" class="mt-1 w-full rounded-xl border border-slate-300 bg-slate-50 px-4 py-3 outline-none transition focus:border-qblue focus:bg-white focus:ring-4 focus:ring-sky-100 dark:border-slate-700 dark:bg-slate-950 dark:focus:border-sky-400 dark:focus:bg-slate-950 dark:focus:ring-sky-900/30">
-            </div>
-
-            <div class="flex items-center gap-3">
-              <input type="checkbox" name="is_featured" id="is_featured" class="h-4 w-4 rounded border-slate-300 text-qblue focus:ring-qblue dark:border-slate-700 dark:bg-slate-950">
-              <label for="is_featured" class="text-sm font-bold text-slate-700 dark:text-slate-200">Bosh sahifada asosiy maqola</label>
-            </div>
-
-            <div class="flex items-center gap-3">
-              <input type="checkbox" name="is_pinned" id="is_pinned" class="h-4 w-4 rounded border-slate-300 text-qblue focus:ring-qblue dark:border-slate-700 dark:bg-slate-950">
-              <label for="is_pinned" class="text-sm font-bold text-slate-700 dark:text-slate-200">Muhim xabar sifatida ko'rsatish</label>
-            </div>
-
-            <div class="flex items-center gap-3">
-              <input type="checkbox" name="is_advertisement" id="is_advertisement" class="h-4 w-4 rounded border-slate-300 text-qblue focus:ring-qblue dark:border-slate-700 dark:bg-slate-950">
-              <label for="is_advertisement" class="text-sm font-bold text-slate-700 dark:text-slate-200">Reklama sifatida belgilash</label>
-            </div>
-
-            <div class="flex items-center gap-3">
-              <button type="submit" class="inline-flex items-center gap-2 rounded-xl bg-qblue px-5 py-3.5 font-bold text-white shadow-lg shadow-sky-900/15 transition hover:-translate-y-0.5 hover:bg-qnavy">
-                Saqlash
-                <svg viewBox="0 0 24 24" class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2">
-                  <path d="M5 12h14M13 6l6 6-6 6"></path>
-                </svg>
-              </button>
-
-              <button type="button" id="cancelArticleButton" class="rounded-xl border border-slate-300 bg-white px-5 py-3.5 font-bold text-slate-700 hover:border-qblue hover:text-qblue dark:border-slate-700 dark:bg-slate-950 dark:text-slate-200">
-                Bekor qilish
-              </button>
-            </div>
-          </form>
-        </div>
-      </div>
     </div>
   </div>
+</div>
 
-  <!-- RUKN MODAL -->
-  <div id="categoryModal" class="fixed inset-0 z-[60] hidden overflow-y-auto bg-slate-950/70 p-4 backdrop-blur-sm sm:p-6">
-    <div class="mx-auto max-w-lg rounded-2xl bg-white shadow-2xl dark:bg-slate-900">
-      <div class="mb-6 flex items-center justify-between">
-        <h2 id="categoryModalTitle" class="font-display text-2xl font-extrabold text-qnavy dark:text-white">Yangi rukn</h2>
-        <button id="categoryModalClose" type="button" class="grid h-10 w-10 place-items-center text-slate-500">
-          <svg viewBox="0 0 24 24" class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M6 6l12 12M18 6L6 18"></path>
-          </svg>
-        </button>
-      </div>
+<script>
+var $ = function(id){return document.getElementById(id)};
+var articles = [], categories = [];
+var currentView = 'dashboard';
 
-      <form id="categoryForm" class="px-6 pb-6">
-        <input type="hidden" name="id">
+function esc(s){ return String(s).replace(/[&<>"']/g,function(m){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[m]}); }
+function showMsg(el, text, ok){ el.className = 'text-sm ' + (ok?'text-emerald-600':'text-red-600'); el.textContent = text; }
+function clearMsg(el){ el.className='text-sm'; el.textContent=''; }
 
-        <div class="mb-5">
-          <label class="block text-sm font-bold text-slate-700 dark:text-slate-200">Rukn nomi *</label>
-          <input type="text" name="name" required class="mt-1 w-full rounded-xl border border-slate-300 bg-slate-50 px-4 py-3 outline-none transition focus:border-qblue focus:bg-white focus:ring-4 focus:ring-sky-100 dark:border-slate-700 dark:bg-slate-950 dark:focus:border-sky-400 dark:focus:bg-slate-950 dark:focus:ring-sky-900/30">
-        </div>
-
-        <div class="mb-5">
-          <label class="block text-sm font-bold text-slate-700 dark:text-slate-200">Slug</label>
-          <input type="text" name="slug" class="mt-1 w-full rounded-xl border border-slate-300 bg-slate-50 px-4 py-3 outline-none transition focus:border-qblue focus:bg-white focus:ring-4 focus:ring-sky-100 dark:border-slate-700 dark:bg-slate-950 dark:focus:border-sky-400 dark:focus:bg-slate-950 dark:focus:ring-sky-900/30">
-        </div>
-
-        <div class="mb-5 flex items-center gap-3">
-          <input type="checkbox" name="is_active" id="is_active" checked class="h-4 w-4 rounded border-slate-300 text-qblue focus:ring-qblue dark:border-slate-700 dark:bg-slate-950">
-          <label for="is_active" class="text-sm font-bold text-slate-700 dark:text-slate-200">Faol rukn</label>
-        </div>
-
-        <div class="flex gap-3">
-          <button type="submit" class="inline-flex items-center gap-2 rounded-xl bg-qblue px-5 py-3 font-bold text-white shadow-lg shadow-sky-900/15 transition hover:-translate-y-0.5 hover:bg-qnavy">
-            Saqlash
-          </button>
-
-          <button type="button" id="cancelCategoryButton" class="rounded-xl border border-slate-300 bg-white px-5 py-3 font-bold text-slate-700 hover:border-qblue hover:text-qblue dark:border-slate-700 dark:bg-slate-950 dark:text-slate-200">
-            Bekor qilish
-          </button>
-        </div>
-      </form>
-    </div>
-  </div>
-
-  <!-- AD MODAL -->
-  <div id="adModal" class="fixed inset-0 z-[60] hidden overflow-y-auto bg-slate-950/70 p-4 backdrop-blur-sm sm:p-6">
-    <div class="mx-auto max-w-lg rounded-2xl bg-white shadow-2xl dark:bg-slate-900">
-      <div class="mb-6 flex items-center justify-between">
-        <h2 id="adModalTitle" class="font-display text-2xl font-extrabold text-qnavy dark:text-white">Yangi reklama</h2>
-        <button id="adModalClose" type="button" class="grid h-10 w-10 place-items-center text-slate-500">
-          <svg viewBox="0 0 24 24" class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M6 6l12 12M18 6L6 18"></path>
-          </svg>
-        </button>
-      </div>
-
-      <form id="adForm" class="px-6 pb-6">
-        <input type="hidden" name="id">
-
-        <div class="mb-5">
-          <label class="block text-sm font-bold text-slate-700 dark:text-slate-200">Sarlavha *</label>
-          <input type="text" name="title" required class="mt-1 w-full rounded-xl border border-slate-300 bg-slate-50 px-4 py-3 outline-none transition focus:border-qblue focus:bg-white focus:ring-4 focus:ring-sky-100 dark:border-slate-700 dark:bg-slate-950 dark:focus:border-sky-400 dark:focus:bg-slate-950 dark:focus:ring-sky-900/30">
-        </div>
-
-        <div class="mb-5">
-          <label class="block text-sm font-bold text-slate-700 dark:text-slate-200">Kompaniya nomi</label>
-          <input type="text" name="company_name" class="mt-1 w-full rounded-xl border border-slate-300 bg-slate-50 px-4 py-3 outline-none transition focus:border-qblue focus:bg-white focus:ring-4 focus:ring-sky-100 dark:border-slate-700 dark:bg-slate-950 dark:focus:border-sky-400 dark:focus:bg-slate-950 dark:focus:ring-sky-900/30">
-        </div>
-
-        <div class="mb-5">
-          <label class="block text-sm font-bold text-slate-700 dark:text-slate-200">Holat</label>
-          <select name="status" class="mt-1 w-full rounded-xl border border-slate-300 bg-slate-50 px-4 py-3 outline-none transition focus:border-qblue focus:bg-white focus:ring-4 focus:ring-sky-100 dark:border-slate-700 dark:bg-slate-950 dark:focus:border-sky-400 dark:focus:bg-slate-950 dark:focus:ring-sky-900/30">
-            <option value="active">Faol</option>
-            <option value="inactive">Nofaol</option>
-          </select>
-        </div>
-
-        <div class="mb-5">
-          <label class="block text-sm font-bold text-slate-700 dark:text-slate-200">Rasm URL</label>
-          <input type="url" name="image_url" class="mt-1 w-full rounded-xl border border-slate-300 bg-slate-50 px-4 py-3 outline-none transition focus:border-qblue focus:bg-white focus:ring-4 focus:ring-sky-100 dark:border-slate-700 dark:bg-slate-950 dark:focus:border-sky-400 dark:focus:bg-slate-950 dark:focus:ring-sky-900/30">
-        </div>
-
-        <div class="mb-5">
-          <label class="block text-sm font-bold text-slate-700 dark:text-slate-200">Link</label>
-          <input type="url" name="link" class="mt-1 w-full rounded-xl border border-slate-300 bg-slate-50 px-4 py-3 outline-none transition focus:border-qblue focus:bg-white focus:ring-4 focus:ring-sky-100 dark:border-slate-700 dark:bg-slate-950 dark:focus:border-sky-400 dark:focus:bg-slate-950 dark:focus:ring-sky-900/30">
-        </div>
-
-        <div class="flex gap-3">
-          <button type="submit" class="inline-flex items-center gap-2 rounded-xl bg-qblue px-5 py-3 font-bold text-white shadow-lg shadow-sky-900/15 transition hover:-translate-y-0.5 hover:bg-qnavy">
-            Saqlash
-          </button>
-
-          <button type="button" id="cancelAdButton" class="rounded-xl border border-slate-300 bg-white px-5 py-3 font-bold text-slate-700 hover:border-qblue hover:text-qblue dark:border-slate-700 dark:bg-slate-950 dark:text-slate-200">
-            Bekor qilish
-          </button>
-        </div>
-      </form>
-    </div>
-  </div>
-
-  <script>
-    // ====== STORAGE ======
-    const STORAGE_ARTICLES = 'qi_articles';
-    const STORAGE_CATEGORIES = 'qi_categories';
-    const STORAGE_ADS = 'qi_advertisements';
-    const STORAGE_SETTINGS = 'qi_settings';
-    const STORAGE_THEME = 'qi_theme';
-
-    let articles = JSON.parse(localStorage.getItem(STORAGE_ARTICLES)) || [];
-    let categories = JSON.parse(localStorage.getItem(STORAGE_CATEGORIES)) || [];
-    let advertisements = JSON.parse(localStorage.getItem(STORAGE_ADS)) || [];
-    let settings = JSON.parse(localStorage.getItem(STORAGE_SETTINGS)) || {};
-
-    let editingArticleId = null;
-    let editingCategoryId = null;
-    let editingAdId = null;
-
-    const $ = (id) => document.getElementById(id);
-
-    // ====== UTILITY ======
-    function saveAll() {
-      localStorage.setItem(STORAGE_ARTICLES, JSON.stringify(articles));
-      localStorage.setItem(STORAGE_CATEGORIES, JSON.stringify(categories));
-      localStorage.setItem(STORAGE_ADS, JSON.stringify(advertisements));
-      localStorage.setItem(STORAGE_SETTINGS, JSON.stringify(settings));
-    }
-
-    function escapeHtml(str) {
-      const map = {
-        '&': '&amp;',
-        '<': '&lt;',
-        '>': '&gt;',
-        '"': '&quot;',
-        "'": '&#039;'
-      };
-      return String(str || '').replace(/[&<>"']/g, m => map[m]);
-    }
-
-    function nextId(list) {
-      if (!list.length) return 1;
-      return Math.max(...list.map(item => Number(item.id) || 0)) + 1;
-    }
-
-    function formatDate(value) {
-      if (!value) return '';
-      const date = new Date(value);
-      if (isNaN(date.getTime())) return String(value);
-      return date.toLocaleDateString('uz-UZ', { year: 'numeric', month: 'long', day: 'numeric' });
-    }
-
-    function articleTypeText(type) {
-      const map = {
-        'guide': 'Qo\'llanma',
-        'news': 'Yangilik',
-        'official': 'Rasmiy xabar',
-        'analysis': 'Tahlil',
-        'question': 'Savol-javob'
-      };
-      return map[type] || 'Maqola';
-    }
-
-    // ====== THEME ======
-    function initTheme() {
-      const saved = localStorage.getItem(STORAGE_THEME);
-      if (saved === 'dark') {
-        document.documentElement.classList.add('dark');
-        updateThemeIcon();
-      }
-    }
-
-    function updateThemeIcon() {
-      const icon = $('themeSunIcon');
-      if (document.documentElement.classList.contains('dark')) {
-        icon.innerHTML = '<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>';
-      } else {
-        icon.innerHTML = '<circle cx="12" cy="12" r="4"></circle><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"></path>';
-      }
-    }
-
-    $('themeButton').addEventListener('click', () => {
-      document.documentElement.classList.toggle('dark');
-      const isDark = document.documentElement.classList.contains('dark');
-      localStorage.setItem(STORAGE_THEME, isDark ? 'dark' : 'light');
-      updateThemeIcon();
+function api(url, opts){
+  opts = opts || {};
+  opts.headers = Object.assign({'Content-Type':'application/json'}, opts.headers||{});
+  opts.credentials = 'same-origin';
+  return fetch(url, opts).then(function(r){
+    return r.json().then(function(data){
+      if(!r.ok) throw new Error(data.error || 'Xatolik yuz berdi');
+      return data;
     });
+  });
+}
 
-    // ====== TAB NAVIGATION ======
-    function setTab(tabName) {
-      document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
-      document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
+/* ---------- Login ---------- */
+function checkLogin(){
+  api('/api/admin/check').then(function(d){ if(d.loggedIn){ showApp(); } else { showLogin(); } }).catch(function(){ showLogin(); });
+}
+function showLogin(){ $("loginView").classList.remove('hidden-imp'); $("appShell").classList.add('hidden-imp'); }
+function showApp(){
+  $("loginView").classList.add('hidden-imp'); $("appShell").classList.remove('hidden-imp');
+  loadAll(); switchView('dashboard');
+}
+$("loginBtn").addEventListener('click', function(){
+  clearMsg($("loginMsg"));
+  api('/api/login', {method:'POST', body: JSON.stringify({username:$("lu").value, password:$("lp").value})})
+    .then(function(){ $("lp").value=''; showApp(); })
+    .catch(function(e){ showMsg($("loginMsg"), e.message, false); });
+});
+$("logoutBtn").addEventListener('click', function(){ api('/api/logout', {method:'POST'}).then(showLogin); });
+$("viewSiteBtn").addEventListener('click', function(){ window.open('/', '_blank'); });
 
-      $(`${tabName}Tab`).classList.remove('hidden');
-      document.querySelector(`[data-tab="${tabName}"]`).classList.add('active');
+/* ---------- Theme ---------- */
+(function initTheme(){
+  var saved = localStorage.getItem('qi-admin-theme');
+  if(saved==='dark') document.documentElement.classList.add('dark');
+})();
+$("themeBtn").addEventListener('click', function(){
+  var isDark = document.documentElement.classList.toggle('dark');
+  localStorage.setItem('qi-admin-theme', isDark ? 'dark' : 'light');
+});
 
-      const titles = {
-        dashboard: 'Dashboard',
-        articles: 'Maqolalar',
-        categories: 'Ruknlar',
-        advertisements: 'Reklama',
-        settings: 'Sozlamalar'
-      };
+/* ---------- Sidebar / navigation ---------- */
+$("menuBtn").addEventListener('click', function(){ $("sidebar").classList.remove('-translate-x-full'); $("overlay").classList.remove('hidden'); });
+$("overlay").addEventListener('click', closeSidebar);
+function closeSidebar(){ $("sidebar").classList.add('-translate-x-full'); $("overlay").classList.add('hidden'); }
 
-      $('pageTitle').textContent = titles[tabName] || 'Admin Panel';
-    }
+var TITLES = {dashboard:"Boshqaruv paneli", articles:"Maqolalar", categories:"Kategoriyalar", settings:"Sozlamalar", articleForm:"Maqola"};
+Array.prototype.forEach.call(document.querySelectorAll('.navItem[data-view]'), function(btn){
+  btn.addEventListener('click', function(){ switchView(btn.getAttribute('data-view')); closeSidebar(); });
+});
+function switchView(name){
+  currentView = name;
+  Array.prototype.forEach.call(document.querySelectorAll('[id^="view-"]'), function(el){ el.classList.add('hidden-imp'); });
+  $("view-"+name).classList.remove('hidden-imp');
+  $("pageTitle").textContent = TITLES[name] || '';
+  Array.prototype.forEach.call(document.querySelectorAll('.navItem[data-view]'), function(btn){
+    btn.classList.toggle('bg-white/10', btn.getAttribute('data-view')===name);
+    btn.classList.toggle('text-amber-450', btn.getAttribute('data-view')===name);
+  });
+  if(name==='articles') renderArticlesTable();
+  if(name==='categories') renderCategoriesList();
+  if(name==='dashboard') loadStats();
+}
 
-    document.querySelectorAll('.nav-item').forEach(button => {
-      button.addEventListener('click', () => setTab(button.getAttribute('data-tab')));
+/* ---------- Load everything ---------- */
+function loadAll(){
+  loadStats();
+  api('/api/admin/categories').then(function(d){ categories = d; fillCategorySelect(); }).catch(function(){});
+  api('/api/admin/articles').then(function(d){ articles = d; if(currentView==='articles') renderArticlesTable(); }).catch(function(){});
+}
+function loadStats(){
+  api('/api/admin/stats').then(function(s){
+    $("statArticles").textContent = s.totalArticles;
+    $("statPublished").textContent = s.published;
+    $("statDraft").textContent = s.draft;
+    $("statViews").textContent = s.totalViews;
+  }).catch(function(){});
+}
+
+/* ---------- Articles table ---------- */
+function renderArticlesTable(){
+  if(!articles.length){ $("articlesTbody").innerHTML = '<tr><td class="p-3" colspan="6">Hozircha maqola yo\'q.</td></tr>'; return; }
+  $("articlesTbody").innerHTML = articles.map(function(a){
+    var cat = categories.filter(function(c){return c.name===a.category})[0];
+    var color = cat ? cat.color : '#1F4E79';
+    var statusBadge = a.status==='draft'
+      ? '<span class="px-2.5 py-1 rounded-full text-xs font-semibold bg-slate-100 text-slate-500 dark:bg-slate-800">Qoralama</span>'
+      : '<span class="px-2.5 py-1 rounded-full text-xs font-semibold bg-emerald-100 text-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-400">Nashr qilingan</span>';
+    return '<tr class="border-t border-slate-200 dark:border-slate-800">'
+      + '<td class="p-3 font-medium max-w-[220px] truncate">'+esc(a.title)+'</td>'
+      + '<td class="p-3"><span class="px-2.5 py-1 rounded-full text-xs font-semibold text-white" style="background:'+color+'">'+esc(a.category)+'</span></td>'
+      + '<td class="p-3">'+statusBadge+'</td>'
+      + '<td class="p-3">'+a.views+'</td>'
+      + '<td class="p-3 text-slate-400">'+esc(a.created_at)+'</td>'
+      + '<td class="p-3 flex gap-2"><button class="px-3 py-1.5 rounded-lg border border-slate-200 dark:border-slate-700 text-xs font-semibold" data-edit="'+a.id+'">Tahrirlash</button><button class="px-3 py-1.5 rounded-lg bg-red-600 text-white text-xs font-semibold" data-del="'+a.id+'">O\'chirish</button></td>'
+      + '</tr>';
+  }).join('');
+}
+$("articlesTbody").addEventListener('click', function(e){
+  var editId = e.target.getAttribute('data-edit');
+  var delId = e.target.getAttribute('data-del');
+  if(editId) startEditArticle(editId);
+  if(delId){
+    if(!confirm("Maqolani o'chirishni tasdiqlaysizmi?")) return;
+    api('/api/admin/articles/'+delId, {method:'DELETE'}).then(function(){ loadAll(); });
+  }
+});
+$("newArticleBtn").addEventListener('click', function(){ resetArticleForm(); switchView('articleForm'); });
+$("cancelArticleBtn").addEventListener('click', function(){ switchView('articles'); });
+
+function fillCategorySelect(){
+  $("fCat").innerHTML = categories.map(function(c){ return '<option value="'+esc(c.name)+'">'+esc(c.name)+'</option>'; }).join('');
+}
+function resetArticleForm(){
+  $("editId").value=''; $("fTitle").value=''; $("fLead").value=''; $("fCover").value=''; $("fMin").value=5;
+  $("fBody").innerHTML=''; $("fStatus").value='published';
+  if(categories.length) $("fCat").value = categories[0].name;
+  $("pageTitle").textContent = 'Yangi maqola';
+  clearMsg($("articleMsg"));
+}
+function startEditArticle(id){
+  var a = articles.filter(function(x){return x.id==id})[0]; if(!a) return;
+  switchView('articleForm');
+  $("editId").value = a.id;
+  $("fCat").value = a.category;
+  $("fStatus").value = a.status || 'published';
+  $("fTitle").value = a.title;
+  $("fLead").value = a.lead;
+  $("fCover").value = a.cover_image_url || '';
+  $("fMin").value = a.minutes;
+  var looksHtml = /<[a-z][\s\S]*>/i.test(a.body);
+  if(looksHtml){ $("fBody").innerHTML = a.body; }
+  else { $("fBody").innerHTML = String(a.body).split(/\n\n+/).map(function(p){ return '<p>'+esc(p)+'</p>'; }).join(''); }
+  $("pageTitle").textContent = 'Maqolani tahrirlash';
+  clearMsg($("articleMsg"));
+}
+
+/* Rich text toolbar */
+Array.prototype.forEach.call(document.querySelectorAll('[data-cmd]'), function(btn){
+  btn.addEventListener('click', function(){
+    $("fBody").focus();
+    document.execCommand(btn.getAttribute('data-cmd'), false, btn.getAttribute('data-val') || null);
+  });
+});
+$("linkBtn").addEventListener('click', function(){
+  var url = prompt("Havola manzilini kiriting (https://...)");
+  if(url){ $("fBody").focus(); document.execCommand('createLink', false, url); }
+});
+
+$("saveArticleBtn").addEventListener('click', function(){
+  clearMsg($("articleMsg"));
+  var payload = {
+    category: $("fCat").value,
+    status: $("fStatus").value,
+    title: $("fTitle").value.trim(),
+    lead: $("fLead").value.trim(),
+    cover_image_url: $("fCover").value.trim(),
+    minutes: $("fMin").value,
+    body: $("fBody").innerHTML.trim()
+  };
+  if(!payload.category || !payload.title || !payload.lead || !payload.body){
+    showMsg($("articleMsg"), "Kategoriya, sarlavha, qisqacha va matnni to'ldiring.", false); return;
+  }
+  var id = $("editId").value;
+  var req = id ? api('/api/admin/articles/'+id, {method:'PUT', body: JSON.stringify(payload)})
+               : api('/api/admin/articles', {method:'POST', body: JSON.stringify(payload)});
+  req.then(function(){ loadAll(); switchView('articles'); })
+     .catch(function(e){ showMsg($("articleMsg"), e.message, false); });
+});
+
+/* ---------- Categories ---------- */
+$("catColor").addEventListener('input', function(){ $("catColorHex").textContent = this.value; });
+function renderCategoriesList(){
+  $("catList").innerHTML = categories.map(function(c){
+    return '<div class="flex items-center gap-3 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-4">'
+      + '<div class="w-6 h-6 rounded-md flex-shrink-0" style="background:'+c.color+'"></div>'
+      + '<span class="flex-1 font-medium">'+esc(c.name)+'</span>'
+      + '<button class="px-3 py-1.5 rounded-lg border border-slate-200 dark:border-slate-700 text-xs font-semibold" data-catedit="'+c.id+'">Tahrirlash</button>'
+      + '<button class="px-3 py-1.5 rounded-lg bg-red-600 text-white text-xs font-semibold" data-catdel="'+c.id+'">O\'chirish</button></div>';
+  }).join('');
+}
+$("catList").addEventListener('click', function(e){
+  var editId = e.target.getAttribute('data-catedit');
+  var delId = e.target.getAttribute('data-catdel');
+  if(editId){
+    var c = categories.filter(function(x){return x.id==editId})[0]; if(!c) return;
+    $("catEditId").value = c.id; $("catName").value = c.name; $("catColor").value = c.color; $("catColorHex").textContent = c.color;
+    $("catFormTitle").textContent = "Kategoriyani tahrirlash";
+    $("cancelCatBtn").classList.remove('hidden-imp');
+  }
+  if(delId){
+    if(!confirm("Kategoriyani o'chirishni tasdiqlaysizmi? Unga bog'liq maqolalar o'chmaydi, lekin kategoriyasiz qoladi.")) return;
+    api('/api/admin/categories/'+delId, {method:'DELETE'}).then(function(){
+      api('/api/admin/categories').then(function(d){ categories = d; fillCategorySelect(); renderCategoriesList(); });
     });
+  }
+});
+$("cancelCatBtn").addEventListener('click', resetCatForm);
+function resetCatForm(){
+  $("catEditId").value=''; $("catName").value=''; $("catColor").value='#1F4E79'; $("catColorHex").textContent='#1F4E79';
+  $("catFormTitle").textContent = "Yangi kategoriya";
+  $("cancelCatBtn").classList.add('hidden-imp');
+  clearMsg($("catMsg"));
+}
+$("saveCatBtn").addEventListener('click', function(){
+  clearMsg($("catMsg"));
+  var name = $("catName").value.trim(), color = $("catColor").value;
+  if(!name){ showMsg($("catMsg"), "Nomini kiriting.", false); return; }
+  var id = $("catEditId").value;
+  var req = id ? api('/api/admin/categories/'+id, {method:'PUT', body: JSON.stringify({name:name,color:color})})
+               : api('/api/admin/categories', {method:'POST', body: JSON.stringify({name:name,color:color})});
+  req.then(function(){
+    resetCatForm();
+    api('/api/admin/categories').then(function(d){ categories = d; fillCategorySelect(); renderCategoriesList(); });
+    api('/api/admin/articles').then(function(d){ articles = d; });
+  }).catch(function(e){ showMsg($("catMsg"), e.message, false); });
+});
 
-    // ====== SIDEBAR ======
-    $('sidebarOpenButton').addEventListener('click', () => {
-      $('sidebar').classList.remove('-translate-x-full');
-      $('mobileOverlay').classList.remove('hidden');
-    });
+/* ---------- Settings: change password ---------- */
+$("pwSave").addEventListener('click', function(){
+  clearMsg($("pwMsg"));
+  api('/api/admin/change-password', {method:'POST', body: JSON.stringify({currentPassword:$("pwCurrent").value, newPassword:$("pwNew").value})})
+    .then(function(){ showMsg($("pwMsg"), "Parol almashtirildi.", true); $("pwCurrent").value=''; $("pwNew").value=''; })
+    .catch(function(e){ showMsg($("pwMsg"), e.message, false); });
+});
 
-    $('sidebarCloseButton').addEventListener('click', () => {
-      $('sidebar').classList.add('-translate-x-full');
-      $('mobileOverlay').classList.add('hidden');
-    });
-
-    $('mobileOverlay').addEventListener('click', () => {
-      $('sidebar').classList.add('-translate-x-full');
-      $('mobileOverlay').classList.add('hidden');
-    });
-
-    // ====== RENDER DASHBOARD ======
-    function renderDashboard() {
-      $('statArticles').textContent = articles.length;
-      $('statCategories').textContent = categories.filter(c => c.is_active).length;
-      $('statAds').textContent = advertisements.filter(a => a.status === 'active').length;
-      $('statStatus').textContent = 'OK';
-
-      const latest = [...articles].reverse().slice(0, 6);
-      $('dashboardArticles').innerHTML = latest.map(article => `
-        <article class="rounded-xl border border-slate-200 bg-slate-50 p-4 dark:border-slate-800 dark:bg-slate-950">
-          <div class="flex items-center justify-between gap-2 text-xs font-bold text-slate-500 dark:text-slate-400">
-            <span>${escapeHtml(article.category)}</span>
-            <span>${formatDate(article.updated)}</span>
-          </div>
-          <h3 class="mt-2 line-clamp-2 font-display text-base font-bold text-qnavy dark:text-white">${escapeHtml(article.title)}</h3>
-        </article>
-      `).join('');
-    }
-
-    // ====== RENDER ARTICLES ======
-    function renderArticles() {
-      const tbody = $('articlesTableBody');
-      tbody.innerHTML = articles.map(article => `
-        <tr class="hover:bg-slate-50 dark:hover:bg-slate-950">
-          <td class="px-5 py-4">
-            <div class="font-semibold text-slate-800 dark:text-slate-200">${escapeHtml(article.title)}</div>
-            <div class="text-xs text-slate-500 dark:text-slate-400">${formatDate(article.updated)}</div>
-          </td>
-          <td class="px-5 py-4 text-slate-700 dark:text-slate-300">${escapeHtml(article.category)}</td>
-          <td class="px-5 py-4 text-slate-700 dark:text-slate-300">${articleTypeText(article.article_type)}</td>
-          <td class="px-5 py-4">
-            <span class="rounded-full ${article.status === 'published' ? 'bg-emerald-100 text-emerald-800 dark:bg-emerald-950/50 dark:text-emerald-300' : 'bg-orange-100 text-orange-800 dark:bg-orange-950/50 dark:text-orange-300'} px-3 py-1 text-xs font-bold">
-              ${article.status === 'published' ? 'Chiqarilgan' : 'Qoralama'}
-            </span>
-          </td>
-          <td class="px-5 py-4">
-            <div class="flex gap-2">
-              <button onclick="editArticleModal(${article.id})" class="rounded-lg border border-slate-300 bg-white px-3 py-1.5 text-xs font-bold text-slate-700 hover:border-qblue dark:border-slate-700 dark:bg-slate-950 dark:text-slate-200">Tahrirlash</button>
-              <button onclick="deleteArticle(${article.id})" class="rounded-lg border border-red-300 bg-white px-3 py-1.5 text-xs font-bold text-red-700 dark:border-red-800 dark:bg-slate-950 dark:text-red-300">O'chirish</button>
-            </div>
-          </td>
-        </tr>
-      `).join('');
-    }
-
-    // ====== RENDER CATEGORIES ======
-    function renderCategories() {
-      const tbody = $('categoriesTableBody');
-      tbody.innerHTML = categories.map((category, idx) => `
-        <tr class="hover:bg-slate-50 dark:hover:bg-slate-950">
-          <td class="px-5 py-4 font-semibold text-slate-800 dark:text-slate-200">${escapeHtml(category.name)}</td>
-          <td class="px-5 py-4 text-slate-700 dark:text-slate-300">${escapeHtml(category.slug)}</td>
-          <td class="px-5 py-4">
-            <span class="rounded-full ${category.is_active ? 'bg-emerald-100 text-emerald-800 dark:bg-emerald-950/50 dark:text-emerald-300' : 'bg-slate-200 text-slate-700 dark:bg-slate-800 dark:text-slate-300'} px-3 py-1 text-xs font-bold">
-              ${category.is_active ? 'Faol' : 'Nofaol'}
-            </span>
-          </td>
-          <td class="px-5 py-4">
-            <div class="flex gap-2">
-              <button onclick="editCategoryModal(${category.id})" class="rounded-lg border border-slate-300 bg-white px-3 py-1.5 text-xs font-bold text-slate-700 hover:border-qblue dark:border-slate-700 dark:bg-slate-950 dark:text-slate-200">Tahrirlash</button>
-              <button onclick="deleteCategory(${category.id})" class="rounded-lg border border-red-300 bg-white px-3 py-1.5 text-xs font-bold text-red-700 dark:border-red-800 dark:bg-slate-950 dark:text-red-300">O'chirish</button>
-            </div>
-          </td>
-        </tr>
-      `).join('');
-    }
-
-    // ====== RENDER ADS ======
-    function renderAds() {
-      const tbody = $('adsTableBody');
-      tbody.innerHTML = advertisements.map(ad => `
-        <tr class="hover:bg-slate-50 dark:hover:bg-slate-950">
-          <td class="px-5 py-4 font-semibold text-slate-800 dark:text-slate-200">${escapeHtml(ad.title)}</td>
-          <td class="px-5 py-4 text-slate-700 dark:text-slate-300">${escapeHtml(ad.company_name || '—')}</td>
-          <td class="px-5 py-4">
-            <span class="rounded-full ${ad.status === 'active' ? 'bg-emerald-100 text-emerald-800 dark:bg-emerald-950/50 dark:text-emerald-300' : 'bg-slate-200 text-slate-700 dark:bg-slate-800 dark:text-slate-300'} px-3 py-1 text-xs font-bold">
-              ${ad.status === 'active' ? 'Faol' : 'Nofaol'}
-            </span>
-          </td>
-          <td class="px-5 py-4">
-            <div class="flex gap-2">
-              <button onclick="editAdModal(${ad.id})" class="rounded-lg border border-slate-300 bg-white px-3 py-1.5 text-xs font-bold text-slate-700 hover:border-qblue dark:border-slate-700 dark:bg-slate-950 dark:text-slate-200">Tahrirlash</button>
-              <button onclick="deleteAd(${ad.id})" class="rounded-lg border border-red-300 bg-white px-3 py-1.5 text-xs font-bold text-red-700 dark:border-red-800 dark:bg-slate-950 dark:text-red-300">O'chirish</button>
-            </div>
-          </td>
-        </tr>
-      `).join('');
-    }
-
-    // ====== RENDER SETTINGS ======
-    function renderSettings() {
-      const form = $('settingsForm');
-      form.site_name.value = settings.site_name || '';
-      form.telegram_url.value = settings.telegram_url || '';
-      form.instagram_url.value = settings.instagram_url || '';
-      form.facebook_url.value = settings.facebook_url || '';
-      form.youtube_url.value = settings.youtube_url || '';
-      form.tiktok_url.value = settings.tiktok_url || '';
-      form.contact.value = settings.contact || '';
-      form.about_text.value = settings.about_text || '';
-    }
-
-    function renderAll() {
-      renderDashboard();
-      renderArticles();
-      renderCategories();
-      renderAds();
-      renderSettings();
-      populateCategorySelect();
-    }
-
-    // ====== ARTICLE MODAL ======
-    function populateCategorySelect() {
-      const select = $('articleForm').querySelector('select[name="category"]');
-      select.innerHTML = categories
-        .filter(c => c.is_active)
-        .map(c => `<option value="${escapeHtml(c.name)}">${escapeHtml(c.name)}</option>`)
-        .join('');
-    }
-
-    $('newArticleButton').addEventListener('click', () => {
-      editingArticleId = null;
-      $('articleModalTitle').textContent = 'Yangi maqola';
-      $('articleForm').reset();
-      $('articleForm').querySelector('input[name="id"]').value = '';
-      $('articleForm').querySelector('select[name="status"]').value = 'draft';
-      $('articleForm').querySelector('input[name="minutes"]').value = '5';
-      populateCategorySelect();
-      $('articleModal').classList.remove('hidden');
-    });
-
-    function editArticleModal(id) {
-      const article = articles.find(a => a.id === id);
-      if (!article) return;
-
-      editingArticleId = id;
-      const form = $('articleForm');
-
-      $('articleModalTitle').textContent = 'Maqolani tahrirlash';
-      form.id.value = article.id;
-      form.title.value = article.title || '';
-      form.category.value = article.category || '';
-      form.article_type.value = article.article_type || 'guide';
-      form.status.value = article.status || 'draft';
-      form.lead.value = article.lead || '';
-      form.body.value = article.body || '';
-      form.author.value = article.author || '';
-      form.minutes.value = article.minutes || 5;
-      form.image_url.value = article.image_url || '';
-      form.image_caption.value = article.image_caption || '';
-      form.steps.value = article.steps || '';
-      form.warning.value = article.warning || '';
-      form.source_name.value = article.source_name || '';
-      form.source_url.value = article.source_url || '';
-      form.document_no.value = article.document_no || '';
-      form.updated.value = article.updated || '';
-      form.published_at.value = article.published_at || '';
-      form.tags.value = article.tags || '';
-      form.is_featured.checked = article.is_featured ? true : false;
-      form.is_pinned.checked = article.is_pinned ? true : false;
-      form.is_advertisement.checked = article.is_advertisement ? true : false;
-
-      populateCategorySelect();
-      $('articleModal').classList.remove('hidden');
-    }
-
-    $('articleModalClose').addEventListener('click', () => {
-      $('articleModal').classList.add('hidden');
-    });
-
-    $('cancelArticleButton').addEventListener('click', () => {
-      $('articleModal').classList.add('hidden');
-    });
-
-    $('articleModal').addEventListener('click', (e) => {
-      if (e.target === $('articleModal')) {
-        $('articleModal').classList.add('hidden');
-      }
-    });
-
-    $('articleForm').addEventListener('submit', (e) => {
-      e.preventDefault();
-
-      const form = $('articleForm');
-      const data = {
-        title: form.title.value.trim(),
-        category: form.category.value,
-        article_type: form.article_type.value,
-        status: form.status.value,
-        lead: form.lead.value.trim(),
-        body: form.body.value.trim(),
-        author: form.author.value.trim(),
-        minutes: Number(form.minutes.value) || 5,
-        image_url: form.image_url.value.trim(),
-        image_caption: form.image_caption.value.trim(),
-        steps: form.steps.value.trim(),
-        warning: form.warning.value.trim(),
-        source_name: form.source_name.value.trim(),
-        source_url: form.source_url.value.trim(),
-        document_no: form.document_no.value.trim(),
-        updated: form.updated.value,
-        published_at: form.published_at.value,
-        tags: form.tags.value.trim(),
-        is_featured: form.is_featured.checked ? 1 : 0,
-        is_pinned: form.is_pinned.checked ? 1 : 0,
-        is_advertisement: form.is_advertisement.checked ? 1 : 0
-      };
-
-      if (editingArticleId) {
-        const idx = articles.findIndex(a => a.id === editingArticleId);
-        articles[idx] = { ...articles[idx], ...data };
-      } else {
-        articles.push({ id: nextId(articles), ...data });
-      }
-
-      saveAll();
-      renderAll();
-      $('articleModal').classList.add('hidden');
-      alert('Saqlandi');
-    });
-
-    function deleteArticle(id) {
-      if (!confirm('O\'chirish ishonchisizmi?')) return;
-      articles = articles.filter(a => a.id !== id);
-      saveAll();
-      renderAll();
-    }
-
-    // ====== CATEGORY MODAL ======
-    $('newCategoryButton').addEventListener('click', () => {
-      editingCategoryId = null;
-      $('categoryModalTitle').textContent = 'Yangi rukn';
-      $('categoryForm').reset();
-      $('categoryForm').querySelector('input[name="id"]').value = '';
-      $('categoryForm').querySelector('input[name="is_active"]').checked = true;
-      $('categoryModal').classList.remove('hidden');
-    });
-
-    function editCategoryModal(id) {
-      const category = categories.find(c => c.id === id);
-      if (!category) return;
-
-      editingCategoryId = id;
-      const form = $('categoryForm');
-
-      $('categoryModalTitle').textContent = 'Ruknni tahrirlash';
-      form.id.value = category.id;
-      form.name.value = category.name || '';
-      form.slug.value = category.slug || '';
-      form.is_active.checked = category.is_active ? true : false;
-
-      $('categoryModal').classList.remove('hidden');
-    }
-
-    $('categoryModalClose').addEventListener('click', () => {
-      $('categoryModal').classList.add('hidden');
-    });
-
-    $('cancelCategoryButton').addEventListener('click', () => {
-      $('categoryModal').classList.add('hidden');
-    });
-
-    $('categoryModal').addEventListener('click', (e) => {
-      if (e.target === $('categoryModal')) {
-        $('categoryModal').classList.add('hidden');
-      }
-    });
-
-    $('categoryForm').addEventListener('submit', (e) => {
-      e.preventDefault();
-
-      const form = $('categoryForm');
-      const name = form.name.value.trim();
-      if (!name) {
-        alert('Rukn nomini yozing');
-        return;
-      }
-
-      const slug = form.slug.value.trim() || 
-        name.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '');
-
-      const data = {
-        name,
-        slug,
-        is_active: form.is_active.checked ? true : false
-      };
-
-      if (editingCategoryId) {
-        const idx = categories.findIndex(c => c.id === editingCategoryId);
-        categories[idx] = { ...categories[idx], ...data };
-      } else {
-        categories.push({ id: nextId(categories), ...data });
-      }
-
-      saveAll();
-      renderAll();
-      $('categoryModal').classList.add('hidden');
-      alert('Saqlandi');
-    });
-
-    function deleteCategory(id) {
-      const used = articles.some(a => {
-        const cat = categories.find(c => c.id === id);
-        return a.category === cat.name;
-      });
-
-      if (used) {
-        alert('Bu ruknda maqolalar bor');
-        return;
-      }
-
-      if (!confirm('O\'chirish ishonchisizmi?')) return;
-      categories = categories.filter(c => c.id !== id);
-      saveAll();
-      renderAll();
-    }
-
-    // ====== AD MODAL ======
-    $('newAdButton').addEventListener('click', () => {
-      editingAdId = null;
-      $('adModalTitle').textContent = 'Yangi reklama';
-      $('adForm').reset();
-      $('adForm').querySelector('input[name="id"]').value = '';
-      $('adForm').querySelector('select[name="status"]').value = 'active';
-      $('adModal').classList.remove('hidden');
-    });
-
-    function editAdModal(id) {
-      const ad = advertisements.find(a => a.id === id);
-      if (!ad) return;
-
-      editingAdId = id;
-      const form = $('adForm');
-
-      $('adModalTitle').textContent = 'Reklamani tahrirlash';
-      form.id.value = ad.id;
-      form.title.value = ad.title || '';
-      form.company_name.value = ad.company_name || '';
-      form.status.value = ad.status || 'active';
-      form.image_url.value = ad.image_url || '';
-      form.link.value = ad.link || '';
-
-      $('adModal').classList.remove('hidden');
-    }
-
-    $('adModalClose').addEventListener('click', () => {
-      $('adModal').classList.add('hidden');
-    });
-
-    $('cancelAdButton').addEventListener('click', () => {
-      $('adModal').classList.add('hidden');
-    });
-
-    $('adModal').addEventListener('click', (e) => {
-      if (e.target === $('adModal')) {
-        $('adModal').classList.add('hidden');
-      }
-    });
-
-    $('adForm').addEventListener('submit', (e) => {
-      e.preventDefault();
-
-      const form = $('adForm');
-      const data = {
-        title: form.title.value.trim(),
-        company_name: form.company_name.value.trim(),
-        status: form.status.value,
-        image_url: form.image_url.value.trim(),
-        link: form.link.value.trim()
-      };
-
-      if (editingAdId) {
-        const idx = advertisements.findIndex(a => a.id === editingAdId);
-        advertisements[idx] = { ...advertisements[idx], ...data };
-      } else {
-        advertisements.push({ id: nextId(advertisements), ...data });
-      }
-
-      saveAll();
-      renderAll();
-      $('adModal').classList.add('hidden');
-      alert('Saqlandi');
-    });
-
-    function deleteAd(id) {
-      if (!confirm('O\'chirish ishonchisizmi?')) return;
-      advertisements = advertisements.filter(a => a.id !== id);
-      saveAll();
-      renderAll();
-    }
-
-    // ====== SETTINGS ======
-    $('settingsForm').addEventListener('submit', (e) => {
-      e.preventDefault();
-
-      const form = $('settingsForm');
-      settings = {
-        site_name: form.site_name.value.trim(),
-        telegram_url: form.telegram_url.value.trim(),
-        instagram_url: form.instagram_url.value.trim(),
-        facebook_url: form.facebook_url.value.trim(),
-        youtube_url: form.youtube_url.value.trim(),
-        tiktok_url: form.tiktok_url.value.trim(),
-        contact: form.contact.value.trim(),
-        about_text: form.about_text.value.trim()
-      };
-
-      saveAll();
-      alert('Sozlamalar saqlandi');
-    });
-
-    // ====== INIT ======
-    initTheme();
-    renderAll();
-  </script>
+checkLogin();
+</script>
 </body>
 </html>
