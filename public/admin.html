@@ -1,469 +1,770 @@
 <!DOCTYPE html>
-<html lang="uz">
+<html lang="uz" class="scroll-smooth">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>QurilishInfo — Admin panel</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Admin panel — QurilishInfo</title>
+<script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+<style type="text/tailwindcss">
+@theme {
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Manrope", ui-sans-serif, system-ui, sans-serif;
+  --color-qblue: #0b4f7c;
+  --color-qnavy: #073b61;
+  --color-qgreen: #138a5b;
+  --color-qgreen-dark: #0c6d47;
+  --color-qsoft: #f3f7fa;
+  --color-qline: #dce5eb;
+  --color-qink: #17212b;
+}
+.no-scrollbar::-webkit-scrollbar{display:none}
+.no-scrollbar{-ms-overflow-style:none;scrollbar-width:none}
+@keyframes toast-in{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.toast{animation:toast-in .25s ease both}
+</style>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Sora:wght@600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-<script src="https://cdn.tailwindcss.com"></script>
-<script>
-tailwind.config = {
-  darkMode: 'class',
-  theme: {
-    extend: {
-      fontFamily: { display: ['Sora','system-ui','sans-serif'], sans: ['Inter','system-ui','sans-serif'] },
-      colors: { ink: '#0B1220', amber: { 450: '#F5A524' } }
-    }
-  }
-}
-</script>
-<style>
-  body{font-family:Inter,system-ui,sans-serif}
-  .font-display{font-family:Sora,system-ui,sans-serif}
-  .icon{width:20px;height:20px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
-  .diag-tape{background-image:repeating-linear-gradient(45deg,#0B1220 0 14px,#F5A524 14px 28px)}
-  .rich{min-height:220px}
-  .rich p{margin:0 0 .85rem}
-  .rich h2{font-family:Sora,system-ui,sans-serif;font-weight:800;font-size:1.2rem;margin:1rem 0 .5rem}
-  .rich ul{padding-left:1.2rem;margin:0 0 .85rem}
-  .rich a{color:#D97706;text-decoration:underline}
-  .hidden-imp{display:none !important}
-</style>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Manrope:wght@600;700;800&display=swap" rel="stylesheet">
 </head>
-<body class="bg-slate-50 text-ink dark:bg-slate-950 dark:text-slate-100">
+<body class="bg-qsoft text-qink antialiased dark:bg-slate-950 dark:text-slate-100">
 
-<!-- ===== Login ===== -->
-<div id="loginView" class="min-h-screen grid place-items-center px-4">
-  <div class="w-full max-w-sm bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-6 shadow-xl">
-    <div class="flex items-center gap-2 font-display font-extrabold text-xl mb-6">
-      <span class="w-2.5 h-6 diag-tape rounded-sm rotate-6"></span> QurilishInfo
+<!-- LOGIN SCREEN -->
+<div id="loginScreen" class="fixed inset-0 z-50 hidden grid place-items-center bg-qsoft px-4 dark:bg-slate-950">
+  <form id="loginForm" class="w-full max-w-sm rounded-3xl border border-slate-200 bg-white p-8 shadow-xl dark:border-slate-800 dark:bg-slate-900">
+    <div class="mx-auto grid h-12 w-12 place-items-center rounded-xl bg-qblue text-white">
+      <svg viewBox="0 0 24 24" class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M3 21h18"/><path d="M5 21V10l7-6 7 6v11"/><path d="M9 21v-6h6v6"/></svg>
     </div>
-    <label class="block text-sm font-semibold mb-1">Login</label>
-    <input id="lu" autocomplete="username" class="w-full rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 px-4 py-2.5 mb-3 outline-none focus:ring-2 ring-amber-450">
-    <label class="block text-sm font-semibold mb-1">Parol</label>
-    <input id="lp" type="password" autocomplete="current-password" class="w-full rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 px-4 py-2.5 mb-4 outline-none focus:ring-2 ring-amber-450">
-    <button id="loginBtn" class="w-full bg-amber-450 text-ink font-semibold py-3 rounded-xl hover:brightness-95 active:scale-95 transition">Kirish</button>
-    <div id="loginMsg" class="mt-3 text-sm"></div>
+    <h1 class="mt-4 text-center font-display text-xl font-extrabold text-qnavy dark:text-white">QurilishInfo — Admin</h1>
+    <p class="mt-1 text-center text-sm text-slate-500 dark:text-slate-400">Kirish uchun parolni kiriting</p>
+    <input id="loginPassword" type="password" required placeholder="Parol" class="mt-5 w-full rounded-xl border border-slate-300 bg-slate-50 px-4 py-3 text-sm outline-none focus:border-qblue focus:ring-4 focus:ring-sky-100 dark:border-slate-700 dark:bg-slate-800 dark:focus:ring-sky-900/30">
+    <p id="loginError" class="mt-2 hidden text-sm font-semibold text-rose-600">Parol noto'g'ri</p>
+    <button type="submit" class="mt-4 w-full rounded-xl bg-qblue py-3 text-sm font-bold text-white hover:bg-qnavy">Kirish</button>
+  </form>
+</div>
+
+<!-- APP SHELL -->
+<div id="appShell" class="hidden">
+  <header class="sticky top-0 z-30 border-b border-slate-200 bg-white/95 backdrop-blur-lg dark:border-slate-800 dark:bg-slate-950/95">
+    <div class="mx-auto flex h-16 max-w-7xl items-center gap-3 px-4 sm:px-6 lg:px-8">
+      <a href="/" class="flex items-center gap-2.5 font-display text-lg font-extrabold text-qnavy dark:text-white">
+        <span class="grid h-9 w-9 place-items-center rounded-lg bg-qblue text-white">
+          <svg viewBox="0 0 24 24" class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M3 21h18"/><path d="M5 21V10l7-6 7 6v11"/><path d="M9 21v-6h6v6"/></svg>
+        </span>
+        <span>Qurilish<span class="text-qgreen">Info</span> <span class="font-sans text-xs font-bold text-slate-400">/ admin</span></span>
+      </a>
+      <nav class="ml-6 hidden gap-1 sm:flex">
+        <button data-tab="articles" class="tab-btn rounded-lg px-3 py-2 text-sm font-bold">Maqolalar</button>
+        <button data-tab="ads" class="tab-btn rounded-lg px-3 py-2 text-sm font-bold">Reklamalar</button>
+        <button data-tab="settings" class="tab-btn rounded-lg px-3 py-2 text-sm font-bold">Sozlamalar</button>
+      </nav>
+      <div class="ml-auto flex items-center gap-2">
+        <button id="themeButton" type="button" class="grid h-9 w-9 place-items-center rounded-lg border border-slate-200 text-slate-700 hover:border-qblue hover:text-qblue dark:border-slate-700 dark:text-slate-200" aria-label="Mavzu">
+          <svg id="themeSunIcon" viewBox="0 0 24 24" class="h-4.5 w-4.5" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg>
+        </button>
+        <button id="logoutButton" type="button" class="rounded-lg border border-slate-200 px-3 py-2 text-sm font-bold text-slate-600 hover:border-rose-300 hover:text-rose-600 dark:border-slate-700 dark:text-slate-300">Chiqish</button>
+      </div>
+    </div>
+    <nav class="no-scrollbar flex gap-1 overflow-x-auto border-t border-slate-100 px-4 py-2 sm:hidden dark:border-slate-800">
+      <button data-tab="articles" class="tab-btn whitespace-nowrap rounded-lg px-3 py-2 text-sm font-bold">Maqolalar</button>
+      <button data-tab="ads" class="tab-btn whitespace-nowrap rounded-lg px-3 py-2 text-sm font-bold">Reklamalar</button>
+      <button data-tab="settings" class="tab-btn whitespace-nowrap rounded-lg px-3 py-2 text-sm font-bold">Sozlamalar</button>
+    </nav>
+  </header>
+
+  <main class="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
+
+    <!-- ARTICLES TAB -->
+    <section id="tab-articles" class="tab-panel">
+      <div class="mb-5 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+        <div>
+          <h1 class="font-display text-2xl font-extrabold text-qnavy dark:text-white">Maqolalar</h1>
+          <p class="mt-1 text-sm text-slate-500 dark:text-slate-400">Barcha maqolalarni qo‘shish, tahrirlash va o‘chirish</p>
+        </div>
+        <div class="flex gap-2">
+          <input id="articleSearch" type="search" placeholder="Qidirish..." class="w-full rounded-xl border border-slate-300 bg-white px-4 py-2.5 text-sm outline-none focus:border-qblue dark:border-slate-700 dark:bg-slate-900 sm:w-56">
+          <button id="newArticleButton" class="shrink-0 rounded-xl bg-qgreen px-4 py-2.5 text-sm font-bold text-white hover:bg-qgreen-dark">+ Yangi</button>
+        </div>
+      </div>
+
+      <div class="overflow-x-auto rounded-2xl border border-slate-200 bg-white dark:border-slate-800 dark:bg-slate-900">
+        <table class="w-full min-w-[720px] text-left text-sm">
+          <thead class="border-b border-slate-200 bg-slate-50 text-xs font-bold uppercase tracking-wide text-slate-500 dark:border-slate-800 dark:bg-slate-950/40 dark:text-slate-400">
+            <tr>
+              <th class="px-4 py-3">Sarlavha</th>
+              <th class="px-4 py-3">Rukn</th>
+              <th class="px-4 py-3">Holat</th>
+              <th class="px-4 py-3">Sana</th>
+              <th class="px-4 py-3 text-right">Amallar</th>
+            </tr>
+          </thead>
+          <tbody id="articlesTableBody" class="divide-y divide-slate-100 dark:divide-slate-800"></tbody>
+        </table>
+      </div>
+      <p id="articlesEmptyState" class="hidden py-10 text-center text-sm text-slate-500 dark:text-slate-400">Hozircha maqola yo‘q.</p>
+    </section>
+
+    <!-- ADS TAB -->
+    <section id="tab-ads" class="tab-panel hidden">
+      <div class="mb-5 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+        <div>
+          <h1 class="font-display text-2xl font-extrabold text-qnavy dark:text-white">Reklamalar</h1>
+          <p class="mt-1 text-sm text-slate-500 dark:text-slate-400">Hamkorlik va reklama materiallari</p>
+        </div>
+        <button id="newAdButton" class="shrink-0 rounded-xl bg-qgreen px-4 py-2.5 text-sm font-bold text-white hover:bg-qgreen-dark">+ Yangi</button>
+      </div>
+
+      <div class="overflow-x-auto rounded-2xl border border-slate-200 bg-white dark:border-slate-800 dark:bg-slate-900">
+        <table class="w-full min-w-[640px] text-left text-sm">
+          <thead class="border-b border-slate-200 bg-slate-50 text-xs font-bold uppercase tracking-wide text-slate-500 dark:border-slate-800 dark:bg-slate-950/40 dark:text-slate-400">
+            <tr>
+              <th class="px-4 py-3">Sarlavha</th>
+              <th class="px-4 py-3">Kompaniya</th>
+              <th class="px-4 py-3">Holat</th>
+              <th class="px-4 py-3">Muddat</th>
+              <th class="px-4 py-3 text-right">Amallar</th>
+            </tr>
+          </thead>
+          <tbody id="adsTableBody" class="divide-y divide-slate-100 dark:divide-slate-800"></tbody>
+        </table>
+      </div>
+      <p id="adsEmptyState" class="hidden py-10 text-center text-sm text-slate-500 dark:text-slate-400">Hozircha reklama yo‘q.</p>
+    </section>
+
+    <!-- SETTINGS TAB -->
+    <section id="tab-settings" class="tab-panel hidden">
+      <div class="mb-5">
+        <h1 class="font-display text-2xl font-extrabold text-qnavy dark:text-white">Sayt sozlamalari</h1>
+        <p class="mt-1 text-sm text-slate-500 dark:text-slate-400">Bosh sahifadagi matnlar va havolalar</p>
+      </div>
+
+      <form id="settingsForm" class="grid gap-6 lg:grid-cols-2">
+        <div class="space-y-4 rounded-2xl border border-slate-200 bg-white p-5 dark:border-slate-800 dark:bg-slate-900">
+          <h2 class="font-display text-base font-extrabold text-qnavy dark:text-white">Umumiy</h2>
+          <div><label class="lbl">Sayt nomi</label><input name="site_name" class="inp"></div>
+          <div><label class="lbl">Slogan</label><input name="site_tagline" class="inp"></div>
+          <div><label class="lbl">Tavsif (SEO)</label><textarea name="site_description" rows="2" class="inp"></textarea></div>
+          <div><label class="lbl">Bosh banner sarlavhasi</label><input name="cta_title" class="inp"></div>
+          <div><label class="lbl">Bosh banner matni</label><textarea name="cta_text" rows="2" class="inp"></textarea></div>
+          <div><label class="lbl">"Biz haqimizda" matni</label><textarea name="about_text" rows="3" class="inp"></textarea></div>
+          <div><label class="lbl">Tahririy siyosat matni</label><input name="editorial_policy" class="inp"></div>
+        </div>
+
+        <div class="space-y-4 rounded-2xl border border-slate-200 bg-white p-5 dark:border-slate-800 dark:bg-slate-900">
+          <h2 class="font-display text-base font-extrabold text-qnavy dark:text-white">Aloqa va ijtimoiy tarmoqlar</h2>
+          <div><label class="lbl">Telegram kanal URL</label><input name="telegram_url" class="inp"></div>
+          <div><label class="lbl">Kontakt nomi (@username)</label><input name="contact" class="inp"></div>
+          <div><label class="lbl">Kontakt URL</label><input name="contact_url" class="inp"></div>
+          <div><label class="lbl">Instagram URL</label><input name="instagram_url" class="inp"></div>
+          <div><label class="lbl">Facebook URL</label><input name="facebook_url" class="inp"></div>
+          <div><label class="lbl">YouTube URL</label><input name="youtube_url" class="inp"></div>
+          <div><label class="lbl">TikTok URL</label><input name="tiktok_url" class="inp"></div>
+
+          <h2 class="pt-2 font-display text-base font-extrabold text-qnavy dark:text-white">Muhim e'lon paneli</h2>
+          <div><label class="lbl">Sarlavha (bo‘sh — o‘chirish uchun)</label><input name="important_notice_title" class="inp"></div>
+          <div><label class="lbl">Havola (bo‘sh bo‘lsa, mahkamlangan maqolaga o‘tadi)</label><input name="important_notice_url" class="inp"></div>
+        </div>
+
+        <div class="lg:col-span-2">
+          <button type="submit" class="rounded-xl bg-qblue px-6 py-3 text-sm font-bold text-white hover:bg-qnavy">Sozlamalarni saqlash</button>
+        </div>
+      </form>
+    </section>
+  </main>
+</div>
+
+<!-- ARTICLE MODAL -->
+<div id="articleModal" class="fixed inset-0 z-50 hidden overflow-y-auto bg-slate-950/60 p-0 backdrop-blur-sm sm:p-6">
+  <div class="mx-auto min-h-full max-w-3xl sm:flex sm:min-h-full sm:items-center">
+    <div class="relative min-h-screen w-full bg-white p-5 shadow-2xl dark:bg-slate-900 sm:min-h-0 sm:rounded-3xl sm:p-8">
+      <button type="button" data-close-modal="articleModal" class="absolute right-4 top-4 grid h-9 w-9 place-items-center rounded-lg border border-slate-200 text-slate-500 hover:text-qblue dark:border-slate-700">✕</button>
+      <h2 id="articleModalTitle" class="font-display text-xl font-extrabold text-qnavy dark:text-white">Yangi maqola</h2>
+
+      <form id="articleForm" class="mt-5 grid gap-4 sm:grid-cols-2">
+        <input type="hidden" name="id">
+        <div class="sm:col-span-2"><label class="lbl">Sarlavha *</label><input name="title" required class="inp"></div>
+        <div class="sm:col-span-2"><label class="lbl">Qisqa kirish (lead) *</label><textarea name="lead" rows="2" required class="inp"></textarea></div>
+        <div class="sm:col-span-2"><label class="lbl">Matn (paragraflar bo‘sh qator bilan ajratiladi) *</label><textarea name="body" rows="8" required class="inp"></textarea></div>
+
+        <div>
+          <label class="lbl">Rukn *</label>
+          <select name="category" required class="inp">
+            <option>Boshlashdan oldin</option>
+            <option>Uy qurish</option>
+            <option>Xarajat va narxlar</option>
+            <option>Uy sotib olish</option>
+            <option>Ta'mirlash</option>
+            <option>Huquq va idoralar</option>
+            <option>Inspeksiya izohlaydi</option>
+            <option>Qaror sodda tilda</option>
+            <option>Rasmiy xabarlar</option>
+          </select>
+        </div>
+        <div>
+          <label class="lbl">Material turi</label>
+          <select name="article_type" class="inp">
+            <option value="guide">Qo‘llanma</option>
+            <option value="news">Yangilik</option>
+            <option value="official">Rasmiy xabar</option>
+            <option value="analysis">Tahlil</option>
+            <option value="question">Savol-javob</option>
+            <option value="advertisement">Hamkorlik materiali</option>
+          </select>
+        </div>
+
+        <div><label class="lbl">Muallif</label><input name="author" class="inp"></div>
+        <div><label class="lbl">O‘qish vaqti (daqiqa)</label><input name="minutes" type="number" min="1" class="inp"></div>
+
+        <div class="sm:col-span-2"><label class="lbl">Teglar (vergul bilan)</label><input name="tags" class="inp" placeholder="ruxsatnoma, smeta"></div>
+
+        <div class="sm:col-span-2"><label class="lbl">Rasm URL</label><input name="image_url" class="inp"></div>
+        <div><label class="lbl">Rasm izohi</label><input name="image_caption" class="inp"></div>
+        <div><label class="lbl">Rasm manbasi</label><input name="image_credit" class="inp"></div>
+
+        <div class="sm:col-span-2"><label class="lbl">Qadamlar ("Nima qilish kerak?" — har biri yangi qatorda)</label><textarea name="steps" rows="4" class="inp"></textarea></div>
+        <div class="sm:col-span-2"><label class="lbl">Ogohlantirish ("E'tibor bering" bloki)</label><textarea name="warning" rows="2" class="inp"></textarea></div>
+
+        <div><label class="lbl">Rasmiy manba nomi</label><input name="source_name" class="inp"></div>
+        <div><label class="lbl">Rasmiy manba URL</label><input name="source_url" class="inp"></div>
+        <div><label class="lbl">Hujjat raqami / nomi</label><input name="document_no" class="inp"></div>
+        <div><label class="lbl">Yangilangan sana</label><input name="updated" type="date" class="inp"></div>
+
+        <div>
+          <label class="lbl">Holat</label>
+          <select name="status" class="inp">
+            <option value="draft">Qoralama</option>
+            <option value="published">Chop etilgan</option>
+          </select>
+        </div>
+        <div><label class="lbl">Chop etish sanasi</label><input name="published_at" type="datetime-local" class="inp"></div>
+
+        <div class="flex flex-wrap gap-5 sm:col-span-2">
+          <label class="flex items-center gap-2 text-sm font-semibold"><input type="checkbox" name="is_featured" class="h-4 w-4 rounded"> Bosh sahifada (banner)</label>
+          <label class="flex items-center gap-2 text-sm font-semibold"><input type="checkbox" name="is_pinned" class="h-4 w-4 rounded"> Muhim (mahkamlangan)</label>
+          <label class="flex items-center gap-2 text-sm font-semibold"><input type="checkbox" name="is_advertisement" class="h-4 w-4 rounded"> Reklama sifatida belgilash</label>
+        </div>
+
+        <div class="flex justify-end gap-3 sm:col-span-2">
+          <button type="button" data-close-modal="articleModal" class="rounded-xl border border-slate-300 px-5 py-3 text-sm font-bold text-slate-600 dark:border-slate-700 dark:text-slate-300">Bekor qilish</button>
+          <button type="submit" class="rounded-xl bg-qblue px-5 py-3 text-sm font-bold text-white hover:bg-qnavy">Saqlash</button>
+        </div>
+      </form>
+    </div>
   </div>
 </div>
 
-<!-- ===== App shell ===== -->
-<div id="appShell" class="hidden-imp min-h-screen">
-  <div id="overlay" class="fixed inset-0 bg-black/40 z-40 hidden"></div>
+<!-- AD MODAL -->
+<div id="adModal" class="fixed inset-0 z-50 hidden overflow-y-auto bg-slate-950/60 p-0 backdrop-blur-sm sm:p-6">
+  <div class="mx-auto min-h-full max-w-lg sm:flex sm:min-h-full sm:items-center">
+    <div class="relative min-h-screen w-full bg-white p-5 shadow-2xl dark:bg-slate-900 sm:min-h-0 sm:rounded-3xl sm:p-8">
+      <button type="button" data-close-modal="adModal" class="absolute right-4 top-4 grid h-9 w-9 place-items-center rounded-lg border border-slate-200 text-slate-500 hover:text-qblue dark:border-slate-700">✕</button>
+      <h2 id="adModalTitle" class="font-display text-xl font-extrabold text-qnavy dark:text-white">Yangi reklama</h2>
 
-  <nav id="sidebar" class="fixed inset-y-0 left-0 w-72 max-w-[82vw] bg-ink text-white z-50 -translate-x-full transition-transform duration-200 flex flex-col overflow-y-auto">
-    <div class="flex items-center gap-3 px-5 py-5 border-b border-white/10">
-      <div id="avatarLetter" class="w-9 h-9 rounded-lg bg-amber-450 text-ink font-extrabold grid place-items-center">A</div>
-      <b class="font-display">Admin panel</b>
-    </div>
-    <p class="text-[11px] uppercase tracking-wider text-white/40 font-semibold px-5 pt-4 pb-1">Asosiy</p>
-    <button class="navItem flex items-center gap-3 px-5 py-3 font-medium hover:bg-white/5" data-view="dashboard">
-      <svg class="icon" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="9" rx="1"/><rect x="14" y="3" width="7" height="5" rx="1"/><rect x="14" y="12" width="7" height="9" rx="1"/><rect x="3" y="16" width="7" height="5" rx="1"/></svg>
-      Boshqaruv paneli
-    </button>
-    <p class="text-[11px] uppercase tracking-wider text-white/40 font-semibold px-5 pt-4 pb-1">Kontent</p>
-    <button class="navItem flex items-center gap-3 px-5 py-3 font-medium hover:bg-white/5" data-view="articles">
-      <svg class="icon" viewBox="0 0 24 24"><path d="M4 22h16a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v16a2 2 0 0 1-2 2Zm0 0a2 2 0 0 1-2-2v-9c0-1.1.9-2 2-2h2"/><path d="M18 14h-8"/><path d="M15 18h-5"/><path d="M10 6h8v4h-8V6Z"/></svg>
-      Maqolalar
-    </button>
-    <button class="navItem flex items-center gap-3 px-5 py-3 font-medium hover:bg-white/5" data-view="categories">
-      <svg class="icon" viewBox="0 0 24 24"><path d="m20.59 13.41-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82Z"/><circle cx="7" cy="7" r="1"/></svg>
-      Kategoriyalar
-    </button>
-    <p class="text-[11px] uppercase tracking-wider text-white/40 font-semibold px-5 pt-4 pb-1">Tizim</p>
-    <button class="navItem flex items-center gap-3 px-5 py-3 font-medium hover:bg-white/5" data-view="settings">
-      <svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1Z"/></svg>
-      Sozlamalar
-    </button>
-    <button id="viewSiteBtn" class="flex items-center gap-3 px-5 py-3 font-medium hover:bg-white/5">
-      <svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M2 12h20"/><path d="M12 2a15 15 0 0 1 0 20 15 15 0 0 1 0-20Z"/></svg>
-      Saytni ko'rish
-    </button>
-    <button id="logoutBtn" class="flex items-center gap-3 px-5 py-3 font-medium text-amber-450 mt-auto hover:bg-white/5">
-      <svg class="icon" viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><path d="M16 17l5-5-5-5"/><path d="M21 12H9"/></svg>
-      Chiqish
-    </button>
-  </nav>
-
-  <div class="md:pl-0">
-    <header class="sticky top-0 z-30 bg-white/90 dark:bg-slate-900/90 backdrop-blur border-b border-slate-200 dark:border-slate-800 flex items-center gap-3 px-4 h-16">
-      <button id="menuBtn" class="w-10 h-10 rounded-xl border border-slate-200 dark:border-slate-700 grid place-items-center">
-        <svg class="icon" viewBox="0 0 24 24"><path d="M4 6h16"/><path d="M4 12h16"/><path d="M4 18h16"/></svg>
-      </button>
-      <h1 id="pageTitle" class="font-display font-bold text-lg flex-1">Boshqaruv paneli</h1>
-      <button id="themeBtn" class="w-10 h-10 rounded-xl border border-slate-200 dark:border-slate-700 grid place-items-center">
-        <svg class="icon" viewBox="0 0 24 24"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
-      </button>
-    </header>
-
-    <div class="max-w-4xl mx-auto p-4 md:p-6">
-
-      <!-- Dashboard -->
-      <section id="view-dashboard">
-        <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-          <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-5">
-            <div class="font-display font-extrabold text-2xl" id="statArticles">0</div>
-            <div class="text-sm text-slate-500 mt-1">Jami maqolalar</div>
-          </div>
-          <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-5">
-            <div class="font-display font-extrabold text-2xl text-emerald-600" id="statPublished">0</div>
-            <div class="text-sm text-slate-500 mt-1">Nashr qilingan</div>
-          </div>
-          <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-5">
-            <div class="font-display font-extrabold text-2xl text-slate-400" id="statDraft">0</div>
-            <div class="text-sm text-slate-500 mt-1">Qoralama</div>
-          </div>
-          <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-5">
-            <div class="font-display font-extrabold text-2xl text-amber-500" id="statViews">0</div>
-            <div class="text-sm text-slate-500 mt-1">Jami ko'rishlar</div>
-          </div>
+      <form id="adForm" class="mt-5 grid gap-4">
+        <input type="hidden" name="id">
+        <div><label class="lbl">Yorliq (masalan: Hamkorlik)</label><input name="label" class="inp"></div>
+        <div><label class="lbl">Sarlavha *</label><input name="title" required class="inp"></div>
+        <div><label class="lbl">Tavsif *</label><textarea name="description" rows="3" required class="inp"></textarea></div>
+        <div><label class="lbl">Kompaniya nomi</label><input name="company_name" class="inp"></div>
+        <div><label class="lbl">Rasm URL</label><input name="image_url" class="inp"></div>
+        <div><label class="lbl">Havola (bosilganda ochiladigan URL)</label><input name="target_url" class="inp"></div>
+        <div class="grid grid-cols-2 gap-4">
+          <div><label class="lbl">Boshlanish sanasi</label><input name="starts_at" type="date" class="inp"></div>
+          <div><label class="lbl">Tugash sanasi</label><input name="ends_at" type="date" class="inp"></div>
         </div>
-      </section>
-
-      <!-- Articles list -->
-      <section id="view-articles" class="hidden-imp">
-        <div class="flex justify-end mb-4">
-          <button id="newArticleBtn" class="bg-amber-450 text-ink font-semibold px-4 py-2.5 rounded-xl hover:brightness-95 active:scale-95 transition">+ Yangi maqola</button>
+        <div>
+          <label class="lbl">Holat</label>
+          <select name="status" class="inp"><option value="active">Faol</option><option value="inactive">Nofaol</option></select>
         </div>
-        <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl overflow-x-auto">
-          <table class="w-full text-sm">
-            <thead><tr class="text-left text-slate-400 uppercase text-xs">
-              <th class="p-3">Sarlavha</th><th class="p-3">Kategoriya</th><th class="p-3">Holat</th><th class="p-3">Ko'rish</th><th class="p-3">Sana</th><th class="p-3"></th>
-            </tr></thead>
-            <tbody id="articlesTbody"><tr><td class="p-3" colspan="6">Yuklanmoqda...</td></tr></tbody>
-          </table>
+        <div class="flex justify-end gap-3">
+          <button type="button" data-close-modal="adModal" class="rounded-xl border border-slate-300 px-5 py-3 text-sm font-bold text-slate-600 dark:border-slate-700 dark:text-slate-300">Bekor qilish</button>
+          <button type="submit" class="rounded-xl bg-qblue px-5 py-3 text-sm font-bold text-white hover:bg-qnavy">Saqlash</button>
         </div>
-      </section>
-
-      <!-- Article form -->
-      <section id="view-articleForm" class="hidden-imp">
-        <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-5 md:p-6 space-y-4">
-          <input type="hidden" id="editId">
-          <div class="grid md:grid-cols-2 gap-4">
-            <div>
-              <label class="block text-sm font-semibold mb-1">Kategoriya</label>
-              <select id="fCat" class="w-full rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 px-4 py-2.5 outline-none focus:ring-2 ring-amber-450"></select>
-            </div>
-            <div>
-              <label class="block text-sm font-semibold mb-1">Holat</label>
-              <select id="fStatus" class="w-full rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 px-4 py-2.5 outline-none focus:ring-2 ring-amber-450">
-                <option value="published">Nashr qilingan</option>
-                <option value="draft">Qoralama</option>
-              </select>
-            </div>
-          </div>
-          <div>
-            <label class="block text-sm font-semibold mb-1">Sarlavha</label>
-            <input id="fTitle" class="w-full rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 px-4 py-2.5 outline-none focus:ring-2 ring-amber-450">
-          </div>
-          <div>
-            <label class="block text-sm font-semibold mb-1">Qisqacha (lead)</label>
-            <input id="fLead" class="w-full rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 px-4 py-2.5 outline-none focus:ring-2 ring-amber-450">
-          </div>
-          <div>
-            <label class="block text-sm font-semibold mb-1">Muqova rasm havolasi (ixtiyoriy)</label>
-            <input id="fCover" placeholder="https://..." class="w-full rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 px-4 py-2.5 outline-none focus:ring-2 ring-amber-450">
-            <p class="text-xs text-slate-400 mt-1">Rasmni biror joyga (Google Drive, Imgur) yuklab, ochiq havolasini shu yerga qo'ying.</p>
-          </div>
-          <div class="max-w-[160px]">
-            <label class="block text-sm font-semibold mb-1">O'qish vaqti (daq.)</label>
-            <input id="fMin" type="number" min="1" value="5" class="w-full rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 px-4 py-2.5 outline-none focus:ring-2 ring-amber-450">
-          </div>
-          <div>
-            <label class="block text-sm font-semibold mb-1">Maqola matni</label>
-            <div class="flex flex-wrap gap-2 border border-slate-200 dark:border-slate-700 border-b-0 rounded-t-xl p-2 bg-slate-50 dark:bg-slate-800">
-              <button type="button" data-cmd="bold" class="px-3 py-1.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 font-bold text-sm">B</button>
-              <button type="button" data-cmd="italic" class="px-3 py-1.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 italic text-sm">I</button>
-              <button type="button" data-cmd="formatBlock" data-val="H2" class="px-3 py-1.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 font-bold text-sm">H2</button>
-              <button type="button" data-cmd="insertUnorderedList" class="px-3 py-1.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-sm">• Ro'yxat</button>
-              <button type="button" id="linkBtn" class="px-3 py-1.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-sm">🔗 Havola</button>
-              <button type="button" data-cmd="removeFormat" class="px-3 py-1.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-sm">Tozalash</button>
-            </div>
-            <div id="fBody" contenteditable="true" class="rich border border-slate-200 dark:border-slate-700 rounded-b-xl p-4 outline-none focus:ring-2 ring-amber-450 bg-white dark:bg-slate-900"></div>
-          </div>
-          <div class="flex gap-3">
-            <button id="saveArticleBtn" class="bg-amber-450 text-ink font-semibold px-5 py-2.5 rounded-xl hover:brightness-95 active:scale-95 transition">Saqlash</button>
-            <button id="cancelArticleBtn" class="border border-slate-200 dark:border-slate-700 font-semibold px-5 py-2.5 rounded-xl">Bekor qilish</button>
-          </div>
-          <div id="articleMsg" class="text-sm"></div>
-        </div>
-      </section>
-
-      <!-- Categories -->
-      <section id="view-categories" class="hidden-imp">
-        <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-5 md:p-6 mb-5">
-          <h2 id="catFormTitle" class="font-display font-bold text-lg mb-3">Yangi kategoriya</h2>
-          <input type="hidden" id="catEditId">
-          <label class="block text-sm font-semibold mb-1">Nomi</label>
-          <input id="catName" class="w-full rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 px-4 py-2.5 mb-3 outline-none focus:ring-2 ring-amber-450">
-          <label class="block text-sm font-semibold mb-1">Rangi</label>
-          <div class="flex items-center gap-3 mb-4">
-            <input id="catColor" type="color" value="#1F4E79" class="w-14 h-11 rounded-lg border border-slate-200 dark:border-slate-700">
-            <span id="catColorHex" class="text-sm font-mono">#1F4E79</span>
-          </div>
-          <div class="flex gap-3">
-            <button id="saveCatBtn" class="bg-amber-450 text-ink font-semibold px-5 py-2.5 rounded-xl hover:brightness-95 active:scale-95 transition">Saqlash</button>
-            <button id="cancelCatBtn" class="hidden-imp border border-slate-200 dark:border-slate-700 font-semibold px-5 py-2.5 rounded-xl">Bekor qilish</button>
-          </div>
-          <div id="catMsg" class="text-sm mt-2"></div>
-        </div>
-        <div id="catList" class="grid gap-3"></div>
-      </section>
-
-      <!-- Settings -->
-      <section id="view-settings" class="hidden-imp">
-        <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-5 md:p-6">
-          <h2 class="font-display font-bold text-lg mb-3">Parolni almashtirish</h2>
-          <label class="block text-sm font-semibold mb-1">Joriy parol</label>
-          <input id="pwCurrent" type="password" class="w-full rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 px-4 py-2.5 mb-3 outline-none focus:ring-2 ring-amber-450">
-          <label class="block text-sm font-semibold mb-1">Yangi parol (kamida 8 belgi)</label>
-          <input id="pwNew" type="password" class="w-full rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 px-4 py-2.5 mb-4 outline-none focus:ring-2 ring-amber-450">
-          <button id="pwSave" class="bg-amber-450 text-ink font-semibold px-5 py-2.5 rounded-xl hover:brightness-95 active:scale-95 transition">Saqlash</button>
-          <div id="pwMsg" class="text-sm mt-2"></div>
-        </div>
-      </section>
-
+      </form>
     </div>
   </div>
 </div>
+
+<!-- CONFIRM DELETE -->
+<div id="confirmModal" class="fixed inset-0 z-[60] hidden grid place-items-center bg-slate-950/60 px-4 backdrop-blur-sm">
+  <div class="w-full max-w-sm rounded-2xl bg-white p-6 shadow-2xl dark:bg-slate-900">
+    <h3 class="font-display text-lg font-extrabold text-qnavy dark:text-white">O‘chirishni tasdiqlang</h3>
+    <p id="confirmText" class="mt-2 text-sm text-slate-600 dark:text-slate-400">Bu amalni ortga qaytarib bo‘lmaydi.</p>
+    <div class="mt-5 flex justify-end gap-3">
+      <button id="confirmCancel" class="rounded-xl border border-slate-300 px-4 py-2.5 text-sm font-bold text-slate-600 dark:border-slate-700 dark:text-slate-300">Bekor qilish</button>
+      <button id="confirmOk" class="rounded-xl bg-rose-600 px-4 py-2.5 text-sm font-bold text-white hover:bg-rose-700">O‘chirish</button>
+    </div>
+  </div>
+</div>
+
+<div id="toastHost" class="fixed bottom-5 right-5 z-[70] flex flex-col gap-2"></div>
+
+<style>
+  .lbl{display:block;margin-bottom:.35rem;font-size:.75rem;font-weight:700;color:#64748b}
+  .dark .lbl{color:#94a3b8}
+  .inp{width:100%;border-radius:.75rem;border:1px solid #cbd5e1;background:#f8fafc;padding:.6rem .85rem;font-size:.875rem;outline:none}
+  .inp:focus{border-color:#0b4f7c;box-shadow:0 0 0 4px rgba(11,79,124,.12)}
+  .dark .inp{border-color:#334155;background:#1e293b;color:#f1f5f9}
+  .tab-btn{color:#64748b}
+  .tab-btn.active{background:#0b4f7c;color:#fff}
+  .dark .tab-btn{color:#94a3b8}
+  .dark .tab-btn.active{background:#0b4f7c;color:#fff}
+</style>
 
 <script>
-var $ = function(id){return document.getElementById(id)};
-var articles = [], categories = [];
-var currentView = 'dashboard';
+/* ============================================================
+   ESLATMA (backend uchun): ushbu admin panel quyidagi API
+   endpointlar bilan ishlashga mo'ljallangan:
 
-function esc(s){ return String(s).replace(/[&<>"']/g,function(m){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[m]}); }
-function showMsg(el, text, ok){ el.className = 'text-sm ' + (ok?'text-emerald-600':'text-red-600'); el.textContent = text; }
-function clearMsg(el){ el.className='text-sm'; el.textContent=''; }
+   POST   /api/login              { password }              -> { token }
+   GET    /api/articles                                     -> [article]
+   POST   /api/articles           { ...article }             -> article
+   PUT    /api/articles/:id       { ...article }             -> article
+   DELETE /api/articles/:id
+   GET    /api/advertisements                                -> [ad]
+   POST   /api/advertisements     { ...ad }                  -> ad
+   PUT    /api/advertisements/:id { ...ad }                  -> ad
+   DELETE /api/advertisements/:id
+   GET    /api/settings                                      -> { ...settings }
+   PUT    /api/settings           { ...settings }            -> { ...settings }
 
-function api(url, opts){
-  opts = opts || {};
-  opts.headers = Object.assign({'Content-Type':'application/json'}, opts.headers||{});
-  opts.credentials = 'same-origin';
-  return fetch(url, opts).then(function(r){
-    return r.json().then(function(data){
-      if(!r.ok) throw new Error(data.error || 'Xatolik yuz berdi');
-      return data;
-    });
-  });
+   Mutatsion so'rovlarga "Authorization: Bearer <token>" header
+   qo'shiladi. Agar server 401 qaytarsa, panel avtomatik login
+   ekraniga chiqaradi.
+   ============================================================ */
+
+const TOKEN_KEY = "qurilishinfo-admin-token";
+const $ = (id) => document.getElementById(id);
+const state = { articles: [], ads: [], settings: {}, activeTab: "articles" };
+
+function getToken(){ return localStorage.getItem(TOKEN_KEY); }
+function setToken(t){ localStorage.setItem(TOKEN_KEY, t); }
+function clearToken(){ localStorage.removeItem(TOKEN_KEY); }
+
+function escapeHtml(v){
+  return String(v ?? "").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#039;");
+}
+function formatDate(value){
+  if(!value) return "";
+  const normalized = String(value).includes("T") ? String(value) : String(value).replace(" ","T");
+  const date = new Date(normalized.endsWith("Z") ? normalized : normalized);
+  if(Number.isNaN(date.getTime())) return String(value);
+  return new Intl.DateTimeFormat("uz-UZ",{year:"numeric",month:"short",day:"numeric"}).format(date);
+}
+function toDatetimeLocal(value){
+  if(!value) return "";
+  const normalized = String(value).replace(" ","T").replace("Z","");
+  return normalized.slice(0,16);
 }
 
-/* ---------- Login ---------- */
-function checkLogin(){
-  api('/api/admin/check').then(function(d){ if(d.loggedIn){ showApp(); } else { showLogin(); } }).catch(function(){ showLogin(); });
+function toast(message, kind="success"){
+  const el = document.createElement("div");
+  el.className = `toast rounded-xl px-4 py-3 text-sm font-bold text-white shadow-lg ${kind==="error"?"bg-rose-600":"bg-qgreen"}`;
+  el.textContent = message;
+  $("toastHost").appendChild(el);
+  setTimeout(()=>{ el.remove(); }, 3200);
 }
-function showLogin(){ $("loginView").classList.remove('hidden-imp'); $("appShell").classList.add('hidden-imp'); }
+
+async function apiFetch(url, options={}){
+  const headers = Object.assign({}, options.headers || {});
+  if(options.body && !(options.body instanceof FormData)){
+    headers["Content-Type"] = "application/json";
+  }
+  const token = getToken();
+  if(token) headers["Authorization"] = `Bearer ${token}`;
+
+  const response = await fetch(url, Object.assign({}, options, { headers }));
+
+  if(response.status === 401){
+    clearToken();
+    showLogin();
+    throw new Error("unauthorized");
+  }
+  if(!response.ok){
+    let msg = `Xatolik (${response.status})`;
+    try{ const j = await response.json(); if(j && j.message) msg = j.message; }catch(e){}
+    throw new Error(msg);
+  }
+  if(response.status === 204) return null;
+  return response.json().catch(()=>null);
+}
+
+/* ---------- THEME ---------- */
+function applyTheme(theme){
+  const isDark = theme === "dark";
+  document.documentElement.classList.toggle("dark", isDark);
+  localStorage.setItem("qurilishinfo-theme", theme);
+  $("themeSunIcon").innerHTML = isDark
+    ? '<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>'
+    : '<circle cx="12" cy="12" r="4"></circle><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"></path>';
+}
+function initTheme(){
+  const saved = localStorage.getItem("qurilishinfo-theme");
+  if(saved){ applyTheme(saved); return; }
+  const prefersDark = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
+  applyTheme(prefersDark ? "dark" : "light");
+}
+$("themeButton").addEventListener("click", ()=> applyTheme(document.documentElement.classList.contains("dark") ? "light" : "dark"));
+
+/* ---------- LOGIN ---------- */
+function showLogin(){
+  $("loginScreen").classList.remove("hidden");
+  $("appShell").classList.add("hidden");
+}
 function showApp(){
-  $("loginView").classList.add('hidden-imp'); $("appShell").classList.remove('hidden-imp');
-  loadAll(); switchView('dashboard');
-}
-$("loginBtn").addEventListener('click', function(){
-  clearMsg($("loginMsg"));
-  api('/api/login', {method:'POST', body: JSON.stringify({username:$("lu").value, password:$("lp").value})})
-    .then(function(){ $("lp").value=''; showApp(); })
-    .catch(function(e){ showMsg($("loginMsg"), e.message, false); });
-});
-$("logoutBtn").addEventListener('click', function(){ api('/api/logout', {method:'POST'}).then(showLogin); });
-$("viewSiteBtn").addEventListener('click', function(){ window.open('/', '_blank'); });
-
-/* ---------- Theme ---------- */
-(function initTheme(){
-  var saved = localStorage.getItem('qi-admin-theme');
-  if(saved==='dark') document.documentElement.classList.add('dark');
-})();
-$("themeBtn").addEventListener('click', function(){
-  var isDark = document.documentElement.classList.toggle('dark');
-  localStorage.setItem('qi-admin-theme', isDark ? 'dark' : 'light');
-});
-
-/* ---------- Sidebar / navigation ---------- */
-$("menuBtn").addEventListener('click', function(){ $("sidebar").classList.remove('-translate-x-full'); $("overlay").classList.remove('hidden'); });
-$("overlay").addEventListener('click', closeSidebar);
-function closeSidebar(){ $("sidebar").classList.add('-translate-x-full'); $("overlay").classList.add('hidden'); }
-
-var TITLES = {dashboard:"Boshqaruv paneli", articles:"Maqolalar", categories:"Kategoriyalar", settings:"Sozlamalar", articleForm:"Maqola"};
-Array.prototype.forEach.call(document.querySelectorAll('.navItem[data-view]'), function(btn){
-  btn.addEventListener('click', function(){ switchView(btn.getAttribute('data-view')); closeSidebar(); });
-});
-function switchView(name){
-  currentView = name;
-  Array.prototype.forEach.call(document.querySelectorAll('[id^="view-"]'), function(el){ el.classList.add('hidden-imp'); });
-  $("view-"+name).classList.remove('hidden-imp');
-  $("pageTitle").textContent = TITLES[name] || '';
-  Array.prototype.forEach.call(document.querySelectorAll('.navItem[data-view]'), function(btn){
-    btn.classList.toggle('bg-white/10', btn.getAttribute('data-view')===name);
-    btn.classList.toggle('text-amber-450', btn.getAttribute('data-view')===name);
-  });
-  if(name==='articles') renderArticlesTable();
-  if(name==='categories') renderCategoriesList();
-  if(name==='dashboard') loadStats();
+  $("loginScreen").classList.add("hidden");
+  $("appShell").classList.remove("hidden");
+  loadAll();
 }
 
-/* ---------- Load everything ---------- */
-function loadAll(){
-  loadStats();
-  api('/api/admin/categories').then(function(d){ categories = d; fillCategorySelect(); }).catch(function(){});
-  api('/api/admin/articles').then(function(d){ articles = d; if(currentView==='articles') renderArticlesTable(); }).catch(function(){});
-}
-function loadStats(){
-  api('/api/admin/stats').then(function(s){
-    $("statArticles").textContent = s.totalArticles;
-    $("statPublished").textContent = s.published;
-    $("statDraft").textContent = s.draft;
-    $("statViews").textContent = s.totalViews;
-  }).catch(function(){});
-}
-
-/* ---------- Articles table ---------- */
-function renderArticlesTable(){
-  if(!articles.length){ $("articlesTbody").innerHTML = '<tr><td class="p-3" colspan="6">Hozircha maqola yo\'q.</td></tr>'; return; }
-  $("articlesTbody").innerHTML = articles.map(function(a){
-    var cat = categories.filter(function(c){return c.name===a.category})[0];
-    var color = cat ? cat.color : '#1F4E79';
-    var statusBadge = a.status==='draft'
-      ? '<span class="px-2.5 py-1 rounded-full text-xs font-semibold bg-slate-100 text-slate-500 dark:bg-slate-800">Qoralama</span>'
-      : '<span class="px-2.5 py-1 rounded-full text-xs font-semibold bg-emerald-100 text-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-400">Nashr qilingan</span>';
-    return '<tr class="border-t border-slate-200 dark:border-slate-800">'
-      + '<td class="p-3 font-medium max-w-[220px] truncate">'+esc(a.title)+'</td>'
-      + '<td class="p-3"><span class="px-2.5 py-1 rounded-full text-xs font-semibold text-white" style="background:'+color+'">'+esc(a.category)+'</span></td>'
-      + '<td class="p-3">'+statusBadge+'</td>'
-      + '<td class="p-3">'+a.views+'</td>'
-      + '<td class="p-3 text-slate-400">'+esc(a.created_at)+'</td>'
-      + '<td class="p-3 flex gap-2"><button class="px-3 py-1.5 rounded-lg border border-slate-200 dark:border-slate-700 text-xs font-semibold" data-edit="'+a.id+'">Tahrirlash</button><button class="px-3 py-1.5 rounded-lg bg-red-600 text-white text-xs font-semibold" data-del="'+a.id+'">O\'chirish</button></td>'
-      + '</tr>';
-  }).join('');
-}
-$("articlesTbody").addEventListener('click', function(e){
-  var editId = e.target.getAttribute('data-edit');
-  var delId = e.target.getAttribute('data-del');
-  if(editId) startEditArticle(editId);
-  if(delId){
-    if(!confirm("Maqolani o'chirishni tasdiqlaysizmi?")) return;
-    api('/api/admin/articles/'+delId, {method:'DELETE'}).then(function(){ loadAll(); });
-  }
-});
-$("newArticleBtn").addEventListener('click', function(){ resetArticleForm(); switchView('articleForm'); });
-$("cancelArticleBtn").addEventListener('click', function(){ switchView('articles'); });
-
-function fillCategorySelect(){
-  $("fCat").innerHTML = categories.map(function(c){ return '<option value="'+esc(c.name)+'">'+esc(c.name)+'</option>'; }).join('');
-}
-function resetArticleForm(){
-  $("editId").value=''; $("fTitle").value=''; $("fLead").value=''; $("fCover").value=''; $("fMin").value=5;
-  $("fBody").innerHTML=''; $("fStatus").value='published';
-  if(categories.length) $("fCat").value = categories[0].name;
-  $("pageTitle").textContent = 'Yangi maqola';
-  clearMsg($("articleMsg"));
-}
-function startEditArticle(id){
-  var a = articles.filter(function(x){return x.id==id})[0]; if(!a) return;
-  switchView('articleForm');
-  $("editId").value = a.id;
-  $("fCat").value = a.category;
-  $("fStatus").value = a.status || 'published';
-  $("fTitle").value = a.title;
-  $("fLead").value = a.lead;
-  $("fCover").value = a.cover_image_url || '';
-  $("fMin").value = a.minutes;
-  var looksHtml = /<[a-z][\s\S]*>/i.test(a.body);
-  if(looksHtml){ $("fBody").innerHTML = a.body; }
-  else { $("fBody").innerHTML = String(a.body).split(/\n\n+/).map(function(p){ return '<p>'+esc(p)+'</p>'; }).join(''); }
-  $("pageTitle").textContent = 'Maqolani tahrirlash';
-  clearMsg($("articleMsg"));
-}
-
-/* Rich text toolbar */
-Array.prototype.forEach.call(document.querySelectorAll('[data-cmd]'), function(btn){
-  btn.addEventListener('click', function(){
-    $("fBody").focus();
-    document.execCommand(btn.getAttribute('data-cmd'), false, btn.getAttribute('data-val') || null);
-  });
-});
-$("linkBtn").addEventListener('click', function(){
-  var url = prompt("Havola manzilini kiriting (https://...)");
-  if(url){ $("fBody").focus(); document.execCommand('createLink', false, url); }
-});
-
-$("saveArticleBtn").addEventListener('click', function(){
-  clearMsg($("articleMsg"));
-  var payload = {
-    category: $("fCat").value,
-    status: $("fStatus").value,
-    title: $("fTitle").value.trim(),
-    lead: $("fLead").value.trim(),
-    cover_image_url: $("fCover").value.trim(),
-    minutes: $("fMin").value,
-    body: $("fBody").innerHTML.trim()
-  };
-  if(!payload.category || !payload.title || !payload.lead || !payload.body){
-    showMsg($("articleMsg"), "Kategoriya, sarlavha, qisqacha va matnni to'ldiring.", false); return;
-  }
-  var id = $("editId").value;
-  var req = id ? api('/api/admin/articles/'+id, {method:'PUT', body: JSON.stringify(payload)})
-               : api('/api/admin/articles', {method:'POST', body: JSON.stringify(payload)});
-  req.then(function(){ loadAll(); switchView('articles'); })
-     .catch(function(e){ showMsg($("articleMsg"), e.message, false); });
-});
-
-/* ---------- Categories ---------- */
-$("catColor").addEventListener('input', function(){ $("catColorHex").textContent = this.value; });
-function renderCategoriesList(){
-  $("catList").innerHTML = categories.map(function(c){
-    return '<div class="flex items-center gap-3 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-4">'
-      + '<div class="w-6 h-6 rounded-md flex-shrink-0" style="background:'+c.color+'"></div>'
-      + '<span class="flex-1 font-medium">'+esc(c.name)+'</span>'
-      + '<button class="px-3 py-1.5 rounded-lg border border-slate-200 dark:border-slate-700 text-xs font-semibold" data-catedit="'+c.id+'">Tahrirlash</button>'
-      + '<button class="px-3 py-1.5 rounded-lg bg-red-600 text-white text-xs font-semibold" data-catdel="'+c.id+'">O\'chirish</button></div>';
-  }).join('');
-}
-$("catList").addEventListener('click', function(e){
-  var editId = e.target.getAttribute('data-catedit');
-  var delId = e.target.getAttribute('data-catdel');
-  if(editId){
-    var c = categories.filter(function(x){return x.id==editId})[0]; if(!c) return;
-    $("catEditId").value = c.id; $("catName").value = c.name; $("catColor").value = c.color; $("catColorHex").textContent = c.color;
-    $("catFormTitle").textContent = "Kategoriyani tahrirlash";
-    $("cancelCatBtn").classList.remove('hidden-imp');
-  }
-  if(delId){
-    if(!confirm("Kategoriyani o'chirishni tasdiqlaysizmi? Unga bog'liq maqolalar o'chmaydi, lekin kategoriyasiz qoladi.")) return;
-    api('/api/admin/categories/'+delId, {method:'DELETE'}).then(function(){
-      api('/api/admin/categories').then(function(d){ categories = d; fillCategorySelect(); renderCategoriesList(); });
+$("loginForm").addEventListener("submit", async (e)=>{
+  e.preventDefault();
+  $("loginError").classList.add("hidden");
+  const password = $("loginPassword").value;
+  try{
+    const res = await fetch("/api/login", {
+      method:"POST",
+      headers:{ "Content-Type":"application/json" },
+      body: JSON.stringify({ password })
     });
+    if(!res.ok) throw new Error("bad");
+    const data = await res.json();
+    if(!data || !data.token) throw new Error("bad");
+    setToken(data.token);
+    $("loginPassword").value = "";
+    showApp();
+  }catch(err){
+    $("loginError").classList.remove("hidden");
   }
 });
-$("cancelCatBtn").addEventListener('click', resetCatForm);
-function resetCatForm(){
-  $("catEditId").value=''; $("catName").value=''; $("catColor").value='#1F4E79'; $("catColorHex").textContent='#1F4E79';
-  $("catFormTitle").textContent = "Yangi kategoriya";
-  $("cancelCatBtn").classList.add('hidden-imp');
-  clearMsg($("catMsg"));
+
+$("logoutButton").addEventListener("click", ()=>{
+  clearToken();
+  showLogin();
+});
+
+/* ---------- TABS ---------- */
+function setTab(tab){
+  state.activeTab = tab;
+  document.querySelectorAll(".tab-panel").forEach(el => el.classList.add("hidden"));
+  $(`tab-${tab}`).classList.remove("hidden");
+  document.querySelectorAll(".tab-btn").forEach(btn=>{
+    btn.classList.toggle("active", btn.getAttribute("data-tab") === tab);
+  });
 }
-$("saveCatBtn").addEventListener('click', function(){
-  clearMsg($("catMsg"));
-  var name = $("catName").value.trim(), color = $("catColor").value;
-  if(!name){ showMsg($("catMsg"), "Nomini kiriting.", false); return; }
-  var id = $("catEditId").value;
-  var req = id ? api('/api/admin/categories/'+id, {method:'PUT', body: JSON.stringify({name:name,color:color})})
-               : api('/api/admin/categories', {method:'POST', body: JSON.stringify({name:name,color:color})});
-  req.then(function(){
-    resetCatForm();
-    api('/api/admin/categories').then(function(d){ categories = d; fillCategorySelect(); renderCategoriesList(); });
-    api('/api/admin/articles').then(function(d){ articles = d; });
-  }).catch(function(e){ showMsg($("catMsg"), e.message, false); });
+document.querySelectorAll(".tab-btn").forEach(btn=>{
+  btn.addEventListener("click", ()=> setTab(btn.getAttribute("data-tab")));
 });
 
-/* ---------- Settings: change password ---------- */
-$("pwSave").addEventListener('click', function(){
-  clearMsg($("pwMsg"));
-  api('/api/admin/change-password', {method:'POST', body: JSON.stringify({currentPassword:$("pwCurrent").value, newPassword:$("pwNew").value})})
-    .then(function(){ showMsg($("pwMsg"), "Parol almashtirildi.", true); $("pwCurrent").value=''; $("pwNew").value=''; })
-    .catch(function(e){ showMsg($("pwMsg"), e.message, false); });
+/* ---------- MODALS ---------- */
+function openModal(id){ $(id).classList.remove("hidden"); document.body.style.overflow="hidden"; }
+function closeModal(id){ $(id).classList.add("hidden"); document.body.style.overflow=""; }
+document.querySelectorAll("[data-close-modal]").forEach(btn=>{
+  btn.addEventListener("click", ()=> closeModal(btn.getAttribute("data-close-modal")));
+});
+[ "articleModal", "adModal" ].forEach(id=>{
+  $(id).addEventListener("click", (e)=>{ if(e.target === $(id)) closeModal(id); });
 });
 
-checkLogin();
+let pendingDelete = null;
+function askDelete(kind, id, label){
+  pendingDelete = { kind, id };
+  $("confirmText").textContent = `"${label}" o'chiriladi. Bu amalni ortga qaytarib bo'lmaydi.`;
+  openModal("confirmModal");
+}
+$("confirmCancel").addEventListener("click", ()=>{ pendingDelete=null; closeModal("confirmModal"); });
+$("confirmOk").addEventListener("click", async ()=>{
+  if(!pendingDelete) return;
+  const { kind, id } = pendingDelete;
+  try{
+    if(kind === "article"){
+      await apiFetch(`/api/articles/${id}`, { method:"DELETE" });
+      toast("Maqola o'chirildi");
+      await loadArticles();
+    } else {
+      await apiFetch(`/api/advertisements/${id}`, { method:"DELETE" });
+      toast("Reklama o'chirildi");
+      await loadAds();
+    }
+  }catch(err){
+    toast(err.message || "Xatolik yuz berdi", "error");
+  }
+  pendingDelete = null;
+  closeModal("confirmModal");
+});
+
+/* ---------- ARTICLES ---------- */
+async function loadArticles(){
+  try{
+    const data = await apiFetch("/api/articles");
+    state.articles = Array.isArray(data) ? data : [];
+    renderArticlesTable();
+  }catch(err){
+    if(err.message !== "unauthorized") toast(err.message || "Maqolalarni yuklab bo'lmadi", "error");
+  }
+}
+
+function renderArticlesTable(){
+  const query = ($("articleSearch").value || "").trim().toLowerCase();
+  const rows = state.articles
+    .filter(a => !query || String(a.title||"").toLowerCase().includes(query))
+    .sort((a,b)=>{
+      const ad = new Date(String(a.published_at||a.created_at||"").replace(" ","T")).getTime() || 0;
+      const bd = new Date(String(b.published_at||b.created_at||"").replace(" ","T")).getTime() || 0;
+      return bd - ad;
+    });
+
+  $("articlesEmptyState").classList.toggle("hidden", rows.length !== 0);
+
+  $("articlesTableBody").innerHTML = rows.map(a => `
+    <tr>
+      <td class="px-4 py-3">
+        <div class="font-bold text-slate-800 dark:text-slate-100">${escapeHtml(a.title)}</div>
+        <div class="mt-0.5 flex gap-1.5">
+          ${Number(a.is_featured)===1 ? '<span class="rounded bg-sky-100 px-1.5 py-0.5 text-[10px] font-extrabold text-qblue dark:bg-sky-950/50 dark:text-sky-300">BANNER</span>' : ""}
+          ${Number(a.is_pinned)===1 ? '<span class="rounded bg-emerald-100 px-1.5 py-0.5 text-[10px] font-extrabold text-qgreen dark:bg-emerald-950/50 dark:text-emerald-300">MUHIM</span>' : ""}
+          ${Number(a.is_advertisement)===1 ? '<span class="rounded bg-amber-100 px-1.5 py-0.5 text-[10px] font-extrabold text-amber-800 dark:bg-amber-950/50 dark:text-amber-300">REKLAMA</span>' : ""}
+        </div>
+      </td>
+      <td class="px-4 py-3 text-slate-600 dark:text-slate-400">${escapeHtml(a.category)}</td>
+      <td class="px-4 py-3">
+        <span class="rounded-full px-2.5 py-1 text-xs font-bold ${a.status==="published" ? "bg-emerald-100 text-qgreen dark:bg-emerald-950/50 dark:text-emerald-300" : "bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-300"}">
+          ${a.status==="published" ? "Chop etilgan" : "Qoralama"}
+        </span>
+      </td>
+      <td class="px-4 py-3 text-slate-500 dark:text-slate-400">${escapeHtml(formatDate(a.published_at || a.created_at))}</td>
+      <td class="px-4 py-3 text-right">
+        <button data-edit-article="${a.id}" class="mr-2 rounded-lg border border-slate-200 px-3 py-1.5 text-xs font-bold text-slate-600 hover:border-qblue hover:text-qblue dark:border-slate-700 dark:text-slate-300">Tahrirlash</button>
+        <button data-delete-article="${a.id}" data-title="${escapeHtml(a.title)}" class="rounded-lg border border-slate-200 px-3 py-1.5 text-xs font-bold text-rose-600 hover:border-rose-300 dark:border-slate-700">O‘chirish</button>
+      </td>
+    </tr>
+  `).join("");
+}
+
+$("articleSearch").addEventListener("input", renderArticlesTable);
+
+function openArticleForm(article){
+  const form = $("articleForm");
+  form.reset();
+  $("articleModalTitle").textContent = article ? "Maqolani tahrirlash" : "Yangi maqola";
+  form.elements["id"].value = article ? article.id : "";
+  if(article){
+    form.elements["title"].value = article.title || "";
+    form.elements["lead"].value = article.lead || "";
+    form.elements["body"].value = article.body || "";
+    form.elements["category"].value = article.category || "Uy qurish";
+    form.elements["article_type"].value = article.article_type || "guide";
+    form.elements["author"].value = article.author || "";
+    form.elements["minutes"].value = article.minutes || "";
+    form.elements["tags"].value = article.tags || "";
+    form.elements["image_url"].value = article.image_url || "";
+    form.elements["image_caption"].value = article.image_caption || "";
+    form.elements["image_credit"].value = article.image_credit || "";
+    form.elements["steps"].value = article.steps || "";
+    form.elements["warning"].value = article.warning || "";
+    form.elements["source_name"].value = article.source_name || "";
+    form.elements["source_url"].value = article.source_url || "";
+    form.elements["document_no"].value = article.document_no || "";
+    form.elements["updated"].value = article.updated ? String(article.updated).slice(0,10) : "";
+    form.elements["status"].value = article.status || "draft";
+    form.elements["published_at"].value = toDatetimeLocal(article.published_at);
+    form.elements["is_featured"].checked = Number(article.is_featured) === 1;
+    form.elements["is_pinned"].checked = Number(article.is_pinned) === 1;
+    form.elements["is_advertisement"].checked = Number(article.is_advertisement) === 1;
+  } else {
+    form.elements["status"].value = "draft";
+    form.elements["minutes"].value = 5;
+  }
+  openModal("articleModal");
+}
+
+$("newArticleButton").addEventListener("click", ()=> openArticleForm(null));
+
+document.addEventListener("click", (e)=>{
+  const editBtn = e.target.closest("[data-edit-article]");
+  if(editBtn){
+    const article = state.articles.find(a => String(a.id) === editBtn.getAttribute("data-edit-article"));
+    if(article) openArticleForm(article);
+  }
+  const delBtn = e.target.closest("[data-delete-article]");
+  if(delBtn){
+    askDelete("article", delBtn.getAttribute("data-delete-article"), delBtn.getAttribute("data-title"));
+  }
+  const editAd = e.target.closest("[data-edit-ad]");
+  if(editAd){
+    const ad = state.ads.find(a => String(a.id) === editAd.getAttribute("data-edit-ad"));
+    if(ad) openAdForm(ad);
+  }
+  const delAd = e.target.closest("[data-delete-ad]");
+  if(delAd){
+    askDelete("ad", delAd.getAttribute("data-delete-ad"), delAd.getAttribute("data-title"));
+  }
+});
+
+$("articleForm").addEventListener("submit", async (e)=>{
+  e.preventDefault();
+  const form = e.target;
+  const fd = new FormData(form);
+  const id = fd.get("id");
+
+  const payload = {
+    title: fd.get("title"),
+    lead: fd.get("lead"),
+    body: fd.get("body"),
+    category: fd.get("category"),
+    article_type: fd.get("article_type"),
+    author: fd.get("author"),
+    minutes: fd.get("minutes") ? Number(fd.get("minutes")) : null,
+    tags: fd.get("tags"),
+    image_url: fd.get("image_url"),
+    image_caption: fd.get("image_caption"),
+    image_credit: fd.get("image_credit"),
+    steps: fd.get("steps"),
+    warning: fd.get("warning"),
+    source_name: fd.get("source_name"),
+    source_url: fd.get("source_url"),
+    document_no: fd.get("document_no"),
+    updated: fd.get("updated") || null,
+    status: fd.get("status"),
+    published_at: fd.get("published_at") || null,
+    is_featured: form.elements["is_featured"].checked ? 1 : 0,
+    is_pinned: form.elements["is_pinned"].checked ? 1 : 0,
+    is_advertisement: form.elements["is_advertisement"].checked ? 1 : 0
+  };
+
+  try{
+    if(id){
+      await apiFetch(`/api/articles/${id}`, { method:"PUT", body: JSON.stringify(payload) });
+      toast("Maqola yangilandi");
+    } else {
+      await apiFetch("/api/articles", { method:"POST", body: JSON.stringify(payload) });
+      toast("Maqola qo'shildi");
+    }
+    closeModal("articleModal");
+    await loadArticles();
+  }catch(err){
+    toast(err.message || "Saqlashda xatolik", "error");
+  }
+});
+
+/* ---------- ADS ---------- */
+async function loadAds(){
+  try{
+    const data = await apiFetch("/api/advertisements");
+    state.ads = Array.isArray(data) ? data : [];
+    renderAdsTable();
+  }catch(err){
+    if(err.message !== "unauthorized") toast(err.message || "Reklamalarni yuklab bo'lmadi", "error");
+  }
+}
+
+function renderAdsTable(){
+  $("adsEmptyState").classList.toggle("hidden", state.ads.length !== 0);
+  $("adsTableBody").innerHTML = state.ads.map(ad => `
+    <tr>
+      <td class="px-4 py-3 font-bold text-slate-800 dark:text-slate-100">${escapeHtml(ad.title)}</td>
+      <td class="px-4 py-3 text-slate-600 dark:text-slate-400">${escapeHtml(ad.company_name || "—")}</td>
+      <td class="px-4 py-3">
+        <span class="rounded-full px-2.5 py-1 text-xs font-bold ${ad.status==="active" ? "bg-emerald-100 text-qgreen dark:bg-emerald-950/50 dark:text-emerald-300" : "bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-300"}">
+          ${ad.status==="active" ? "Faol" : "Nofaol"}
+        </span>
+      </td>
+      <td class="px-4 py-3 text-slate-500 dark:text-slate-400">${ad.starts_at || ad.ends_at ? `${escapeHtml(formatDate(ad.starts_at))} — ${escapeHtml(formatDate(ad.ends_at))}` : "Cheklanmagan"}</td>
+      <td class="px-4 py-3 text-right">
+        <button data-edit-ad="${ad.id}" class="mr-2 rounded-lg border border-slate-200 px-3 py-1.5 text-xs font-bold text-slate-600 hover:border-qblue hover:text-qblue dark:border-slate-700 dark:text-slate-300">Tahrirlash</button>
+        <button data-delete-ad="${ad.id}" data-title="${escapeHtml(ad.title)}" class="rounded-lg border border-slate-200 px-3 py-1.5 text-xs font-bold text-rose-600 hover:border-rose-300 dark:border-slate-700">O‘chirish</button>
+      </td>
+    </tr>
+  `).join("");
+}
+
+function openAdForm(ad){
+  const form = $("adForm");
+  form.reset();
+  $("adModalTitle").textContent = ad ? "Reklamani tahrirlash" : "Yangi reklama";
+  form.elements["id"].value = ad ? ad.id : "";
+  if(ad){
+    form.elements["label"].value = ad.label || "";
+    form.elements["title"].value = ad.title || "";
+    form.elements["description"].value = ad.description || "";
+    form.elements["company_name"].value = ad.company_name || "";
+    form.elements["image_url"].value = ad.image_url || "";
+    form.elements["target_url"].value = ad.target_url || "";
+    form.elements["starts_at"].value = ad.starts_at ? String(ad.starts_at).slice(0,10) : "";
+    form.elements["ends_at"].value = ad.ends_at ? String(ad.ends_at).slice(0,10) : "";
+    form.elements["status"].value = ad.status || "active";
+  } else {
+    form.elements["status"].value = "active";
+  }
+  openModal("adModal");
+}
+
+$("newAdButton").addEventListener("click", ()=> openAdForm(null));
+
+$("adForm").addEventListener("submit", async (e)=>{
+  e.preventDefault();
+  const fd = new FormData(e.target);
+  const id = fd.get("id");
+  const payload = {
+    label: fd.get("label"),
+    title: fd.get("title"),
+    description: fd.get("description"),
+    company_name: fd.get("company_name"),
+    image_url: fd.get("image_url"),
+    target_url: fd.get("target_url"),
+    starts_at: fd.get("starts_at") || null,
+    ends_at: fd.get("ends_at") || null,
+    status: fd.get("status")
+  };
+  try{
+    if(id){
+      await apiFetch(`/api/advertisements/${id}`, { method:"PUT", body: JSON.stringify(payload) });
+      toast("Reklama yangilandi");
+    } else {
+      await apiFetch("/api/advertisements", { method:"POST", body: JSON.stringify(payload) });
+      toast("Reklama qo'shildi");
+    }
+    closeModal("adModal");
+    await loadAds();
+  }catch(err){
+    toast(err.message || "Saqlashda xatolik", "error");
+  }
+});
+
+/* ---------- SETTINGS ---------- */
+async function loadSettings(){
+  try{
+    const data = await apiFetch("/api/settings");
+    state.settings = data || {};
+    const form = $("settingsForm");
+    Object.entries(state.settings).forEach(([key, value])=>{
+      if(form.elements[key]) form.elements[key].value = value ?? "";
+    });
+  }catch(err){
+    if(err.message !== "unauthorized") toast(err.message || "Sozlamalarni yuklab bo'lmadi", "error");
+  }
+}
+
+$("settingsForm").addEventListener("submit", async (e)=>{
+  e.preventDefault();
+  const fd = new FormData(e.target);
+  const payload = {};
+  fd.forEach((value, key) => { payload[key] = value; });
+  try{
+    await apiFetch("/api/settings", { method:"PUT", body: JSON.stringify(payload) });
+    toast("Sozlamalar saqlandi");
+  }catch(err){
+    toast(err.message || "Saqlashda xatolik", "error");
+  }
+});
+
+/* ---------- INIT ---------- */
+async function loadAll(){
+  await Promise.all([ loadArticles(), loadAds(), loadSettings() ]);
+}
+
+initTheme();
+setTab("articles");
+if(getToken()){ showApp(); } else { showLogin(); }
 </script>
 </body>
 </html>
