@@ -2,9 +2,16 @@ const express = require('express');
 const fs = require('fs');
 const path = require('path');
 const cors = require('cors');
+const crypto = require('crypto');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
+
+// Admin paroli (xohlasangiz .env faylga ko'chirasiz)
+const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || 'qurilish2026';
+
+// Tokenlar saqlanadigan joy (xotirada, server qayta ishga tushsa o'chadi)
+const tokens = new Set();
 
 // Middleware
 app.use(cors());
@@ -17,6 +24,10 @@ app.use(express.static(path.join(__dirname, 'public')));
 // ---- YORDAMCHI FUNKSIYALAR ----
 const DATA_DIR = path.join(__dirname, 'data');
 
+if (!fs.existsSync(DATA_DIR)) {
+  fs.mkdirSync(DATA_DIR, { recursive: true });
+}
+
 function readData(file, fallback = []) {
   try {
     const filePath = path.join(DATA_DIR, file);
@@ -24,18 +35,16 @@ function readData(file, fallback = []) {
       fs.writeFileSync(filePath, JSON.stringify(fallback, null, 2));
       return fallback;
     }
-    const content = fs.readFileSync(filePath, 'utf-8');
-    return JSON.parse(content);
+    return JSON.parse(fs.readFileSync(filePath, 'utf-8'));
   } catch (err) {
-    console.error(`Xato (${file}):`, err.message);
+    console.error(`O'qishda xato (${file}):`, err.message);
     return fallback;
   }
 }
 
 function writeData(file, data) {
   try {
-    const filePath = path.join(DATA_DIR, file);
-    fs.writeFileSync(filePath, JSON.stringify(data, null, 2));
+    fs.writeFileSync(path.join(DATA_DIR, file), JSON.stringify(data, null, 2));
     return true;
   } catch (err) {
     console.error(`Yozishda xato (${file}):`, err.message);
@@ -43,32 +52,49 @@ function writeData(file, data) {
   }
 }
 
-// data papkasi mavjud bo'lmasa — yaratish
-if (!fs.existsSync(DATA_DIR)) {
-  fs.mkdirSync(DATA_DIR, { recursive: true });
+// ---- TOKEN TEKSHIRUVI ----
+function checkAuth(req, res, next) {
+  const authHeader = req.headers.authorization || '';
+  const token = authHeader.replace('Bearer ', '').trim();
+  
+  if (!token || !tokens.has(token)) {
+    return res.status(401).json({ message: 'Avtorizatsiya kerak' });
+  }
+  next();
 }
 
-// ---- API: MAQOLALAR ----
+// ============ LOGIN ============
 
-// Barcha maqolalarni olish
-app.get('/api/articles', (req, res) => {
-  const articles = readData('articles.json', []);
-  res.json(articles);
+app.post('/api/login', (req, res) => {
+  const { password } = req.body;
+  
+  if (password !== ADMIN_PASSWORD) {
+    return res.status(401).json({ message: 'Parol noto\'g\'ri' });
+  }
+  
+  const token = crypto.randomBytes(32).toString('hex');
+  tokens.add(token);
+  
+  res.json({ token });
 });
 
-// Bitta maqolani olish
+// ============ MAQOLALAR ============
+
+// Ommaviy: hamma maqolalarni olish (index.html uchun)
+app.get('/api/articles', (req, res) => {
+  res.json(readData('articles.json', []));
+});
+
+// Admin: bitta maqolani olish
 app.get('/api/articles/:id', (req, res) => {
   const articles = readData('articles.json', []);
   const article = articles.find(a => String(a.id) === String(req.params.id));
-  
-  if (!article) {
-    return res.status(404).json({ error: 'Maqola topilmadi' });
-  }
+  if (!article) return res.status(404).json({ message: 'Topilmadi' });
   res.json(article);
 });
 
-// Yangi maqola qo'shish (admin)
-app.post('/api/articles', (req, res) => {
+// Admin: yangi maqola qo'shish
+app.post('/api/articles', checkAuth, (req, res) => {
   const articles = readData('articles.json', []);
   const newArticle = {
     id: Date.now(),
@@ -81,66 +107,39 @@ app.post('/api/articles', (req, res) => {
   res.status(201).json(newArticle);
 });
 
-// Maqolani yangilash (admin)
-app.put('/api/articles/:id', (req, res) => {
+// Admin: maqolani tahrirlash
+app.put('/api/articles/:id', checkAuth, (req, res) => {
   const articles = readData('articles.json', []);
   const index = articles.findIndex(a => String(a.id) === String(req.params.id));
-  
-  if (index === -1) {
-    return res.status(404).json({ error: 'Maqola topilmadi' });
-  }
+  if (index === -1) return res.status(404).json({ message: 'Topilmadi' });
   
   articles[index] = {
     ...articles[index],
     ...req.body,
+    id: articles[index].id,
     updated_at: new Date().toISOString()
   };
   writeData('articles.json', articles);
   res.json(articles[index]);
 });
 
-// Maqolani o'chirish (admin)
-app.delete('/api/articles/:id', (req, res) => {
+// Admin: maqolani o'chirish
+app.delete('/api/articles/:id', checkAuth, (req, res) => {
   let articles = readData('articles.json', []);
-  const initialLength = articles.length;
+  const before = articles.length;
   articles = articles.filter(a => String(a.id) !== String(req.params.id));
-  
-  if (articles.length === initialLength) {
-    return res.status(404).json({ error: 'Maqola topilmadi' });
-  }
-  
+  if (articles.length === before) return res.status(404).json({ message: 'Topilmadi' });
   writeData('articles.json', articles);
-  res.json({ success: true });
+  res.status(204).end();
 });
 
-// ---- API: SOZLAMALAR ----
-
-app.get('/api/settings', (req, res) => {
-  const settings = readData('settings.json', {
-    site_name: 'QurilishInfo',
-    site_tagline: 'Qurilishdagi to\'g\'ri qarorlar uchun amaliy ma\'lumot',
-    telegram_url: 'https://t.me/qurilishinfo',
-    contact: '@qurilishinfo_admin',
-    contact_url: 'https://t.me/qurilishinfo_admin'
-  });
-  res.json(settings);
-});
-
-app.put('/api/settings', (req, res) => {
-  const current = readData('settings.json', {});
-  const updated = { ...current, ...req.body };
-  writeData('settings.json', updated);
-  res.json(updated);
-});
-
-// ---- API: REKLAMALAR ----
+// ============ REKLAMALAR ============
 
 app.get('/api/advertisements', (req, res) => {
-  const ads = readData('advertisements.json', []);
-  res.json(ads);
+  res.json(readData('advertisements.json', []));
 });
 
-app.post('/api/advertisements', (req, res) => {
+app.post('/api/advertisements', checkAuth, (req, res) => {
   const ads = readData('advertisements.json', []);
   const newAd = {
     id: Date.now(),
@@ -152,52 +151,63 @@ app.post('/api/advertisements', (req, res) => {
   res.status(201).json(newAd);
 });
 
-// ---- QO'SHIMCHA API: QIDIRUV ----
-
-app.get('/api/search', (req, res) => {
-  const query = String(req.query.q || '').toLowerCase().trim();
+app.put('/api/advertisements/:id', checkAuth, (req, res) => {
+  const ads = readData('advertisements.json', []);
+  const index = ads.findIndex(a => String(a.id) === String(req.params.id));
+  if (index === -1) return res.status(404).json({ message: 'Topilmadi' });
   
-  if (!query) {
-    return res.json({ articles: [], laws: [], fines: [], organizations: [] });
-  }
-  
-  const articles = readData('articles.json', []);
-  const laws = readData('laws.json', []);
-  const fines = readData('fines.json', []);
-  const organizations = readData('organizations.json', []);
-  
-  function matches(item) {
-    const text = Object.values(item).join(' ').toLowerCase();
-    return text.includes(query);
-  }
-  
-  res.json({
-    articles: articles.filter(matches).slice(0, 10),
-    laws: laws.filter(matches).slice(0, 10),
-    fines: fines.filter(matches).slice(0, 10),
-    organizations: organizations.filter(matches).slice(0, 10)
-  });
+  ads[index] = { ...ads[index], ...req.body, id: ads[index].id };
+  writeData('advertisements.json', ads);
+  res.json(ads[index]);
 });
 
-// ---- ADMIN SAHIFASI ----
+app.delete('/api/advertisements/:id', checkAuth, (req, res) => {
+  let ads = readData('advertisements.json', []);
+  const before = ads.length;
+  ads = ads.filter(a => String(a.id) !== String(req.params.id));
+  if (ads.length === before) return res.status(404).json({ message: 'Topilmadi' });
+  writeData('advertisements.json', ads);
+  res.status(204).end();
+});
+
+// ============ SOZLAMALAR ============
+
+app.get('/api/settings', (req, res) => {
+  const settings = readData('settings.json', {
+    site_name: 'QurilishInfo',
+    site_tagline: 'Qurilishdagi to\'g\'ri qarorlar uchun amaliy ma\'lumot',
+    site_description: 'Uy qurish, ruxsatnoma, smeta, ta\'mirlash va qurilishdagi huquqlar bo\'yicha amaliy ma\'lumotlar.',
+    telegram_url: 'https://t.me/qurilishinfo',
+    contact: '@qurilishinfo_admin',
+    contact_url: 'https://t.me/qurilishinfo_admin'
+  });
+  res.json(settings);
+});
+
+app.put('/api/settings', checkAuth, (req, res) => {
+  const current = readData('settings.json', {});
+  const updated = { ...current, ...req.body };
+  writeData('settings.json', updated);
+  res.json(updated);
+});
+
+// ============ SAHIFALAR ============
 
 app.get('/admin', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'admin.html'));
 });
 
-// ---- BOSH SAHIFA ----
-
 app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
-// ---- 404 ----
-
+// 404 — bosh sahifaga qaytarish
 app.use((req, res) => {
   res.status(404).sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
 app.listen(PORT, () => {
-  console.log(`✅ Server ishga tushdi: http://localhost:${PORT}`);
+  console.log(`✅ Server: http://localhost:${PORT}`);
+  console.log(`🔐 Admin paroli: ${ADMIN_PASSWORD}`);
   console.log(`📁 Data papkasi: ${DATA_DIR}`);
 });
