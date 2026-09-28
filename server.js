@@ -10,7 +10,7 @@ const PORT = process.env.PORT || 3000;
 // Admin paroli (xohlasangiz .env faylga ko'chirasiz)
 const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || 'qurilish2026';
 
-// Tokenlar saqlanadigan joy (xotirada, server qayta ishga tushsa o'chadi)
+// Tokenlar xotirada saqlanadi
 const tokens = new Set();
 
 // Middleware
@@ -18,10 +18,10 @@ app.use(cors());
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true }));
 
-// Statik fayllar (public papkasi)
+// Statik fayllar
 app.use(express.static(path.join(__dirname, 'public')));
 
-// ---- YORDAMCHI FUNKSIYALAR ----
+// ---- YORDAMCHI ----
 const DATA_DIR = path.join(__dirname, 'data');
 
 if (!fs.existsSync(DATA_DIR)) {
@@ -64,12 +64,11 @@ function checkAuth(req, res, next) {
 }
 
 // ============ LOGIN ============
-
 app.post('/api/login', (req, res) => {
   const { password } = req.body;
   
   if (password !== ADMIN_PASSWORD) {
-    return res.status(401).json({ message: 'Parol noto\'g\'ri' });
+    return res.status(401).json({ message: 'Parol notogri' });
   }
   
   const token = crypto.randomBytes(32).toString('hex');
@@ -79,13 +78,10 @@ app.post('/api/login', (req, res) => {
 });
 
 // ============ MAQOLALAR ============
-
-// Ommaviy: hamma maqolalarni olish (index.html uchun)
 app.get('/api/articles', (req, res) => {
   res.json(readData('articles.json', []));
 });
 
-// Admin: bitta maqolani olish
 app.get('/api/articles/:id', (req, res) => {
   const articles = readData('articles.json', []);
   const article = articles.find(a => String(a.id) === String(req.params.id));
@@ -93,7 +89,6 @@ app.get('/api/articles/:id', (req, res) => {
   res.json(article);
 });
 
-// Admin: yangi maqola qo'shish
 app.post('/api/articles', checkAuth, (req, res) => {
   const articles = readData('articles.json', []);
   const newArticle = {
@@ -107,7 +102,6 @@ app.post('/api/articles', checkAuth, (req, res) => {
   res.status(201).json(newArticle);
 });
 
-// Admin: maqolani tahrirlash
 app.put('/api/articles/:id', checkAuth, (req, res) => {
   const articles = readData('articles.json', []);
   const index = articles.findIndex(a => String(a.id) === String(req.params.id));
@@ -123,7 +117,6 @@ app.put('/api/articles/:id', checkAuth, (req, res) => {
   res.json(articles[index]);
 });
 
-// Admin: maqolani o'chirish
 app.delete('/api/articles/:id', checkAuth, (req, res) => {
   let articles = readData('articles.json', []);
   const before = articles.length;
@@ -134,7 +127,6 @@ app.delete('/api/articles/:id', checkAuth, (req, res) => {
 });
 
 // ============ REKLAMALAR ============
-
 app.get('/api/advertisements', (req, res) => {
   res.json(readData('advertisements.json', []));
 });
@@ -171,12 +163,10 @@ app.delete('/api/advertisements/:id', checkAuth, (req, res) => {
 });
 
 // ============ SOZLAMALAR ============
-
 app.get('/api/settings', (req, res) => {
   const settings = readData('settings.json', {
     site_name: 'QurilishInfo',
-    site_tagline: 'Qurilishdagi to\'g\'ri qarorlar uchun amaliy ma\'lumot',
-    site_description: 'Uy qurish, ruxsatnoma, smeta, ta\'mirlash va qurilishdagi huquqlar bo\'yicha amaliy ma\'lumotlar.',
+    site_tagline: 'Qurilishdagi togri qarorlar uchun amaliy malumot',
     telegram_url: 'https://t.me/qurilishinfo',
     contact: '@qurilishinfo_admin',
     contact_url: 'https://t.me/qurilishinfo_admin'
@@ -192,7 +182,6 @@ app.put('/api/settings', checkAuth, (req, res) => {
 });
 
 // ============ SAHIFALAR ============
-
 app.get('/admin', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'admin.html'));
 });
@@ -201,13 +190,12 @@ app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
-// 404 — bosh sahifaga qaytarish
 app.use((req, res) => {
   res.status(404).sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
 app.listen(PORT, () => {
-  console.log(`✅ Server: http://localhost:${PORT}`);
-  console.log(`🔐 Admin paroli: ${ADMIN_PASSWORD}`);
-  console.log(`📁 Data papkasi: ${DATA_DIR}`);
+  console.log(`Server: http://localhost:${PORT}`);
+  console.log(`Admin paroli: ${ADMIN_PASSWORD}`);
+  console.log(`Data papkasi: ${DATA_DIR}`);
 });
