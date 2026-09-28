@@ -1,1 +1,1465 @@
+<!DOCTYPE html>
+<html lang="uz" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin panel — QurilishInfo</title>
+  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Manrope:wght@600;700;800&display=swap" rel="stylesheet">
 
+ <style type="text/tailwindcss">
+  @theme {
+    --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+    --font-display: "Manrope", ui-sans-serif, system-ui, sans-serif;
+    --color-qblue: #0b4f7c;
+    --color-qnavy: #073b61;
+    --color-qgreen: #138a5b;
+    --color-qgreen-dark: #0c6d47;
+    --color-qsoft: #f3f7fa;
+    --color-qline: #dce5eb;
+    --color-qink: #17212b;
+  }
+
+  /* Sidebar linklar */
+  .sidebar-link {
+    color: #64748b;
+    transition: all 0.2s ease;
+  }
+  .sidebar-link:hover {
+    background: #f1f5f9;
+    color: #0b4f7c;
+  }
+  .sidebar-link.active {
+    background: linear-gradient(90deg, #0b4f7c, #138a5b);
+    color: #ffffff;
+    box-shadow: 0 4px 12px rgba(11, 79, 124, 0.25);
+  }
+  .sidebar-link.active svg {
+    color: #ffffff;
+  }
+
+  /* Dark mode sidebar */
+  .dark .sidebar-link {
+    color: #94a3b8;
+  }
+  .dark .sidebar-link:hover {
+    background: #1e293b;
+    color: #69b5e4;
+  }
+  .dark .sidebar-link.active {
+    background: linear-gradient(90deg, #0b4f7c, #138a5b);
+    color: #ffffff;
+  }
+
+  /* Toast animatsiya */
+  @keyframes toast-in {
+    from { opacity: 0; transform: translateY(16px) scale(0.95); }
+    to { opacity: 1; transform: translateY(0) scale(1); }
+  }
+  .toast {
+    animation: toast-in 0.28s cubic-bezier(0.16, 1, 0.3, 1) both;
+  }
+
+  /* Scrollbar */
+  ::-webkit-scrollbar { width: 8px; height: 8px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+  ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+  .dark ::-webkit-scrollbar-thumb { background: #334155; }
+  .dark ::-webkit-scrollbar-thumb:hover { background: #475569; }
+
+  /* Modal */
+  #articleModal, #adModal, #confirmModal {
+    animation: fadeIn 0.2s ease;
+  }
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+
+  /* Jadval qatorlari */
+  tbody tr {
+    transition: background 0.15s ease;
+  }
+  tbody tr:hover {
+    background: #f8fafc;
+  }
+  .dark tbody tr:hover {
+    background: rgba(30, 41, 59, 0.5);
+  }
+
+  /* Input fokus */
+  input:focus, textarea:focus, select:focus {
+    outline: none;
+  }
+
+  /* Login animatsiya */
+  #loginScreen form {
+    animation: slideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1) both;
+  }
+  @keyframes slideUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+</style>
+</head>
+
+<body class="bg-slate-50 text-slate-800 antialiased dark:bg-slate-950 dark:text-slate-100">
+
+<!-- ============================================ -->
+<!-- LOGIN EKRANI                                  -->
+<!-- ============================================ -->
+<div id="loginScreen" class="fixed inset-0 z-50 hidden grid place-items-center bg-gradient-to-br from-slate-100 to-slate-200 px-4 dark:from-slate-950 dark:to-slate-900">
+  <form id="loginForm" class="w-full max-w-md rounded-3xl border border-slate-200 bg-white p-8 shadow-2xl dark:border-slate-800 dark:bg-slate-900">
+    <div class="mx-auto grid h-14 w-14 place-items-center rounded-2xl bg-gradient-to-br from-[#0b4f7c] to-[#138a5b] text-white shadow-lg">
+      <svg viewBox="0 0 24 24" class="h-7 w-7" fill="none" stroke="currentColor" stroke-width="2.2">
+        <path d="M3 21h18"/><path d="M5 21V10l7-6 7 6v11"/><path d="M9 21v-6h6v6"/>
+      </svg>
+    </div>
+    <h1 class="mt-5 text-center font-display text-2xl font-extrabold text-slate-900 dark:text-white">QurilishInfo Admin</h1>
+    <p class="mt-1 text-center text-sm text-slate-500 dark:text-slate-400">Boshqaruv paneliga kirish</p>
+
+    <div class="mt-6">
+      <label class="block text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">Parol</label>
+      <input id="loginPassword" type="password" required placeholder="••••••••" class="mt-2 w-full rounded-xl border border-slate-300 bg-slate-50 px-4 py-3 text-sm outline-none transition focus:border-[#0b4f7c] focus:bg-white focus:ring-4 focus:ring-sky-100 dark:border-slate-700 dark:bg-slate-800 dark:focus:ring-sky-900/30">
+    </div>
+
+    <p id="loginError" class="mt-3 hidden rounded-lg bg-rose-50 px-3 py-2 text-sm font-semibold text-rose-700 dark:bg-rose-950/50 dark:text-rose-300">Parol noto'g'ri</p>
+
+    <button type="submit" class="mt-5 w-full rounded-xl bg-gradient-to-r from-[#0b4f7c] to-[#138a5b] py-3 text-sm font-bold text-white shadow-lg transition hover:shadow-xl">
+      Kirish
+    </button>
+
+    <p class="mt-5 text-center text-xs text-slate-400">Faqat adminlar uchun</p>
+  </form>
+</div>
+
+<!-- ============================================ -->
+<!-- ASOSIY PANEL                                  -->
+<!-- ============================================ -->
+<div id="appShell" class="hidden">
+
+  <!-- SIDEBAR (chap panel) -->
+  <aside id="sidebar" class="fixed inset-y-0 left-0 z-40 flex w-64 flex-col border-r border-slate-200 bg-white transition-transform duration-300 dark:border-slate-800 dark:bg-slate-900 lg:translate-x-0 -translate-x-full">
+    
+    <!-- Logo -->
+    <div class="flex h-16 items-center gap-2.5 border-b border-slate-200 px-5 dark:border-slate-800">
+      <span class="grid h-9 w-9 place-items-center rounded-lg bg-gradient-to-br from-[#0b4f7c] to-[#138a5b] text-white">
+        <svg viewBox="0 0 24 24" class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2.2">
+          <path d="M3 21h18"/><path d="M5 21V10l7-6 7 6v11"/><path d="M9 21v-6h6v6"/>
+        </svg>
+      </span>
+      <div>
+        <p class="font-display text-sm font-extrabold text-slate-900 dark:text-white">QurilishInfo</p>
+        <p class="text-xs text-slate-500 dark:text-slate-400">Admin panel</p>
+      </div>
+    </div>
+
+    <!-- Navigatsiya -->
+    <nav class="flex-1 overflow-y-auto px-3 py-4">
+      <p class="mb-2 px-3 text-xs font-bold uppercase tracking-wider text-slate-400">Asosiy</p>
+      
+      <button data-tab="dashboard" class="sidebar-link mb-1 flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-left text-sm font-semibold transition">
+        <svg viewBox="0 0 24 24" class="h-5 w-5 shrink-0" fill="none" stroke="currentColor" stroke-width="2">
+          <rect x="3" y="3" width="7" height="9" rx="1"/><rect x="14" y="3" width="7" height="5" rx="1"/>
+          <rect x="14" y="12" width="7" height="9" rx="1"/><rect x="3" y="16" width="7" height="5" rx="1"/>
+        </svg>
+        Dashboard
+      </button>
+
+      <button data-tab="articles" class="sidebar-link mb-1 flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-left text-sm font-semibold transition">
+        <svg viewBox="0 0 24 24" class="h-5 w-5 shrink-0" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M4 4h16v16H4z"/><path d="M8 8h8M8 12h8M8 16h5"/>
+        </svg>
+        Maqolalar
+        <span id="articlesCountBadge" class="ml-auto rounded-full bg-slate-100 px-2 py-0.5 text-xs font-bold text-slate-600 dark:bg-slate-800 dark:text-slate-300">0</span>
+      </button>
+
+      <button data-tab="ads" class="sidebar-link mb-1 flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-left text-sm font-semibold transition">
+        <svg viewBox="0 0 24 24" class="h-5 w-5 shrink-0" fill="none" stroke="currentColor" stroke-width="2">
+          <rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 10h18M8 15h8"/>
+        </svg>
+        Reklamalar
+        <span id="adsCountBadge" class="ml-auto rounded-full bg-slate-100 px-2 py-0.5 text-xs font-bold text-slate-600 dark:bg-slate-800 dark:text-slate-300">0</span>
+      </button>
+
+      <button data-tab="social" class="sidebar-link mb-1 flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-left text-sm font-semibold transition">
+        <svg viewBox="0 0 24 24" class="h-5 w-5 shrink-0" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15 15 0 0 1 0 20M12 2a15 15 0 0 0 0 20"/>
+        </svg>
+        Ijtimoiy tarmoqlar
+      </button>
+
+      <p class="mb-2 mt-5 px-3 text-xs font-bold uppercase tracking-wider text-slate-400">Sozlamalar</p>
+
+      <button data-tab="settings" class="sidebar-link mb-1 flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-left text-sm font-semibold transition">
+        <svg viewBox="0 0 24 24" class="h-5 w-5 shrink-0" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="3"/>
+          <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+        </svg>
+        Umumiy sozlamalar
+      </button>
+    </nav>
+
+    <!-- Pastki qism -->
+    <div class="border-t border-slate-200 p-3 dark:border-slate-800">
+      <a href="/" target="_blank" class="mb-1 flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-semibold text-slate-600 transition hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-800">
+        <svg viewBox="0 0 24 24" class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
+          <path d="M15 3h6v6M10 14L21 3"/>
+        </svg>
+        Saytni ko'rish
+      </a>
+      <button id="logoutButton" class="flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-left text-sm font-semibold text-rose-600 transition hover:bg-rose-50 dark:hover:bg-rose-950/30">
+        <svg viewBox="0 0 24 24" class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
+          <path d="M16 17l5-5-5-5M21 12H9"/>
+        </svg>
+        Chiqish
+      </button>
+    </div>
+  </aside>
+
+  <!-- Overlay (mobil uchun) -->
+  <div id="sidebarOverlay" class="fixed inset-0 z-30 hidden bg-slate-950/50 backdrop-blur-sm lg:hidden"></div>
+
+  <!-- ASOSIY KONTENT -->
+  <div class="lg:ml-64">
+    
+    <!-- TOP HEADER -->
+    <header class="sticky top-0 z-20 flex h-16 items-center gap-3 border-b border-slate-200 bg-white/95 px-4 backdrop-blur-lg dark:border-slate-800 dark:bg-slate-950/95 sm:px-6">
+      <button id="sidebarToggle" class="grid h-9 w-9 place-items-center rounded-lg border border-slate-200 text-slate-600 lg:hidden dark:border-slate-700 dark:text-slate-300">
+        <svg viewBox="0 0 24 24" class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M4 7h16M4 12h16M4 17h16"/>
+        </svg>
+      </button>
+
+      <h1 id="pageTitle" class="font-display text-lg font-extrabold text-slate-900 dark:text-white">Dashboard</h1>
+
+      <div class="ml-auto flex items-center gap-2">
+        <button id="themeButton" class="grid h-9 w-9 place-items-center rounded-lg border border-slate-200 text-slate-600 dark:border-slate-700 dark:text-slate-300">
+          <svg id="themeIcon" viewBox="0 0 24 24" class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/>
+          </svg>
+        </button>
+
+        <span class="hidden items-center gap-2 rounded-lg bg-emerald-50 px-3 py-1.5 text-xs font-bold text-emerald-700 sm:flex dark:bg-emerald-950/50 dark:text-emerald-300">
+          <span class="h-2 w-2 rounded-full bg-emerald-500"></span>
+          Online
+        </span>
+      </div>
+    </header>
+
+    <!-- KONTENT -->
+    <main class="p-4 sm:p-6">
+
+      <!-- =========================================== -->
+      <!-- TAB: DASHBOARD                              -->
+      <!-- =========================================== -->
+      <section id="tab-dashboard" class="tab-panel">
+        
+        <!-- Statistika kartalari -->
+        <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+          <div class="rounded-2xl border border-slate-200 bg-white p-5 dark:border-slate-800 dark:bg-slate-900">
+            <div class="flex items-center justify-between">
+              <span class="grid h-10 w-10 place-items-center rounded-xl bg-sky-100 text-sky-700 dark:bg-sky-950/50 dark:text-sky-300">
+                <svg viewBox="0 0 24 24" class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M4 4h16v16H4z"/><path d="M8 8h8M8 12h8M8 16h5"/>
+                </svg>
+              </span>
+            </div>
+            <p class="mt-4 text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">Jami maqolalar</p>
+            <p id="statTotalArticles" class="mt-1 font-display text-3xl font-extrabold text-slate-900 dark:text-white">0</p>
+          </div>
+
+          <div class="rounded-2xl border border-slate-200 bg-white p-5 dark:border-slate-800 dark:bg-slate-900">
+            <div class="flex items-center justify-between">
+              <span class="grid h-10 w-10 place-items-center rounded-xl bg-emerald-100 text-emerald-700 dark:bg-emerald-950/50 dark:text-emerald-300">
+                <svg viewBox="0 0 24 24" class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M20 6L9 17l-5-5"/>
+                </svg>
+              </span>
+            </div>
+            <p class="mt-4 text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">Chop etilgan</p>
+            <p id="statPublished" class="mt-1 font-display text-3xl font-extrabold text-emerald-600 dark:text-emerald-400">0</p>
+          </div>
+
+          <div class="rounded-2xl border border-slate-200 bg-white p-5 dark:border-slate-800 dark:bg-slate-900">
+            <div class="flex items-center justify-between">
+              <span class="grid h-10 w-10 place-items-center rounded-xl bg-amber-100 text-amber-700 dark:bg-amber-950/50 dark:text-amber-300">
+                <svg viewBox="0 0 24 24" class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M12 8v4l3 3"/><circle cx="12" cy="12" r="10"/>
+                </svg>
+              </span>
+            </div>
+            <p class="mt-4 text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">Qoralama</p>
+            <p id="statDraft" class="mt-1 font-display text-3xl font-extrabold text-amber-600 dark:text-amber-400">0</p>
+          </div>
+
+          <div class="rounded-2xl border border-slate-200 bg-white p-5 dark:border-slate-800 dark:bg-slate-900">
+            <div class="flex items-center justify-between">
+              <span class="grid h-10 w-10 place-items-center rounded-xl bg-purple-100 text-purple-700 dark:bg-purple-950/50 dark:text-purple-300">
+                <svg viewBox="0 0 24 24" class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2">
+                  <rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 10h18"/>
+                </svg>
+              </span>
+            </div>
+            <p class="mt-4 text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">Reklamalar</p>
+            <p id="statTotalAds" class="mt-1 font-display text-3xl font-extrabold text-purple-600 dark:text-purple-400">0</p>
+          </div>
+        </div>
+
+        <!-- Bo'lim: Maqolalar va reklamalar ro'yxati -->
+        <div class="mt-6 grid gap-6 lg:grid-cols-2">
+          
+          <!-- Oxirgi maqolalar -->
+          <div class="rounded-2xl border border-slate-200 bg-white dark:border-slate-800 dark:bg-slate-900">
+            <div class="flex items-center justify-between border-b border-slate-200 px-5 py-4 dark:border-slate-800">
+              <h3 class="font-display text-base font-extrabold text-slate-900 dark:text-white">Oxirgi maqolalar</h3>
+              <button data-goto-tab="articles" class="text-xs font-bold text-[#0b4f7c] hover:underline dark:text-sky-400">Barchasini ko'rish →</button>
+            </div>
+            <div id="recentArticles" class="divide-y divide-slate-100 dark:divide-slate-800"></div>
+          </div>
+
+          <!-- Faol reklamalar -->
+          <div class="rounded-2xl border border-slate-200 bg-white dark:border-slate-800 dark:bg-slate-900">
+            <div class="flex items-center justify-between border-b border-slate-200 px-5 py-4 dark:border-slate-800">
+              <h3 class="font-display text-base font-extrabold text-slate-900 dark:text-white">Faol reklamalar</h3>
+              <button data-goto-tab="ads" class="text-xs font-bold text-[#0b4f7c] hover:underline dark:text-sky-400">Barchasini ko'rish →</button>
+            </div>
+            <div id="activeAds" class="divide-y divide-slate-100 dark:divide-slate-800"></div>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- =========================================== -->
+      <!-- TAB: MAQOLALAR                              -->
+      <!-- =========================================== -->
+      <section id="tab-articles" class="tab-panel hidden">
+        <div class="mb-5 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+          <div>
+            <h2 class="font-display text-2xl font-extrabold text-slate-900 dark:text-white">Maqolalar</h2>
+            <p class="mt-1 text-sm text-slate-500 dark:text-slate-400">Qo'shish, tahrirlash, o'chirish</p>
+          </div>
+          <div class="flex flex-wrap gap-2">
+            <input id="articleSearch" type="search" placeholder="Qidirish..." class="rounded-xl border border-slate-300 bg-white px-4 py-2.5 text-sm outline-none focus:border-[#0b4f7c] dark:border-slate-700 dark:bg-slate-900 sm:w-56">
+            <select id="articleFilter" class="rounded-xl border border-slate-300 bg-white px-3 py-2.5 text-sm outline-none focus:border-[#0b4f7c] dark:border-slate-700 dark:bg-slate-900">
+              <option value="all">Barchasi</option>
+              <option value="published">Chop etilgan</option>
+              <option value="draft">Qoralama</option>
+            </select>
+            <button id="newArticleButton" class="rounded-xl bg-gradient-to-r from-[#0b4f7c] to-[#138a5b] px-4 py-2.5 text-sm font-bold text-white shadow-lg hover:shadow-xl">+ Yangi</button>
+          </div>
+        </div>
+
+        <div class="overflow-hidden rounded-2xl border border-slate-200 bg-white dark:border-slate-800 dark:bg-slate-900">
+          <div class="overflow-x-auto">
+            <table class="w-full min-w-[800px] text-left text-sm">
+              <thead class="border-b border-slate-200 bg-slate-50 text-xs font-bold uppercase tracking-wide text-slate-500 dark:border-slate-800 dark:bg-slate-950/40 dark:text-slate-400">
+                <tr>
+                  <th class="px-4 py-3">Sarlavha</th>
+                  <th class="px-4 py-3">Rukn</th>
+                  <th class="px-4 py-3">Holat</th>
+                  <th class="px-4 py-3">Sana</th>
+                  <th class="px-4 py-3 text-right">Amallar</th>
+                </tr>
+              </thead>
+              <tbody id="articlesTableBody" class="divide-y divide-slate-100 dark:divide-slate-800"></tbody>
+            </table>
+          </div>
+        </div>
+        <p id="articlesEmptyState" class="hidden py-10 text-center text-sm text-slate-500 dark:text-slate-400">Hozircha maqola yo'q.</p>
+      </section>
+
+      <!-- =========================================== -->
+      <!-- TAB: REKLAMALAR                             -->
+      <!-- =========================================== -->
+      <section id="tab-ads" class="tab-panel hidden">
+        <div class="mb-5 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+          <div>
+            <h2 class="font-display text-2xl font-extrabold text-slate-900 dark:text-white">Reklamalar</h2>
+            <p class="mt-1 text-sm text-slate-500 dark:text-slate-400">Hamkorlik materiallari</p>
+          </div>
+          <button id="newAdButton" class="rounded-xl bg-gradient-to-r from-[#0b4f7c] to-[#138a5b] px-4 py-2.5 text-sm font-bold text-white shadow-lg hover:shadow-xl">+ Yangi reklama</button>
+        </div>
+
+        <div class="overflow-hidden rounded-2xl border border-slate-200 bg-white dark:border-slate-800 dark:bg-slate-900">
+          <div class="overflow-x-auto">
+            <table class="w-full min-w-[700px] text-left text-sm">
+              <thead class="border-b border-slate-200 bg-slate-50 text-xs font-bold uppercase tracking-wide text-slate-500 dark:border-slate-800 dark:bg-slate-950/40 dark:text-slate-400">
+                <tr>
+                  <th class="px-4 py-3">Sarlavha</th>
+                  <th class="px-4 py-3">Kompaniya</th>
+                  <th class="px-4 py-3">Holat</th>
+                  <th class="px-4 py-3">Muddat</th>
+                  <th class="px-4 py-3 text-right">Amallar</th>
+                </tr>
+              </thead>
+              <tbody id="adsTableBody" class="divide-y divide-slate-100 dark:divide-slate-800"></tbody>
+            </table>
+          </div>
+        </div>
+        <p id="adsEmptyState" class="hidden py-10 text-center text-sm text-slate-500 dark:text-slate-400">Hozircha reklama yo'q.</p>
+      </section>
+
+      <!-- =========================================== -->
+      <!-- TAB: IJTIMOIY TARMOQLAR                     -->
+      <!-- =========================================== -->
+      <section id="tab-social" class="tab-panel hidden">
+        <div class="mb-5">
+          <h2 class="font-display text-2xl font-extrabold text-slate-900 dark:text-white">Ijtimoiy tarmoqlar</h2>
+          <p class="mt-1 text-sm text-slate-500 dark:text-slate-400">Saytda ko'rinadigan ijtimoiy tarmoq havolalari</p>
+        </div>
+
+        <form id="socialForm" class="grid gap-4 md:grid-cols-2">
+          <!-- Telegram -->
+          <div class="rounded-2xl border border-slate-200 bg-white p-5 dark:border-slate-800 dark:bg-slate-900">
+            <div class="flex items-center gap-3">
+              <span class="grid h-10 w-10 place-items-center rounded-xl bg-sky-100 text-sky-600 dark:bg-sky-950/50 dark:text-sky-400">
+                <svg viewBox="0 0 24 24" class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M22 2L11 13"/><path d="M22 2l-7 20-4-9-9-4 20-7z"/>
+                </svg>
+              </span>
+              <div>
+                <p class="font-bold text-slate-900 dark:text-white">Telegram</p>
+                <p class="text-xs text-slate-500 dark:text-slate-400">Kanal yoki guruh havolasi</p>
+              </div>
+            </div>
+            <input name="telegram_url" placeholder="https://t.me/kanalingiz" class="mt-4 w-full rounded-xl border border-slate-300 bg-slate-50 px-3 py-2.5 text-sm outline-none focus:border-[#0b4f7c] dark:border-slate-700 dark:bg-slate-800">
+          </div>
+
+          <!-- Instagram -->
+          <div class="rounded-2xl border border-slate-200 bg-white p-5 dark:border-slate-800 dark:bg-slate-900">
+            <div class="flex items-center gap-3">
+              <span class="grid h-10 w-10 place-items-center rounded-xl bg-pink-100 text-pink-600 dark:bg-pink-950/50 dark:text-pink-400">
+                <svg viewBox="0 0 24 24" class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2">
+                  <rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><path d="M17.5 6.5h.01"/>
+                </svg>
+              </span>
+              <div>
+                <p class="font-bold text-slate-900 dark:text-white">Instagram</p>
+                <p class="text-xs text-slate-500 dark:text-slate-400">Profil havolasi</p>
+              </div>
+            </div>
+            <input name="instagram_url" placeholder="https://instagram.com/profilingiz" class="mt-4 w-full rounded-xl border border-slate-300 bg-slate-50 px-3 py-2.5 text-sm outline-none focus:border-[#0b4f7c] dark:border-slate-700 dark:bg-slate-800">
+          </div>
+
+          <!-- Facebook -->
+          <div class="rounded-2xl border border-slate-200 bg-white p-5 dark:border-slate-800 dark:bg-slate-900">
+            <div class="flex items-center gap-3">
+              <span class="grid h-10 w-10 place-items-center rounded-xl bg-blue-100 text-blue-600 dark:bg-blue-950/50 dark:text-blue-400">
+                <svg viewBox="0 0 24 24" class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M14 8h3V4h-3c-3 0-5 2-5 5v3H6v4h3v5h4v-5h3l1-4h-4V9c0-.6.4-1 1-1z"/>
+                </svg>
+              </span>
+              <div>
+                <p class="font-bold text-slate-900 dark:text-white">Facebook</p>
+                <p class="text-xs text-slate-500 dark:text-slate-400">Sahifa havolasi</p>
+              </div>
+            </div>
+            <input name="facebook_url" placeholder="https://facebook.com/sahifangiz" class="mt-4 w-full rounded-xl border border-slate-300 bg-slate-50 px-3 py-2.5 text-sm outline-none focus:border-[#0b4f7c] dark:border-slate-700 dark:bg-slate-800">
+          </div>
+
+          <!-- YouTube -->
+          <div class="rounded-2xl border border-slate-200 bg-white p-5 dark:border-slate-800 dark:bg-slate-900">
+            <div class="flex items-center gap-3">
+              <span class="grid h-10 w-10 place-items-center rounded-xl bg-red-100 text-red-600 dark:bg-red-950/50 dark:text-red-400">
+                <svg viewBox="0 0 24 24" class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M22 12s0-5-1.3-6.3C19.4 4.4 12 4.4 12 4.4s-7.4 0-8.7 1.3C2 7 2 12 2 12s0 5 1.3 6.3C4.6 19.6 12 19.6 12 19.6s7.4 0 8.7-1.3C22 17 22 12 22 12z"/>
+                  <path d="M10 9l5 3-5 3z"/>
+                </svg>
+              </span>
+              <div>
+                <p class="font-bold text-slate-900 dark:text-white">YouTube</p>
+                <p class="text-xs text-slate-500 dark:text-slate-400">Kanal havolasi</p>
+              </div>
+            </div>
+            <input name="youtube_url" placeholder="https://youtube.com/@kanalingiz" class="mt-4 w-full rounded-xl border border-slate-300 bg-slate-50 px-3 py-2.5 text-sm outline-none focus:border-[#0b4f7c] dark:border-slate-700 dark:bg-slate-800">
+          </div>
+
+          <!-- TikTok -->
+          <div class="rounded-2xl border border-slate-200 bg-white p-5 dark:border-slate-800 dark:bg-slate-900">
+            <div class="flex items-center gap-3">
+              <span class="grid h-10 w-10 place-items-center rounded-xl bg-slate-100 text-slate-700 dark:bg-slate-800 dark:text-slate-300">
+                <svg viewBox="0 0 24 24" class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M14 4v10.5a4.5 4.5 0 1 1-4-4.47"/><path d="M14 4c1.2 2.4 3.1 3.8 6 4"/>
+                </svg>
+              </span>
+              <div>
+                <p class="font-bold text-slate-900 dark:text-white">TikTok</p>
+                <p class="text-xs text-slate-500 dark:text-slate-400">Profil havolasi</p>
+              </div>
+            </div>
+            <input name="tiktok_url" placeholder="https://tiktok.com/@profilingiz" class="mt-4 w-full rounded-xl border border-slate-300 bg-slate-50 px-3 py-2.5 text-sm outline-none focus:border-[#0b4f7c] dark:border-slate-700 dark:bg-slate-800">
+          </div>
+
+          <!-- Kontakt -->
+          <div class="rounded-2xl border border-slate-200 bg-white p-5 dark:border-slate-800 dark:bg-slate-900">
+            <div class="flex items-center gap-3">
+              <span class="grid h-10 w-10 place-items-center rounded-xl bg-emerald-100 text-emerald-600 dark:bg-emerald-950/50 dark:text-emerald-400">
+                <svg viewBox="0 0 24 24" class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M4 4h16v16H4z"/><path d="M4 4l8 8 8-8"/>
+                </svg>
+              </span>
+              <div>
+                <p class="font-bold text-slate-900 dark:text-white">Aloqa</p>
+                <p class="text-xs text-slate-500 dark:text-slate-400">Username va havola</p>
+              </div>
+            </div>
+            <input name="contact" placeholder="@username" class="mt-4 w-full rounded-xl border border-slate-300 bg-slate-50 px-3 py-2.5 text-sm outline-none focus:border-[#0b4f7c] dark:border-slate-700 dark:bg-slate-800">
+            <input name="contact_url" placeholder="https://t.me/username" class="mt-2 w-full rounded-xl border border-slate-300 bg-slate-50 px-3 py-2.5 text-sm outline-none focus:border-[#0b4f7c] dark:border-slate-700 dark:bg-slate-800">
+          </div>
+
+          <div class="md:col-span-2">
+            <button type="submit" class="rounded-xl bg-gradient-to-r from-[#0b4f7c] to-[#138a5b] px-6 py-3 text-sm font-bold text-white shadow-lg hover:shadow-xl">Saqlash</button>
+          </div>
+        </form>
+      </section>
+
+      <!-- =========================================== -->
+      <!-- TAB: SOZLAMALAR                             -->
+      <!-- =========================================== -->
+      <section id="tab-settings" class="tab-panel hidden">
+        <div class="mb-5">
+          <h2 class="font-display text-2xl font-extrabold text-slate-900 dark:text-white">Umumiy sozlamalar</h2>
+          <p class="mt-1 text-sm text-slate-500 dark:text-slate-400">Sayt nomi, slogan, SEO</p>
+        </div>
+
+        <form id="settingsForm" class="grid gap-6 lg:grid-cols-2">
+          <div class="space-y-4 rounded-2xl border border-slate-200 bg-white p-5 dark:border-slate-800 dark:bg-slate-900">
+            <h3 class="font-display text-base font-extrabold text-slate-900 dark:text-white">Asosiy</h3>
+            <div>
+              <label class="block text-xs font-bold text-slate-500 dark:text-slate-400">Sayt nomi</label>
+              <input name="site_name" class="mt-1 w-full rounded-xl border border-slate-300 bg-slate-50 px-3 py-2.5 text-sm outline-none focus:border-[#0b4f7c] dark:border-slate-700 dark:bg-slate-800">
+            </div>
+            <div>
+              <label class="block text-xs font-bold text-slate-500 dark:text-slate-400">Slogan</label>
+              <input name="site_tagline" class="mt-1 w-full rounded-xl border border-slate-300 bg-slate-50 px-3 py-2.5 text-sm outline-none focus:border-[#0b4f7c] dark:border-slate-700 dark:bg-slate-800">
+            </div>
+            <div>
+              <label class="block text-xs font-bold text-slate-500 dark:text-slate-400">SEO tavsif</label>
+              <textarea name="site_description" rows="3" class="mt-1 w-full rounded-xl border border-slate-300 bg-slate-50 px-3 py-2.5 text-sm outline-none focus:border-[#0b4f7c] dark:border-slate-700 dark:bg-slate-800"></textarea>
+            </div>
+            <div>
+              <label class="block text-xs font-bold text-slate-500 dark:text-slate-400">Bosh banner sarlavhasi</label>
+              <input name="cta_title" class="mt-1 w-full rounded-xl border border-slate-300 bg-slate-50 px-3 py-2.5 text-sm outline-none focus:border-[#0b4f7c] dark:border-slate-700 dark:bg-slate-800">
+            </div>
+            <div>
+              <label class="block text-xs font-bold text-slate-500 dark:text-slate-400">Bosh banner matni</label>
+              <textarea name="cta_text" rows="2" class="mt-1 w-full rounded-xl border border-slate-300 bg-slate-50 px-3 py-2.5 text-sm outline-none focus:border-[#0b4f7c] dark:border-slate-700 dark:bg-slate-800"></textarea>
+            </div>
+          </div>
+
+          <div class="space-y-4 rounded-2xl border border-slate-200 bg-white p-5 dark:border-slate-800 dark:bg-slate-900">
+            <h3 class="font-display text-base font-extrabold text-slate-900 dark:text-white">Qo'shimcha</h3>
+            <div>
+              <label class="block text-xs font-bold text-slate-500 dark:text-slate-400">"Biz haqimizda" matni</label>
+              <textarea name="about_text" rows="4" class="mt-1 w-full rounded-xl border border-slate-300 bg-slate-50 px-3 py-2.5 text-sm outline-none focus:border-[#0b4f7c] dark:border-slate-700 dark:bg-slate-800"></textarea>
+            </div>
+            <div>
+              <label class="block text-xs font-bold text-slate-500 dark:text-slate-400">Tahririy siyosat matni</label>
+              <input name="editorial_policy" class="mt-1 w-full rounded-xl border border-slate-300 bg-slate-50 px-3 py-2.5 text-sm outline-none focus:border-[#0b4f7c] dark:border-slate-700 dark:bg-slate-800">
+            </div>
+            <div>
+              <label class="block text-xs font-bold text-slate-500 dark:text-slate-400">Muhim e'lon sarlavhasi</label>
+              <input name="important_notice_title" class="mt-1 w-full rounded-xl border border-slate-300 bg-slate-50 px-3 py-2.5 text-sm outline-none focus:border-[#0b4f7c] dark:border-slate-700 dark:bg-slate-800">
+            </div>
+            <div>
+              <label class="block text-xs font-bold text-slate-500 dark:text-slate-400">Muhim e'lon havolasi</label>
+              <input name="important_notice_url" class="mt-1 w-full rounded-xl border border-slate-300 bg-slate-50 px-3 py-2.5 text-sm outline-none focus:border-[#0b4f7c] dark:border-slate-700 dark:bg-slate-800">
+            </div>
+          </div>
+
+          <div class="lg:col-span-2">
+            <button type="submit" class="rounded-xl bg-gradient-to-r from-[#0b4f7c] to-[#138a5b] px-6 py-3 text-sm font-bold text-white shadow-lg hover:shadow-xl">Sozlamalarni saqlash</button>
+          </div>
+        </form>
+      </section>
+
+    </main>
+  </div>
+</div>
+
+<!-- ============================================ -->
+<!-- MODAL: MAQOLA                                 -->
+<!-- ============================================ -->
+<div id="articleModal" class="fixed inset-0 z-50 hidden overflow-y-auto bg-slate-950/60 p-0 backdrop-blur-sm sm:p-6">
+  <div class="mx-auto min-h-full max-w-3xl sm:flex sm:items-center">
+    <div class="relative min-h-screen w-full bg-white p-5 shadow-2xl dark:bg-slate-900 sm:min-h-0 sm:rounded-3xl sm:p-8">
+      <button type="button" data-close-modal="articleModal" class="absolute right-4 top-4 grid h-9 w-9 place-items-center rounded-lg border border-slate-200 text-slate-500 hover:text-[#0b4f7c] dark:border-slate-700">✕</button>
+      <h2 id="articleModalTitle" class="font-display text-xl font-extrabold text-slate-900 dark:text-white">Yangi maqola</h2>
+
+      <form id="articleForm" class="mt-5 grid gap-4 sm:grid-cols-2">
+        <input type="hidden" name="id">
+        <div class="sm:col-span-2">
+          <label class="block text-xs font-bold text-slate-500 dark:text-slate-400">Sarlavha *</label>
+          <input name="title" required class="mt-1 w-full rounded-xl border border-slate-300 bg-slate-50 px-3 py-2.5 text-sm outline-none focus:border-[#0b4f7c] dark:border-slate-700 dark:bg-slate-800">
+        </div>
+        <div class="sm:col-span-2">
+          <label class="block text-xs font-bold text-slate-500 dark:text-slate-400">Qisqa kirish (lead) *</label>
+          <textarea name="lead" rows="2" required class="mt-1 w-full rounded-xl border border-slate-300 bg-slate-50 px-3 py-2.5 text-sm outline-none focus:border-[#0b4f7c] dark:border-slate-700 dark:bg-slate-800"></textarea>
+        </div>
+        <div class="sm:col-span-2">
+          <label class="block text-xs font-bold text-slate-500 dark:text-slate-400">Matn *</label>
+          <textarea name="body" rows="8" required class="mt-1 w-full rounded-xl border border-slate-300 bg-slate-50 px-3 py-2.5 text-sm outline-none focus:border-[#0b4f7c] dark:border-slate-700 dark:bg-slate-800"></textarea>
+        </div>
+        <div>
+          <label class="block text-xs font-bold text-slate-500 dark:text-slate-400">Rukn *</label>
+          <select name="category" required class="mt-1 w-full rounded-xl border border-slate-300 bg-slate-50 px-3 py-2.5 text-sm outline-none focus:border-[#0b4f7c] dark:border-slate-700 dark:bg-slate-800">
+            <option>Boshlashdan oldin</option>
+            <option>Uy qurish</option>
+            <option>Xarajat va narxlar</option>
+            <option>Uy sotib olish</option>
+            <option>Ta'mirlash</option>
+            <option>Huquq va idoralar</option>
+            <option>Inspeksiya izohlaydi</option>
+            <option>Qaror sodda tilda</option>
+            <option>Rasmiy xabarlar</option>
+          </select>
+        </div>
+        <div>
+          <label class="block text-xs font-bold text-slate-500 dark:text-slate-400">Turi</label>
+          <select name="article_type" class="mt-1 w-full rounded-xl border border-slate-300 bg-slate-50 px-3 py-2.5 text-sm outline-none focus:border-[#0b4f7c] dark:border-slate-700 dark:bg-slate-800">
+            <option value="guide">Qo'llanma</option>
+            <option value="news">Yangilik</option>
+            <option value="official">Rasmiy xabar</option>
+            <option value="analysis">Tahlil</option>
+            <option value="question">Savol-javob</option>
+          </select>
+        </div>
+        <div>
+          <label class="block text-xs font-bold text-slate-500 dark:text-slate-400">Muallif</label>
+          <input name="author" class="mt-1 w-full rounded-xl border border-slate-300 bg-slate-50 px-3 py-2.5 text-sm outline-none focus:border-[#0b4f7c] dark:border-slate-700 dark:bg-slate-800">
+        </div>
+        <div>
+          <label class="block text-xs font-bold text-slate-500 dark:text-slate-400">O'qish vaqti (daqiqa)</label>
+          <input name="minutes" type="number" min="1" class="mt-1 w-full rounded-xl border border-slate-300 bg-slate-50 px-3 py-2.5 text-sm outline-none focus:border-[#0b4f7c] dark:border-slate-700 dark:bg-slate-800">
+        </div>
+        <div class="sm:col-span-2">
+          <label class="block text-xs font-bold text-slate-500 dark:text-slate-400">Teglar (vergul bilan)</label>
+          <input name="tags" class="mt-1 w-full rounded-xl border border-slate-300 bg-slate-50 px-3 py-2.5 text-sm outline-none focus:border-[#0b4f7c] dark:border-slate-700 dark:bg-slate-800">
+        </div>
+        <div class="sm:col-span-2">
+          <label class="block text-xs font-bold text-slate-500 dark:text-slate-400">Rasm URL</label>
+          <input name="image_url" class="mt-1 w-full rounded-xl border border-slate-300 bg-slate-50 px-3 py-2.5 text-sm outline-none focus:border-[#0b4f7c] dark:border-slate-700 dark:bg-slate-800">
+        </div>
+        <div>
+          <label class="block text-xs font-bold text-slate-500 dark:text-slate-400">Rasm izohi</label>
+          <input name="image_caption" class="mt-1 w-full rounded-xl border border-slate-300 bg-slate-50 px-3 py-2.5 text-sm outline-none focus:border-[#0b4f7c] dark:border-slate-700 dark:bg-slate-800">
+        </div>
+        <div>
+          <label class="block text-xs font-bold text-slate-500 dark:text-slate-400">Rasm manbasi</label>
+          <input name="image_credit" class="mt-1 w-full rounded-xl border border-slate-300 bg-slate-50 px-3 py-2.5 text-sm outline-none focus:border-[#0b4f7c] dark:border-slate-700 dark:bg-slate-800">
+        </div>
+        <div class="sm:col-span-2">
+          <label class="block text-xs font-bold text-slate-500 dark:text-slate-400">Qadamlar (har biri yangi qatorda)</label>
+          <textarea name="steps" rows="4" class="mt-1 w-full rounded-xl border border-slate-300 bg-slate-50 px-3 py-2.5 text-sm outline-none focus:border-[#0b4f7c] dark:border-slate-700 dark:bg-slate-800"></textarea>
+        </div>
+        <div class="sm:col-span-2">
+          <label class="block text-xs font-bold text-slate-500 dark:text-slate-400">Ogohlantirish</label>
+          <textarea name="warning" rows="2" class="mt-1 w-full rounded-xl border border-slate-300 bg-slate-50 px-3 py-2.5 text-sm outline-none focus:border-[#0b4f7c] dark:border-slate-700 dark:bg-slate-800"></textarea>
+        </div>
+        <div>
+          <label class="block text-xs font-bold text-slate-500 dark:text-slate-400">Rasmiy manba nomi</label>
+          <input name="source_name" class="mt-1 w-full rounded-xl border border-slate-300 bg-slate-50 px-3 py-2.5 text-sm outline-none focus:border-[#0b4f7c] dark:border-slate-700 dark:bg-slate-800">
+        </div>
+        <div>
+          <label class="block text-xs font-bold text-slate-500 dark:text-slate-400">Rasmiy manba URL</label>
+          <input name="source_url" class="mt-1 w-full rounded-xl border border-slate-300 bg-slate-50 px-3 py-2.5 text-sm outline-none focus:border-[#0b4f7c] dark:border-slate-700 dark:bg-slate-800">
+        </div>
+        <div>
+          <label class="block text-xs font-bold text-slate-500 dark:text-slate-400">Hujjat raqami</label>
+          <input name="document_no" class="mt-1 w-full rounded-xl border border-slate-300 bg-slate-50 px-3 py-2.5 text-sm outline-none focus:border-[#0b4f7c] dark:border-slate-700 dark:bg-slate-800">
+        </div>
+        <div>
+          <label class="block text-xs font-bold text-slate-500 dark:text-slate-400">Yangilangan sana</label>
+          <input name="updated" type="date" class="mt-1 w-full rounded-xl border border-slate-300 bg-slate-50 px-3 py-2.5 text-sm outline-none focus:border-[#0b4f7c] dark:border-slate-700 dark:bg-slate-800">
+        </div>
+        <div>
+          <label class="block text-xs font-bold text-slate-500 dark:text-slate-400">Holat</label>
+          <select name="status" class="mt-1 w-full rounded-xl border border-slate-300 bg-slate-50 px-3 py-2.5 text-sm outline-none focus:border-[#0b4f7c] dark:border-slate-700 dark:bg-slate-800">
+            <option value="draft">Qoralama</option>
+            <option value="published">Chop etilgan</option>
+          </select>
+        </div>
+        <div>
+          <label class="block text-xs font-bold text-slate-500 dark:text-slate-400">Chop etish sanasi</label>
+          <input name="published_at" type="datetime-local" class="mt-1 w-full rounded-xl border border-slate-300 bg-slate-50 px-3 py-2.5 text-sm outline-none focus:border-[#0b4f7c] dark:border-slate-700 dark:bg-slate-800">
+        </div>
+        <div class="flex flex-wrap gap-5 sm:col-span-2">
+          <label class="flex items-center gap-2 text-sm font-semibold">
+            <input type="checkbox" name="is_featured" class="h-4 w-4 rounded"> Banner
+          </label>
+          <label class="flex items-center gap-2 text-sm font-semibold">
+            <input type="checkbox" name="is_pinned" class="h-4 w-4 rounded"> Muhim
+          </label>
+          <label class="flex items-center gap-2 text-sm font-semibold">
+            <input type="checkbox" name="is_advertisement" class="h-4 w-4 rounded"> Reklama
+          </label>
+        </div>
+        <div class="flex justify-end gap-3 sm:col-span-2">
+          <button type="button" data-close-modal="articleModal" class="rounded-xl border border-slate-300 px-5 py-3 text-sm font-bold text-slate-600 dark:border-slate-700 dark:text-slate-300">Bekor qilish</button>
+          <button type="submit" class="rounded-xl bg-gradient-to-r from-[#0b4f7c] to-[#138a5b] px-5 py-3 text-sm font-bold text-white shadow-lg">Saqlash</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================ -->
+<!-- MODAL: REKLAMA                                -->
+<!-- ============================================ -->
+<div id="adModal" class="fixed inset-0 z-50 hidden overflow-y-auto bg-slate-950/60 p-0 backdrop-blur-sm sm:p-6">
+  <div class="mx-auto min-h-full max-w-lg sm:flex sm:items-center">
+    <div class="relative min-h-screen w-full bg-white p-5 shadow-2xl dark:bg-slate-900 sm:min-h-0 sm:rounded-3xl sm:p-8">
+      <button type="button" data-close-modal="adModal" class="absolute right-4 top-4 grid h-9 w-9 place-items-center rounded-lg border border-slate-200 text-slate-500 hover:text-[#0b4f7c] dark:border-slate-700">✕</button>
+      <h2 id="adModalTitle" class="font-display text-xl font-extrabold text-slate-900 dark:text-white">Yangi reklama</h2>
+
+      <form id="adForm" class="mt-5 grid gap-4">
+        <input type="hidden" name="id">
+        <div>
+          <label class="block text-xs font-bold text-slate-500 dark:text-slate-400">Yorliq</label>
+          <input name="label" placeholder="Hamkorlik" class="mt-1 w-full rounded-xl border border-slate-300 bg-slate-50 px-3 py-2.5 text-sm outline-none focus:border-[#0b4f7c] dark:border-slate-700 dark:bg-slate-800">
+        </div>
+        <div>
+          <label class="block text-xs font-bold text-slate-500 dark:text-slate-400">Sarlavha *</label>
+          <input name="title" required class="mt-1 w-full rounded-xl border border-slate-300 bg-slate-50 px-3 py-2.5 text-sm outline-none focus:border-[#0b4f7c] dark:border-slate-700 dark:bg-slate-800">
+        </div>
+        <div>
+          <label class="block text-xs font-bold text-slate-500 dark:text-slate-400">Tavsif *</label>
+          <textarea name="description" rows="3" required class="mt-1 w-full rounded-xl border border-slate-300 bg-slate-50 px-3 py-2.5 text-sm outline-none focus:border-[#0b4f7c] dark:border-slate-700 dark:bg-slate-800"></textarea>
+        </div>
+        <div>
+          <label class="block text-xs font-bold text-slate-500 dark:text-slate-400">Kompaniya</label>
+          <input name="company_name" class="mt-1 w-full rounded-xl border border-slate-300 bg-slate-50 px-3 py-2.5 text-sm outline-none focus:border-[#0b4f7c] dark:border-slate-700 dark:bg-slate-800">
+        </div>
+        <div>
+          <label class="block text-xs font-bold text-slate-500 dark:text-slate-400">Rasm URL</label>
+          <input name="image_url" class="mt-1 w-full rounded-xl border border-slate-300 bg-slate-50 px-3 py-2.5 text-sm outline-none focus:border-[#0b4f7c] dark:border-slate-700 dark:bg-slate-800">
+        </div>
+        <div>
+          <label class="block text-xs font-bold text-slate-500 dark:text-slate-400">Havola</label>
+          <input name="target_url" class="mt-1 w-full rounded-xl border border-slate-300 bg-slate-50 px-3 py-2.5 text-sm outline-none focus:border-[#0b4f7c] dark:border-slate-700 dark:bg-slate-800">
+        </div>
+        <div class="grid grid-cols-2 gap-4">
+          <div>
+            <label class="block text-xs font-bold text-slate-500 dark:text-slate-400">Boshlanish</label>
+            <input name="starts_at" type="date" class="mt-1 w-full rounded-xl border border-slate-300 bg-slate-50 px-3 py-2.5 text-sm outline-none focus:border-[#0b4f7c] dark:border-slate-700 dark:bg-slate-800">
+          </div>
+          <div>
+            <label class="block text-xs font-bold text-slate-500 dark:text-slate-400">Tugash</label>
+            <input name="ends_at" type="date" class="mt-1 w-full rounded-xl border border-slate-300 bg-slate-50 px-3 py-2.5 text-sm outline-none focus:border-[#0b4f7c] dark:border-slate-700 dark:bg-slate-800">
+          </div>
+        </div>
+        <div>
+          <label class="block text-xs font-bold text-slate-500 dark:text-slate-400">Holat</label>
+          <select name="status" class="mt-1 w-full rounded-xl border border-slate-300 bg-slate-50 px-3 py-2.5 text-sm outline-none focus:border-[#0b4f7c] dark:border-slate-700 dark:bg-slate-800">
+            <option value="active">Faol</option>
+            <option value="inactive">Nofaol</option>
+          </select>
+        </div>
+        <div class="flex justify-end gap-3">
+          <button type="button" data-close-modal="adModal" class="rounded-xl border border-slate-300 px-5 py-3 text-sm font-bold text-slate-600 dark:border-slate-700 dark:text-slate-300">Bekor qilish</button>
+          <button type="submit" class="rounded-xl bg-gradient-to-r from-[#0b4f7c] to-[#138a5b] px-5 py-3 text-sm font-bold text-white shadow-lg">Saqlash</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================ -->
+<!-- MODAL: TASDIQLASH                             -->
+<!-- ============================================ -->
+<div id="confirmModal" class="fixed inset-0 z-[60] hidden grid place-items-center bg-slate-950/60 px-4 backdrop-blur-sm">
+  <div class="w-full max-w-sm rounded-2xl bg-white p-6 shadow-2xl dark:bg-slate-900">
+    <div class="mx-auto grid h-12 w-12 place-items-center rounded-full bg-rose-100 text-rose-600 dark:bg-rose-950/50">
+      <svg viewBox="0 0 24 24" class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M12 9v4M12 17h.01"/><path d="M10.3 3.3L2.8 17a2 2 0 0 0 1.8 3h14.8a2 2 0 0 0 1.8-3L13.7 3.3a2 2 0 0 0-3.4 0z"/>
+      </svg>
+    </div>
+    <h3 class="mt-4 text-center font-display text-lg font-extrabold text-slate-900 dark:text-white">O'chirishni tasdiqlang</h3>
+    <p id="confirmText" class="mt-2 text-center text-sm text-slate-600 dark:text-slate-400">Bu amalni ortga qaytarib bo'lmaydi.</p>
+    <div class="mt-5 flex justify-end gap-3">
+      <button id="confirmCancel" class="rounded-xl border border-slate-300 px-4 py-2.5 text-sm font-bold text-slate-600 dark:border-slate-700 dark:text-slate-300">Bekor qilish</button>
+      <button id="confirmOk" class="rounded-xl bg-rose-600 px-4 py-2.5 text-sm font-bold text-white hover:bg-rose-700">O'chirish</button>
+    </div>
+  </div>
+</div>
+
+<!-- TOAST (bildirishnoma) -->
+<div id="toastHost" class="fixed bottom-5 right-5 z-[70] flex flex-col gap-2"></div>
+
+<script>
+/* ============================================================
+   QURILISHINFO ADMIN PANEL v2
+   ============================================================ */
+
+const TOKEN_KEY = "qurilishinfo-admin-token-v2";
+const $ = (id) => document.getElementById(id);
+
+const state = {
+  articles: [],
+  ads: [],
+  settings: {},
+  social: {},
+  activeTab: "dashboard"
+};
+
+/* ---------- TOKEN ---------- */
+function getToken() { return localStorage.getItem(TOKEN_KEY); }
+function setToken(t) { localStorage.setItem(TOKEN_KEY, t); }
+function clearToken() { localStorage.removeItem(TOKEN_KEY); }
+
+/* ---------- YORDAMCHI ---------- */
+function escapeHtml(v) {
+  return String(v ?? "")
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
+}
+
+function formatDate(value) {
+  if (!value) return "";
+  const normalized = String(value).includes("T")
+    ? String(value)
+    : String(value).replace(" ", "T");
+  const date = new Date(normalized);
+  if (Number.isNaN(date.getTime())) return String(value);
+  return new Intl.DateTimeFormat("uz-UZ", {
+    year: "numeric", month: "short", day: "numeric"
+  }).format(date);
+}
+
+function toDatetimeLocal(value) {
+  if (!value) return "";
+  const normalized = String(value).replace(" ", "T").replace("Z", "");
+  return normalized.slice(0, 16);
+}
+
+/* ---------- TOAST ---------- */
+function toast(message, kind = "success") {
+  const el = document.createElement("div");
+  el.className = `toast rounded-xl px-4 py-3 text-sm font-bold text-white shadow-2xl ${
+    kind === "error" ? "bg-rose-600" : "bg-[#138a5b]"
+  }`;
+  el.textContent = message;
+  $("toastHost").appendChild(el);
+  setTimeout(() => el.remove(), 3200);
+}
+
+/* ---------- API ---------- */
+async function apiFetch(url, options = {}) {
+  const headers = Object.assign({}, options.headers || {});
+  if (options.body && !(options.body instanceof FormData)) {
+    headers["Content-Type"] = "application/json";
+  }
+  const token = getToken();
+  if (token) headers["Authorization"] = `Bearer ${token}`;
+
+  const response = await fetch(url, Object.assign({}, options, { headers }));
+
+  if (response.status === 401) {
+    clearToken();
+    showLogin();
+    throw new Error("unauthorized");
+  }
+  if (!response.ok) {
+    let msg = `Xatolik (${response.status})`;
+    try {
+      const j = await response.json();
+      if (j && j.message) msg = j.message;
+    } catch (e) {}
+    throw new Error(msg);
+  }
+  if (response.status === 204) return null;
+  return response.json().catch(() => null);
+}
+
+/* ---------- TEMA ---------- */
+function applyTheme(theme) {
+  const isDark = theme === "dark";
+  document.documentElement.classList.toggle("dark", isDark);
+  localStorage.setItem("qurilishinfo-theme", theme);
+  $("themeIcon").innerHTML = isDark
+    ? '<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>'
+    : '<circle cx="12" cy="12" r="4"></circle><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"></path>';
+}
+
+function initTheme() {
+  const saved = localStorage.getItem("qurilishinfo-theme");
+  if (saved) { applyTheme(saved); return; }
+  const prefersDark = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
+  applyTheme(prefersDark ? "dark" : "light");
+}
+
+$("themeButton").addEventListener("click", () => {
+  applyTheme(document.documentElement.classList.contains("dark") ? "light" : "dark");
+});
+
+/* ---------- LOGIN ---------- */
+function showLogin() {
+  $("loginScreen").classList.remove("hidden");
+  $("appShell").classList.add("hidden");
+}
+
+function showApp() {
+  $("loginScreen").classList.add("hidden");
+  $("appShell").classList.remove("hidden");
+  loadAll();
+}
+
+$("loginForm").addEventListener("submit", async (e) => {
+  e.preventDefault();
+  $("loginError").classList.add("hidden");
+  const password = $("loginPassword").value;
+  try {
+    const res = await fetch("/api/login", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ password })
+    });
+    if (!res.ok) throw new Error("bad");
+    const data = await res.json();
+    if (!data || !data.token) throw new Error("bad");
+    setToken(data.token);
+    $("loginPassword").value = "";
+    showApp();
+  } catch (err) {
+    $("loginError").classList.remove("hidden");
+  }
+});
+
+$("logoutButton").addEventListener("click", () => {
+  clearToken();
+  showLogin();
+});
+
+/* ---------- SIDEBAR ---------- */
+const PAGE_TITLES = {
+  dashboard: "Dashboard",
+  articles: "Maqolalar",
+  ads: "Reklamalar",
+  social: "Ijtimoiy tarmoqlar",
+  settings: "Sozlamalar"
+};
+
+function setTab(tab) {
+  state.activeTab = tab;
+
+  document.querySelectorAll(".tab-panel").forEach((el) => el.classList.add("hidden"));
+  const panel = $(`tab-${tab}`);
+  if (panel) panel.classList.remove("hidden");
+
+  document.querySelectorAll(".sidebar-link").forEach((btn) => {
+    btn.classList.toggle("active", btn.getAttribute("data-tab") === tab);
+  });
+
+  $("pageTitle").textContent = PAGE_TITLES[tab] || "Admin";
+
+  if (window.innerWidth < 1024) closeSidebar();
+}
+
+document.querySelectorAll(".sidebar-link").forEach((btn) => {
+  btn.addEventListener("click", () => setTab(btn.getAttribute("data-tab")));
+});
+
+document.querySelectorAll("[data-goto-tab]").forEach((btn) => {
+  btn.addEventListener("click", () => setTab(btn.getAttribute("data-goto-tab")));
+});
+
+function openSidebar() {
+  $("sidebar").classList.remove("-translate-x-full");
+  $("sidebarOverlay").classList.remove("hidden");
+}
+
+function closeSidebar() {
+  $("sidebar").classList.add("-translate-x-full");
+  $("sidebarOverlay").classList.add("hidden");
+}
+
+$("sidebarToggle").addEventListener("click", openSidebar);
+$("sidebarOverlay").addEventListener("click", closeSidebar);
+
+/* ---------- MODAL ---------- */
+function openModal(id) {
+  $(id).classList.remove("hidden");
+  document.body.style.overflow = "hidden";
+}
+
+function closeModal(id) {
+  $(id).classList.add("hidden");
+  document.body.style.overflow = "";
+}
+
+document.querySelectorAll("[data-close-modal]").forEach((btn) => {
+  btn.addEventListener("click", () => closeModal(btn.getAttribute("data-close-modal")));
+});
+
+["articleModal", "adModal"].forEach((id) => {
+  $(id).addEventListener("click", (e) => {
+    if (e.target === $(id)) closeModal(id);
+  });
+});
+
+/* ---------- O'CHIRISHNI TASDIQLASH ---------- */
+let pendingDelete = null;
+
+function askDelete(kind, id, label) {
+  pendingDelete = { kind, id };
+  $("confirmText").textContent = `"${label}" o'chiriladi. Bu amalni ortga qaytarib bo'lmaydi.`;
+  openModal("confirmModal");
+}
+
+$("confirmCancel").addEventListener("click", () => {
+  pendingDelete = null;
+  closeModal("confirmModal");
+});
+
+$("confirmOk").addEventListener("click", async () => {
+  if (!pendingDelete) return;
+  const { kind, id } = pendingDelete;
+  try {
+    if (kind === "article") {
+      await apiFetch(`/api/articles/${id}`, { method: "DELETE" });
+      toast("Maqola o'chirildi");
+      await loadArticles();
+      await renderDashboard();
+    } else if (kind === "ad") {
+      await apiFetch(`/api/advertisements/${id}`, { method: "DELETE" });
+      toast("Reklama o'chirildi");
+      await loadAds();
+      await renderDashboard();
+    }
+  } catch (err) {
+    toast(err.message || "Xatolik yuz berdi", "error");
+  }
+  pendingDelete = null;
+  closeModal("confirmModal");
+});
+
+/* ============================================================
+   MAQOLALAR
+   ============================================================ */
+async function loadArticles() {
+  try {
+    const data = await apiFetch("/api/articles");
+    state.articles = Array.isArray(data) ? data : [];
+    renderArticlesTable();
+    updateCounts();
+  } catch (err) {
+    if (err.message !== "unauthorized") toast(err.message || "Maqolalarni yuklab bo'lmadi", "error");
+  }
+}
+
+function updateCounts() {
+  $("articlesCountBadge").textContent = state.articles.length;
+  $("adsCountBadge").textContent = state.ads.length;
+}
+
+function renderArticlesTable() {
+  const query = ($("articleSearch").value || "").trim().toLowerCase();
+  const filter = $("articleFilter").value;
+
+  const rows = state.articles
+    .filter((a) => {
+      if (query && !String(a.title || "").toLowerCase().includes(query)) return false;
+      if (filter === "published" && a.status !== "published") return false;
+      if (filter === "draft" && a.status === "published") return false;
+      return true;
+    })
+    .sort((a, b) => {
+      const ad = new Date(String(a.published_at || a.created_at || "").replace(" ", "T")).getTime() || 0;
+      const bd = new Date(String(b.published_at || b.created_at || "").replace(" ", "T")).getTime() || 0;
+      return bd - ad;
+    });
+
+  $("articlesEmptyState").classList.toggle("hidden", rows.length !== 0);
+
+  $("articlesTableBody").innerHTML = rows.map((a) => `
+    <tr>
+      <td class="px-4 py-3">
+        <div class="font-bold text-slate-800 dark:text-slate-100">${escapeHtml(a.title)}</div>
+        <div class="mt-0.5 flex gap-1.5">
+          ${Number(a.is_featured) === 1 ? '<span class="rounded bg-sky-100 px-1.5 py-0.5 text-[10px] font-extrabold text-[#0b4f7c] dark:bg-sky-950/50 dark:text-sky-300">BANNER</span>' : ""}
+          ${Number(a.is_pinned) === 1 ? '<span class="rounded bg-emerald-100 px-1.5 py-0.5 text-[10px] font-extrabold text-[#138a5b] dark:bg-emerald-950/50 dark:text-emerald-300">MUHIM</span>' : ""}
+          ${Number(a.is_advertisement) === 1 ? '<span class="rounded bg-amber-100 px-1.5 py-0.5 text-[10px] font-extrabold text-amber-800 dark:bg-amber-950/50 dark:text-amber-300">REKLAMA</span>' : ""}
+        </div>
+      </td>
+      <td class="px-4 py-3 text-slate-600 dark:text-slate-400">${escapeHtml(a.category)}</td>
+      <td class="px-4 py-3">
+        <span class="rounded-full px-2.5 py-1 text-xs font-bold ${
+          a.status === "published"
+            ? "bg-emerald-100 text-[#138a5b] dark:bg-emerald-950/50 dark:text-emerald-300"
+            : "bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-300"
+        }">
+          ${a.status === "published" ? "Chop etilgan" : "Qoralama"}
+        </span>
+      </td>
+      <td class="px-4 py-3 text-slate-500 dark:text-slate-400">${escapeHtml(formatDate(a.published_at || a.created_at))}</td>
+      <td class="px-4 py-3 text-right">
+        <button data-edit-article="${a.id}" class="mr-2 rounded-lg border border-slate-200 px-3 py-1.5 text-xs font-bold text-slate-600 hover:border-[#0b4f7c] hover:text-[#0b4f7c] dark:border-slate-700 dark:text-slate-300">Tahrirlash</button>
+        <button data-delete-article="${a.id}" data-title="${escapeHtml(a.title)}" class="rounded-lg border border-slate-200 px-3 py-1.5 text-xs font-bold text-rose-600 hover:border-rose-300 dark:border-slate-700">O'chirish</button>
+      </td>
+    </tr>
+  `).join("");
+}
+
+$("articleSearch").addEventListener("input", renderArticlesTable);
+$("articleFilter").addEventListener("change", renderArticlesTable);
+
+function openArticleForm(article) {
+  const form = $("articleForm");
+  form.reset();
+  $("articleModalTitle").textContent = article ? "Maqolani tahrirlash" : "Yangi maqola";
+  form.elements["id"].value = article ? article.id : "";
+
+  if (article) {
+    form.elements["title"].value = article.title || "";
+    form.elements["lead"].value = article.lead || "";
+    form.elements["body"].value = article.body || "";
+    form.elements["category"].value = article.category || "Uy qurish";
+    form.elements["article_type"].value = article.article_type || "guide";
+    form.elements["author"].value = article.author || "";
+    form.elements["minutes"].value = article.minutes || "";
+    form.elements["tags"].value = article.tags || "";
+    form.elements["image_url"].value = article.image_url || "";
+    form.elements["image_caption"].value = article.image_caption || "";
+    form.elements["image_credit"].value = article.image_credit || "";
+    form.elements["steps"].value = article.steps || "";
+    form.elements["warning"].value = article.warning || "";
+    form.elements["source_name"].value = article.source_name || "";
+    form.elements["source_url"].value = article.source_url || "";
+    form.elements["document_no"].value = article.document_no || "";
+    form.elements["updated"].value = article.updated ? String(article.updated).slice(0, 10) : "";
+    form.elements["status"].value = article.status || "draft";
+    form.elements["published_at"].value = toDatetimeLocal(article.published_at);
+    form.elements["is_featured"].checked = Number(article.is_featured) === 1;
+    form.elements["is_pinned"].checked = Number(article.is_pinned) === 1;
+    form.elements["is_advertisement"].checked = Number(article.is_advertisement) === 1;
+  } else {
+    form.elements["status"].value = "draft";
+    form.elements["minutes"].value = 5;
+  }
+
+  openModal("articleModal");
+}
+
+$("newArticleButton").addEventListener("click", () => openArticleForm(null));
+
+document.addEventListener("click", (e) => {
+  const editBtn = e.target.closest("[data-edit-article]");
+  if (editBtn) {
+    const article = state.articles.find((a) => String(a.id) === editBtn.getAttribute("data-edit-article"));
+    if (article) openArticleForm(article);
+  }
+  const delBtn = e.target.closest("[data-delete-article]");
+  if (delBtn) {
+    askDelete("article", delBtn.getAttribute("data-delete-article"), delBtn.getAttribute("data-title"));
+  }
+  const editAd = e.target.closest("[data-edit-ad]");
+  if (editAd) {
+    const ad = state.ads.find((a) => String(a.id) === editAd.getAttribute("data-edit-ad"));
+    if (ad) openAdForm(ad);
+  }
+  const delAd = e.target.closest("[data-delete-ad]");
+  if (delAd) {
+    askDelete("ad", delAd.getAttribute("data-delete-ad"), delAd.getAttribute("data-title"));
+  }
+});
+
+$("articleForm").addEventListener("submit", async (e) => {
+  e.preventDefault();
+  const form = e.target;
+  const fd = new FormData(form);
+  const id = fd.get("id");
+
+  const payload = {
+    title: fd.get("title"),
+    lead: fd.get("lead"),
+    body: fd.get("body"),
+    category: fd.get("category"),
+    article_type: fd.get("article_type"),
+    author: fd.get("author"),
+    minutes: fd.get("minutes") ? Number(fd.get("minutes")) : null,
+    tags: fd.get("tags"),
+    image_url: fd.get("image_url"),
+    image_caption: fd.get("image_caption"),
+    image_credit: fd.get("image_credit"),
+    steps: fd.get("steps"),
+    warning: fd.get("warning"),
+    source_name: fd.get("source_name"),
+    source_url: fd.get("source_url"),
+    document_no: fd.get("document_no"),
+    updated: fd.get("updated") || null,
+    status: fd.get("status"),
+    published_at: fd.get("published_at") || null,
+    is_featured: form.elements["is_featured"].checked ? 1 : 0,
+    is_pinned: form.elements["is_pinned"].checked ? 1 : 0,
+    is_advertisement: form.elements["is_advertisement"].checked ? 1 : 0
+  };
+
+  try {
+    if (id) {
+      await apiFetch(`/api/articles/${id}`, { method: "PUT", body: JSON.stringify(payload) });
+      toast("Maqola yangilandi");
+    } else {
+      await apiFetch("/api/articles", { method: "POST", body: JSON.stringify(payload) });
+      toast("Maqola qo'shildi");
+    }
+    closeModal("articleModal");
+    await loadArticles();
+    await renderDashboard();
+  } catch (err) {
+    toast(err.message || "Saqlashda xatolik", "error");
+  }
+});
+
+/* ============================================================
+   REKLAMALAR
+   ============================================================ */
+async function loadAds() {
+  try {
+    const data = await apiFetch("/api/advertisements");
+    state.ads = Array.isArray(data) ? data : [];
+    renderAdsTable();
+    updateCounts();
+  } catch (err) {
+    if (err.message !== "unauthorized") toast(err.message || "Reklamalarni yuklab bo'lmadi", "error");
+  }
+}
+
+function renderAdsTable() {
+  $("adsEmptyState").classList.toggle("hidden", state.ads.length !== 0);
+  $("adsTableBody").innerHTML = state.ads.map((ad) => `
+    <tr>
+      <td class="px-4 py-3 font-bold text-slate-800 dark:text-slate-100">${escapeHtml(ad.title)}</td>
+      <td class="px-4 py-3 text-slate-600 dark:text-slate-400">${escapeHtml(ad.company_name || "—")}</td>
+      <td class="px-4 py-3">
+        <span class="rounded-full px-2.5 py-1 text-xs font-bold ${
+          ad.status === "active"
+            ? "bg-emerald-100 text-[#138a5b] dark:bg-emerald-950/50 dark:text-emerald-300"
+            : "bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-300"
+        }">
+          ${ad.status === "active" ? "Faol" : "Nofaol"}
+        </span>
+      </td>
+      <td class="px-4 py-3 text-slate-500 dark:text-slate-400">${
+        ad.starts_at || ad.ends_at
+          ? `${escapeHtml(formatDate(ad.starts_at))} — ${escapeHtml(formatDate(ad.ends_at))}`
+          : "Cheklanmagan"
+      }</td>
+      <td class="px-4 py-3 text-right">
+        <button data-edit-ad="${ad.id}" class="mr-2 rounded-lg border border-slate-200 px-3 py-1.5 text-xs font-bold text-slate-600 hover:border-[#0b4f7c] hover:text-[#0b4f7c] dark:border-slate-700 dark:text-slate-300">Tahrirlash</button>
+        <button data-delete-ad="${ad.id}" data-title="${escapeHtml(ad.title)}" class="rounded-lg border border-slate-200 px-3 py-1.5 text-xs font-bold text-rose-600 hover:border-rose-300 dark:border-slate-700">O'chirish</button>
+      </td>
+    </tr>
+  `).join("");
+}
+
+function openAdForm(ad) {
+  const form = $("adForm");
+  form.reset();
+  $("adModalTitle").textContent = ad ? "Reklamani tahrirlash" : "Yangi reklama";
+  form.elements["id"].value = ad ? ad.id : "";
+  if (ad) {
+    form.elements["label"].value = ad.label || "";
+    form.elements["title"].value = ad.title || "";
+    form.elements["description"].value = ad.description || "";
+    form.elements["company_name"].value = ad.company_name || "";
+    form.elements["image_url"].value = ad.image_url || "";
+    form.elements["target_url"].value = ad.target_url || "";
+    form.elements["starts_at"].value = ad.starts_at ? String(ad.starts_at).slice(0, 10) : "";
+    form.elements["ends_at"].value = ad.ends_at ? String(ad.ends_at).slice(0, 10) : "";
+    form.elements["status"].value = ad.status || "active";
+  } else {
+    form.elements["status"].value = "active";
+  }
+  openModal("adModal");
+}
+
+$("newAdButton").addEventListener("click", () => openAdForm(null));
+
+$("adForm").addEventListener("submit", async (e) => {
+  e.preventDefault();
+  const fd = new FormData(e.target);
+  const id = fd.get("id");
+  const payload = {
+    label: fd.get("label"),
+    title: fd.get("title"),
+    description: fd.get("description"),
+    company_name: fd.get("company_name"),
+    image_url: fd.get("image_url"),
+    target_url: fd.get("target_url"),
+    starts_at: fd.get("starts_at") || null,
+    ends_at: fd.get("ends_at") || null,
+    status: fd.get("status")
+  };
+  try {
+    if (id) {
+      await apiFetch(`/api/advertisements/${id}`, { method: "PUT", body: JSON.stringify(payload) });
+      toast("Reklama yangilandi");
+    } else {
+      await apiFetch("/api/advertisements", { method: "POST", body: JSON.stringify(payload) });
+      toast("Reklama qo'shildi");
+    }
+    closeModal("adModal");
+    await loadAds();
+    await renderDashboard();
+  } catch (err) {
+    toast(err.message || "Saqlashda xatolik", "error");
+  }
+});
+
+/* ============================================================
+   IJTIMOIY TARMOQLAR
+   ============================================================ */
+async function loadSocial() {
+  try {
+    const data = await apiFetch("/api/settings");
+    state.social = data || {};
+    const form = $("socialForm");
+    if (form) {
+      ["telegram_url", "instagram_url", "facebook_url", "youtube_url", "tiktok_url", "contact", "contact_url"].forEach((key) => {
+        if (form.elements[key]) form.elements[key].value = state.social[key] || "";
+      });
+    }
+  } catch (err) {
+    if (err.message !== "unauthorized") toast(err.message || "Ijtimoiy tarmoqlarni yuklab bo'lmadi", "error");
+  }
+}
+
+$("socialForm").addEventListener("submit", async (e) => {
+  e.preventDefault();
+  const fd = new FormData(e.target);
+  const payload = {};
+  fd.forEach((v, k) => { payload[k] = v; });
+  try {
+    await apiFetch("/api/settings", { method: "PUT", body: JSON.stringify(payload) });
+    toast("Ijtimoiy tarmoqlar saqlandi");
+  } catch (err) {
+    toast(err.message || "Saqlashda xatolik", "error");
+  }
+});
+
+/* ============================================================
+   SOZLAMALAR
+   ============================================================ */
+async function loadSettings() {
+  try {
+    const data = await apiFetch("/api/settings");
+    state.settings = data || {};
+    const form = $("settingsForm");
+    if (form) {
+      Object.entries(state.settings).forEach(([key, value]) => {
+        if (form.elements[key]) form.elements[key].value = value ?? "";
+      });
+    }
+  } catch (err) {
+    if (err.message !== "unauthorized") toast(err.message || "Sozlamalarni yuklab bo'lmadi", "error");
+  }
+}
+
+$("settingsForm").addEventListener("submit", async (e) => {
+  e.preventDefault();
+  const fd = new FormData(e.target);
+  const payload = {};
+  fd.forEach((v, k) => { payload[k] = v; });
+  try {
+    await apiFetch("/api/settings", { method: "PUT", body: JSON.stringify(payload) });
+    toast("Sozlamalar saqlandi");
+  } catch (err) {
+    toast(err.message || "Saqlashda xatolik", "error");
+  }
+});
+
+/* ============================================================
+   DASHBOARD
+   ============================================================ */
+async function renderDashboard() {
+  const articles = state.articles || [];
+  const ads = state.ads || [];
+
+  const published = articles.filter((a) => a.status === "published").length;
+  const draft = articles.filter((a) => a.status !== "published").length;
+
+  $("statTotalArticles").textContent = articles.length;
+  $("statPublished").textContent = published;
+  $("statDraft").textContent = draft;
+  $("statTotalAds").textContent = ads.length;
+
+  // Oxirgi 5 ta maqola
+  const recent = [...articles]
+    .sort((a, b) => {
+      const ad = new Date(String(a.published_at || a.created_at || "").replace(" ", "T")).getTime() || 0;
+      const bd = new Date(String(b.published_at || b.created_at || "").replace(" ", "T")).getTime() || 0;
+      return bd - ad;
+    })
+    .slice(0, 5);
+
+  $("recentArticles").innerHTML = recent.length
+    ? recent.map((a) => `
+        <div class="flex items-center gap-3 px-5 py-3">
+          <span class="grid h-9 w-9 shrink-0 place-items-center rounded-lg ${
+            a.status === "published"
+              ? "bg-emerald-100 text-emerald-700 dark:bg-emerald-950/50 dark:text-emerald-300"
+              : "bg-amber-100 text-amber-700 dark:bg-amber-950/50 dark:text-amber-300"
+          }">
+            <svg viewBox="0 0 24 24" class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M4 4h16v16H4z"/><path d="M8 8h8M8 12h8M8 16h5"/>
+            </svg>
+          </span>
+          <div class="min-w-0 flex-1">
+            <p class="truncate text-sm font-bold text-slate-800 dark:text-slate-100">${escapeHtml(a.title)}</p>
+            <p class="text-xs text-slate-500 dark:text-slate-400">${escapeHtml(a.category)} · ${escapeHtml(formatDate(a.published_at || a.created_at))}</p>
+          </div>
+          <button data-edit-article="${a.id}" class="shrink-0 rounded-lg border border-slate-200 px-2.5 py-1 text-xs font-bold text-slate-600 hover:border-[#0b4f7c] hover:text-[#0b4f7c] dark:border-slate-700 dark:text-slate-300">Tahrir</button>
+        </div>
+      `).join("")
+    : '<p class="px-5 py-8 text-center text-sm text-slate-500 dark:text-slate-400">Hozircha maqola yo\'q</p>';
+
+  // Faol reklamalar
+  const activeAds = ads.filter((a) => a.status === "active").slice(0, 5);
+
+  $("activeAds").innerHTML = activeAds.length
+    ? activeAds.map((a) => `
+        <div class="flex items-center gap-3 px-5 py-3">
+          <span class="grid h-9 w-9 shrink-0 place-items-center rounded-lg bg-purple-100 text-purple-700 dark:bg-purple-950/50 dark:text-purple-300">
+            <svg viewBox="0 0 24 24" class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 10h18"/>
+            </svg>
+          </span>
+          <div class="min-w-0 flex-1">
+            <p class="truncate text-sm font-bold text-slate-800 dark:text-slate-100">${escapeHtml(a.title)}</p>
+            <p class="text-xs text-slate-500 dark:text-slate-400">${escapeHtml(a.company_name || "—")}</p>
+          </div>
+          <button data-edit-ad="${a.id}" class="shrink-0 rounded-lg border border-slate-200 px-2.5 py-1 text-xs font-bold text-slate-600 hover:border-[#0b4f7c] hover:text-[#0b4f7c] dark:border-slate-700 dark:text-slate-300">Tahrir</button>
+        </div>
+      `).join("")
+    : '<p class="px-5 py-8 text-center text-sm text-slate-500 dark:text-slate-400">Faol reklama yo\'q</p>';
+}
+
+/* ============================================================
+   BOSHLASH
+   ============================================================ */
+async function loadAll() {
+  await Promise.all([loadArticles(), loadAds(), loadSettings(), loadSocial()]);
+  await renderDashboard();
+}
+
+initTheme();
+setTab("dashboard");
+
+if (getToken()) {
+  showApp();
+} else {
+  showLogin();
+}
+</script>
+
+</body>
+</html>
